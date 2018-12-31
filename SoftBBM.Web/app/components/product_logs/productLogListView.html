@@ -1,0 +1,161 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Lịch sử sản phẩm
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active">Lịch sử sản phẩm</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+            <div class="row marginleft5px">
+                <div class="col-xs-12">
+                    <form class="form-inline" novalidate name="frmSearch" ng-submit="search()">
+                        <div class="row">
+                            <input type="text" ng-model="filterProductLog" class="form-control" placeholder="Mã SP, Id log ...">
+                            <button class="btn btn-default" type="submit" style="width:60px" title="Tìm kiếm"><i class="fa fa-search"></i></button>
+                            <button type="button" class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
+                            <button type="button" style="width:60px" class="btn btn-danger" ng-click="loadDelete()"><i class="fa fa-trash" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
+                            <div class="pull-right totalcount">
+                                <span>
+                                    Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> dòng
+                                </span>
+                            </div>
+                            <span ng-hide="pagesCount==0" class="pull-right totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div ng-show="animate" class="row marginleft5px margintop10px" style="margin-right:0px">
+                <div ng-show="isDelete" class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                    <div class="box box-solid box-primary" style="margin-bottom:0px">
+                        <div class="box-header">
+                            <h3 class="box-title">Thời gian cần xoá</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body" style="padding-bottom:5px;height:122px">
+                            <div class="row" style="margin-bottom:5px">
+                                <div class="col-xs-4" style="text-align:right">
+                                    <label class="control-label margintop5px">Từ</label>
+                                </div>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="startDateDeleteFilter" is-open="picker.startDateDeleteFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openStartDateDeleteFilter($event)" />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom:5px">
+                                <div class="col-xs-4" style="text-align:right">
+                                    <label class="control-label margintop5px">Đến</label>
+                                </div>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="endDateDeleteFilter" is-open="picker.endDateDeleteFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openEndDateDeleteFilter($event)" />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom:5px">
+                                <div class="col-xs-4" style="text-align:right">
+                                    <button type="button" class="btn btn-success" style="padding:3px;margin-left:10px" ng-click="deleteLog()">Xoá log</button>
+                                </div>
+                                <div class="col-xs-8">
+                                    <button type="button" class="btn btn-danger" style="padding:3px;float:right" ng-click="resetTimeDeleteFilter()">Xoá thời gian</button>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </div>
+                <div ng-show="isSearch" class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                    <div class="box box-solid box-primary" style="margin-bottom:0px">
+                        <div class="box-header">
+                            <h3 class="box-title">Thời gian ghi log</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body" style="padding-bottom:5px;height:122px">
+                            <div class="row" style="margin-bottom:5px">
+                                <div class="col-xs-4" style="text-align:right">
+                                    <label class="control-label margintop5px">Từ</label>
+                                </div>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="startDateFilter" is-open="picker.startDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openStartDateFilter($event)" />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom:5px">
+                                <div class="col-xs-4" style="text-align:right">
+                                    <label class="control-label margintop5px">Đến</label>
+                                </div>
+                                <div class="col-xs-8">
+                                    <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="endDateFilter" is-open="picker.endDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openEndDateFilter($event)" />
+                                </div>
+                            </div>
+                            <div class="row" style="margin-bottom:5px">
+                                <div class="col-xs-4" style="text-align:right">
+                                    <button type="button" class="btn btn-success" style="padding:3px;margin-left:10px" ng-click="search()">Lọc</button>
+                                </div>
+                                <div class="col-xs-8">
+                                    <button type="button" class="btn btn-danger" style="padding:3px;float:right" ng-click="resetTimeFilter()">Xoá</button>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="responsivetable">
+                        <table class="table table-bordered table-striped table-hover table_data">
+                            <tr>
+                                <th>Id</th>
+                                <th>Mã sản phẩm</th>
+                                <th>Chi tiết</th>
+                                <th>Số lượng</th>
+                                <th>Thời gian</th>
+                                <th>Nhân viên</th>
+                            </tr>
+                            <tr ng-repeat="item in productLogs">
+                                <td>{{item.Id}}</td>
+                                <td>
+                                    {{item.shop_sanpham.masp}}
+                                </td>
+                                <td>
+                                    {{item.Description}}
+                                </td>
+                                <td>
+                                    {{item.Quantity | currency:'':0}}
+                                </td>
+                                <td>
+                                    {{item.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}
+                                </td>
+                                <td>
+                                    {{item.ApplicationUser.UserName}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div ng-if="loading">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4">
+                            <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <custom-pager page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager>
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+</section><!-- /.content -->

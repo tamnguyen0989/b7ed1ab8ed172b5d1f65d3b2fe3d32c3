@@ -1,0 +1,118 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Danh sách khách hàng
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active">Danh sách khách hàng</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+            <div class="row marginleft5px">
+                <div class="col-xs-12">
+                    <form class="form-inline" novalidate name="frmSearch" ng-submit="search()">
+                        <div class="row">
+                            <input type="text" ng-model="filterCustomers" class="form-control" placeholder="Từ khoá...">
+                            <button class="btn btn-default" type="submit" style="width:60px" title="Tìm kiếm"><i class="fa fa-search"></i></button>
+                            <a class="btn btn-success" ui-sref="add_customer" style="width:60px" title="Thêm mới" target="_blank"><i class="fa fa-plus"></i></a>
+                            <button class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
+                            <div class="pull-right totalcount">
+                                <span>
+                                    Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> dòng
+                                </span>
+                            </div>
+                            <span ng-hide="pagesCount==0" class="pull-right totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="responsivetable">
+                        <table class="table table-bordered table-striped table-hover table_data">
+                            <tr>
+                                <th>Id</th>
+                                <th>Tên đăng nhập</th>
+                                <th>Họ tên</th>
+                                <th>Điểm tích luỹ</th>
+                                <th>Email</th>
+                                <th>Điện thoại</th>
+                                <th>Địa chỉ</th>
+                                <th>Thành phố</th>
+                                <th>Quận</th>
+                                <th width="10%">Thao tác</th>
+                            </tr>
+                            <tr ng-repeat="item in customers">
+                                <td>{{item.MaKH}}</td>
+                                <td>{{item.tendn}}</td>
+                                <td>
+                                    <span ng-show="!enabledEdit[{{$index}}]">{{item.hoten}}</span>
+                                    <input type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.hoten" class="form-control" />
+                                </td>
+                                <td>{{item.diem | currency:'':0}}</td>
+                                <td>
+                                    <span ng-show="!enabledEdit[{{$index}}]">{{item.email}}</span>
+                                    <input type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.email" class="form-control" />
+                                </td>
+                                <td>
+                                    <span ng-show="!enabledEdit[{{$index}}]">{{item.dienthoai}}</span>
+                                    <input type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.dienthoai" class="form-control" />
+                                </td>
+                                <td>
+                                    <span ng-show="!enabledEdit[{{$index}}]">{{item.duong}}</span>
+                                    <input type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.duong" class="form-control" />
+                                </td>
+                                <td>
+                                    <span ng-show="!enabledEdit[{{$index}}]">{{item.City.tentp}}</span>
+                                    <select ng-hide="!enabledEdit[{{$index}}]"
+                                            ng-options="optiontp.tentp for optiontp in cities track by optiontp.id"
+                                            class="form-control"
+                                            ng-model="item.City">
+                                    </select>
+                                </td>
+                                <td>                                   
+                                    <span ng-show="!enabledEdit[{{$index}}]">{{item.District.tentinh}}</span>
+                                    <select ng-hide="!enabledEdit[{{$index}}]"
+                                            ng-options="optiontinh.tentinh for optiontinh in districts track by optiontinh.id"
+                                            class="form-control"
+                                            ng-model="item.District">
+                                    </select>
+                                </td>
+                                <td width="10%">
+                                    <button ng-show="!enabledEdit[{{$index}}]" title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="editCustomer(item,$index)"><i class="fa fa-pencil"></i></button>
+                                    <button ng-hide="!enabledEdit[{{$index}}]" title="Cập nhật" class="btn btn-sm btn-success" ng-click="updateCustomer(item,$index)"><i class="fa fa-check"></i></button>
+                                    <button ng-hide="!enabledEdit[{{$index}}]" title="Hoàn tác" class="btn btn-sm btn-default" ng-click="cancelCustomer(item,$index)"><i class="fa fa-refresh"></i></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div ng-if="loading">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4">
+                            <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <custom-pager page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager>
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+</section><!-- /.content -->

@@ -1,0 +1,206 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Danh sách đơn đặt hàng nhà cung cấp
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active">Danh sách đơn đặt hàng nhà cung cấp</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+            <div class="row marginleft5px">
+                <div class="col-xs-12">
+                    <form class="form-inline" novalidate name="frmSearch" ng-submit="search()">
+                        <div class="row">
+                            <input type="text" ng-model="filterBooks" class="form-control" placeholder="Từ khoá...">
+                            <button class="btn btn-default" type="submit" style="width:60px" title="Tìm kiếm"><i class="fa fa-search"></i></button>
+                            <a class="btn btn-success" ui-sref="add_book" style="width:60px" title="Thêm mới" target="_blank"><i class="fa fa-plus"></i></a>
+                            <button type="button" class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
+                            <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
+                            <div class="pull-right totalcount">
+                                <span>
+                                    Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> dòng
+                                </span>
+                            </div>
+                            <span ng-hide="pagesCount==0" class="pull-right totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div ng-show="animate" class="row marginleft5px margintop10px" style="margin-right:0px">
+                <div class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                    <div class="box box-solid box-primary" style="margin-bottom:0px">
+                        <div class="box-header">
+                            <h3 class="box-title">Từ nhà cung cấp</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body" style="padding-bottom:5px">
+                            <select style="width:100%;border:0px;padding-left:0px"
+                                    ng-change="updateFilter()" ng-options="option.Name for option in supplierFilters track by option.Id"
+                                    ng-model="filters.selectedSupplierFilters"
+                                    name="supplierFilter"
+                                    class="form-control"
+                                    size="5"
+                                    multiple></select>
+                        </div><!-- /.box-body -->
+                    </div>
+                </div>
+                <div class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                    <div class="box box-solid box-primary" style="margin-bottom:0px">
+                        <div class="box-header">
+                            <h3 class="box-title">Tình trạng đơn</h3>
+                        </div>
+                        <div class="box-body" style="padding-bottom:5px">
+                            <select style="width:100%;border:0px;padding-left:0px"
+                                    ng-change="updateFilter()" ng-options="option.Name for option in bookStatusFilters track by option.Id"
+                                    ng-model="filters.selectedBookStatusFilters"
+                                    name="bookStatusFilter"
+                                    class="form-control"
+                                    size="5"
+                                    multiple></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                    <div class="box box-solid box-primary" style="margin-bottom:0px">
+                        <div class="box-header">
+                            <h3 class="box-title">Thời gian tạo đơn</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body" style="padding-bottom:5px;height:122px">
+                            <div class="row" style="margin-bottom:10px">
+                                <div class="col-xs-3" style="text-align:right">
+                                    <label class="control-label margintop5px">Từ</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="startDateFilter" is-open="picker.startDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openStartDateFilter($event)" />
+                                </div>
+                            </div>
+                            <div class="row style=" margin-bottom:10px"">
+                                <div class="col-xs-3" style="text-align:right">
+                                    <label class="control-label margintop5px">Đến</label>
+                                </div>
+                                <div class="col-xs-9">
+                                    <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="endDateFilter" is-open="picker.endDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openEndDateFilter($event)" />
+                                </div>
+                            </div>
+                            <div style="margin-top:5px">
+                                <button type="button" class="btn btn-success" style="padding:2px;float:left;margin-left:10px" ng-click="updateFilter()">Lọc</button>
+                                <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetTimeFilter()">Xoá</button>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="responsivetable">
+                        <table class="table table-bordered table-striped table-hover text-center table_data" style="margin-bottom:10px">
+                            <tr>
+                                <th>Mã</th>
+                                <th>Nhà cung cấp</th>
+                                <th ng-click="sortBy('CreatedDate')">Ngày tạo <i class="fa fa-fw fa-sort"></i></th>
+                                <th ng-click="sortBy('Total')">Tổng tiền <i class="fa fa-fw fa-sort"></i></th>
+                                <th>Số lượng</th>
+                                <th>Ghi chú</th>
+                                <th>Tình trạng <br />đơn</th>
+                                <th>Tình trạng <br />nhập kho</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-form name="data{{$index}}" ng-repeat="item in books">
+                                <td>{{item.Id}}</td>
+                                <td>{{item.FromSuppliers}}</td>
+                                <td>{{item.CreatedDate| date: 'dd/MM/yyyy HH:mm'}}</td>
+                                <td>{{item.Total | currency:'':0}} đ</td>
+                                <td>{{item.TotalQuantity}}</td>
+                                <td>
+                                    {{item.Description}}
+                                </td>
+                                <td>
+                                    <span ng-class="item.SupplierStatusCss">
+                                        {{item.SupplierStatus}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span>
+                                        {{item.ToBranchStatus}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button ng-click="bookDetail(item)" title="Chi tiết" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>
+                                    <button ng-hide="item.SupplierStatusId=='08' || item.SupplierStatusId=='02'" ui-sref="edit_book({stockinId:item.Id})" title="Chỉnh sửa" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></button>
+                                    <button ng-click="updateCancel(item)" ng-hide="item.SupplierStatusId=='08' || item.SupplierStatusId=='02'" title="Huỷ" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i></button>
+                                    <button ng-show="item.SupplierStatusId=='03'" ng-click="getBookDetailToPrint(item)" title="In đơn" class="btn btn-sm btn-warning"><i class="fa fa-print"></i></button>
+                                    <button ng-show="item.SupplierStatusId=='03'" class="btn btn-sm" title="Export Excel" style="background-color:yellowgreen;color:white" type="button" ng-click="exportExcel(item)"><i class="fa fa-fw fa-file-excel-o"></i></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <custom-pager page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager>
+                </div>
+            </div>
+            <div class="row" style="display:none">
+                <div id="printDiv">
+                    <style>
+                        ul li {
+                            list-style: none;
+                        }
+                        #content, #address, #to_supplier{
+                            font-size: 12px;
+                        }
+                        #address{
+                            font-style:italic
+                        }
+                    </style>
+                    <div id="content">
+                        <ul id="address" style="margin-left:20px">
+                            <li>Công ty TNHH MTV Thương mại & Dịch vụ Babymart</li>
+                            <li>3/19 Phan Văn Sửu – P. 13 – Q. Tân Bình</li>
+                            <li>(028) 7309.3479 – babymart.vn@gmail.com</li>
+                        </ul>
+
+                        <h4 class="text-center text-bold">ĐƠN ĐẶT HÀNG</h4>
+                        <p class="text-center">Ngày .... tháng .... năm ....</p>
+                        <ul id="to_supplier" style="margin-left:0px">
+                            <li>Gửi đến NCC: {{supplierPrint.Name}}</li>
+                            <li>Địa chỉ: {{supplierPrint.Address}}</li>
+                            <li>SĐT: {{supplierPrint.Phone}}</li>
+                            <li>Email: {{supplierPrint.Email}}</li>
+                            <li>Người tạo đơn: {{userName}}</li>
+                        </ul>
+                        <table class="table table-bordered table-striped table-hover text-center">
+                            <tr>
+                                <th>Mã sản phẩm</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Số lượng</th>
+                            </tr>
+                            <tr ng-repeat="item in bookDetails">
+                                <td>{{item.shop_sanpham.masp}}</td>
+                                <td>{{item.shop_sanpham.tensp}}</td>
+                                <td>{{item.Quantity}}</td>
+                            </tr>
+                        </table>
+                    </div>               
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+</section><!-- /.content -->
+<script>
+
+</script>

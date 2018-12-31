@@ -1,0 +1,61 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Cập nhật danh mục quyền: {{applicationRole.Name}}
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a ui-sref="application_roles">Danh sách quyền</a></li>
+        <li class="active">Cập nhật</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <!-- Horizontal Form -->
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">{{applicationRole.Name}}</h3>
+        </div><!-- /.box-header -->
+        <!-- form start -->
+        <form class="form-horizontal" novalidate name="frmEditApplicationRole" role="form" ng-submit="UpdateApplicationRole()">
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Tên quyền</label>
+                    <div class="col-sm-6">
+                        <input type="text" required name="name" ng-maxlength="256" ng-model="applicationRole.Name" class="form-control">
+                        <span ng-show="frmEditApplicationRole.name.$invalid" class="has-error">Phải nhập tên quyền</span>
+                        <span ng-show="frmEditApplicationRole.name.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Mô tả</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="description" required ng-maxlength="256" ng-model="applicationRole.Description" class="form-control">
+                        <span ng-show="frmEditApplicationRole.description.$invalid" class="has-error">Phải nhập mô tả</span>
+                        <span ng-show="frmEditApplicationRole.description.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Category:</label>
+                    <div class="col-sm-6">
+                        <select ng-options="option.Name for option in roleCategories track by option.Id"
+                                ng-model="selectedRoleCategory"
+                                class="form-control"
+                                style="width:50%"
+                                name="roleCategory">
+                            <option disabled value="">-- Chọn loại quyền --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label"></label>
+                    <div class="col-sm-6">
+                        <button type="submit" ng-disabled="frmEditApplicationRole.$invalid" class="btn btn-success">Lưu lại</button>
+                        <button ui-sref="application_roles" class="btn btn-default">Trở về</button>   
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.box -->
+</section><!-- /.content -->

@@ -1,0 +1,440 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Danh sách đơn hàng
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active">Danh sách đơn hàng</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+            <div class="row marginleft5px">
+                <div class="col-xs-12">
+                    <form class="form-inline" novalidate name="frmSearch" ng-submit="search()">
+                        <div class="row">
+                            <input type="text" ng-model="filterOrders" class="form-control" placeholder="Từ khoá...">
+                            <button class="btn btn-default" type="submit" style="width:60px" title="Tìm kiếm"><i class="fa fa-search"></i></button>
+                            <a class="btn btn-success" ui-sref="add_order" style="width:60px" title="Thêm mới" target="_blank"><i class="fa fa-plus"></i></a>
+                            <button type="button" class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
+                            <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
+                            <div class="pull-right totalcount">
+                                <span>
+                                    Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> dòng
+                                </span>
+                            </div>
+                            <span ng-hide="pagesCount==0" class="pull-right totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row marginleft20px col-xs-12">
+                <div class="col col-xs-4">
+                    <label>Loại đơn hàng: </label>
+                    <select ng-options="option.Name for option in channels track by option.Id"
+                            ng-model="selectedChannel"
+                            name="channel"
+                            class="marginleft5px">
+                        <option disabled value="">-- Chọn loại đơn --</option>
+                    </select>
+                </div>
+                <div class="col col-xs-4 text-center">
+                    <label ng-show="selectedChannel && selectedChannel.Id>0" style="font-weight:700;color:red;font-size:20px">{{channelName}}</label>
+                    <label ng-show="!selectedChannel" style="font-weight:700;color:red;font-size:20px">Chọn loại đơn !</label>
+                </div>
+                <div class="col col-xs-4"></div>
+            </div>
+            <div class="row col-xs-12 margintop5px">
+                <div ng-show="animate">
+                    <div class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                        <div class="box box-solid box-primary" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h3 class="box-title">Tình trạng</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding-bottom:5px">
+                                <select style="width:100%;border:0px;padding-left:0px"
+                                        ng-change="updateFilter()" ng-options="option.Name for option in orderStatusFilters track by option.Id"
+                                        ng-model="filters.selectedOrderStatusFilters"
+                                        name="orderStatusFilter"
+                                        class="form-control"
+                                        size="5"
+                                        multiple></select>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div>
+                    <div class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                        <div class="box box-solid box-primary" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h3 class="box-title">Người bán</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding-bottom:5px">
+                                <select style="width:100%;border:0px;padding-left:0px"
+                                        ng-change="updateFilter()" ng-options="option.UserName for option in userFilters track by option.Id"
+                                        ng-model="filters.selectedSellerFilters"
+                                        name="sellerFilter"
+                                        class="form-control"
+                                        size="5"
+                                        multiple></select>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div>
+                    <div class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                        <div class="box box-solid box-primary" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h3 class="box-title">Người giao</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding-bottom:5px">
+                                <select style="width:100%;border:0px;padding-left:0px"
+                                        ng-change="updateFilter()" ng-options="option.UserName for option in userFilters track by option.Id"
+                                        ng-model="filters.selectedShipperFilters"
+                                        name="shipperFilter"
+                                        class="form-control"
+                                        size="5"
+                                        multiple></select>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div>
+                    <div class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                        <div class="box box-solid box-primary" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h3 class="box-title">Thời gian</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding-bottom:5px;height:122px">
+                                <div class="row" style="margin-bottom:5px">
+                                    <div class="col-xs-3" style="text-align:right">
+                                        <label class="control-label margintop5px">Từ</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="startDateFilter" is-open="picker.startDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openStartDateFilter($event)" />
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-bottom:5px">
+                                    <div class="col-xs-3" style="text-align:right">
+                                        <label class="control-label margintop5px">Đến</label>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="endDateFilter" is-open="picker.endDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openEndDateFilter($event)" />
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:5px">
+                                    <div class="col-xs-3" style="text-align:right">
+                                        <button type="button" class="btn btn-success" style="padding:2px;margin-left:10px" ng-click="updateFilter()">Lọc</button>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetTimeFilter()">Xoá</button>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="responsivetable">
+                        <table class="table table-bordered table-striped table-hover text-center table_data" style="margin-bottom:10px">
+                            <tr style="background-color:white">
+                                <td colspan="7" style="text-align:left;">
+                                    <div class="input-group" ng-show="selectedOrders.length>0">
+                                        <span class="label_bulk">Có {{selectedOrders.length}} đơn hàng được chọn</span>
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color:#3c8dbc;color:white">Cập nhật <span class="fa fa-caret-down"></span></button>
+                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                                <li class="dropdown-submenu">
+                                                    <a tabindex="-1">Tình trạng ĐH</a>
+                                                    <ul class="dropdown-menu overflow_y">
+                                                        <li ng-repeat="itemOrderStatus in orderStatusFilters">
+                                                            <a ng-click="updateStatusOrders(itemOrderStatus)" tabindex="-1">{{itemOrderStatus.Name}}</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="dropdown-submenu">
+                                                    <a tabindex="-1">NV giao hàng</a>
+                                                    <ul class="dropdown-menu overflow_y">
+                                                        <li ng-repeat="itemShipper in userFilters">
+                                                            <a ng-click="updateShipper(itemShipper)" tabindex="-1">{{itemShipper.UserName}}</a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                            <button ng-click="getDetailOrdersToPrint()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
+                                            <button ng-click="resetSelectedOrders()" type="button" class="btn btn-default" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Bỏ chọn</button>
+                                        </div><!-- /btn-group -->
+                                    </div>
+                                </td>
+                                <td ng-hide="selectedChannel.Id==1"></td>
+                                <td ng-hide="selectedChannel.Id==1"></td>
+                                <th colspan="5" style="text-align:right;">Tổng tiền ds:&emsp; <span style="color:red">{{totalMoney | currency:'':0}} đ</span></th>
+                            </tr>
+                            <tr></tr>
+                            <tr>
+                                <th class="no-padding">
+                                    <input name="all" type="checkbox" ng-click="selectAll()" />
+                                </th>
+                                <th>Mã</th>
+                                <!--<th ng-show="selectedChannel.Id==2">Code</th>-->
+                                <!--<th ng-hide="selectedChannel">Loại đơn</th>-->
+                                <th>Khách hàng</th>
+                                <th ng-click="sortBy('CreatedDate')">Ngày tạo <i class="fa fa-fw fa-sort"></i></th>
+                                <th ng-click="sortBy('tongtien')">Tổng tiền <i class="fa fa-fw fa-sort"></i></th>
+                                <th ng-hide="selectedChannel.Id==1">TPhố/T</th>
+                                <th ng-hide="selectedChannel.Id==1">Quận/H</th>
+                                <th>NV giao hàng</th>
+                                <th>Ghi chú</th>
+                                <th class="padding_1px">Tình trạng</th>
+                                <th style="padding:0px !important">Đã in</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-form name="data{{$index}}" ng-repeat="item in orders">
+                                <td class="no-padding">
+                                    <input type="checkbox" ng-model="item.checked" ng-click="selectOrder(item)" />
+                                </td>
+                                <td><span ng-class="{'has-error':item.idgiogiao==5}">{{item.id}}</span></td>
+                                <!--<td ng-show="selectedChannel.Id==2">
+                                    <span ng-show="!item.Code">Website</span>
+                                    {{item.Code}}
+                                </td>-->
+                                <!--<td ng-hide="selectedChannel">
+                                    {{item.Channel}} <span ng-show="item.ChannelId==2 && item.Code">- CHA</span><span ng-show="item.ChannelId==2 && !item.Code">- WS</span>
+                                </td>-->
+                                <td>{{item.CustomerName}}</td>
+                                <td>{{item.CreatedDateConvert}}</td>
+                                <td>{{item.tongtien | currency:'':0}}</td>
+                                <td ng-hide="selectedChannel.Id==1">
+                                    {{item.City}}
+                                </td>
+                                <td ng-hide="selectedChannel.Id==1">
+                                    {{item.District}}
+                                </td>
+                                <td>
+                                    {{item.ShipperUserName}}
+                                </td>
+                                <td>{{item.ghichu}}</td>
+                                <td class="padding_1px">
+                                    <span ng-class="item.StatusCss">
+                                        {{item.StatusName}}
+                                    </span>
+                                </td>
+                                <td style="padding:0px !important">
+                                    <span ng-show="item.StatusPrint"><i class="fa fa-fw fa-check"></i></span>
+                                </td>
+                                <td>
+                                    <button ng-click="orderDetail(item)" title="Chi tiết" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>
+                                    <button type="button" ng-hide="item.StatusId==3 || item.StatusId==4 || item.StatusId==6" ng-click="editOrder(item)" title="Chỉnh sửa" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></button>
+                                    <button ng-click="getDetailOrderToPrint(item)" title="In đơn" class="btn btn-sm btn-warning"><i class="fa fa-print"></i></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="display:none">
+                <div id="printDiv">
+                    <style>
+                        @media print {
+                            .ng-hide {
+                                display: none !important;
+                            }
+                        }
+
+                        ul li {
+                            list-style: none;
+                        }
+
+                        #content {
+                            font-size: 12px;
+                        }
+
+                            #content td, th {
+                                padding: 5px !important;
+                            }
+                    </style>
+                    <div id="content">
+                        <h5 class="text-center" style="font-weight: 700;margin-top:0px;margin-bottom:0px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h5>
+                        <p class="text-center" style="margin-top:0px;margin-bottom:3px">(028) 7309.3479 – 0918.644643</p>
+                        <h4 class="text-center" style="margin-top:0px;margin-bottom:3px">HÓA ĐƠN BÁN HÀNG</h4>
+                        <!--<div class="row"  style="margin-top:0px">
+                            <div class="col col-xs-2 text-right" style="padding-right:5px">Ngày :</div>
+                            <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                        </div>-->
+                        <div class="row">
+                            <div class="col col-xs-2 text-right" style="padding-right:5px">Số :</div>
+                            <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.Code}}-{{orderReturn.id}} | Ngày : {{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-xs-2 text-right" style="padding-right:5px">Tên :</div>
+                            <div class="col col-xs-10 text-left" style="padding-left:5px"><span style="font-style:italic">{{orderReturn.khachhang.hoten}}</span> - {{orderReturn.khachhang.dienthoai}}</div>
+                        </div>
+                        <div class="row" ng-hide="orderReturn.ChannelId==1">
+                            <div class="col col-xs-2 text-right" style="padding-right:5px">ĐC :</div>
+                            <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.khachhang.duong}} - {{orderReturn.tenquan}} - {{orderReturn.tentp}}</div>
+                        </div>
+                        <div class="row" ng-hide="!orderReturn.tenpttt && !orderReturn.tenptgh">
+                            <div class="col col-xs-2 text-right" style="padding-right:5px">TT :</div>
+                            <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.tenpttt}}<span ng-hide="!orderReturn.giogiao"> | TG: {{orderReturn.giogiao}}</span><span ng-hide="!orderReturn.tenptgh"> | GH: {{orderReturn.tenptgh}}</span></div>
+                        </div>
+                        <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px;margin-top:3px">
+                            <tr>
+                                <th class="text-center" style="padding:1px"></th>
+                                <th ng-hide="orderReturn.ChannelId==1" class="text-center" style="padding:1px">Mã</th>
+                                <th class="text-center">Tên sản phẩm</th>
+                                <th class="text-center">SL</th>
+                                <th class="text-center">Giá</th>
+                                <th class="text-center">T.Tiền</th>
+                            </tr>
+                            <tr ng-repeat="item in orderReturn.donhang_ct">
+                                <td style="padding:1px">{{$index+1}}</td>
+                                <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
+                                <td>{{item.shop_bienthe.tensp}}</td>
+                                <td>{{item.Soluong}}</td>
+                                <td>{{item.Dongia | currency:'':0}}</td>
+                                <td>{{item.Soluong * item.Dongia | currency:'':0}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-right">Tổng thành tiền</td>
+                                <td colspan="2">{{totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                            </tr>
+                            <tr ng-hide="(orderReturn.ship + orderReturn.phithuho) ==0">
+                                <td colspan="4" class="text-right">Phí</td>
+                                <td colspan="2">{{orderReturn.ship + orderReturn.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                            </tr>
+                            <tr ng-hide="orderReturn.datru_diem==0">
+                                <td colspan="4" class="text-right">Giảm</td>
+                                <td colspan="2">{{orderReturn.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                            </tr>
+                            <tr>
+                                <td class="text-right" style="font-weight:700" colspan="4">Thanh toán</td>
+                                <td colspan="2">{{orderReturn.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                            </tr>
+                            <tr ng-hide="!orderReturn.ghichu && !orderReturn.chitietgiogiao">
+                                <td colspan="2">Lưu ý</td>
+                                <td colspan="4">{{orderReturn.ghichu}} - {{orderReturn.chitietgiogiao}}</td>
+                            </tr>
+                        </table>
+                        <div class="text-right" style="margin-top:5px">
+                            Xin cảm ơn Quý Khách và hẹn gặp lại.
+                        </div>
+                        <div ng-hide="!orderReturn.tenptgh && (orderReturn.pttt!=1 || orderReturn.pttt!=3)" class="text-right" style="margin-top:5px">
+                            {{orderReturn.tenptgh}} - Thu hộ - {{orderReturn.tongtien | currency:'':0}} đ
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row" style="display:none">
+                <div id="printDivAll">
+                    <style>
+                        @media print {
+                            .ng-hide {
+                                display: none !important;
+                            }
+                        }
+
+                        .pagebreak {
+                            page-break-before: always;
+                        }
+
+                        ul li {
+                            list-style: none;
+                        }
+
+                        #content {
+                            font-size: 12px;
+                        }
+
+                            #content td, th {
+                                padding: 5px !important;
+                            }
+                    </style>
+                    <div id="content">
+                        <div ng-repeat="order in ordersReturn">
+                            <h5 class="text-center" style="font-weight: 700;margin-top:0px;margin-bottom:0px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h5>
+                            <p class="text-center" style="margin-top:0px;margin-bottom:3px">(028) 7309.3479 – 0918.644643</p>
+                            <h4 class="text-center" style="margin-top:0px;margin-bottom:3px">HÓA ĐƠN BÁN HÀNG</h4>
+                            <div class="row">
+                                <div class="col col-xs-2 text-right" style="padding-right:5px">Số :</div>
+                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.Code}}-{{order.id}} | Ngày : {{order.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-xs-2 text-right" style="padding-right:5px">Tên :</div>
+                                <div class="col col-xs-10 text-left" style="padding-left:5px"><span style="font-style:italic">{{order.khachhang.hoten}}</span> - {{order.khachhang.dienthoai}}</div>
+                            </div>
+                            <div class="row" ng-hide="ordersReturn.ChannelId==1">
+                                <div class="col col-xs-2 text-right" style="padding-right:5px">ĐC :</div>
+                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.khachhang.duong}} - {{order.tenquan}} - {{order.tentp}}</div>
+
+                            </div>
+                            <div class="row" ng-hide="!order.tenpttt && !order.tenptgh">
+                                <div class="col col-xs-2 text-right" style="padding-right:5px">TT :</div>
+                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.tenpttt}}<span ng-hide="!order.giogiao"> | TG: {{order.giogiao}}</span><span ng-hide="!order.tenptgh"> | GH: {{order.tenptgh}}</span></div>
+                            </div>
+                            <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px;margin-top:3px">
+                                <tr>
+                                    <th class="text-center" style="padding:1px"></th>
+                                    <th ng-hide="orderReturn.ChannelId==1" class="text-center" style="padding:1px">Mã</th>
+                                    <th class="text-center">Tên sản phẩm</th>
+                                    <th class="text-center">SL</th>
+                                    <th class="text-center">Giá</th>
+                                    <th class="text-center">T.Tiền</th>
+                                </tr>
+                                <tr ng-repeat="item in order.donhang_ct">
+                                    <td style="padding:1px">{{$index+1}}</td>
+                                    <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
+                                    <td>{{item.shop_bienthe.tensp}}</td>
+                                    <td>{{item.Soluong}}</td>
+                                    <td>{{item.Dongia | currency:'':0}}</td>
+                                    <td>{{item.Soluong * item.Dongia | currency:'':0}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="text-right">Tổng thành tiền</td>
+                                    <td colspan="2">{{order.totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                </tr>
+                                <tr ng-hide="(order.ship + order.phithuho) ==0">
+                                    <td colspan="4" class="text-right">Phí</td>
+                                    <td colspan="2">{{order.ship + order.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                </tr>
+                                <tr ng-hide="order.datru_diem==0">
+                                    <td colspan="4" class="text-right">Giảm</td>
+                                    <td colspan="2">{{order.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" style="font-weight:700" colspan="4">Thanh toán</td>
+                                    <td colspan="2">{{order.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                </tr>
+                                <tr ng-hide="!order.ghichu && !order.chitietgiogiao">
+                                    <td colspan="2">Lưu ý</td>
+                                    <td colspan="4">{{order.ghichu}} - {{order.chitietgiogiao}}</td>
+                                </tr>
+                            </table>
+                            <div class="text-right" style="margin-top:5px">
+                                Xin cảm ơn Quý Khách và hẹn gặp lại.
+                            </div>
+                            <div ng-hide="!order.tenptgh && (order.pttt!=1 || order.pttt!=3)" class="text-right" style="margin-top:5px">
+                                {{order.tenptgh}} - Thu hộ - {{order.tongtien | currency:'':0}} đ
+                            </div>
+                            <div class="pagebreak"> </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <custom-pager page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager>
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+</section><!-- /.content -->

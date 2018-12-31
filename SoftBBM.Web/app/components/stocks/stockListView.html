@@ -1,0 +1,475 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Danh sách sản phẩm tại kho
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ng-click="setupToogleData()"><i class="fa fa-dashboard"></i> Ẩn/Hiện cột</a></li>
+        <!--<li class="active">Danh sách sản phẩm tại kho</li>-->
+    </ol>
+    <div ng-show="setupToogleDataVal" style="margin:15px;background-color:#f4f4f4">
+        <h5>
+            <input ng-model="showId" type="checkbox" /> Id
+        </h5>
+        <h5>
+            <input ng-model="showImage" type="checkbox" /> Hình
+        </h5>
+        <h5>
+            <input ng-model="showBarcode" type="checkbox" /> Mã vạch
+        </h5>
+        <h5>
+            <input ng-model="showProductCode" type="checkbox" /> Mã sp
+        </h5>
+        <h5>
+            <input ng-model="showName" type="checkbox" /> Tên sp
+        </h5>
+        <h5>
+            <input ng-model="showStock" type="checkbox" /> Tồn
+        </h5>
+        <h5>
+            <input ng-model="showStockAll" type="checkbox" /> Tồn chung
+        </h5>
+        <h5>
+            <input ng-model="showPriceBase" type="checkbox" /> Giá nhập mới
+        </h5>
+        <h5>
+            <input ng-model="showPriceBaseOld" type="checkbox" /> Giá nhập cũ
+        </h5>
+        <h5>
+            <input ng-model="showPriceAvg" type="checkbox" /> Giá cơ bản
+        </h5>
+        <h5>
+            <input ng-model="showPriceRef" type="checkbox" /> Giá tham chiếu
+        </h5>
+        <h5>
+            <input ng-model="showPriceWholesale" type="checkbox" /> Giá bán sỉ
+        </h5>
+        <h5>
+            <input ng-model="showPriceShop" type="checkbox" /> Giá cửa hàng
+        </h5>
+        <h5>
+            <input ng-model="showPriceChannel" type="checkbox" /> Giá kênh
+        </h5>
+        <h5>
+            <input ng-model="showPriceChannelDiscount" type="checkbox" /> Giá kênh
+        </h5>
+        <h5>
+            <input ng-model="showSupplier" type="checkbox" /> NCC
+        </h5>
+        <h5>
+            <input ng-model="showStatus" type="checkbox" /> Tình trạng
+        </h5>
+        <h5>
+            <input ng-model="showVat" type="checkbox" /> VAT
+        </h5>
+        <h5>
+            <input ng-model="showCURD" type="checkbox" /> Thao tác
+        </h5>
+    </div>
+
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+            <div class="row marginleft5px">
+                <div class="col-xs-12">
+                    <form class="form-inline" novalidate name="frmSearch" ng-submit="search()">
+                        <div class="row">
+                            <input type="text" ng-model="filterStocks" class="form-control" placeholder="Từ khoá...">
+                            <button class="btn btn-default" type="submit" style="width:60px" title="Tìm kiếm"><i class="fa fa-search"></i></button>
+                            <a class="btn btn-success" ng-click="authenAddProduct()" style="width:60px" title="Thêm mới" target="_blank"><i class="fa fa-plus"></i></a>
+                            <button class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
+                            <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
+                            <button class="btn" title="Export Products" style="background-color:yellowgreen;color:white;width:60px" type="button" ng-click="authenExport()"><i class="fa fa-fw fa-cloud-download"></i></button>
+                            <input class="form-control" file-upload type="file" style="margin-left:20px;width:115px;border:none;margin-right:-10px">
+                            <button class="btn" title="Import Products" style="background-color:yellowgreen;color:white;width:60px" type="button" ng-click="authenImport()"><i class="fa fa-fw fa-cloud-upload"></i></button>
+                            <div class="form-control" style="border: none;padding-left: 0px;">
+                                <a ng-click="downloadImportSample()" title="Mẫu import"><i class="fa fa-fw fa-file-excel-o fa-2"></i></a>
+                            </div>
+
+
+                            <div class="pull-right totalcount">
+                                <span>
+                                    Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> dòng
+                                </span>
+                            </div>
+                            <span ng-hide="pagesCount==0" class="pull-right totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>
+
+                        </div>
+
+                        <div ng-show="animate" class="row margintop10px" style="margin-right:-5px">
+                            <div class="col-xs-2" style="padding-right:5px;padding-left:0px">
+                                <div class="box box-solid box-primary" style="margin-bottom:0px">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Nhóm sản phẩm</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body" style="padding-bottom:5px">
+                                        <select style="width:100%;border:0px;padding-left:0px"
+                                                ng-change="updateFilter()" ng-options="option.Name for option in productCategories track by option.Id"
+                                                ng-model="filters.selectedProductCategoryFilters"
+                                                name="productCategoryFilter"
+                                                class="form-control"
+                                                size="5"
+                                                multiple></select>
+                                    </div><!-- /.box-body -->
+                                </div>
+                            </div>
+                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
+                                <div class="box box-solid box-primary" style="margin-bottom:0px">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Nhà cung cấp</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body" style="padding-bottom:5px">
+                                        <select style="width:100%;border:0px;padding-left:0px"
+                                                ng-change="updateFilter()" ng-options="option.Name for option in suppliers track by option.Id"
+                                                ng-model="filters.selectedSupplierFilters"
+                                                name="supplierFilter"
+                                                class="form-control"
+                                                size="5"
+                                                multiple></select>
+                                    </div><!-- /.box-body -->
+                                </div>
+                            </div>
+                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
+                                <div class="box box-solid box-primary" style="margin-bottom:0px">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Tình trạng</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body" style="padding-bottom:5px">
+                                        <select style="width:100%;border:0px;padding-left:0px"
+                                                ng-change="updateFilter()" ng-options="option.Name for option in productStatuses track by option.Id"
+                                                ng-model="filters.selectedProductStatusFilters"
+                                                name="productStatusFilter"
+                                                class="form-control"
+                                                size="5"
+                                                multiple></select>
+                                    </div><!-- /.box-body -->
+                                </div>
+                            </div>
+                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
+                                <div class="box box-solid box-primary" style="margin-bottom:0px">
+                                    <div class="box-header">
+                                        <h3 class="box-title">VAT</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body" style="padding-bottom:5px">
+                                        <select style="width:100%;border:0px;padding-left:0px"
+                                                ng-change="updateFilter()" ng-options="option.Name for option in vatStatuses track by option.Id"
+                                                ng-model="filters.selectedVatStatusFilters"
+                                                name="vatStatusFilter"
+                                                class="form-control"
+                                                size="5"
+                                                multiple></select>
+                                    </div><!-- /.box-body -->
+                                </div>
+                            </div>
+                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
+                                <div class="box box-solid box-primary" style="margin-bottom:0px">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Tồn kho</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body" style="padding-bottom:5px;height:122px">
+                                        <div class="row" style="margin-bottom:10px;margin-left:10px">
+                                            <input name="rbStockFilter" type="radio" value="1" ng-model="filters.selectedStockFilter" /> Lớn hơn
+                                            <input name="rbStockFilter" type="radio" value="2" ng-model="filters.selectedStockFilter" /> Nhỏ hơn
+                                            <input name="rbStockFilter" type="radio" value="3" ng-model="filters.selectedStockFilter" /> Bằng
+                                        </div>
+                                        <div class="row" style="margin-bottom:10px;margin-left:10px">
+                                            <input ng-disabled="!filters.selectedStockFilter" type="number" class="form-control" ng-model="filters.selectedStockFilterValue" />
+                                        </div>
+                                        <div style="margin-top:5px">
+                                            <button type="button" class="btn btn-success" style="padding:2px;float:left;margin-left:10px" ng-click="updateFilter()">Lọc</button>
+                                            <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetStockFilter()">Xoá</button>
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                </div>
+                            </div>
+                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
+                                <div class="box box-solid box-primary" style="margin-bottom:0px">
+                                    <div class="box-header">
+                                        <h3 class="box-title">Tồn kho tổng</h3>
+                                    </div><!-- /.box-header -->
+                                    <div class="box-body" style="padding-bottom:5px;height:122px">
+                                        <div class="row" style="margin-bottom:10px;margin-left:10px">
+                                            <input name="rbStockTotalFilter" type="radio" value="1" ng-model="filters.selectedStockTotalFilter" /> Lớn hơn
+                                            <input name="rbStockTotalFilter" type="radio" value="2" ng-model="filters.selectedStockTotalFilter" /> Nhỏ hơn
+                                            <input name="rbStockTotalFilter" type="radio" value="3" ng-model="filters.selectedStockTotalFilter" /> Bằng
+                                        </div>
+                                        <div class="row" style="margin-bottom:10px;margin-left:10px">
+                                            <input ng-disabled="!filters.selectedStockTotalFilter" type="number" class="form-control" ng-model="filters.selectedStockTotalFilterValue" />
+                                        </div>
+                                        <div style="margin-top:5px">
+                                            <button type="button" class="btn btn-success" style="padding:2px;float:left;margin-left:10px" ng-click="updateFilter()">Lọc</button>
+                                            <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetStockTotalFilter()">Xoá</button>
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="box-body">
+            <div class="row marginleft20px col-xs-12" style="margin-bottom:10px">
+                <div class="col col-xs-4">
+                    <label>Kênh: </label>
+                    <select ng-options="option.Name for option in channels track by option.Id"
+                            ng-model="selectedChannel"
+                            ng-change="updateSelectedChannel()"
+                            name="channel"
+                            class="marginleft5px">
+                        <option disabled value="">-- Chọn kênh --</option>
+                    </select>
+                </div>
+                <div class="col col-xs-4 ">
+                    <div ng-if="loading">
+                        <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                    </div>
+                </div>
+                <div class="col col-xs-4 text-center">
+                    <!--<label style="font-weight:700;color:red;font-size:20px">{{channelName}}</label>-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="responsivetable">
+                        <table class="table table-bordered table-striped table-hover product-data text-center table_data" style="margin-bottom:0px">
+                            <tr>
+                                <th ng-show="showId">Id</th>
+                                <th ng-show="showImage">Hình</th>
+                                <th ng-show="showBarcode">Mã vạch</th>
+                                <th ng-show="showProductCode" ng-click="sortBy('productCode')">Mã SP<br /><i class="fa fa-fw fa-sort"></i></th>
+                                <th ng-show="showName" ng-click="sortBy('productName')">Tên SP<br /><i class="fa fa-fw fa-sort"></i></th>
+                                <th ng-show="showStock" ng-click="sortBy('stock')">Tồn<br /><i class="fa fa-fw fa-sort"></i></th>
+                                <th ng-show="showStockAll" ng-click="sortBy('stockTotal')">Tồn<br />chung<br /><i class="fa fa-fw fa-sort"></i></th>
+                                <th ng-show="showPriceBase" ng-click="sortBy('priceBase')">Giá <br />mới<br /><i class="fa fa-fw fa-sort"></i></th>
+                                <th ng-show="showPriceBaseOld">Giá <br />cũ</th>
+                                <th ng-show="showPriceAvg">Giá <br />cơ bản</th>
+                                <th ng-show="showPriceRef">Giá <br />t/chiếu</th>
+                                <th ng-show="showPriceWholesale">Giá <br />bán sỉ</th>
+                                <th ng-show="showPriceShop">Giá <br />cửa hàng</th>
+                                <th ng-show="showPriceChannel">Giá kênh<br /><span style="color:red;font-size:12px">{{channelName}}</span></th>
+                                <th ng-show="showPriceChannelDiscount">Giá km<br /><span style="color:red;font-size:12px">{{channelName}}</span></th>
+                                <th ng-show="showSupplier">NCC</th>
+                                <th ng-show="showStatus" style="padding:0px">Tình trạng</th>
+                                <th ng-show="showVat">VAT</th>
+                                <th ng-show="showCURD"></th>
+                            </tr>
+                            <tr ng-form name="data{{$index}}" ng-repeat="item in stocks">
+                                <td ng-show="showId">{{item.shop_sanpham.id}}</td>
+                                <td ng-show="showImage"><img ng-src="{{item.shop_sanpham.shop_image[0].url || 'Assets/Admin/img/no-img.jpg' }}" /></td>
+                                <td ng-show="showBarcode">
+                                    <span ng-show="!enabledEdit[{{$index}}]">{{item.shop_sanpham.Barcode}}</span>
+                                    <input type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.shop_sanpham.Barcode" class="form-control width_stock_input" />
+                                </td>
+                                <td ng-show="showProductCode">{{item.shop_sanpham.masp}}</td>
+                                <td ng-show="showName">{{item.shop_sanpham.tensp}}</td>
+                                <td ng-show="showStock">
+                                    <!--<input readonly type="text" ng-model="item.Stock_Total" class="form-control width50px" />-->
+                                    {{item.Stock_Total | currency:'':0}}
+                                </td>
+                                <td ng-show="showStockAll" ng-click="openStockTotalAll(item)" class="current_obj">
+                                    <!--<input ng-click="openStockTotalAll(item)" readonly type="text" ng-model="item.Stock_Total_All" class="form-control width50px" />-->
+                                    {{item.Stock_Total_All | currency:'':0}}
+                                </td>
+                                <td ng-show="showPriceBase">
+                                    <span>
+                                        {{item.shop_sanpham.PriceBase | currency:'':0}}
+                                    </span>
+                                    <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.shop_sanpham.PriceBase" class="form-control width90px" />-->
+                                </td>
+                                <td class="padding_left_right2px" ng-show="showPriceBaseOld">
+                                    <!--<span ng-show="!enabledEdit[{{$index}}]">
+                                        {{item.shop_sanpham.PriceBaseOld | currency:'':0}}
+                                    </span>-->
+                                    {{item.shop_sanpham.PriceBaseOld | currency:'':0}}
+                                    <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.shop_sanpham.PriceBaseOld" class="form-control width_stock_input" />
+                                    </td>-->
+                                <td class="padding_left_right2px" ng-show="showPriceAvg">
+                                    <!--<span ng-show="!enabledEdit[{{$index}}]">
+                                         {{item.shop_sanpham.PriceAvg | currency:'':0}}
+                                    </span>-->
+                                    {{item.shop_sanpham.PriceAvg | currency:'':0}}
+                                    <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.shop_sanpham.PriceAvg" class="form-control width_stock_input" />
+                                    </td>-->
+                                <td class="padding_left_right2px" ng-show="showPriceRef">
+                                    <!--<span ng-show="!enabledEdit[{{$index}}]">
+                                       {{item.shop_sanpham.PriceRef | currency:'':0}}
+                                    </span>-->
+                                    {{item.shop_sanpham.PriceRef | currency:'':0}}
+                                    <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.shop_sanpham.PriceRef" class="form-control width_stock_input" />
+                                    </td>-->
+
+                                <td ng-show="showPriceWholesale">
+                                    <span>{{item.shop_sanpham.PriceWholesale | currency:'':0}}</span>
+                                    <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.PriceWholesale" class="form-control width90px" />-->
+                                </td>
+                                <td ng-show="showPriceShop">
+                                    <span>{{item.PriceShop | currency:'':0}}</span>
+                                    <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.PriceShop" class="form-control width90px" />-->
+                                </td>
+                                <td class="padding_left_right2px" ng-show="showPriceChannel">
+                                    <span class="current_obj"
+                                          style="padding:10px"
+                                          popover-placement="top-right"
+                                          uib-popover-template="dynamicPopover.templateUrl"
+                                          popover-trigger="'none'"
+                                          popover-is-open="enabledPopover[{{item.Id}}]"
+                                          ng-click="openChannelPricePopover(item)">
+                                        {{item.PriceChannel | currency:'':0}}
+                                    </span>
+
+                                    <!--<button ng-click="openChannelPrices(item)" class="btn btn-primary">Giá kênh</button>-->
+                                </td>
+                                <td ng-show="showPriceChannelDiscount">
+                                    {{item.PriceDiscount | currency:'':0}}
+                                </td>
+                                <td ng-show="showSupplier">
+                                    {{item.shop_sanpham.SoftSupplier.Name}}
+                                    <!--<span ng-show="!enabledEdit[{{$index}}]">{{item.shop_sanpham.SoftSupplier.Name}}</span>
+
+                                    <select ng-hide="!enabledEdit[{{$index}}]"
+                                            class="width90px"
+                                            ng-options="option.Name for option in suppliers track by option.Id"
+                                            ng-model="item.shop_sanpham.SoftSupplier"
+                                            name="supplier"></select>-->
+
+                                </td>
+
+                                <td ng-show="showStatus" style="padding:0px">
+                                    <span ng-class="item.shop_sanpham.shop_sanphamStatus.CssClass">
+                                        {{item.shop_sanpham.shop_sanphamStatus.Name}}
+                                    </span>
+                                    <!--<span ng-show="!enabledEdit[{{$index}}]" ng-class="item.shop_sanpham.shop_sanphamStatus.CssClass">
+                                        {{item.shop_sanpham.shop_sanphamStatus.Name}}
+                                    </span>
+                                    <div>
+                                        <select ng-hide="!enabledEdit[{{$index}}]"
+                                                class="width90px"
+                                                ng-options="option.Name for option in productStatuses track by option.Id"
+                                                ng-model="item.shop_sanpham.shop_sanphamStatus"
+                                                name="status"></select>
+                                    </div>-->
+                                </td>
+                                <td ng-show="showVat">
+                                    <!--<span ng-show="!enabledEdit[{{$index}}]">{{item.Vat}}</span>-->
+                                    {{item.Vat}}
+                                </td>
+                                <td class="padding2px" ng-show="showCURD">
+                                    <button title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="openStockEditModal(item)"><i class="fa fa-pencil"></i></button>
+                                    <button title="Giá tất cả kênh" class="btn btn-sm btn-primary" ng-click="openChannelPricesModal(item)"><i class="fa fa-bar-chart"></i></button>
+                                    <!--<button title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="editStock(item,$index)"><i class="fa fa-pencil"></i></button>
+                                    <button ng-show="!enabledEdit[{{$index}}]" title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="editStock(item,$index)"><i class="fa fa-pencil"></i></button>
+                                    <button ng-disabled="data{{$index}}.$invalid" ng-hide="!enabledEdit[{{$index}}]" title="Cập nhật" class="btn btn-sm btn-success" ng-click="updateStock(item,$index)"><i class="fa fa-check"></i></button>
+                                    <button ng-hide="!enabledEdit[{{$index}}]" title="Hoàn tác" class="btn btn-sm btn-default" ng-click="cancelStock(item,$index)"><i class="fa fa-refresh"></i></button>-->
+                                </td>
+                            </tr>
+                        </table>
+
+                    </div>
+                    <!--<div ng-if="loading">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4">
+                            <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>-->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 text-center">
+                    <custom-pager page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager>
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+    </div><!-- /.box -->
+    <script type="text/ng-template" id="myPopoverTemplate.html">
+        <div class="row paddingleft5px">
+            <div class="col-xs-11" style="padding-right:0px">
+                <label class="marginright10px">Kênh: <span style="color:red">{{channelName}}</span> - <span span style="color:darkblue">{{selectedStock.shop_sanpham.masp}}</span> - {{selectedStock.shop_sanpham.tensp}}</label>
+            </div>
+            <div class="col-xs-1" style="padding-left:0px;padding-right:0px">
+                <i class="fa fa-2 fa-close pull-right marginright10px current_cursor"
+                   style="margin-bottom:5px"
+                   ng-click="closeChannelPricePopover()"></i>
+            </div>
+        </div>
+        <div class="row paddingleft5px">
+            <div class="col-xs-4 text-right">
+                <span class="table_data"> Giá nhập mới:</span>
+            </div>
+            <div class="col-xs-8" style="padding-left:12px">
+                {{selectedStock.shop_sanpham.PriceBase | currency:'':0}}
+                <span class="table_data" style="padding-left:12px;padding-right:12px">Giá nhập cũ:</span>
+                {{selectedStock.shop_sanpham.PriceBaseOld| currency:'':0}}
+            </div>
+        </div>
+        <div class="row paddingleft5px margintop5px">
+            <div class="col-xs-4 text-right margintop5px">
+                <span class="table_data">Giá kênh:</span>
+            </div>
+            <div class="col-xs-8" style="padding-left:0px">
+                <input type="text" format="number" class="form-control text-left table_data" ng-model="selectedStockPopover.priceChannel" />
+            </div>
+        </div>
+        <div class="row paddingleft5px margintop5px">
+            <div class="col-xs-4 text-right margintop5px">
+                <span class="table_data" style="margin-top:10px">Giá kênh km:</span>
+            </div>
+            <div class="col-xs-8" style="padding-left:0px">
+                <input type="text" format="number" class="form-control text-left table_data" ng-model="selectedStockPopover.priceDiscount" />
+            </div>
+        </div>
+        <div class="row paddingleft5px margintop5px">
+            <div class="col-xs-4 text-right margintop5px">
+                <span class="table_data" style="margin-top:10px">Ngày bắt đầu:</span>
+            </div>
+            <div class="col-xs-8" style="padding-left:0px">
+                {{selectedStockPopover.startDateDiscount | date:'dd/MM/yyyy'}}
+                <button class="btn btn-default marginleft5px" ng-click="openStartDateDiscount($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                <button type="button" title="Cập nhật" class="btn btn-success pull-right" style="width:60px" ng-click="updateChannelPricePopover()">
+                    <i class="fa fa-fw fa-save"></i>
+                </button>
+                <input style="display:none"
+                       type="text"
+                       class="form-control text-left"
+                       uib-datepicker-popup="dd/MM/yyyy"
+                       ng-model="selectedStockPopover.startDateDiscount"
+                       is-open="picker.startDateDiscount"
+                       datepicker-options="dateOptions"
+                       readonly clear-text="Xoá"
+                       current-text="Hôm nay"
+                       close-text="Đóng" />
+
+            </div>
+        </div>
+        <div class="row paddingleft5px margintop5px">
+            <div class="col-xs-4 text-right margintop5px">
+                <span class="table_data" style="margin-top:10px">Ngày kết thúc:</span>
+            </div>
+            <div class="col-xs-8" style="padding-left:0px">
+                {{selectedStockPopover.endDateDiscount | date:'dd/MM/yyyy'}}
+                <button class="btn btn-default marginleft5px" ng-click="openEndDateDiscount($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                <input style="display:none"
+                       type="text"
+                       class="form-control text-left"
+                       uib-datepicker-popup="dd/MM/yyyy"
+                       ng-model="selectedStockPopover.endDateDiscount"
+                       is-open="picker.endDateDiscount"
+                       datepicker-options="dateOptions"
+                       readonly clear-text="Xoá"
+                       current-text="Hôm nay"
+                       close-text="Đóng" />
+            </div>
+        </div>
+    </script>
+</section><!-- /.content -->

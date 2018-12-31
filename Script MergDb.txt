@@ -1,0 +1,92 @@
+--SET IDENTITY_INSERT [dbo].[donhang] ON 
+--SET IDENTITY_INSERT [dbo].[donhang] OFF
+
+delete SoftReturnSupplierDetails
+delete SoftReturnSuppliers
+delete SoftAdjustmentStockDetails
+delete SoftAdjustmentStocks
+delete SoftNotifications
+delete SoftStockInDetails
+delete SoftStockIns
+
+
+delete ApplicationUserRoles
+where UserId > 1
+delete ApplicationUserGroups
+where UserId > 1
+delete ApplicationUsers
+where Id > 1
+DONE
+
+--delete [donhang_ct]
+--delete [donhang]
+
+
+--delete [donhang-chuyenphat_tinh]
+--insert
+--update priority HCM
+--update [donhang-chuyenphat_tinh]
+--set Priority=25
+--where Priority is null
+--update [donhang-chuyenphat_tinh]
+--set Priority=24
+--where id=889
+-- DONE
+
+--delete [khachhang_lienhe]
+--insert
+
+--delete [khachhang-vanglai]
+--insert
+
+--delete [khachhang]
+--insert
+
+--delete [module-detail]
+--insert
+
+--delete [shop_page]
+--insert
+
+--delete [sys_Banner]
+--insert
+
+--delete [sys_tags_Summary]
+--insert
+
+--delete [sys_tags_Ref]
+--insert
+
+--delete [sys-file]
+--insert
+
+--update [shop-sanpham]
+--set SupplierId=null
+--delete [SoftSuppliers]
+--Map old to new Db
+--insert
+
+--delete [shop-bienthe]
+--delete [shop-collection]
+--delete [shop-danhmuccon]
+--delete [shop-image]
+--delete [SoftBranchProductStocks]
+--delete [SoftChannelProductPrices]
+--delete [shop-sanphamLogs]
+--delete [shop-sanpham]
+--delete [shop-sanphamCategories]
+--delete [shop-thuonghieu]
+--insert
+
+--insert [SoftBranchProductStocks]
+--insert [SoftChannelProductPrices]
+--update ngaydat -> CreatedDate
+
+--insert [donhang]
+--insert [donhang_ct]
+
+--update [shop-sanpham]
+--set PriceAvg=PriceBase
+--migra PriceWholesale
+
+test git

@@ -1,0 +1,78 @@
+﻿<div class="modal-header">
+    <h4>Chi tiết phiếu trả hàng - {{selectedBook.Id}}</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form role="form" novalidate angular-validator name="frmBookDetail" class="form-inline">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Mã phiếu:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.Id}}</div>
+                </div>
+                <div ng-show="book.SoftSupplier.Name" class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Nhà cung cấp:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.SoftSupplier.Name}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Ngày lập:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.CreatedDate| date: 'dd/MM/yyyy HH:mm'}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Người lập:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.ApplicationUser.FullName}} ({{book.ApplicationUser.UserName}})</div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                    
+            </div>
+        </div>
+        <div class="row nomarginleft margintop20px">
+            <table ng-show="book.SoftReturnSupplierDetails.length>0" class="table table-bordered table-striped table-hover text-center">
+                <tr>
+                    <th>STT</th>
+                    <th>Mã sản phẩm</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Số lượng</th>
+                </tr>
+                <tr ng-repeat="item in book.SoftReturnSupplierDetails">
+                    <td>{{$index+1}}</td>
+                    <td>{{item.ProductId}}</td>
+                    <td>{{item.ProductName}}</td>
+                    <td>{{item.Quantity}}</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="text-align:right">Tổng số lượng:</td>
+                    <td>{{book.TotalQuantity}}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:right">Ghi chú:</td>
+                    <td colspan="3">
+                        <textarea readonly ng-model="book.Description" style="width:100%" class="form-control" rows="3"></textarea>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="7">
+                        <button ng-click="okBook()" class="btn btn-success">Trở về</button>
+                    </td>
+                </tr>
+            </table>
+            <div ng-if="loading">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+    </form>
+</div>

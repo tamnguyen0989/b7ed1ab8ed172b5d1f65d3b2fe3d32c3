@@ -1,0 +1,233 @@
+﻿<!--<div class="modal-header">
+    <h4>Chi tiết đơn hàng {{selectedOrderId}}</h4>
+</div>-->
+<div class="modal-body" id="modal-body" style="padding:0px">
+    <div class="row nomarginleft margintop20px col-xs-12">
+        <div class="col-xs-8">
+            <div class="box box-info">
+                <form class="form-horizontal">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Thông tin đơn hàng - {{selectedOrder.id}}</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label class="col-xs-4 cus-control-label">Ngày xuất:</label>
+                                <div class="col-xs-8">
+                                    {{order.ngaydat | date: 'dd/MM/yyyy HH:mm:ss'}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 cus-control-label">Số hoá đơn:</label>
+                                <div class="col-xs-8">
+                                    {{order.Code}}-{{order.id}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 cus-control-label">NV bán hàng:</label>
+                                <div class="col-xs-8">
+                                    {{order.ApplicationUser1.UserName}}
+                                </div>
+                            </div>
+                            <div ng-show="order.chitietgiogiao" class="form-group">
+                                <label class="col-xs-4 cus-control-label">TGGH cụ thể:</label>
+                                <div class="col-xs-8">
+                                    {{order.chitietgiogiao}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-4 cus-control-label">NV giao hàng:</label>
+                                <select ng-options="option.UserName for option in userFilters track by option.Id"
+                                        ng-model="selectedShipper"
+                                        ng-disabled="isUpdated"
+                                        name="channel"
+                                        class="marginleft5px">
+                                    <option value="">-- Chọn NV giao hàng --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea ng-model="order.ghichu" rows="2" style="width:90%" class="form-control marginleft20px"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div ng-show="order.tenpttt" class="form-group">
+                                <label class="col-xs-5 cus-control-label">Phương thức TT:</label>
+                                <div class="col-xs-7">
+                                    {{order.tenpttt}}
+                                    <br />
+                                    <span ng-class="{'badge bg-red':order.tinhtrang!='00','badge bg-green':order.tinhtrang=='00'}" ng-show="order.pttt==4">{{order.tinhtrang | statusVNPayFilter}}</span>
+                                </div>
+                            </div>
+                            <div ng-show="order.giogiao" class="form-group">
+                                <label class="col-xs-5 cus-control-label">Thời gian GH:</label>
+                                <div class="col-xs-7">
+                                    {{order.giogiao}}
+                                </div>
+                            </div>
+                            <div ng-show="order.tenptgh" class="form-group">
+                                <label class="col-xs-5 cus-control-label">Phương thức GH:</label>
+                                <div class="col-xs-7">
+                                    {{order.tenptgh}}
+                                </div>
+                            </div>
+                            <div ng-show="order.makh>0" class="form-group">
+                                <label class="col-xs-5 cus-control-label">Điểm sản phẩm:</label>
+                                <div class="col-xs-7">
+                                    {{order.diemsp}}
+                                </div>
+                            </div>
+                            <div ng-show="(order.Discount + order.datru_diem)>0" class="form-group">
+                                <label class="col-xs-5 cus-control-label">Tổng giảm:</label>
+                                <div class="col-xs-7">
+                                    <span>
+                                        {{order.Discount + order.datru_diem | currency:'':0}}
+                                    </span>
+                                    <i style="font-size:13px;margin-left:5px" ng-show="order.datru_diem>0">
+                                        <br />- Giảm 5 % thành viên
+                                    </i>
+                                    <i style="font-size:13px;margin-left:5px" ng-show="order.DiscountMoney>0">
+                                        <br />- Giảm {{order.DiscountMoney | currency:'':0}}
+                                    </i>
+                                    <i style="font-size:13px;margin-left:5px" ng-show="order.DiscountPercent>0">
+                                        <br />- Giảm {{order.DiscountPercent}} %
+                                    </i>
+                                    <i style="font-size:13px;margin-left:5px" ng-show="order.DiscountCode">
+                                        <br />- Mã giảm {{order.DiscountCode}}
+                                    </i>
+                                </div>
+                            </div>
+                            <div ng-show="order.ship>0" class="form-group">
+                                <label class="col-xs-5 cus-control-label">Phí:</label>
+                                <div class="col-xs-7">
+                                    {{order.ship | currency:'':0}}
+                                </div>
+                            </div>
+                            <div ng-show="order.phithuho>0" class="form-group">
+                                <label class="col-xs-5 cus-control-label">Phí thu hộ:</label>
+                                <div class="col-xs-7">
+                                    {{order.phithuho | currency:'':0}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-5 cus-control-label">Tổng thanh toán:</label>
+                                <div class="col-xs-7" style="color:red;font-weight:700">
+                                    {{order.tongtien | currency:'':0}} đ
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-xs-5 cus-control-label">Tình trạng:</label>
+                                <div class="col-xs-7">
+                                    <span ng-class="order.donhangStatu.CssClass">{{order.donhangStatu.Name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="box box-info">
+                <form class="form-horizontal">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Thông tin khách hàng</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-xs-4 cus-control-label">Họ tên:</label>
+                            <div class="col-xs-8">
+                                {{order.khachhang.hoten | date: 'dd/MM/yyyy'}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-4 cus-control-label">Điện thoại:</label>
+                            <div class="col-xs-8">
+                                {{order.khachhang.dienthoai}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-4 cus-control-label">Địa chỉ:</label>
+                            <div class="col-xs-8">
+                                {{order.khachhang.duong}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-4 cus-control-label">Tỉnh/Thành:</label>
+                            <div class="col-xs-8">
+                                {{order.tentp}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-4 cus-control-label">Quận/Huyện:</label>
+                            <div class="col-xs-8">
+                                {{order.tenquan}}
+                            </div>
+                        </div>
+                        <div ng-show="order.khachhang.MaKH>0" class="form-group">
+                            <label class="col-xs-4 cus-control-label">Điểm hiện tại:</label>
+                            <div class="col-xs-8">
+                                {{order.khachhang.diem}}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row nomarginleft margintop20px col-xs-12">
+        <table align="center" style="width:80%" class="table table-bordered table-striped table-hover text-center">
+            <tr>
+                <th>STT</th>
+                <th>Mã</th>
+                <th>Tên</th>
+                <th>Giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+            </tr>
+            <tr ng-repeat="item in order.donhang_ct">
+                <td>{{$index+1}}</td>
+                <td>{{item.shop_bienthe.masp}}</td>
+                <td>{{item.shop_bienthe.tensp}}</td>
+                <td>{{item.Dongia | currency:'':0}}</td>
+                <td>{{item.Soluong}}</td>
+                <td>{{item.Dongia * item.Soluong | currency:'':0}}</td>
+            </tr>
+            <tr>
+                <th colspan="5" style="text-align:right">Tổng</th>
+                <td>{{sumMoney() | currency:'':0}}</td>
+            </tr>
+        </table>
+    </div>
+    <div ng-if="loading">
+        <div class="col-xs-4"></div>
+        <div class="col-xs-4">
+            <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+        </div>
+        <div class="col-xs-4"></div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="row col col-xs-12">
+        <div class="pull-left">
+            <button type="button" class="btn btn-default" style="background-color:white" ng-click="back()">Trở về</button>
+        </div>
+        <div class="pull-right">
+            <button ng-hide="isUpdated==true" type="button" class="btn btn-info" ng-click="updateOrderDetails()">Cập nhật</button>
+            <button ng-hide="order.Status==1 || isUpdated==true" type="button" class="btn" ng-click="processOrder()">Chờ xử lý</button>
+            <button ng-hide="order.Status==2 || isUpdated==true" type="button" class="btn btn-warning" ng-click="shippedOrder()">Đang giao hàng</button>
+            <button ng-hide="order.Status==5 || isUpdated==true" type="button" class="btn btn-primary" ng-click="refundOrder()">Hoãn</button>
+            <button ng-hide="isUpdated==true" type="button" class="btn btn-success" ng-click="doneOrder()">Hoàn thành</button>
+            <button ng-hide="isUpdated==true" type="button" class="btn btn-danger" ng-click="cancelOrder()">Huỷ</button>
+            <button ng-hide="isUpdated==true" type="button" class="btn btn-default" ng-click="shipCancelOrder()">Giao hàng thất bại</button>
+        </div>
+    </div>
+    <div class="row col col-xs-12" style="text-align:left;margin-top:10px">
+        <style>
+            #statusPrint li {
+                list-style-type: circle !important;
+            }
+        </style>
+        <ul id="statusPrint">
+            <div ng-bind-html="statusPrint"></div>
+        </ul>
+    </div>
+</div>

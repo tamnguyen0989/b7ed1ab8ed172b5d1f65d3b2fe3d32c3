@@ -1,0 +1,81 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Thêm mới Kho
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a ui-sref="branches">Kho</a></li>
+        <li class="active">Thêm mới</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <!-- Horizontal Form -->
+    <div class="box box-info">
+        <!-- form start -->
+        <form class="form-horizontal" novalidate name="frmAddBranch" role="form" ng-submit="addBranch()">
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Tên</label>
+                    <div class="col-xs-6">
+                        <input type="text" name="name" ng-maxlength="256" required ng-model="branch.Name" class="form-control">
+                        <span ng-show="frmAddBranch.name.$invalid" class="has-error">Phải nhập tên Kho</span>
+                        <span ng-show="frmAddBranch.name.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Code</label>
+                    <div class="col-xs-6">
+                        <input type="text" name="code" ng-maxlength="50" required ng-model="branch.Code" class="form-control">
+                        <span ng-show="frmAddBranch.code.$invalid" class="has-error">Phải nhập Code</span>
+                        <span ng-show="frmAddBranch.code.$error.maxlength" class="has-error"> chỉ được 50 kí tự</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Địa chỉ</label>
+                    <div class="col-xs-6">
+                        <input type="text" name="address" ng-maxlength="500" ng-model="branch.Address" class="form-control">
+                        <span ng-show="frmAddBranch.address.$error.maxlength"> chỉ được 500 kí tự</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Điện thoại</label>
+                    <div class="col-xs-6">
+                        <input type="text" ng-maxlength="256" name="phone" ng-model="branch.Phone" class="form-control">
+                        <span ng-show="frmAddBranch.phone.$error.maxlength">chỉ được 256 kí tự</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Mô tả</label>
+                    <div class="col-xs-6">
+                        <input type="text" ng-maxlength="500" name="description" ng-model="branch.Description" class="form-control">
+                        <span ng-show="frmAddBranch.description.$error.maxlength">chỉ được 500 kí tự</span>
+                    </div>
+                </div>
+
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-xs-2">
+
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="submit" ng-disabled="frmAddBranch.$invalid" class="btn btn-success">Hoàn thành</button>
+                        <button ui-sref="branches" class="btn btn-default">Trở về</button>
+                    </div>
+                </div>
+                <div class=row>
+                    <div ng-if="loading">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4">
+                            <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang thêm mới...</label>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>
+                </div>
+            </div><!-- /.box-footer -->
+        </form>
+    </div><!-- /.box -->
+</section><!-- /.content -->

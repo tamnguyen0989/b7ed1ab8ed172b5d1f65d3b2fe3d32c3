@@ -1,0 +1,44 @@
+﻿<div class="modal-header">
+    <h4>Thêm mới sản phẩm</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form name="frmAddProduct">
+        <div class="row ">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Nhóm sp</label>
+            <div class="col-xs-7">
+                <select ng-change="genNewProductCodeByCategory()" ng-options="option.Name for option in productCategories track by option.Id"
+                        ng-model="selectedProductCategory"
+                        name="selectedProductCategory"
+                        class="form-control">
+                    <option disabled value="">--- Chọn nhóm sản phẩm ---</option>
+                </select>
+            </div>
+        </div>
+        <div ng-show="selectedProductCategory" class="row margintop10px">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;"></label>
+            <div class="col-xs-8">
+                <label class="control-label">{{lastestProductCodeByCategory}}</label> <span ng-show="lastestProductCodeByCategory">- Mã gần nhất của nhóm</span>
+            </div>
+        </div>
+        <div class="row margintop10px">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Mã sp</label>
+            <div class="col-xs-7">
+                <input type="text" name="productCode" ng-maxlength="256" required ng-model="productCode" class="form-control">
+                <span ng-show="frmAddProduct.productCode.$invalid" class="has-error">Phải nhập mã sp</span>
+                <span ng-show="frmAddProduct.productCode.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+            </div>
+        </div>
+        <div class="row margintop10px">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Tên sp</label>
+            <div class="col-xs-7">
+                <input type="text" name="productName" ng-maxlength="256" required ng-model="productName" class="form-control">
+                <span ng-show="frmAddProduct.productName.$invalid" class="has-error">Phải nhập tên sp</span>
+                <span ng-show="frmAddProduct.productName.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button ng-click="addProduct()" class="btn btn-success">Hoàn thành</button>
+    <button ng-click="backButton()" title="Trở về" class="btn btn-default" type="button">Trở về</button>
+</div>

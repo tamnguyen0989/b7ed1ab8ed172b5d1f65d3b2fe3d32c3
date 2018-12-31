@@ -1,0 +1,770 @@
+﻿  <!-- Content Header (Page header) -->
+<!--<section class="content-header">
+    <h1>
+        Thêm mới đơn hàng
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a ui-sref="orders">Danh sách đơn hàng</a></li>
+        <li class="active">Thêm mới</li>
+    </ol>
+</section>-->
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <!-- Horizontal Form -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <!--<h3 class="box-title">Horizontal Form</h3>-->
+                    <div class="row marginleft20px">
+                        <div class="col col-xs-4">
+                            <label>Loại đơn hàng: </label>
+                            <select ng-options="option.Name for option in channels track by option.Id"
+                                    ng-model="selectedChannel"
+                                    name="channel"
+                                    class="marginleft5px"
+                                    ng-change="updateSelectedChannel()">
+                                <option disabled value="">-- Chọn loại đơn --</option>
+                            </select>
+                        </div>
+                        <div class="col col-xs-4 text-center">
+                            <label ng-show="selectedChannel && selectedChannel.Id>0" style="font-weight:700;color:red;font-size:20px">{{channelName}}</label>
+                            <label ng-show="!selectedChannel" style="font-weight:700;color:red;font-size:20px">Chọn loại đơn !</label>
+                        </div>
+                        <div class="col col-xs-4"></div>
+
+                    </div>
+                </div><!-- /.box-header -->
+                <div class="box-body">
+                    <div class="row">
+                        <div name="frmSearch" class="form-horizontal">
+                            <div class="row col-sm-12 marginleft5px">
+                                <table class="table table-bordered table-striped table-hover text-center">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã</th>
+                                        <th>Tên</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Thành tiền</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr ng-repeat="item in detailOrders">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.masp}}</td>
+                                        <td>{{item.tensp}} <span style="color:blue" ng-show="item.freeship==true"> - Miễn phí vc</span></td>
+                                        <td>
+                                            <input required type="text" format="number"  ng-model="item.Price" ng-change="updateDistrict()" class="text-center width90px">
+                                            <br />
+                                            <label ng-show="item.PriceBeforeDiscount>0" class="fontweight600" style="text-decoration:line-through">{{item.PriceBeforeDiscount}}</label>
+                                            <label ng-show="item.NotDiscountMember==true && useDiscountMember == 1" class="text-red">không giảm thành viên</label>
+                                        </td>
+                                        <td><input class="text-center width80px" type="number" ng-model="item.Quantity" ng-change="updateDistrict()" /></td>
+                                        <td>{{item.Price * item.Quantity | currency:'':0}}</td>
+                                        <td><button type="button" class="btn btn-danger" ng-click="removeFromList($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="7" class="alignleft">
+                                            <input 
+                                                   placeholder="Nhập mã, tên sản phẩm" 
+                                                   ng-disabled="!selectedChannel" 
+                                                   type="text" 
+                                                   ng-model="searchText"
+                                                   ng-model-options="{debounce: 1000}" 
+                                                   style="width:40% !important;padding-left:5px">
+                                            <!--ng-change="searchProduct()"--> 
+                                            <input name="searchType" value="masp" ng-model="searchType" type="radio" />&nbsp;Mã SP&nbsp;
+                                            <input name="searchType" value="all" ng-model="searchType" type="radio" />&nbsp;Tất cả
+                                            <span ng-if="searching"><i class="fa fa-fw fa-refresh fa-spin"></i> <label class="label label-primary">Đang tìm...</label></span>
+                                            <div ng-show="searchedProducts.length>0" class="scrollable-menu">
+                                                <ul class="list-group">
+                                                    <li style="background:whitesmoke" class="list-group-item" ng-repeat="result in searchedProducts">
+                                                        <a class="current_cursor_add_order" ng-click="addToList(result)">{{result.masp}} - {{result.tensp}}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <!--<label class="pull-right marginright10px" ng-show="sumMoney()>0">Tổng tiền: {{sumMoney() | currency:'':0}}</label>-->
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            <div ng-if="loading">
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-4">
+                                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                                </div>
+                                <div class="col-xs-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div name="frmOrderAdd">
+            <div class="col-xs-12">
+                <div class="box box-info" style="margin-bottom:0px">
+                    <div class="box-body">
+                        <div class="row">
+                            <div ng-class="{'col-xs-3':selectedChannel.Id>1,'col-xs-4':selectedChannel.Id==1 || selectedChannel==null}" style="padding-right:2px">
+                                <div class="box box-info" style="border-top: 3px solid white;box-shadow: unset;border-right: 1px solid #f4f4f4;border-left: 1px solid #f4f4f4;">
+                                    <div class="form-horizontal">
+                                        <div class="box-header with-border text-center" style="background-color:#f9f9f9">
+                                            <h3 class="box-title">Khách hàng</h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <div class="form-group">
+                                                <label class="col-xs-5 cus-control-label">Điện thoại:</label>
+                                                <div class="col-xs-7">
+                                                    <input ng-change="searchCustomerByPhone()" ng-model="searchPhone" type="text" class="width95" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-xs-5 cus-control-label">Họ tên:</label>
+                                                <div class="col-xs-7">
+                                                    <input ng-model="customer.hoten" type="text" class="width95" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-xs-5 cus-control-label">Tỉnh/Thành:</label>
+                                                <div class="col-xs-7">
+                                                    <select ng-options="option.tentp for option in cities track by option.id"
+                                                            ng-model="selectedCity"
+                                                            name="city"
+                                                            class="width95"
+                                                            ng-change="updateCity()"></select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-xs-5 cus-control-label"><span ng-show="frmOrderAdd.district.$error.required" class="has-error">*</span> Quận/Huyện:</label>
+                                                <div class="col-xs-7">
+                                                    <select ng-options="option.tentinh for option in districts track by option.id"
+                                                            ng-model="selectedDistrict"
+                                                            name="district"
+                                                            class="width95"
+                                                            ng-change="updateDistrict()">
+                                                            <!--ng-required="validSelectedDistrict()"-->
+                                                            
+                                                        <option value=''>--Chọn Quận/Huyện--</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-xs-5 cus-control-label">Địa chỉ:</label>
+                                                <div class="col-xs-7">
+                                                    <textarea rows="2" ng-model="customer.duong" class="width95"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-xs-5 cus-control-label">Điểm KH:</label>
+                                                <div class="col-xs-7">
+                                                    <label class="fontweight600">{{customer.diem}}</label>&nbsp;điểm
+                                                    <br />
+                                                    <div ng-show="customer.diem>=1000">
+                                                        <input type="checkbox" ng-change="updateDiscountMember()" ng-model="useDiscountMember" value="1" />&nbsp;Giảm 5%
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-xs-5 cus-control-label">Điểm KH mới:</label>
+                                                <div class="col-xs-7">
+                                                    <label class="fontweight600">{{sumPoint()}}</label>&nbsp;điểm
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!-- /.box-body -->
+                            </div>
+                            <div ng-class="{'col-xs-9':selectedChannel.Id>1,'col-xs-8':selectedChannel.Id==1|| selectedChannel==null}">
+                                <div class="row">
+                                    <div ng-show="selectedChannel.Id>1" class="col-xs-5" style="padding-left:2px;padding-right:2px">
+                                        <div class="box box-info" style="border-top: 3px solid white;box-shadow: unset;border-right: 1px solid #f4f4f4;border-left: 1px solid #f4f4f4;">
+                                            <div class="form-horizontal">
+                                                <div class="box-header with-border text-center" style="background-color:#f9f9f9">
+                                                    <h3 class="box-title">Vận chuyển</h3>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div ng-show="selectedCity.id==1 && HCMType==3 " class="form-group" style="margin-bottom:10px">
+                                                        <label class="col-xs-4 cus-control-label"><span ng-show="frmOrderAdd.typeShipHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:</label>
+                                                        <div class="col-xs-8">
+                                                            <ul style="list-style-type: none;margin-left:-20px">
+                                                                <li>
+                                                                    <input name="typeShipHCM" type="radio" value=1 ng-model="selectedTypeShipHCM" ng-change="updateTypeShipHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        Viettel Post 24h:
+                                                                        <span ng-show="freeShipType!=1" style="color:blue">
+                                                                            {{VTPFeeHCM | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=1 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==1" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                    </i>
+                                                                </li>
+                                                                <li ng-show="passGHTKRules==true">
+                                                                    <input name="typeShipHCM" type="radio" value=2 ng-model="selectedTypeShipHCM" ng-change="updateTypeShipHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        GH Tiết Kiệm 24h:
+                                                                        <span ng-show="freeShipType!=2" style="color:blue">
+                                                                            {{GHTKFeeHCM | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=2 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==2" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                    </i>
+                                                                </li>
+                                                                <li ng-show="passVNEPRules==true">
+                                                                    <input name="typeShipHCM" type="radio" value=4 ng-model="selectedTypeShipHCM" ng-change="updateTypeShipHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        GH Vnexpress 24h:
+                                                                        <span ng-show="freeShipType!=4" style="color:blue">
+                                                                            {{VNEPFeeHCM | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=4 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==4" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                    </i>
+                                                                </li>
+                                                            </ul>
+                                                            <input 
+                                                                   ng-model="selectedTypeShipHCM" 
+                                                                   name="typeShipHCMTmp" type="text" 
+                                                                   hidden />
+                                                                   <!--ng-required="validSelectedTypeShipHCM()"--> 
+                                                                   
+                                                        </div>
+                                                    </div>
+                                                    <div ng-show="selectedCity.id!=1 && selectedDistrict.id>0 " class="form-group" style="margin-bottom:10px">
+                                                        <label class="col-xs-4 cus-control-label"><span ng-show="frmOrderAdd.typeShipOutHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:</label>
+                                                        <div class="col-xs-8">
+                                                            <ul style="list-style-type: none;margin-left:-20px">
+                                                                <!--<li>
+                                                                    <input name="typeShipOutHCM" type="radio" value=1 ng-model="selectedTypeShipOutHCM" ng-change="updateTypeShipOutHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        Viettel Post Tiết Kiệm {{VTPEcoTime}}:
+                                                                        <span ng-show="freeShipType!=1" style="color:blue">
+                                                                            {{VTPEcoFee | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=1 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==1" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                    </i>
+                                                                </li>
+                                                                <li>
+                                                                    <input name="typeShipOutHCM" type="radio" value=3 ng-model="selectedTypeShipOutHCM" ng-change="updateTypeShipOutHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        Viettel Post Nhanh {{VTPFastTime}}:
+                                                                        <span ng-show="freeShipType!=3" style="color:blue">
+                                                                            {{VTPFastFee | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=3 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==3" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                    </i>
+                                                                </li>-->
+                                                                <li>
+                                                                    <input name="typeShipOutHCM" type="radio" value=4 ng-model="selectedTypeShipOutHCM" ng-change="updateTypeShipOutHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        GH Tiết Kiệm {{GHTKTime}}:
+                                                                        <span ng-show="freeShipType!=4" style="color:blue">
+                                                                            {{GHTKFee | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=4 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==4" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                        <span style="color:black"> - Free COD</span>
+                                                                    </i>
+                                                                </li>
+                                                                <li>
+                                                                    <input name="typeShipOutHCM" type="radio" value=7 ng-model="selectedTypeShipOutHCM" ng-change="updateTypeShipOutHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        VNPost nhanh {{VNPFastTime}}:
+                                                                        <span ng-show="freeShipType!=7" style="color:blue">
+                                                                            {{VNPFastFee | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=7 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==7" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                    </i>
+                                                                </li>
+                                                                <li>
+                                                                    <input name="typeShipOutHCM" type="radio" value=8 ng-model="selectedTypeShipOutHCM" ng-change="updateTypeShipOutHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        VNPost thường {{VNPEcoTime}}:
+                                                                        <span ng-show="freeShipType!=8" style="color:blue">
+                                                                            {{VNPEcoFee | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=8 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==8" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                    </i>
+                                                                </li>
+                                                                <!--<li>
+                                                                    <input name="typeShipOutHCM" type="radio" value=9 ng-model="selectedTypeShipOutHCM" ng-change="updateTypeShipOutHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        GH Vnexpress {{VNEPTime}}:
+                                                                        <span ng-show="freeShipType!=9" style="color:blue">
+                                                                            {{VNEPFee | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=9 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==9" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                        <span style="color:black"> - Free COD</span>
+                                                                    </i>
+                                                                </li>-->
+                                                                <li ng-show="FUTAAddress">
+                                                                    <input name="typeShipOutHCM" type="radio" value=5 ng-model="selectedTypeShipOutHCM" ng-change="updateTypeShipOutHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        Xe Phương Trang {{FUTATime}}:
+                                                                        <span ng-show="freeShipType!=5" style="color:blue">
+                                                                            {{FUTAFee | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=5 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==5" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                    </i><br />
+                                                                    <i ng-show="selectedTypeShipOutHCM==5" style="font-size:13px;margin-left:30px;color:orangered">ĐC nhận hàng: {{FUTAAddress}}</i>
+                                                                </li>
+                                                                <li>
+                                                                    <input name="typeShipOutHCM" type="radio" value=6 ng-model="selectedTypeShipOutHCM" ng-change="updateTypeShipOutHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        Xe Khách Khác
+                                                                    </i>
+                                                                    <input type="text" style="margin-left:15px;width:90%;padding-left:5px" ng-model="coachInfo" />
+                                                                </li>
+                                                            </ul>
+                                                            <input 
+                                                                   ng-model="selectedTypeShipOutHCM"
+                                                                   name="typeShipOutHCMTmp" 
+                                                                   type="text" 
+                                                                   hidden  />
+                                                                   <!--ng-required="validSelectedTypeShipOutHCM()"-->
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-xs-4 cus-control-label"><span ng-show="frmOrderAdd.paymentCity.$error.required" class="has-error">*</span>PT thanh toán:</label>
+                                                        <div class="col-xs-8">
+                                                            <select 
+                                                                    ng-options="option.name for option in paymentCity track by option.value"
+                                                                    ng-model="selectedPayment"
+                                                                    ng-change="updatePayment()"
+                                                                    name="paymentCity"
+                                                                    class="width95">
+                                                                    <!--ng-required="validSelectedPayment()"-->
+                                                                <option disabled value="">--Chọn PT thanh toán--</option>
+                                                            </select>
+                                                            <!--<select ng-show="selectedTypeShipOutHCM==5"
+                                                                    ng-options="option.name for option in  track by option.value"
+                                                                    ng-model="selectedPayment"
+                                                                    ng-change="updatePayment()"
+                                                                    name="paymentCity"
+                                                                    class="width95">
+                                                                <option value="">--Chọn PT thanh toán--</option>
+                                                            </select>-->
+                                                        </div>
+                                                    </div>
+                                                    <div ng-show="selectedCity.id==1 && (HCMType==1 ||  HCMType==2)" class="form-group">
+                                                        <label class="col-xs-4 cus-control-label">
+                                                            <span ng-show="frmOrderAdd.deliveryTimeSubUrban.$error.required" class="has-error">*</span><span ng-show="frmOrderAdd.deliveryTime.$error.required" class="has-error">*</span><span ng-show="frmOrderAdd.deliveryTimeFast.$error.required" class="has-error">*</span> TG giao hàng:
+                                                        </label>
+                                                        <div class="col-xs-8">
+                                                            <select ng-show="checkSubUrban()==true"
+                                                                    ng-options="option.name for option in deliveryTimeSubUrban track by option.value"
+                                                                    ng-model="selectedDeliveryTime"
+                                                                    ng-change="updateDeliveryTime()"
+                                                                    name="deliveryTimeSubUrban"
+                                                                    class="width95">
+                                                                    <!--ng-required="validDeliveryTimeSubUrban()"-->
+                                                                    
+                                                                <option value="">--Chọn thời gian--</option>
+                                                            </select>
+                                                            <select ng-show="checkSubUrban()==false && checkFastDelivery()==false"
+                                                                    ng-options="option.name for option in deliveryTime track by option.value"
+                                                                    ng-model="selectedDeliveryTime"
+                                                                    ng-change="updateDeliveryTime()"
+                                                                    name="deliveryTime"
+                                                                    class="width95">
+                                                                    <!--ng-required="validDeliveryTime()"-->
+                                                                    
+                                                                <option value="">--Chọn thời gian--</option>
+                                                            </select>
+                                                            <select ng-show="checkSubUrban()==false && checkFastDelivery()==true"
+                                                                    ng-options="option.name for option in deliveryTimeFast track by option.value"
+                                                                    ng-model="selectedDeliveryTime"
+                                                                    ng-change="updateDeliveryTime()"
+                                                                    name="deliveryTimeFast"
+                                                                   
+                                                                    class="width95">
+                                                                <!--ng-required="validDeliveryTimeFast()"-->
+                                                                <option value="">--Chọn thời gian--</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div ng-show="selectedCity.id==1 && HCMType!=3 && selectedDistrict && (feeShip>0 ||  feeDeliveryTime>0)" class="form-group">
+                                                        <label class="col-xs-4 cus-control-label">Phí:</label>
+                                                        <div class="col-xs-8">
+                                                            <i style="font-size:13px;margin-left:5px" ng-show="feeShip>0">
+                                                                <!--<span>- Đơn tã, thực phẩm < 400,000</span>-->
+                                                                <span ng-show="HCMType==1 && foodCart==false">- Đơn vật dụng khác <= 200,000 (Q.1,3,4,5,6,8,10,11,TP,TB,GV,PN,BTH)</span>
+                                                                <span ng-show="HCMType==1 && foodCart==true">- Đơn tã,thực phẩm <= 400,000 (Q.1,3,4,5,6,8,10,11,TP,TB,GV,PN,BTH)</span>
+                                                                <span ng-show="HCMType==2 && foodCart==false">- Đơn vật dụng khác <= 300,000 (Q.2,7,9,12,BTA,TD)</span>
+                                                                <span ng-show="HCMType==2 && foodCart==true">- Đơn tã,thực phẩm <= 500,000 (Q.2,7,9,12,BTA,TD)</span>
+                                                                : <span style="color:blue">{{feeShip | currency:'':0}}</span><br />
+                                                            </i>
+                                                            <i style="font-size:13px;margin-left:5px" ng-show="feeDeliveryTime>0">
+                                                                <span ng-show="selectedDeliveryTime.value == 5">- GH nhanh</span>
+                                                                <span ng-show="selectedDeliveryTime.value == 2">- GH ngoài giờ hc</span>
+                                                                <span ng-show="selectedDeliveryTime.value == 3">- GH ngày chủ nhật</span> : <span style="color:blue">{{feeDeliveryTime | currency:'':0}}</span>
+                                                            </i>
+                                                        </div>
+                                                    </div>
+                                                    <div ng-show="(selectedTypeShipOutHCM==5 && sumMoneyCartNoDiscount()<=200000) || (cod>0 && selectedPayment.value == 1)" class="form-group">
+                                                        <label class="col-xs-4 cus-control-label">Phí:</label>
+                                                        <div class="col-xs-8">
+                                                            <i style="font-size:13px;margin-left:5px" ng-show="selectedTypeShipOutHCM==5 && sumMoneyCartNoDiscount()<=200000">
+                                                                <span>- Đơn <= 200,000</span>
+                                                                : <span style="color:blue">20,000</span><br />
+                                                            </i>
+                                                            <i style="font-size:13px;margin-left:5px" ng-show="VTPCod>0 && (selectedTypeShipOutHCM ==1 || selectedTypeShipOutHCM ==3) && selectedPayment.value == 1">
+                                                                <span>- Thu hộ</span>
+                                                                : <span style="color:blue">{{VTPCod | currency:'':0}}</span>
+                                                            </i>
+                                                            <i style="font-size:13px;margin-left:5px" ng-show="VNPCod>0 && (selectedTypeShipOutHCM ==7 || selectedTypeShipOutHCM ==8) && selectedPayment.value == 1">
+                                                                <span>- Thu hộ</span>
+                                                                : <span style="color:blue">{{VNPCod | currency:'':0}}</span>
+                                                            </i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group" ng-show="((selectedChannel.Id==1 || selectedChannel.Id==2) && (HCMType==1 || HCMType==2)) && selectedCity.id==1">
+                                                        <label class="col-xs-4 cus-control-label">NV giao hàng:</label>
+                                                        <div class="col-xs-8">
+                                                            <select ng-options="option.UserName for option in users track by option.Id"
+                                                                    ng-model="selectedShipper"
+                                                                    name="shipper"
+                                                                    class="width95">
+                                                                <option value="">--Chọn NV giao hàng--</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <textarea ng-model="ghichu" rows="2" style="width:90%" class="form-control marginleft20px"></textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="cus-control-label marginleft20px" ng-show="frmOrderAdd.$invalid" style="font-style:italic;font-weight:500;font-size:12px;color:red">(*) Trường bắt buộc chọn</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div>
+                                    <div ng-class="{'col-xs-3':selectedChannel.Id>1,'col-xs-6':selectedChannel.Id==1|| selectedChannel==null}" style="padding-left:2px;padding-right:2px">
+                                        <div class="box box-info" style="border-top: 3px solid white;box-shadow: unset;border-right: 1px solid #f4f4f4;border-left: 1px solid #f4f4f4;">
+                                            <div class="form-horizontal">
+                                                <div class="box-header with-border text-center" style="background-color:#f9f9f9">
+                                                    <h3 class="box-title">Giảm giá</h3>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="form-group">
+                                                        <label class="col-xs-5 fontweight600" style="padding-right:2px;text-align:right">
+                                                            Số tiền:&nbsp;<input ng-model="discountType" type="radio" name="discountType" value="money" />
+                                                        </label>
+                                                        <div class="col-xs-7" style="padding-left:2px">
+                                                            <input ng-change="updateDiscountMoney()" ng-disabled="discountType=='percent'||discountType=='code'" format="number" type="text" class="width90" ng-model="discountMoney" />&nbsp;đ
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-xs-5 fontweight600" style="padding-right:2px;text-align:right">
+                                                            %:&nbsp;<input type="radio" ng-model="discountType" name="discountType" value="percent" />
+                                                        </label>
+                                                        <div class="col-xs-7" style="padding-left:2px">
+                                                            <input ng-change="updateDiscountPercent()" ng-disabled="discountType=='money'||discountType=='code'" type="number" class="width90" ng-model="discountPercent" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-xs-5 fontweight600" style="padding-right:2px;text-align:right">
+                                                            Mã:&nbsp;<input type="radio" ng-model="discountType" name="discountType" value="code" />
+                                                        </label>
+                                                        <div class="col-xs-7" style="padding-left:2px">
+                                                            <input ng-change="updateDiscountCode()" ng-disabled="discountType=='money'||discountType=='percent'" type="text" class="width90" ng-model="discountCode" />
+                                                        </div>
+                                                    </div>
+                                                    <div ng-show="useDiscountMember == 1" class="form-group">
+                                                        <label class="col-xs-5 fontweight600" style="padding-right:2px;text-align:right">Giảm 5%:</label>
+                                                        <div class="col-xs-7" style="padding-left:2px">
+                                                            {{datru_diem  | currency:'':0}} &nbsp;đ
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-xs-5 fontweight600" style="padding-right:2px;text-align:right">Tổng giảm:</label>
+                                                        <div class="col-xs-7" style="padding-left:2px">
+                                                            {{discount + datru_diem | currency:'':0}} &nbsp;đ
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div>
+                                    <div ng-class="{'col-xs-4':selectedChannel.Id>1,'col-xs-6':selectedChannel.Id==1|| selectedChannel==null}" style="padding-left:2px">
+                                        <div class="box box-info" style="border-top: 3px solid white;box-shadow: unset;border-right: 1px solid #f4f4f4;border-left: 1px solid #f4f4f4;">
+                                            <div class="form-horizontal">
+                                                <div class="box-header with-border text-center" style="background-color:#f9f9f9">
+                                                    <h3 class="box-title">Thanh toán</h3>
+                                                </div>
+                                                <div class="box-body">
+                                                    <div class="form-group">
+                                                        <label class="col-xs-5 cus-control-label">Thanh toán:</label>
+                                                        <div class="col-xs-7">
+                                                            {{total() | currency:'':0}}&nbsp;đ
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-xs-5 cus-control-label">Phí khác:</label>
+                                                        <div class="col-xs-7">
+                                                            <input type="text" format="number" class="width95" ng-model="anotherFee" />
+                                                        </div>
+                                                    </div>
+                                                    <!--<div class="form-group">
+                                                        <label class="col-xs-5 cus-control-label">Phí thu hộ:</label>
+                                                        <div class="col-xs-7">
+                                                            <input type="text" format="number" class="width95" ng-model="cod" />
+                                                        </div>
+                                                    </div>-->
+                                                    <div class="form-group">
+                                                        <label class="col-xs-5 cus-control-label">Tổng:</label>
+                                                        <div class="col-xs-7">
+                                                            <label style="color:red">{{totalMoney() | currency:'':0}}&nbsp;đ</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-xs-5 cus-control-label">Khách đưa:</label>
+                                                        <div class="col-xs-7">
+                                                            <input type="text" format="number" class="width95" ng-model="paid" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-xs-5 cus-control-label">Tiền thừa:</label>
+                                                        <div class="col-xs-7">
+                                                            <label ng-show="paid>0">{{paid-totalMoney() | currency:'':0}}&nbsp; đ</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div>
+                                </div>
+                                <div class="row text-center" style="margin-bottom:5px">
+                                    <div class="col-xs-8">
+                                        <button type="button" ng-show="selectedChannel.Id>1" ng-disabled="!selectedChannel || detailOrders.length==0 || addingOrder || frmOrderAdd.$invalid" ng-click="saveOrder()" class="btn btn-warning">Tạo đơn</button>
+                                        <button type="button" ng-disabled="!selectedChannel || detailOrders.length==0 || addingOrder || frmOrderAdd.$invalid" ng-click="addOrder()" class="btn btn-success">Hoàn thành</button>
+                                        <span ng-show="addingOrder"><i class="fa fa-refresh fa-4x fa-spin"></i><label class="label label-primary">Đang tạo...</label></span>
+                                    </div>
+                                    <div class="col-xs-4"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row hidden">
+                            <div id="printDivCH">
+                                <style>
+                                    @media print {
+                                        .ng-hide {
+                                            visibility: collapse !important;
+                                        }
+                                    }
+
+                                    ul li {
+                                        list-style: none;
+                                    }
+
+                                    #content {
+                                        font-size: 12px;
+                                    }
+                                </style>
+                                <div id="content">
+                                    <h5 class="text-center" style="font-weight: 700;margin-bottom:5px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h5>
+                                    <p class="text-center" style="margin-top:0px">(028) 7309.3479 – 0918.644643</p>
+                                    <h4 class="text-center">HÓA ĐƠN BÁN HÀNG</h4>
+                                    <div class="row">
+                                        <div class="col col-xs-3 text-right" style="padding-right:5px">Ngày :</div>
+                                        <div class="col col-xs-9 text-left" style="padding-left:5px">{{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-xs-3 text-right" style="padding-right:5px">Số HĐ :</div>
+                                        <div class="col col-xs-9 text-left" style="padding-left:5px">{{orderReturn.Code}}-{{orderReturn.id}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-xs-3 text-right" style="padding-right:5px">Tên KH :</div>
+                                        <div class="col col-xs-9 text-left" style="padding-left:5px">{{orderReturn.khachhang.hoten}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-xs-3 text-right" style="padding-right:5px">SĐT :</div>
+                                        <div class="col col-xs-9 text-left" style="padding-left:5px">{{orderReturn.khachhang.dienthoai}}</div>
+                                    </div>
+                                    <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px">
+                                        <tr>
+                                            <th class="text-center" style="padding:1px"></th>
+                                            <th class="text-center">Tên sản phẩm</th>
+                                            <th class="text-center">SL</th>
+                                            <th class="text-center">Giá</th>
+                                            <th class="text-center">T.Tiền</th>
+                                        </tr>
+                                        <tr ng-repeat="item in orderReturn.donhang_ct">
+                                            <td style="padding:1px">{{$index+1}}</td>
+                                            <td>{{item.shop_bienthe.tensp}}</td>
+                                            <td>{{item.Soluong}}</td>
+                                            <td>{{item.Dongia | currency:'':0}}</td>
+                                            <td>{{item.Soluong * item.Dongia | currency:'':0}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right">Tổng thành tiền</td>
+                                            <td colspan="2">{{totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        </tr>
+                                        <tr ng-hide="(orderReturn.ship + orderReturn.phithuho) == 0">
+                                            <td colspan="3" class="text-right">Phí</td>
+                                            <td colspan="2">{{orderReturn.ship + orderReturn.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        </tr>
+                                        <tr ng-hide="orderReturn.datru_diem==0">
+                                            <td colspan="3" class="text-right">Giảm</td>
+                                            <td colspan="2">{{orderReturn.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="font-weight:700" colspan="3">Thanh toán</td>
+                                            <td colspan="2">{{orderReturn.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        </tr>
+                                    </table>
+                                    <div class="text-right" style="margin-top:5px">
+                                        Xin cảm ơn Quý Khách và hẹn gặp lại.
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="printDivNotCH">
+                                <style>
+                                    @media print {
+                                        .ng-hide {
+                                            display: none !important;
+                                        }
+                                    }
+
+                                    ul li {
+                                        list-style: none;
+                                    }
+
+                                    #content {
+                                        font-size: 12px;
+                                    }
+
+                                        #content td, th {
+                                            padding: 5px !important;
+                                        }
+                                </style>
+                                <div id="content">
+                                    <h5 class="text-center" style="font-weight: 700;margin-top:0px;margin-bottom:0px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h5>
+                                    <p class="text-center" style="margin-top:0px;margin-bottom:3px">(028) 7309.3479 – 0918.644643</p>
+                                    <h4 class="text-center" style="margin-top:0px;margin-bottom:3px">HÓA ĐƠN BÁN HÀNG</h4>
+                                    <div class="row">
+                                        <div class="col col-xs-2 text-right" style="padding-right:5px">Số :</div>
+                                        <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.Code}}-{{orderReturn.id}} | Ngày : {{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col col-xs-2 text-right" style="padding-right:5px">Tên :</div>
+                                        <div class="col col-xs-10 text-left" style="padding-left:5px"><span style="font-style:italic">{{orderReturn.khachhang.hoten}}</span> - {{orderReturn.khachhang.dienthoai}}</div>
+                                    </div>
+                                    <div class="row" ng-hide="orderReturn.ChannelId==1">
+                                        <div class="col col-xs-2 text-right" style="padding-right:5px">ĐC :</div>
+                                        <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.khachhang.duong}} - {{orderReturn.khachhang.districtName}} - {{orderReturn.khachhang.cityName}}</div>
+                                    </div>
+                                    <div class="row" ng-hide="!orderReturn.tenpttt && !orderReturn.tenptgh">
+                                        <div class="col col-xs-2 text-right" style="padding-right:5px">TT :</div>
+                                        <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.tenpttt}}<span ng-hide="!orderReturn.giogiao"> | TG: {{orderReturn.giogiao}}</span><span ng-hide="!orderReturn.tenptgh"> | GH: {{orderReturn.tenptgh}}</span></div>
+                                    </div>
+                                    <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px;margin-top:3px">
+                                        <tr>
+                                            <th class="text-center" style="padding:1px"></th>
+                                            <th ng-hide="orderReturn.ChannelId==1" class="text-center" style="padding:1px">Mã</th>
+                                            <th class="text-center">Tên sản phẩm</th>
+                                            <th class="text-center">SL</th>
+                                            <th class="text-center">Giá</th>
+                                            <th class="text-center">T.Tiền</th>
+                                        </tr>
+                                        <tr ng-repeat="item in orderReturn.donhang_ct">
+                                            <td style="padding:1px">{{$index+1}}</td>
+                                            <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
+                                            <td>{{item.shop_bienthe.tensp}}</td>
+                                            <td>{{item.Soluong}}</td>
+                                            <td>{{item.Dongia | currency:'':0}}</td>
+                                            <td>{{item.Soluong * item.Dongia | currency:'':0}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" class="text-right">Tổng thành tiền</td>
+                                            <td colspan="2">{{totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        </tr>
+                                        <tr ng-hide="(orderReturn.ship + orderReturn.phithuho) ==0">
+                                            <td colspan="4" class="text-right">Phí</td>
+                                            <td colspan="2">{{orderReturn.ship + orderReturn.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        </tr>
+                                        <tr ng-hide="orderReturn.datru_diem==0">
+                                            <td colspan="4" class="text-right">Giảm</td>
+                                            <td colspan="2">{{orderReturn.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-right" style="font-weight:700" colspan="4">Thanh toán</td>
+                                            <td colspan="2">{{orderReturn.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        </tr>
+                                        <tr ng-hide="!orderReturn.ghichu && !orderReturn.chitietgiogiao">
+                                            <td colspan="2">Lưu ý</td>
+                                            <td colspan="4">{{orderReturn.ghichu}} - {{orderReturn.chitietgiogiao}}</td>
+                                        </tr>
+                                    </table>
+                                    <div class="text-right" style="margin-top:5px">
+                                        Xin cảm ơn Quý Khách và hẹn gặp lại.
+                                    </div>
+                                    <div ng-hide="!orderReturn.tenptgh && (orderReturn.pttt!=1 || orderReturn.pttt!=3)" class="text-right" style="margin-top:5px">
+                                        {{orderReturn.tenptgh}} - Thu hộ - {{orderReturn.tongtien | currency:'':0}} đ
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</section><!-- /.content -->

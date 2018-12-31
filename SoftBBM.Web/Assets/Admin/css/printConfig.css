@@ -1,0 +1,65 @@
+﻿
+/* CSS Styling for the print page */
+.rightAlign {
+    text-align: right;
+}
+
+.noneListStyleType {
+    list-style-type: none;
+}
+
+.sloganBBMPrint {
+    text-align: center;
+    font-weight: 700;margin-bottom:5px
+}
+
+.headerPrint {
+    text-align: center;
+    font-weight: 700;
+}
+
+.headerPhonePrint {
+    text-align: center;
+    margin-top:0px;
+}
+
+#contentPrint{
+    font-size:12px;
+}
+
+.barcode-group {
+    float: left;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    width:39mm !important;
+    height:20mm !important;
+}
+
+.header-barcode {
+    text-align: center;
+    font-size: 9px;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.barcode {
+    text-align: center;
+    font-size: 9px;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.bottom-barcode {
+    text-align: center;
+    font-size: 9px;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.clear {
+    clear: both;
+}
+
+.barcode.code128 {
+    margin-left: 9px;
+}

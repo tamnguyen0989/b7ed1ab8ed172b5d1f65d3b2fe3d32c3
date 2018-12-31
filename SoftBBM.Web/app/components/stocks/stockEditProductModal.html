@@ -1,0 +1,125 @@
+﻿<div class="modal-header">
+    <h4>{{product.productCode}} - {{product.name}}</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form role="form" novalidate angular-validator name="frmEditProduct" class="form-inline">
+        <div class="row nomarginleft">
+            <div class="col col-xs-6">
+                <div class="row">
+                    <div class="col col-xs-4 text-right">
+                        <label class="custom_label">Mã sản phẩm:</label>
+                    </div>
+                    <div class="col col-xs-8">
+                        <input type="text" class="form-control width100" ng-model="product.productCode" />
+                    </div>
+                </div>
+                <div class="row margintop5px">
+                    <div class="col col-xs-4 text-right">
+                        <label class="custom_label">Mã vạch:</label>
+                    </div>
+                    <div class="col col-xs-8">
+                        <input type="text" class="form-control width100" ng-model="product.barCode" />
+                    </div>
+                </div>
+                <div class="row margintop5px">
+                    <div class="col col-xs-4 text-right">
+                        <label class="custom_label">Tên sản phẩm:</label>
+                    </div>
+                    <div class="col col-xs-8">
+                        <input type="text" class="form-control width100" ng-model="product.name" />
+                    </div>
+                </div>
+                <div class="row margintop5px">
+                    <div class="col col-xs-4 text-right">
+                        <label class="custom_label">Giá nhập cũ:</label>
+                    </div>
+                    <div class="col col-xs-8">
+                        <input type="text" class="form-control width100" format="number" ng-model="product.priceBaseOld" />
+                    </div>
+                </div>
+                <div class="row margintop5px">
+                    <div class="col col-xs-4 text-right">
+                        <label class="custom_label">Giá nhập mới:</label>
+                    </div>
+                    <div class="col col-xs-8">
+                        <input type="text" class="form-control width100" format="number" ng-model="product.priceBase" />
+                    </div>
+                </div>
+                <!--<div class="row margintop5px">
+                    <div class="col col-xs-4 text-right">
+                        <label class="custom_label">Giá cơ bản:</label>
+                    </div>
+                    <div class="col col-xs-8">
+                        <input type="text" class="form-control width100" format="number" ng-model="product.priceAvg" />
+                    </div>
+                </div>-->
+                <div class="row margintop5px">
+                    <div class="col col-xs-4 text-right">
+                        <label class="custom_label">Giá tham chiếu:</label>
+                    </div>
+                    <div class="col col-xs-8">
+                        <input type="text" class="form-control width100" format="number" ng-model="product.priceRef" />
+                    </div>
+                </div>
+            </div>
+            <div class="col col-xs-6">
+                <div class="row nomarginleft">
+                    <div class="row">
+                        <div class="col col-xs-4 text-right">
+                            <label class="custom_label">Nhóm sản phẩm:</label>
+                        </div>
+                        <div class="col col-xs-8">
+                            <select ng-options="option.Name for option in productCategories track by option.Id"
+                                    ng-model="selectedProductCategory"
+                                    name="productCategory"
+                                    class="form-control width98">
+                                <option value="">--- Chọn nhóm SP ---</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row margintop5px">
+                        <div class="col col-xs-4 text-right">
+                            <label class="custom_label text-right">Nhà cung cấp:</label>
+                        </div>
+                        <div class="col col-xs-8">
+                            <select 
+                                    ng-options="option.Name for option in suppliers track by option.Id"
+                                    ng-model="selectedSupplier"
+                                    name="supplier"
+                                    class="form-control width98">
+                                <option value="">--- Chọn nhà NCC ---</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row margintop5px">
+                        <div class="col col-xs-4  text-right">
+                            <label class="custom_label">Tình trạng:</label>
+                        </div>
+                        <div class="col col-xs-8">
+                            <select 
+                                    ng-options="option.Name for option in productStatuses track by option.Id"
+                                    ng-model="selectedProductStatus"
+                                    name="productStatus"
+                                    class="form-control width98">
+                                <option value="">--- Chọn tình trạng ---</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row margintop20px text-center">
+                        <button type="button" class="btn btn-success marginright10px" ng-click="update()">Cập nhật</button>
+                        <button type="button" class="btn btn-default" ng-click="back()">Trở về</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row nomarginleft">
+            <div ng-if="loading">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+    </form>    
+</div>

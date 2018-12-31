@@ -1,0 +1,22 @@
+﻿<div class="modal-header">
+    <h4>Cập nhật giá kênh những sản phẩm thay đổi giá</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form role="form" novalidate angular-validator name="frmThenUpdatePrice" class="form-inline">
+        <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:10px">
+            <tr>
+                <th width="15%">Mã</th>
+                <th width="70%">Tên</th>
+                <th width="15%"></th>
+            </tr>
+            <tr ng-repeat="item in updatedProducts">
+                <th width="15%">{{item.masp}}</th>
+                <td width="70%">{{item.tensp}}</td>
+                <td width="15%"><button ng-show="item.updatedChannelPrice==false" type="button" class="btn btn-success" ng-click="thenUpdatePrice(item,$index)"><i class="fa fa-arrow-circle-right"></i> Cập nhật</button><button ng-show="item.updatedChannelPrice==true" ng-click="thenUpdatePrice(item,$index)" type="button" class="btn btn-primary"><i class="fa fa-arrow-circle-right"></i> Đã cập nhật</button></td>
+            </tr>
+        </table>
+        <div class="row" style="text-align:center">
+            <button type="button" class="btn btn-default" ng-click="okBook()">Trở về</button>
+        </div>
+    </form>
+</div>

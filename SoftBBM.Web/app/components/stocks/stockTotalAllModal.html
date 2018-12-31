@@ -1,0 +1,33 @@
+﻿<div class="modal-header">
+    <h4>Mã SP - {{selectedStock.shop_sanpham.masp}} - {{selectedStock.shop_sanpham.tensp}}</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form role="form" novalidate angular-validator name="frmStockChannelPrices" class="form-inline">
+        <div class="row nomarginleft margintop20px">
+            <table align="center" style="width:70%" class="table table-bordered table-striped table-hover product-data text-center ">
+                <tr>
+                    <th>Id kho</th>
+                    <th>Kho</th>
+                    <th>Số lượng tồn</th>
+                </tr>
+                <tr ng-repeat="item in branches">
+                    <td>{{item.Id}}</td>
+                    <td>{{item.Name}}</td>
+                    <td>{{item.StockTotal | currency:'':0}}</td>
+                </tr>
+            </table>
+            <div ng-if="loading">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <div class="text-center">
+        <button type="button" class="btn btn-success" ng-click="okstockTotalAllModal()">Trở về</button>
+    </div>
+</div>

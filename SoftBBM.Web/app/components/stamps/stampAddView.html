@@ -1,0 +1,354 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        In tem sản phẩm
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active">In tem</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+
+    <div class="row">
+
+        <div class="col-sm-4">
+            <div class="box box-info">
+                <div class="box-body">
+                    <div class="row">
+                        <form role="form" novalidate angular-validator name="frmBook" ng-submit="search()">
+                            <div class="input-group margin">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Bộ lọc <span class="fa fa-caret-down"></span></button>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">Nhà cung cấp</a>
+                                            <ul class="dropdown-menu overflow_y">
+                                                <li ng-repeat="itemSupplier in suppliers">
+                                                    <a ng-click="addFilter(itemSupplier,0)" tabindex="-1">{{itemSupplier.Name}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown-submenu">
+                                            <a tabindex="-1">Tình trạng</a>
+                                            <ul class="dropdown-menu overflow_y">
+                                                <li ng-repeat="itemProductStatus in productStatus">
+                                                    <a ng-click="addFilter(itemProductStatus,1)" tabindex="-1">{{itemProductStatus.Name}}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a tabindex="-1">Tồn kho</a>
+                                        </li>
+                                    </ul>
+                                </div><!-- /btn-group -->
+                                <input ng-model="stringSearch" type="text" placeholder="Tìm kiếm" class="form-control">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default btn-flat" ng-click="search()" type="button"><i class="fa fa-search"></i></button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <a ng-click="removeFilter($index)" ng-repeat="itemFilter in filters" class="btn btn-tag">
+                            <i class="fa fa-fw fa-close"></i>{{itemFilter.alias}}: {{itemFilter.name}}
+                        </a>
+                    </div>
+
+                    <div class="row">
+                        <table ng-show="searchedProducts.length>0" id="tblwithimage" class="table table-bordered table-striped table-hover product-data text-center" style="width:95%;margin-left:10px;padding-bottom:0px">
+                            <tr>
+                                <th></th>
+                                <th>Mã</th>
+                                <th>Tên</th>
+                                <th>Tồn</th>
+                                <th>Tồn chung</th>
+                            </tr>
+                            <tr ng-repeat="item in searchedProducts">
+                                <td style="padding:5px"><button ng-click="addBookDetails(item)" class="btn btn-success"><i class="fa fa-plus"></i></button></td>
+                                <!--<td>{{($index+1)+(page*pageSizeNumber)}}</td>-->
+                                <td>
+                                    {{item.masp}}<br />
+                                    <img ng-src="{{item.Image}}" onerror="this.src='../../../Assets/Admin/img/no-img.jpg'" />
+                                </td>
+                                <td>{{item.tensp}}</td>
+                                <td>{{item.StockTotal}}</td>
+                                <td>{{item.StockTotalAll}}</td>
+                            </tr>
+                        </table>
+                        <div ng-if="loading">
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-4">
+                                <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                            </div>
+                            <div class="col-xs-4"></div>
+                        </div>
+                    </div>
+                    <div ng-show="searchedProducts.length>0" class="row col-xs-12 infopaging">Từ {{(page*pageSizeNumber)+1}} đến {{((page+1)*pageSizeNumber)}} của {{totalCount}} sp</div>
+                    <div ng-show="searchedProducts.length>0" class="row">
+                        <div class="col-xs-4 text-center">
+                            <div>
+                                <span>
+                                    <select ng-model="pageSizeNumber" ng-change="search()">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                    </select> dòng
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-8" style="text-align:right">
+                            <custom-pager-small page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager-small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">In tem</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row col-sm-12 marginleft5px text-center">
+                        <table ng-form name="frmSelectedChannel" class="table table-bordered table-striped table-hover text-center">
+                            <tr>
+                                <td style="text-align:right"><label class="control-label">Giá theo kênh:</label></td>
+                                <td colspan="5" style="text-align:left">
+                                    <select required
+                                            ng-options="option.Name for option in channels track by option.Id"
+                                            ng-model="selectedChannel"
+                                            ng-change="updateSelectedChannel(selectedChannel)"
+                                            name="channel"
+                                            class="marginleft5px">
+                                        <option disabled value="">-- Chọn kênh --</option>
+                                    </select>
+                                    &emsp;
+                                    <span ng-show="frmSelectedChannel.channel.$error.required" class="has-error">Vui lòng chọn kênh!</span>
+                                </td>
+                            </tr>
+                            <tr ng-show="bookDetails.length>0">
+                                <th>Mã sản phẩm</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-show="bookDetails.length>0" ng-repeat="itemBookDetail in bookDetails">
+                                <td>{{itemBookDetail.masp}}</td>
+                                <td>{{itemBookDetail.tensp}}</td>
+                                <td>{{itemBookDetail.PriceChannel | currency:'':0}}</td>
+                                <td>
+                                    <input required name="quantity{{$index}}" class="text-center width80px" type="number"  ng-change="initStamp()" ng-model="itemBookDetail.Quantity" />
+                                    <br />
+                                    <span ng-show="frmSelectedChannel.quantity{{$index}}.$error.required" class="has-error">Vui lòng nhập số lượng</span>
+                                </td>
+                                <td><button class="btn btn-danger" ng-click="removeBookDetail($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                            </tr>
+                            <tr ng-show="bookDetails.length>0">
+                                <td colspan="4">
+                                    <button ng-disabled="frmSelectedChannel.$invalid" ng-click="printStamp()" class="btn btn-primary"><i class="fa fa-print"></i> In</button>
+                                    <button ng-click="clearStamp()" class="btn btn-danger"><i class="fa fa-remove "></i> Xoá DS</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="hidden">
+                        <div id="printDiv">
+                            <style>
+                                .barcode.code128 {
+                                    height: 25px;
+                                    min-height: 10px;
+                                }
+
+                                    .barcode.code128 > div.b {
+                                        border-style: solid !important;
+                                        border-color: #000 !important;
+                                        float: left;
+                                        height: 100%;
+                                    }
+
+                                    .barcode.code128 > div.w {
+                                        background: #FFF;
+                                        float: left;
+                                        height: 100%;
+                                    }
+
+                                    .barcode.code128 .w20 {
+                                        width: 20px;
+                                    }
+
+                                    .barcode.code128 .w1 {
+                                        width: 1px;
+                                    }
+
+                                    .barcode.code128 .w2 {
+                                        width: 2px;
+                                    }
+
+                                    .barcode.code128 .w3 {
+                                        width: 3px;
+                                    }
+
+                                    .barcode.code128 .w4 {
+                                        width: 4px;
+                                    }
+
+                                    .barcode.code128 .w5 {
+                                        width: 5px;
+                                    }
+
+                                    .barcode.code128 .w6 {
+                                        width: 6px;
+                                    }
+
+                                    .barcode.code128 .w7 {
+                                        width: 7px;
+                                    }
+
+                                    .barcode.code128 .w8 {
+                                        width: 8px;
+                                    }
+
+                                    .barcode.code128 .w9 {
+                                        width: 9px;
+                                    }
+
+                                    .barcode.code128 .w10 {
+                                        width: 10px;
+                                    }
+
+                                    .barcode.code128 .b1 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 1px !important;
+                                    }
+
+                                    .barcode.code128 .b2 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 2px !important;
+                                    }
+
+                                    .barcode.code128 .b3 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 3px !important;
+                                    }
+
+                                    .barcode.code128 .b4 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 4px !important;
+                                    }
+
+                                    .barcode.code128 .b5 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 5px !important;
+                                    }
+
+                                    .barcode.code128 .b6 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 6px !important;
+                                    }
+
+                                    .barcode.code128 .b7 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 7px !important;
+                                    }
+
+                                    .barcode.code128 .b8 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 8px !important;
+                                    }
+
+                                    .barcode.code128 .b9 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 9px !important;
+                                    }
+
+                                    .barcode.code128 .b10 {
+                                        width: 0 !important;
+                                        border-width: 0 0 0 10px !important;
+                                    }
+
+                                .rightAlign {
+                                    text-align: right;
+                                }
+
+                                .noneListStyleType {
+                                    list-style-type: none;
+                                }
+
+                                .sloganBBMPrint {
+                                    text-align: center;
+                                    font-size: 20px;
+                                }
+
+                                .headerPrint {
+                                    text-align: center;
+                                    font-weight: 700;
+                                    font-size: 30px;
+                                }
+
+                                .headerPhonePrint {
+                                    text-align: center;
+                                    font-size: 15px;
+                                }
+
+                                .barcode, .bottom-barcode, .header-barcode {
+                                    text-align: center;
+                                    font-size: 8px;
+                                    margin-top: 0 !important;
+                                    margin-bottom: 0 !important;
+                                }
+
+                                .barcode-group {
+                                    float: left;
+                                    padding-bottom: 0.8mm;
+                                    padding-top: 0.8mm;
+                                    padding-left: 1.9mm;
+                                    padding-right: 1.9mm;
+                                    width: 20% !important;
+                                    height: 27mm !important;
+                                }
+
+                                /*.header-barcode,.barcode  {
+                                    height:40%;
+                                }
+                                .barcode  {
+                                    height:30%;
+                                }
+                                .bottom-barcode  {
+                                    height:15%;
+                                }*/
+
+                                .clear {
+                                    clear: both;
+                                }
+
+                                .barcode.code128 {
+                                    margin-left: 9px;
+                                }
+
+                            </style>
+                            <div style="margin-top:6mm;margin-left:4.4mm;margin-right:4.5mm" >
+                                <div class="barcode-group" ng-repeat="itemPrint in arrayPrint">
+                                    <p class="header-barcode">
+                                        {{itemPrint.tensp}}
+                                    </p>
+                                    <div barcode-generator="{{itemPrint.masp}}" class="barcode"></div>
+                                    <p class="bottom-barcode">
+                                        {{itemPrint.masp}}
+                                    </p>
+                                    <p class="bottom-barcode">
+                                        Giá: {{itemPrint.PriceChannel | currency:'':0}} đ
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section><!-- /.content -->

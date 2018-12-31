@@ -1,0 +1,94 @@
+﻿<div class="modal-header">
+    <h4>Chi tiết đơn đặt hàng NCC - {{selectedBook.Id}}</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form role="form" novalidate angular-validator name="frmBookDetail" class="form-inline">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Ngày tạo:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.CreatedDate| date: 'dd/MM/yyyy HH:mm'}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Người tạo:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.CreatedByName}}</div>
+                </div>                
+            </div>
+            <div class="col-xs-6">
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Tình trạng đơn:</label>
+                    </div>
+                    <div class="col-xs-8 ">
+                        <span ng-class="book.SupplierStatusCss">
+                            {{book.SupplierStatus}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Tình trạng nhập kho:</label>
+                    </div>
+                    <div class="col-xs-8 ">
+                        <span>
+                            {{book.ToBranchStatus}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row nomarginleft margintop20px">
+            <table ng-show="book.SoftStockInDetails.length>0" class="table table-bordered table-striped table-hover text-center">
+                <tr>
+                    <th>STT</th>
+                    <th>Mã sản phẩm</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Nhà cung cấp</th>
+                    <th>Số lượng đặt</th>
+                    <th>Giá nhập mới</th>
+                    <th>Thành tiền</th>
+                    <!--<th></th>-->
+                </tr>
+                <tr ng-repeat="itemBookDetail in book.SoftStockInDetails">
+
+                    <td>{{$index+1}}</td>
+                    <td>{{itemBookDetail.masp}}</td>
+                    <td>{{itemBookDetail.tensp}}</td>
+                    <td>{{itemBookDetail.SupplierName}}</td>
+                    <td>{{itemBookDetail.Quantity}}</td>
+                    <td>{{itemBookDetail.PriceNew | currency:'':0}}</td>                   
+                    <td>{{itemBookDetail.PriceNew * itemBookDetail.Quantity | currency:'':0}}</td>
+                </tr>
+                <tr>
+                    <th colspan="4" style="text-align:right">Tổng số lượng</th>
+                    <td>{{book.TotalQuantity}}</td>
+                    <th style="text-align:right">Tổng tiền</th>
+                    <td>{{book.Total | currency:'':0}} đ</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align:right">Ghi chú</td>
+                    <td colspan="7">
+                        <textarea readonly ng-model="book.Description" style="width:100%" class="form-control" rows="3"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="7">
+                        <button ng-click="okBook()" class="btn btn-success">Trở về</button>
+                        <!--<button ng-hide="book.StatusId=='00' || book.StatusId=='02'" ng-click="updateCancel()" class="btn btn-danger">Huỷ đơn</button>-->
+                    </td>
+                </tr>
+            </table>
+            <div ng-if="loading">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+    </form>
+</div>

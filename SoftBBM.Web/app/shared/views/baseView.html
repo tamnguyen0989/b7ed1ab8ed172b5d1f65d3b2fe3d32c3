@@ -1,0 +1,215 @@
+﻿<!-- Site wrapper -->
+
+<div class="wrapper">
+    <header class="main-header">
+        <!-- Logo -->
+        <a class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span ui-sref="home" class="logo-mini"><b>B</b>BM</span>
+            <!-- logo for regular state and mobile devices -->
+            <span ui-sref="home"><b>Admin</b>LTE</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- Messages: style can be found in dropdown.less-->
+                    <li class="dropdown messages-menu">
+                        <a ng-click="hideNotification()" class="dropdown-toggle" data-toggle="dropdown">
+                            <i style="font-size:1.4em" class="fa fa-commenting" aria-hidden="true">
+                            </i>
+                            <small ng-show="totalIsRead>0" style="font-size:12px !important" class="label label-danger">{{totalIsRead}}</small>
+                        </a>
+                        <ul id="notificationList" class="dropdown-menu dropdown-menu-left">
+                            <li ng-repeat="item in notifications" class="header">
+                                <a ng-click="updateIsRead(item)">
+                                    <h4>
+                                        Từ: {{item.SoftBranch.Name}}
+                                        <small><i class="fa fa-clock-o"></i>{{item.CreatedDateConvert}}</small>
+                                    </h4>
+                                    <p ng-class="{'has-error':item.IsRead==false}">{{item.Message}}</p>
+                                </a>
+                            </li>
+                            <li >
+                                <div>
+                                    <div class="col col-xs-6 text-left margintop5px">
+                                        <a href="" style="color:#3c8dbc !important" ng-click="updateReadAll()">Đã xem</a>
+                                        <span ng-if="updatingReadAll" style="margin-left:5px">
+                                            <i class="fa fa-refresh fa-fw fa-spin"></i><span>Đang cập nhật...</span>
+                                        </span>
+                                    </div>
+                                    <div class="col col-xs-6 text-right">
+                                        <custom-pager-small page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager-small>
+                                    </div>    
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a>
+                            <select required
+                                    class="text-black"
+                                    ng-options="option.Name for option in authentication.branches track by option.Id"
+                                    ng-model="branchSelectedRoot"
+                                    ng-change="updatebranchSelectedRoot(branchSelectedRoot)"
+                                    name="Code">
+                                <option disabled value="">-- Chọn kho --</option>
+                            </select>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a ui-sref="add_order" target="_blank" style="background:#b6006e">
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            <span>Bán hàng</span>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a ui-sref="orders" target="_blank">
+                            <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                            <span>Đơn hàng</span>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa fa-folder-open-o" aria-hidden="true"></i>
+                            <span>Hàng hoá</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">
+                                <a ui-sref="stocks" target="_blank"><i style="width:20px" class="fa fa-cube" aria-hidden="true"></i>Sản phẩm</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="product_categories" target="_blank"><i style="width:20px" class="fa fa-cubes" aria-hidden="true"></i>Nhóm sản phẩm</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="adjustment_stocks" target="_blank"><i style="width:20px" class="fa fa-file-text-o" aria-hidden="true"></i>Phiếu điều chỉnh tồn kho</a>
+                            </li>
+                            <li ng-show="branchSelectedRoot.Id==2" class="header">
+                                <a ui-sref="return_suppliers" target="_blank"><i style="width:20px" class="fa fa-stack-overflow" aria-hidden="true"></i>Phiếu trả hàng</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="add_stamp" target="_blank"><i style="width:20px" class="fa fa-print" aria-hidden="true"></i>In tem</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="product_logs" target="_blank"><i style="width:20px" class="fa fa-history" aria-hidden="true"></i>Lịch sử sản phẩm</a>
+                            </li>
+                        </ul>
+                    </li>  
+                    <li class="dropdown messages-menu">
+                        <a ui-sref="stockins" target="_blank">
+                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                            <span>Nhập kho</span>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a ui-sref="stockouts" target="_blank">
+                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                            <span>Xuất kho</span>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-phone" aria-hidden="true"></i>
+                            <span>Đặt hàng</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">
+                                <a ui-sref="books" target="_blank"><i style="width:20px" class="fa fa-truck" aria-hidden="true"></i>Nhà cung cấp</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="branch_books" target="_blank"><i style="width:20px" class="fa fa-hospital-o" aria-hidden="true"></i>Kho nội bộ</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-handshake-o" aria-hidden="true"></i>
+                            <span>Đối tác</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">
+                                <a ui-sref="customers" target="_blank"><i style="width:20px" class="fa fa-user-secret" aria-hidden="true"></i>Khách hàng</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="suppliers" target="_blank"><i style="width:20px" class="fa fa-truck" aria-hidden="true"></i>Nhà cung cấp</a>
+                            </li>
+                        </ul>
+                    </li>                                      
+                    <li class="dropdown messages-menu">
+                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-cogs" aria-hidden="true"></i>
+                            <span>Thiết lập</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">
+                                <a ui-sref="branches" target="_blank"><i style="width:20px" class="fa fa-hospital-o" aria-hidden="true"></i>Kho</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="channels" target="_blank"><i style="width:20px" class="fa fa-handshake-o " aria-hidden="true"></i>Kênh</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="application_users" target="_blank"><i style="width:20px" class="fa fa-user" aria-hidden="true"></i>User</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="application_roles" target="_blank"><i style="width:20px" class="fa fa-check-circle-o" aria-hidden="true"></i>Quyền</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="application_groups" target="_blank"><i style="width:20px" class="fa fa-group" aria-hidden="true"></i>Nhóm</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="/Assets/admin/img/userbbm.jpg" class="user-image" alt="User Image">
+                            <span class="hidden-xs">{{authentication.userName}}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <!--<li class="user-header">
+                                <img src="./Assets/admin/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                <p>
+                                    Alexander Pierce - Web Developer
+                                    <small>Member since Nov. 2012</small>
+                                </p>
+                            </li>-->
+                            <!-- Menu Body -->
+                            <!--<li class="user-body">
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">Followers</a>
+                                </div>
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">Sales</a>
+                                </div>
+                                <div class="col-xs-4 text-center">
+                                    <a href="#">Friends</a>
+                                </div>
+                            </li>-->
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a ui-sref="edit_user({id:userId})" class="btn btn-default btn-flat">Thông tin</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" ng-click="logOut()" class="btn btn-default btn-flat">Đăng xuất</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <!--<li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>-->
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <!-- =============================================== -->
+    <!-- Left side column. contains the sidebar -->
+    <!-- =============================================== -->
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <div ui-view></div>
+    </div><!-- /.content-wrapper -->
+</div>

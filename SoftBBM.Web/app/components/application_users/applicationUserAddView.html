@@ -1,0 +1,102 @@
+﻿<section class="content-header">
+    <h1>
+        Thêm mới người dùng
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a ui-sref="accounts">Danh mục người dùng</a></li>
+        <li class="active">Thêm mới</li>
+    </ol>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{applicationUser.FullName}}</h3>
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal" role="form" novalidate name="frmAddApplicationUser" ng-submit="AddApplicationUser()">
+                    <div class="box-body">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Họ tên:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="fullName" class="form-control"
+                                           required ng-model="applicationUser.FullName">
+                                    <span ng-show="frmAddApplicationUser.fullName.$invalid" class="has-error">Phải nhập họ tên</span>
+                                    <span ng-show="frmAddApplicationUser.fullName.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Username:</label>
+                                <div class="col-sm-10">
+                                    <input required type="text" name="username" class="form-control" ng-model="applicationUser.UserName">
+                                    <span ng-show="frmAddApplicationUser.username.$invalid" class="has-error">Phải nhập Username</span>
+                                    <span ng-show="frmAddApplicationUser.username.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Password:</label>
+                                <div class="col-sm-10">
+                                    <input required type="password" name="passWord" class="form-control" ng-model="applicationUser.Password">
+                                    <span ng-show="frmAddApplicationUser.passWord.$invalid" class="has-error">Phải nhập Password</span>
+                                    <span ng-show="frmAddApplicationUser.passWord.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Email:</label>
+                                <div class="col-sm-10">
+                                    <input required type="email" name="email" class="form-control" ng-model="applicationUser.Email">
+                                    <span ng-show="frmAddApplicationUser.email.$invalid" class="has-error">Phải nhập Email</span>
+                                    <span ng-show="frmAddApplicationUser.email.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Điện thoại:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="password" class="form-control"
+                                           ng-model="applicationUser.PhoneNumber">
+                                </div>
+                            </div>
+                            <!--<div class="form-group">
+                                <label class="col-sm-2 control-label">Ngày sinh:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="birthDate" class="form-control" ng-model="mydateOfBirth" datepicker>
+                                </div>
+                            </div>-->
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <input type="submit" ng-disabled="frmAddApplicationUser.$invalid" class="btn btn-success" value="Lưu lại" />
+                                    <a ui-sref="application_users" class="btn btn-default">Trở về</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Groups:</label>
+                                <div class="col-sm-10" style="padding:5px">
+                                    <span style="margin-left:10px"></span>
+                                    <span ng-repeat="group in applicationGroups">
+                                        <input type="checkbox" checklist-model="applicationUser.Groups" checklist-value="group"> {{group.Name}} &emsp;
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Kho:</label>
+                                <div class="col-sm-10" style="padding:5px">
+                                    <span style="margin-left:10px"></span>
+                                    <span ng-repeat="branch in branches">
+                                        <input type="checkbox" checklist-model="applicationUser.Branches" checklist-value="branch"> {{branch.Name}} &emsp;
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </form>
+            </div><!-- /.box -->
+        </div>
+    </div>
+</section>

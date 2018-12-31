@@ -1,0 +1,88 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Danh sách người dùng
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active">Danh sách người dùng</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <div class="box">
+        <div class="box-header with-border">
+            <div class="row marginleft5px">
+                <div class="col-xs-12">
+                    <form class="form-inline" novalidate name="frmSearch" ng-submit="Search()">
+                        <div class="row">
+                            <input type="text" ng-model="keyword" class="form-control" placeholder="Từ khoá...">
+                            <button class="btn btn-default" type="submit" style="width:60px" title="Tìm kiếm"><i class="fa fa-search"></i></button>
+                            <a class="btn btn-success" ui-sref="add_application_user" style="width:60px" title="Thêm mới"  target ="_blank"><i class="fa fa-plus"></i></a>
+                            <button type="button" class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
+                            <!--<button class="btn btn-danger" id="btnDelete" disabled ng-click="DeleteMultiple()">Xoá</button>-->
+                            <div class="pull-right totalcount">
+                                <span>
+                                    Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
+                                        <option value="10">10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select> dòng
+                                </span>
+                            </div>
+                            <span ng-hide="pagesCount==0" class="pull-right totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-xs-12">
+                    <table class="table table-bordered table-striped table-hover table_data">
+                        <tr>
+                            <!--<td><input type="checkbox" name="all" ng-click="SelectAll()" /></td>-->
+                            <th>Id</th>
+                            <th>Tên người dùng</th>
+                            <th>Tài khoản</th>
+                            <th>Email</th>
+                            <th>Tình trạng</th>
+                            <th style="width:10%"></th>
+                        </tr>
+                        <tr ng-repeat="item in applicationUsers">
+                            <!--<td><input type="checkbox" name="all" ng-model="item.checked" /></td>-->
+                            <td>{{item.Id}}</td>
+                            <td><a ui-sref="edit_application_user({id:item.Id})">{{item.FullName}}</a></td>
+                            <td><a ui-sref="edit_application_user({id:item.Id})">{{item.UserName}}</a></td>
+                            <td>{{item.Email}}</td>
+                            <td><span ng-show="item.Status==true">Bị khoá</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-info" ui-sref="edit_application_user({id:item.Id})"><i class="fa fa-pencil"></i></button>
+                                <!--<button class="btn btn-sm btn-danger" ng-click="DeleteApplicationUser(item.Id)"><i class="fa fa-trash"></i></button>-->
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div ng-if="loading">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <custom-pager page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="GetApplicationUsers(page)"></custom-pager>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <!--<div class="box-footer">
+            <pager-directive page="{{page}}" custom-path="{{customPath}}" pages-count="{{pagesCount}}" total-count="{{totalCount}}" search-func="GetApplicationUsers(page)"></pager-directive>
+        </div>--><!-- /.box-footer-->
+    </div><!-- /.box -->
+</section><!-- /.content -->

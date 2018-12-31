@@ -1,0 +1,37 @@
+﻿<div class="modal-header">
+    <h4>Thanh toán đơn nhập kho {{selectedStockin.Id}}</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form name="frmPayment">
+        <div class="row ">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Tình trạng TT:</label>
+            <div class="col-xs-7">
+                <select required
+                        ng-options="option.Name for option in paymentStatuses track by option.Id"
+                        ng-model="selectedPaymentStatus"
+                        ng-change="updatePaymentStatus()"
+                        name="paymentType"
+                        class="marginleft5px form-control">
+                </select>
+                <span ng-show="frmPayment.paymentStatus.$error.required" class="has-error marginleft5px">* Chọn tình trạng TT!</span>
+            </div>
+        </div>
+        <div ng-show="selectedPaymentStatus && selectedPaymentStatus.Id!=2" class="row margintop10px">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Phương thức TT:</label>
+            <div class="col-xs-7">
+                <select ng-options="option.Name for option in paymentMethods track by option.Id"
+                        ng-model="selectedPaymentMethod"
+                        name="paymentMethod"
+                        class="marginleft5px form-control"
+                        ng-required="validPaymentMethod()">
+                    <!--<option disabled value="">--  --</option>-->
+                </select>
+                <span ng-show="frmPayment.paymentMethod.$error.required" class="has-error marginleft5px">* Chọn phương thức TT!</span>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer" style="text-align:center">
+    <button ng-disabled="frmPayment.$invalid" ng-click="updatePayment()" class="btn btn-success">Cập nhật</button>
+    <!--<button ng-click="back()" class="btn btn-default">Trở về</button>-->
+</div>

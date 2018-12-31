@@ -1,0 +1,118 @@
+﻿<div class="modal-header">
+    <h4>Chi tiết đơn xuất kho - {{selectedBook.Id}}</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form role="form" novalidate angular-validator name="frmBookDetail" class="form-inline">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Từ:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.FromBranch}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Đến:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.ToBranch}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Ngày tạo:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.CreatedDate| date: 'dd/MM/yyyy HH:mm'}}</div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Tình trạng đơn:</label>
+                    </div>
+                    <div class="col-xs-8 ">
+                        <span ng-class="book.FromBranchStatusCss">
+                            {{book.FromBranchStatus}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>TT nhập kho:</label>
+                    </div>
+                    <div class="col-xs-8 ">
+                        <span>
+                            {{book.ToBranchStatus}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>TT đặt kho:</label>
+                    </div>
+                    <div class="col-xs-8 ">
+                        <span>
+                            {{book.SupplierStatus}}
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-right">
+                        <label>Người tạo:</label>
+                    </div>
+                    <div class="col-xs-8">{{book.CreatedByName}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row nomarginleft margintop20px">
+            <table ng-show="book.SoftStockInDetails.length>0" class="table table-bordered table-striped table-hover text-center">
+                <tr>
+                    <th>STT</th>
+                    <th>Mã sản phẩm</th>
+                    <th>Tên sản phẩm</th>
+                    <th ng-hide="book.FromBranchStatusId=='06'|| book.FromBranchStatusId=='02'">Số lượng tồn</th>
+                    <th>Số lượng xuất</th>
+                    <th>Giá nhập mới</th>
+                    <th>Thành tiền</th>
+                </tr>
+                <tr ng-class="{'has-error':itemBookDetail.StockTotal<itemBookDetail.Quantity && (book.FromBranchStatusId!='06' && book.FromBranchStatusId!='02')}" ng-repeat="itemBookDetail in book.SoftStockInDetails">
+                    <td>{{$index+1}}</td>
+                    <td>{{itemBookDetail.masp}}</td>
+                    <td>{{itemBookDetail.tensp}}</td>
+                    <td ng-hide="book.FromBranchStatusId=='06'|| book.FromBranchStatusId=='02'">{{itemBookDetail.StockTotal}}</td>
+                    <td>{{itemBookDetail.Quantity}}</td>
+                    <td>{{itemBookDetail.PriceBase | currency:'':0}}</td>
+                    <td>{{itemBookDetail.PriceBase * itemBookDetail.Quantity | currency:'':0}}</td>
+                </tr>
+                <tr>
+                    <td ng-hide="book.FromBranchStatusId=='06'|| book.FromBranchStatusId=='02'"></td>
+                    <th colspan="3" style="text-align:right">Tổng số lượng</th>
+                    <td>{{sumQuantity()}}</td>
+                    <th style="text-align:right">Tổng tiền</th>
+                    <td>{{sumMoney() | currency:'':0}} đ</td>
+                </tr>
+                <tr>
+                    <td ng-hide="book.FromBranchStatusId=='06'|| book.FromBranchStatusId=='02'"></td>
+                    <td style="text-align:right">Ghi chú</td>
+                    <td colspan="5">
+                        <textarea readonly ng-model="book.Description" style="width:100%" class="form-control" rows="3"></textarea>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td ng-hide="book.SupplierStatusId=='08' || book.SupplierStatusId=='02'"></td>
+                    <td colspan="6">
+                        <button ng-click="okBook()" class="btn btn-success">Trở về</button>
+                        <!--<button ng-hide="book.StatusId=='00' || book.StatusId=='02'" ng-click="updateCancel()" class="btn btn-danger">Huỷ đơn</button>-->
+                    </td>
+                </tr>
+            </table>
+            <div ng-if="loading">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+    </form>
+</div>

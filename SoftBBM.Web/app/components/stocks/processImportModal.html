@@ -1,0 +1,16 @@
+﻿<div class="modal-header">
+    <h4>Thông báo</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form role="form" novalidate angular-validator name="frmStockChannelPrices" class="form-inline">
+        <div class="row nomarginleft margintop20px">
+            <div ng-if="loadingModal">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang import...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+    </form>
+</div>

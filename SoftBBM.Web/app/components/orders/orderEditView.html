@@ -1,0 +1,136 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Nhập kho đơn {{stockin.Id}}
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a ui-sref="input_stockins">Danh sách đơn nhập kho mới</a></li>
+        <li class="active">Nhập kho</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <!-- Horizontal Form -->
+    <div class="box box-info">
+        <!-- form start -->
+        <div class="box-body">
+            <form role="form" novalidate angular-validator name="frmEditStockIn">
+                <div class="row col-sm-12">
+                    <div class="col-sm-3">
+                        <label>Nhà cung cấp</label><br />
+                        <select ng-disabled="isAdding || detailStockIns.length>0" size="9"
+                                ng-options="option.Name for option in suppliers track by option.Id"
+                                ng-model="selectedSupplier"
+                                name="supplier"
+                                class="form-control">
+                            <option value="">-- Chọn nhà cung cấp --</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Sản phẩm</label><br />
+                        <select size="9" ng-options="option.tensp for option in orders track by option.id"
+                                ng-model="selectedProduct"
+                                name="product"
+                                class="form-control">
+                            <option value="">-- Chọn sản phẩm --</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-5">
+                        <label>Nhập chi tiết sản phẩm</label> <span class="has-error" ng-show="!product.id"> * Vui lòng chọn sản phẩm !</span><br />
+                        <div class="row col-sm-12">
+                            <label class="col-sm-4 text-right">Id :</label>
+                            <span class="col-sm-8">{{product.id}}</span>
+                        </div>
+                        <div class="row col-sm-12">
+                            <label class="col-sm-4 text-right">Mã :</label>
+                            <span class="col-sm-8">{{product.masp}}</span>
+                        </div>
+                        <div class="row col-sm-12">
+                            <label class="col-sm-4 text-right">Tên :</label>
+                            <span class="col-sm-8">{{product.tensp}}</span>
+                        </div>
+                        <div class="row col-sm-12">
+                            <label class="col-sm-4 text-right">Giá nhập mới :</label>
+                            <input type="number"  required name="priceNew" ng-model="product.PriceNew" class="col-sm-8">
+                            <div class="col-sm-4 text-right">
+
+                            </div>
+                            <span ng-show="frmEditStockIn.priceNew.$invalid" class="has-error col-sm-8">Phải nhập giá</span>
+                        </div>
+                        <div class="row col-sm-12">
+                            <label class="col-sm-4 text-right">Số lượng :</label>
+                            <input type="number"  required name="quantity" ng-model="product.Quantity" class="col-sm-8">
+                            <div class="col-sm-4 text-right">
+
+                            </div>
+                            <span ng-show="frmEditStockIn.quantity.$invalid" class="has-error col-sm-8">Phải nhập số lượng</span>
+                        </div>
+                        <div class="row col-sm-12 margintop5px">
+                            <div class="col-sm-4 text-right">
+
+                            </div>
+                            <div class="col-sm-8">
+                                <button ng-disabled="frmStockIn.$invalid || !product.id" class="btn btn-success" ng-click="addToList()">Thêm sản phẩm</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row col-sm-12 marginleft5px margintop5px">
+                    <label>Chi tiết đơn nhập kho: </label>
+                </div>
+                <div class="row col-sm-12 marginleft5px">
+                    <table class="table table-bordered product-data text-center">
+                        <tr>
+                            <th>Id</th>
+                            <th>Hình</th>
+                            <th>Mã</th>
+                            <th>Tên</th>
+                            <th>Giá hiện hành</th>
+                            <th>Giá nhập mới</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                            <th></th>
+                        </tr>
+                        <tr ng-repeat="item in detailStockIns">
+                            <td>{{item.id}}</td>
+                            <td><img ng-src="{{item.shop_image[0].url}}" /></td>
+                            <td>{{item.masp}}</td>
+                            <td>{{item.tensp}}</td>
+                            <td>
+                                {{item.PriceBase | currency:'':0}}
+                            </td>
+                            <td>
+                                <input required type="number"  ng-model="item.PriceNew" class="text-center">
+                            </td>
+                            <td>
+                                <input required type="number"  ng-model="item.Quantity" class="text-center width80px">
+                            </td>
+                            <td>{{item.PriceNew * item.Quantity | currency:'':0}}</td>
+                            <td><button class="btn btn-danger" ng-click="removeFromList($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                        </tr>
+                    </table>
+                </div>
+                <div ng-if="loading">
+                    <div class="col-xs-4"></div>
+                    <div class="col-xs-4">
+                        <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                    </div>
+                    <div class="col-xs-4"></div>
+                </div>
+                <div class="row col-sm-12 marginleft5px">
+                    <label class="pull-right marginright10px" ng-show="sumMoney()>0">Tổng tiền: {{sumMoney() | currency:'':0}}</label>
+                </div>
+            </form>
+
+        </div><!-- /.box-body -->
+        <div class="box-footer text-right">
+            <button ng-click="deleteStockIn()" class="btn btn-danger margin-r-5">Huỷ đơn</button>
+            <button ui-sref="input_stockins" class="btn btn-warning margin-r-5">Trở về</button>
+            <button ng-click="updateStockIn()" class="btn btn-success marginright10px">Nhập kho </button>
+        </div><!-- /.box-footer -->
+
+    </div><!-- /.box -->
+</section><!-- /.content -->

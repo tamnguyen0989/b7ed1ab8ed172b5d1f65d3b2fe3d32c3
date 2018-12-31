@@ -1,0 +1,20 @@
+﻿<div class="modal-header">
+    <h4>Xuất đến kho đang thiếu các sản phẩm này</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form role="form" novalidate angular-validator name="frmThenOut" class="form-inline">
+        <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:10px">
+            <tr>
+                <th width="70%">Xuất đến kho</th>
+                <th width="30%"></th>
+            </tr>
+            <tr ng-repeat="item in stockouts">
+                <td width="70%">{{item.ToBranch.Name}}</td>
+                <td width="30%"><button ng-show="item.outed==false" type="button" class="btn btn-success" ng-click="thenOut(item,$index)"><i class="fa fa-arrow-circle-right"></i> Xuất</button><span ng-show="item.outed==true" class="badge bg-blue">Đã xuất</span></td>
+            </tr>
+        </table>
+        <div class="row" style="text-align:center">
+            <button type="button" class="btn btn-default" ng-click="okBook()">Trở về</button>
+        </div>
+    </form>
+</div>

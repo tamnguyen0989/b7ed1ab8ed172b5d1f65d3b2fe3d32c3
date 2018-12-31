@@ -1,0 +1,84 @@
+﻿<div class="modal-header">
+    <h4>Mã SP - {{selectedStock.shop_sanpham.masp}} - Danh sách giá theo kênh</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form role="form" novalidate angular-validator name="frmStockChannelPrices" class="form-inline">
+        <div class="row nomarginleft">
+            <div class="form-group">
+                <label>Giá nhập mới</label>
+                <input format="number" type="text" readonly name="priceBase" ng-maxlength="500" ng-model="stockChannelPrices.PriceBase" class="form-control smallinputdata">
+            </div>&emsp;
+            <div class="form-group">
+                <label>Giá nhập cũ</label>
+                <input format="number" type="text" readonly name="priceBaseOld" ng-maxlength="500" ng-model="stockChannelPrices.PriceBaseOld" class="form-control smallinputdata">
+            </div>&emsp;
+            <div class="form-group">
+                <label>Giá tham chiếu</label>
+                <input format="number" type="text" readonly name="priceRef" ng-maxlength="500" ng-model="stockChannelPrices.PriceRef" class="form-control smallinputdata">
+            </div>&emsp;
+            <!--<div class="form-group">
+                <label>Giá cơ bản</label>
+                <input format="number" type="text" readonly name="priceAvg" ng-maxlength="500" ng-model="selectedStock.shop_sanpham.PriceAvg" class="form-control smallinputdata">
+            </div>&emsp;-->
+            
+        </div>
+        <div class="row nomarginleft margintop20px" style="margin-right:0px">
+            <table class="table table-bordered table-striped table-hover product-data text-center ">
+                <tr>
+                    <th></th>
+                    <th>Kênh</th>
+                    <th>Giá</th>
+                    <th>Giá khuyến mãi</th>
+                    <th>Ngày chạy</th>
+                    <th>Ngày dừng</th>
+                    <!--<th>Chi tiết</th>-->
+                </tr>
+                <tr ng-repeat="item in stockChannelPrices.PriceChannels">
+                    <td>{{$index+1}}</td>
+                    <td>{{item.Name}}</td>
+                    <td>
+                        <input format="number" type="text" name="price" ng-maxlength="500" ng-model="item.Price" class="form-control width160px">
+                    </td>
+                    <td>
+                        <input format="number" type="text" name="priceDiscount" ng-maxlength="500" ng-model="item.PriceDiscount" class="form-control width160px">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control width0pxhidden " uib-datepicker-popup="dd/MM/yyyy" ng-model="item.StartDateDiscount" is-open="picker['startDate'+item.ChannelId]" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                        <div class="margintop-35px">
+                            <span>
+                                <button type="button" class="btn btn-default" ng-click="openStartDate($event,item.ChannelId)"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                            <span>{{item.StartDateDiscount | date:"dd/MM/yyyy"}}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control width0pxhidden " uib-datepicker-popup="dd/MM/yyyy" ng-model="item.EndDateDiscount" is-open="picker['endDate'+item.ChannelId]" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                        <div class="margintop-35px">
+                            <span>
+                                <button type="button" class="btn btn-default" ng-click="openEndDate($event,item.ChannelId)"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
+                            <span>{{item.EndDateDiscount | date:"dd/MM/yyyy"}}</span>
+                        </div>
+                    </td>
+                    <!--<td>
+                        <input type="text" name="description" ng-maxlength="500" ng-model="item.Description" class="form-control width160px">
+                    </td>-->
+                </tr>
+            </table>
+            <div ng-if="loading">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                </div>
+                <div class="col-xs-4"></div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <div class="text-center">
+        <!--<button type="button" class="btn btn-success" ng-click="okChannelPricesModal()">OK</button>-->
+        <button type="button" class="btn btn-success" ng-click="updateChannelPricesModal()">Cập nhật</button>
+        <button type="button" class="btn btn-default" ng-click="cancelChannelPricesModal()">Trở về</button>
+    </div>
+</div>

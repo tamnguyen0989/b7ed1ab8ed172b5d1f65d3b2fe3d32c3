@@ -1,0 +1,66 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Thêm mới kênh
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a ui-sref="channels">Kênh</a></li>
+        <li class="active">Thêm mới</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <!-- Default box -->
+    <!-- Horizontal Form -->
+    <div class="box box-info">
+        <!-- form start -->
+        <form class="form-horizontal" novalidate name="frmAddChannel" role="form" ng-submit="addChannel()">
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Tên</label>
+                    <div class="col-xs-6">
+                        <input type="text" name="name" ng-maxlength="256" required ng-model="channel.Name" class="form-control">
+                        <span ng-show="frmAddChannel.name.$invalid" class="has-error">Phải nhập tên kênh</span>
+                        <span ng-show="frmAddChannel.name.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Code</label>
+                    <div class="col-xs-6">
+                        <input type="text" ng-maxlength="20" name="code" ng-model="channel.Code" class="form-control">
+                        <span ng-show="frmAddChannel.code.$error.maxlength">chỉ được 20 kí tự</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 control-label">Mô tả</label>
+                    <div class="col-xs-6">
+                        <input type="text" ng-maxlength="500" name="description" ng-model="channel.Description" class="form-control">
+                        <span ng-show="frmAddChannel.description.$error.maxlength">chỉ được 500 kí tự</span>
+                    </div>
+                </div>
+
+            </div><!-- /.box-body -->
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-xs-2">
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="submit" ng-disabled="frmAddChannel.$invalid" class="btn btn-success">Hoàn thành</button>
+                        <button ui-sref="channels" class="btn btn-default">Trở về</button>
+                    </div>
+                </div>
+                <div class=row>
+                    <div ng-if="loading">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4">
+                            <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang thêm mới...</label>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>
+                </div>
+            </div><!-- /.box-footer -->
+        </form>
+    </div>
+    <!-- /.box -->
+</section><!-- /.content -->
