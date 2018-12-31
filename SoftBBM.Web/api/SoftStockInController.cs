@@ -875,6 +875,11 @@ namespace SoftBBM.Web.api
         public HttpResponseMessage SaveStockOut(HttpRequestMessage request, SoftStockInViewModel softStockInVm)
         {
             HttpResponseMessage response = null;
+            if (softStockInVm == null)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest,"Danh sách xuất kho lỗi");
+                return response;
+            }
             try
             {
                 double stockCurrent = 0;
@@ -1491,6 +1496,8 @@ namespace SoftBBM.Web.api
                     item.CreatedDateConvert = UtilExtensions.ConvertDate(item.CreatedDate.Value);
                 if (item.StockInDate != null)
                     item.StockInDateConvert = UtilExtensions.ConvertDate(item.StockInDate.Value);
+                if (item.PaidDate != null)
+                    item.PaidDateConvert = UtilExtensions.ConvertDate(item.PaidDate.Value);
                 if (!string.IsNullOrEmpty(item.FromSuppliers))
                 {
                     item.FromSuppliers = item.FromSuppliers.Substring(0, item.FromSuppliers.Length - 1).Replace("|", " , ");

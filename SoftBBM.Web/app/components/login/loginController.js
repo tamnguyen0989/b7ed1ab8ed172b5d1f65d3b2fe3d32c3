@@ -17,9 +17,10 @@
                     }
                     else {
                         var stateService = $injector.get('$state');
+                        localStorage.setItem("isLogin", "1");
                         stateService.go('home');                        
                     }
-                });
+                });   
             }
             $window.document.title = "Quản lý kho BBM";
         }]);

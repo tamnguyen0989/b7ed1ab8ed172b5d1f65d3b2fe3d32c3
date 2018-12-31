@@ -231,6 +231,7 @@
                                           ng-click="openPaymentPopover(item)">
                                         {{item.PaymentStatus}}
                                     </span>
+                                    <br />{{item.PaidDateConvert}}
                                 </td>
                                 
                                 <!--<td>
@@ -359,6 +360,14 @@
                         ng-change="updateSelectedPaymentMethod(selectedPaymentMethod)"
                         name="paymentMethod"
                         class="marginleft5px"></select>
+            </div>
+        </div>
+        <div ng-show="selectedStockin.PaymentStatusId==1" class="row paddingleft5px margintop5px">
+            <div class="col-xs-4 text-right">
+                <span class="table_data">Ngày TT:</span>
+            </div>
+            <div class="col-xs-8">
+                {{selectedStockin.PaidDateConvert}}
             </div>
         </div>
         <div class="row paddingleft5px margintop5px" style="text-align:center">

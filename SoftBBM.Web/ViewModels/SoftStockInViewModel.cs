@@ -152,7 +152,8 @@ namespace SoftBBM.Web.ViewModels
         public string PaymentStatus { get; set;}
         public int? PaymentStatusId { get; set; }
         public string FromSuppliers { get; set; }
-
+        public DateTime? PaidDate { get; set; }
+        public string PaidDateConvert { get; set; }
 
         public IEnumerable<SoftStockInProductViewModel> SoftStockInDetails { get; set; }
         public SoftStockInPaymentMethodViewModel SoftStockInPaymentMethod { get; set; }
