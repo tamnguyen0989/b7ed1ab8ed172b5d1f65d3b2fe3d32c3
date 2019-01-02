@@ -147,6 +147,18 @@ namespace SoftBBM.Web.api
                     }
                     stockCurrent.StockTotal -= item.Quantity;
                     _softStockRepository.Update(stockCurrent);
+
+                    var channelOrder = _softChannelRepository.GetSingleById(orderVM.ChannelId.Value);
+                    shop_sanphamLogs productLog = new shop_sanphamLogs();
+                    productLog.ProductId = item.id;
+                    productLog.Description = "Đơn hàng " + channelOrder.Name + ", mã đơn: " + result.id;
+                    productLog.Quantity = item.Quantity;
+                    productLog.CreatedBy = orderVM.CreatedBy;
+                    productLog.CreatedDate = DateTime.Now;
+                    productLog.BranchId = orderVM.BranchId;
+                    productLog.StockTotal = stockCurrent.StockTotal.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id) - item.Quantity.Value;
+                    _shopSanPhamLogRepository.Add(productLog);  
                 }
                 var donhangReturn = _donhangRepository.GetSingleById((int)donhang.id);
                 var donhangReturnVM = Mapper.Map<donhang, donhangDetailViewModel>(donhangReturn);
@@ -271,10 +283,13 @@ namespace SoftBBM.Web.api
 
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                     productLog.ProductId = item.id;
-                    productLog.Description = "Đơn hàng " + channelOrder.Name + ", từ kho " + branchOrder.Name + ", mã đơn: " + result.id;
+                    productLog.Description = "Đơn hàng " + channelOrder.Name + ", mã đơn: " + result.id;
                     productLog.Quantity = item.Quantity;
                     productLog.CreatedBy = orderVM.CreatedBy;
                     productLog.CreatedDate = DateTime.Now;
+                    productLog.BranchId = orderVM.BranchId;
+                    productLog.StockTotal = stockCurrent.StockTotal.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id) - item.Quantity.Value;
                     _shopSanPhamLogRepository.Add(productLog);
                 }
                 var donhangReturn = _donhangRepository.GetSingleById((int)donhang.id);
@@ -677,6 +692,7 @@ namespace SoftBBM.Web.api
             try
             {
                 var donhang = _donhangRepository.GetSingleById((int)donhangVM.id);
+                var channelOrder = _softChannelRepository.GetSingleById(donhang.ChannelId.Value);
 
                 if (donhang.Status == 3 || donhang.Status == 4 || donhang.Status == 6)
                 {
@@ -737,6 +753,17 @@ namespace SoftBBM.Web.api
                             }
                             stockCurrent.StockTotal += item.Soluong;
                             _softStockRepository.Update(stockCurrent);
+
+                            shop_sanphamLogs productLog = new shop_sanphamLogs();
+                            productLog.ProductId = bienthe.idsp;
+                            productLog.Description = "Cập nhật huỷ đơn hàng " + channelOrder.Name + ", mã đơn: " + donhang.id;
+                            productLog.Quantity = item.Soluong;
+                            productLog.CreatedBy = donhangVM.UserId;
+                            productLog.CreatedDate = DateTime.Now;
+                            productLog.BranchId = donhang.BranchId;
+                            productLog.StockTotal = stockCurrent.StockTotal.Value;
+                            productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                            _shopSanPhamLogRepository.Add(productLog);
                         }
                         _unitOfWork.Commit();
                     }
@@ -762,6 +789,7 @@ namespace SoftBBM.Web.api
             try
             {
                 var donhang = _donhangRepository.GetSingleById((int)donhangVM.id);
+                var channelOrder = _softChannelRepository.GetSingleById(donhang.ChannelId.Value);
 
                 if (donhang.Status == 3 || donhang.Status == 4 || donhang.Status == 6)
                 {
@@ -819,6 +847,17 @@ namespace SoftBBM.Web.api
                             }
                             stockCurrent.StockTotal += item.Soluong;
                             _softStockRepository.Update(stockCurrent);
+
+                            shop_sanphamLogs productLog = new shop_sanphamLogs();
+                            productLog.ProductId = bienthe.idsp;
+                            productLog.Description = "Cập nhật gh thất bại đơn hàng " + channelOrder.Name + ", mã đơn: " + donhang.id;
+                            productLog.Quantity = item.Soluong;
+                            productLog.CreatedBy = donhangVM.UserId;
+                            productLog.CreatedDate = DateTime.Now;
+                            productLog.BranchId = donhang.BranchId;
+                            productLog.StockTotal = stockCurrent.StockTotal.Value;
+                            productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                            _shopSanPhamLogRepository.Add(productLog);
                         }
                         _unitOfWork.Commit();
                     }
@@ -1182,6 +1221,7 @@ namespace SoftBBM.Web.api
                 {
                     foreach (var orderVM in statusOrdersViewModel.Orders)
                     {
+                        var channelOrder = _softChannelRepository.GetSingleById(orderVM.ChannelId.Value);
                         var oldOrder = _donhangRepository.GetSingleByCondition(x => x.id == orderVM.id);
                         oldOrder.Status = 4;
                         oldOrder.UpdatedBy = statusOrdersViewModel.UserId;
@@ -1218,6 +1258,17 @@ namespace SoftBBM.Web.api
                                 }
                                 stockCurrent.StockTotal += item.Soluong;
                                 _softStockRepository.Update(stockCurrent);
+
+                                shop_sanphamLogs productLog = new shop_sanphamLogs();
+                                productLog.ProductId = bienthe.idsp;
+                                productLog.Description = "Cập nhật huỷ đơn hàng " + channelOrder.Name + ", mã đơn: " + oldOrder.id;
+                                productLog.Quantity = item.Soluong;
+                                productLog.CreatedBy = statusOrdersViewModel.UserId;
+                                productLog.CreatedDate = DateTime.Now;
+                                productLog.BranchId = oldOrder.BranchId;
+                                productLog.StockTotal = stockCurrent.StockTotal.Value;
+                                productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                                _shopSanPhamLogRepository.Add(productLog);
                             }
                             _unitOfWork.Commit();
                         }
@@ -1266,6 +1317,7 @@ namespace SoftBBM.Web.api
                 {
                     foreach (var orderVM in statusOrdersViewModel.Orders)
                     {
+                        var channelOrder = _softChannelRepository.GetSingleById(orderVM.ChannelId.Value);
                         var oldOrder = _donhangRepository.GetSingleByCondition(x => x.id == orderVM.id);
                         oldOrder.Status = 6;
                         oldOrder.UpdatedBy = statusOrdersViewModel.UserId;
@@ -1302,6 +1354,17 @@ namespace SoftBBM.Web.api
                                 }
                                 stockCurrent.StockTotal += item.Soluong;
                                 _softStockRepository.Update(stockCurrent);
+
+                                shop_sanphamLogs productLog = new shop_sanphamLogs();
+                                productLog.ProductId = bienthe.idsp;
+                                productLog.Description = "Cập nhật gh thất bại đơn hàng " + channelOrder.Name + ", mã đơn: " + oldOrder.id;
+                                productLog.Quantity = item.Soluong;
+                                productLog.CreatedBy = statusOrdersViewModel.UserId;
+                                productLog.CreatedDate = DateTime.Now;
+                                productLog.BranchId = oldOrder.BranchId;
+                                productLog.StockTotal = stockCurrent.StockTotal.Value;
+                                productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                                _shopSanPhamLogRepository.Add(productLog);
                             }
                             _unitOfWork.Commit();
                         }
@@ -1471,6 +1534,18 @@ namespace SoftBBM.Web.api
                             }
                             stockCurrent.StockTotal += item.Soluong;
                             _softStockRepository.Update(stockCurrent);
+
+                            var channelOrder = _softChannelRepository.GetSingleById(donhang.ChannelId.Value);
+                            shop_sanphamLogs productLog = new shop_sanphamLogs();
+                            productLog.ProductId = bienthe.idsp;
+                            productLog.Description = "Cập nhật chỉnh sửa đơn hàng " + channelOrder.Name + ", mã đơn: " + donhang.id;
+                            productLog.Quantity = item.Soluong;
+                            productLog.CreatedBy = donhangVM.UserId;
+                            productLog.CreatedDate = DateTime.Now;
+                            productLog.BranchId = donhang.BranchId;
+                            productLog.StockTotal = stockCurrent.StockTotal.Value;
+                            productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                            _shopSanPhamLogRepository.Add(productLog);
                         }
                         _unitOfWork.Commit();
                     }

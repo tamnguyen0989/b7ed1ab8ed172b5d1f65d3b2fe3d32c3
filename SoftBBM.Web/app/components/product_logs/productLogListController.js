@@ -47,6 +47,7 @@
             $scope.filters.endDateDeleteFilter = $scope.endDateDeleteFilter;
             $scope.filters.startDateFilter = $scope.startDateFilter;
             $scope.filters.endDateFilter = $scope.endDateFilter;
+            $scope.filters.branchId = $scope.branchSelectedRoot.Id;
             apiService.post('/api/productlog/search/', $scope.filters, function (result) {
                 $scope.productLogs = result.data.Items;
                 $scope.page = result.data.Page;

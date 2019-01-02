@@ -1,8 +1,8 @@
 ﻿(function (app) {
     app.controller('baseController', baseController);
 
-    baseController.$inject = ['notificationService', 'authenticationService', 'apiService', '$window', 'authData', '$scope', '$rootScope'];
-    function baseController(notificationService, authenticationService, apiService, $window, authData, $scope, $rootScope) {
+    baseController.$inject = ['notificationService', 'authenticationService', 'apiService', '$window', 'authData', '$scope', '$rootScope','$state'];
+    function baseController(notificationService, authenticationService, apiService, $window, authData, $scope, $rootScope,$state) {
         authenticationService.setHeader();
         //if (authData.authenticationData.IsAuthenticated == true) {
         //    if (localStorage.getItem("selectedBranch") && localStorage.getItem("selectedBranch") != "undefined") {

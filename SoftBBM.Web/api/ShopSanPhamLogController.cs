@@ -41,6 +41,12 @@ namespace SoftBBM.Web.api
 
             IEnumerable<ShopSanPhamLogViewModel> shopSanPhamLogsVM = Mapper.Map<IEnumerable<shop_sanphamLogs>, IEnumerable<ShopSanPhamLogViewModel>>(shopSanPhamLogs);
 
+            foreach (var item in shopSanPhamLogsVM)
+            {
+                if (item.CreatedDate.HasValue)
+                    item.CreatedDateConvert = UtilExtensions.ConvertDate(item.CreatedDate.Value);
+            }
+
             PaginationSet<ShopSanPhamLogViewModel> pagedSet = new PaginationSet<ShopSanPhamLogViewModel>()
             {
                 Page = currentPage,

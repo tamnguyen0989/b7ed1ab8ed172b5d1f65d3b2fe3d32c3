@@ -130,17 +130,6 @@ namespace SoftBBM.Web.api
                 _unitOfWork.Commit();
                 foreach (var item in softStockInVm.SoftStockInDetails)
                 {
-                    //Add log
-                    shop_sanphamLogs productLog = new shop_sanphamLogs();
-                    productLog.ProductId = item.id;
-                    var branch03 = _softBranchRepository.GetSingleById(softStockIn.BranchId.Value);
-                    var branch03Stockin = _softBranchRepository.GetSingleById(softStockIn.ToBranchId.Value);
-                    productLog.Description = "Xuất kho " + branch03.Name + ", từ đơn xuất kho mới đến kho " + branch03Stockin.Name + ", mã đơn: " + softStockIn.Id;
-                    productLog.Quantity = item.Quantity;
-                    productLog.CreatedBy = softStockInVm.CreatedBy;
-                    productLog.CreatedDate = DateTime.Now;
-                    _shopSanPhamLogRepository.Add(productLog);
-
                     SoftStockInDetail softStockInDetail = new SoftStockInDetail();
                     softStockInDetail.UpdateSoftStockInDetail(item);
                     softStockInDetail.StockInId = softStockIn.Id;
@@ -158,6 +147,17 @@ namespace SoftBBM.Web.api
                     productInBranch.UpdatedDate = DateTime.Now;
                     _softStockRepository.Update(productInBranch);
 
+                    //Add log
+                    shop_sanphamLogs productLog = new shop_sanphamLogs();
+                    productLog.ProductId = item.id;
+                    productLog.Description = "Xuất kho, mã đơn: " + softStockIn.Id;
+                    productLog.Quantity = item.Quantity;
+                    productLog.CreatedBy = softStockInVm.CreatedBy;
+                    productLog.CreatedDate = DateTime.Now;
+                    productLog.BranchId = softStockInVm.FromBranchId;
+                    productLog.StockTotal = productInBranch.StockTotal.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id) - item.Quantity.Value;
+                    _shopSanPhamLogRepository.Add(productLog);
                 }
 
                 var newSoftNotification = new SoftNotification();
@@ -234,13 +234,6 @@ namespace SoftBBM.Web.api
                         fromSuppliers += ctProduct.SoftSupplier.Name + "|";
                     }
 
-                    shop_sanphamLogs productLog = new shop_sanphamLogs();
-                    productLog.ProductId = item.id;
-                    productLog.Description = "Nhập kho " + branch.Name + ", từ đơn nhập kho mới, mã đơn: " + softStockIn.Id.ToString();
-                    productLog.Quantity = item.Quantity;
-                    productLog.CreatedBy = softStockInVm.CreatedBy;
-                    productLog.CreatedDate = DateTime.Now;
-                    _shopSanPhamLogRepository.Add(productLog);
                     //Update Product, Stock
 
                     var shopSanPham = _shopSanPhamRepository.GetSingleById(item.id);
@@ -283,6 +276,18 @@ namespace SoftBBM.Web.api
                     productInBranch.StockTotal += item.Quantity;
                     productInBranch.UpdatedDate = DateTime.Now;
                     _softStockRepository.Update(productInBranch);
+
+
+                    shop_sanphamLogs productLog = new shop_sanphamLogs();
+                    productLog.ProductId = item.id;
+                    productLog.Description = "Nhập kho, mã đơn: " + softStockIn.Id;
+                    productLog.Quantity = item.Quantity;
+                    productLog.CreatedBy = softStockInVm.CreatedBy;
+                    productLog.CreatedDate = DateTime.Now;
+                    productLog.BranchId = softStockInVm.ToBranchId;
+                    productLog.StockTotal = productInBranch.StockTotal.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id) + item.Quantity.Value;
+                    _shopSanPhamLogRepository.Add(productLog);
 
                     foreach (var itemBranch in branches)
                     {
@@ -360,34 +365,6 @@ namespace SoftBBM.Web.api
                 _unitOfWork.Commit();
                 foreach (var item in softStockIn.SoftStockInDetails)
                 {
-                    //Add Log
-                    shop_sanphamLogs productLog = new shop_sanphamLogs();
-                    productLog.ProductId = item.ProductId;
-                    var branch = _softBranchRepository.GetSingleById(softStockIn.BranchId.Value);
-                    switch (softStockIn.CategoryId)
-                    {
-                        case "00":
-                            var supplierLog = _softSupplierRepository.GetSingleById(softStockIn.SupplierId.Value);
-                            productLog.Description = "Nhập kho " + branch.Name + ", từ đơn đặt hàng NCC " + supplierLog.Name + ", mã đơn: " + softStockIn.Id;
-                            break;
-                        case "01":
-                            var branchBookLog = _softBranchRepository.GetSingleById(softStockIn.FromBranchId.Value);
-                            productLog.Description = "Nhập kho " + branch.Name + ", từ đơn đặt hàng kho " + branchBookLog.Name + ", mã đơn: " + softStockIn.Id;
-                            break;
-                        case "02":
-                            productLog.Description = "Nhập kho " + branch.Name + ", từ đơn nhập kho mới, mã đơn: " + softStockIn.Id;
-                            break;
-                        case "03":
-                            var branchStockoutLog = _softBranchRepository.GetSingleById(softStockIn.FromBranchId.Value);
-                            var branchStockinLog03 = _softBranchRepository.GetSingleById(softStockIn.ToBranchId.Value);
-                            productLog.Description = "Nhập kho " + branchStockinLog03.Name + ", từ đơn xuất kho " + branchStockoutLog.Name + ", mã đơn: " + softStockIn.Id;
-                            break;
-                    }
-                    productLog.Quantity = item.Quantity;
-                    productLog.CreatedBy = userId;
-                    productLog.CreatedDate = DateTime.Now;
-                    _shopSanPhamLogRepository.Add(productLog);
-
                     //Update Product, Stock
                     if (softStockIn.CategoryId == "00" || softStockIn.CategoryId == "02")
                     {
@@ -432,6 +409,38 @@ namespace SoftBBM.Web.api
                     productInBranch.UpdatedDate = DateTime.Now;
                     productInBranch.UpdatedBy = userId;
                     _softStockRepository.Update(productInBranch);
+
+                    //Add Log
+                    shop_sanphamLogs productLog = new shop_sanphamLogs();
+                    productLog.ProductId = item.ProductId;
+                    //var branch = _softBranchRepository.GetSingleById(softStockIn.BranchId.Value);
+                    //switch (softStockIn.CategoryId)
+                    //{
+                    //    case "00":
+                    //        var supplierLog = _softSupplierRepository.GetSingleById(softStockIn.SupplierId.Value);
+                    //        productLog.Description = "Nhập kho " + branch.Name + ", từ đơn đặt hàng NCC " + supplierLog.Name + ", mã đơn: " + softStockIn.Id;
+                    //        break;
+                    //    case "01":
+                    //        var branchBookLog = _softBranchRepository.GetSingleById(softStockIn.FromBranchId.Value);
+                    //        productLog.Description = "Nhập kho " + branch.Name + ", từ đơn đặt hàng kho " + branchBookLog.Name + ", mã đơn: " + softStockIn.Id;
+                    //        break;
+                    //    case "02":
+                    //        productLog.Description = "Nhập kho " + branch.Name + ", từ đơn nhập kho mới, mã đơn: " + softStockIn.Id;
+                    //        break;
+                    //    case "03":
+                    //        var branchStockoutLog = _softBranchRepository.GetSingleById(softStockIn.FromBranchId.Value);
+                    //        var branchStockinLog03 = _softBranchRepository.GetSingleById(softStockIn.ToBranchId.Value);
+                    //        productLog.Description = "Nhập kho " + branchStockinLog03.Name + ", từ đơn xuất kho " + branchStockoutLog.Name + ", mã đơn: " + softStockIn.Id;
+                    //        break;
+                    //}
+                    productLog.Description = "Nhập kho, mã đơn: " + softStockIn.Id;
+                    productLog.Quantity = item.Quantity;
+                    productLog.CreatedBy = userId;
+                    productLog.CreatedDate = DateTime.Now;
+                    productLog.BranchId = softStockIn.ToBranchId;
+                    productLog.StockTotal = productInBranch.StockTotal.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.ProductId) + item.Quantity.Value;
+                    _shopSanPhamLogRepository.Add(productLog);
 
                     foreach (var itemBranch in branches)
                     {
@@ -515,26 +524,7 @@ namespace SoftBBM.Web.api
 
                 foreach (var item in softStockIn.SoftStockInDetails)
                 {
-                    //Add Log
-                    shop_sanphamLogs productLog = new shop_sanphamLogs();
-                    productLog.ProductId = item.ProductId;
-                    switch (softStockIn.CategoryId)
-                    {
-                        case "01":
-                            var branch01 = _softBranchRepository.GetSingleById(softStockIn.FromBranchId.Value);
-                            var branch01Book = _softBranchRepository.GetSingleById(softStockIn.ToBranchId.Value);
-                            productLog.Description = "Xuất kho " + branch01.Name + ", từ đơn đặt hàng kho " + branch01Book.Name + ", mã đơn: " + softStockIn.Id;
-                            break;
-                        case "03":
-                            var branch03 = _softBranchRepository.GetSingleById(softStockIn.BranchId.Value);
-                            var branch03Stockin = _softBranchRepository.GetSingleById(softStockIn.ToBranchId.Value);
-                            productLog.Description = "Xuất kho " + branch03.Name + ", từ đơn xuất kho mới đến kho " + branch03Stockin.Name + ", mã đơn: " + softStockIn.Id;
-                            break;
-                    }
-                    productLog.Quantity = item.Quantity;
-                    productLog.CreatedBy = userId;
-                    productLog.CreatedDate = DateTime.Now;
-                    _shopSanPhamLogRepository.Add(productLog);
+                    
 
                     //Update Product, Stock
                     //var shopSanPham = _shopSanPhamRepository.GetSingleById(item.ProductId);
@@ -550,6 +540,30 @@ namespace SoftBBM.Web.api
                     productInBranch.UpdatedDate = DateTime.Now;
                     _softStockRepository.Update(productInBranch);
 
+                    //Add Log
+                    shop_sanphamLogs productLog = new shop_sanphamLogs();
+                    productLog.ProductId = item.ProductId;
+                    //switch (softStockIn.CategoryId)
+                    //{
+                    //    case "01":
+                    //        var branch01 = _softBranchRepository.GetSingleById(softStockIn.FromBranchId.Value);
+                    //        var branch01Book = _softBranchRepository.GetSingleById(softStockIn.ToBranchId.Value);
+                    //        productLog.Description = "Xuất kho " + branch01.Name + ", từ đơn đặt hàng kho " + branch01Book.Name + ", mã đơn: " + softStockIn.Id;
+                    //        break;
+                    //    case "03":
+                    //        var branch03 = _softBranchRepository.GetSingleById(softStockIn.BranchId.Value);
+                    //        var branch03Stockin = _softBranchRepository.GetSingleById(softStockIn.ToBranchId.Value);
+                    //        productLog.Description = "Xuất kho " + branch03.Name + ", từ đơn xuất kho mới đến kho " + branch03Stockin.Name + ", mã đơn: " + softStockIn.Id;
+                    //        break;
+                    //}
+                    productLog.Description = "Xuất kho, mã đơn: " + softStockIn.Id;
+                    productLog.Quantity = item.Quantity;
+                    productLog.CreatedBy = userId;
+                    productLog.CreatedDate = DateTime.Now;
+                    productLog.BranchId = softStockIn.FromBranchId;
+                    productLog.StockTotal = productInBranch.StockTotal.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.ProductId) - item.Quantity.Value;
+                    _shopSanPhamLogRepository.Add(productLog);
                 }
 
                 var newSoftNotification = new SoftNotification();

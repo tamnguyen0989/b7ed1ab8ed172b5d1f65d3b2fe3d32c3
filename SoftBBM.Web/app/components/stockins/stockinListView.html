@@ -202,7 +202,9 @@
                                 <th>Tình trạng <br />TT</th>
                                 
                                 <!--<th>Tình trạng <br />xuất kho</th>-->
-                                <th style="width:10%"></th>
+                                <td style="width:10%">
+                                    <button ng-click="clearStamp()" class="btn btn-danger" style="background-color:indianred"><i class="fa fa-remove "></i> Xoá DS In Tem</button>
+                                </td>
                             </tr>
                             <tr ng-form name="data{{$index}}" ng-repeat="item in books">
                                 <td>{{item.Id}}</td>

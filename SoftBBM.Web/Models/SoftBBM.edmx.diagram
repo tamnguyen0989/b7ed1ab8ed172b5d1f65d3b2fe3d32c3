@@ -186,6 +186,7 @@
         <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentTypes" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftStockInPaymentStatus" Width="1.5" PointX="15.375" PointY="16.875" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentStatuses" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLogs_SoftBranches" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -13,6 +13,9 @@ namespace SoftBBM.Web.ViewModels
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public int StockTotal { get; set; }
+        public int StockTotalAll { get; set; }
+        public string CreatedDateConvert { get; set; }
 
         public ShopSanPhamViewModel shop_sanpham { get; set; }
         public ApplicationUserViewModel ApplicationUser { get; set; }
@@ -28,5 +31,6 @@ namespace SoftBBM.Web.ViewModels
         public DateTime endDateFilter { get; set; }
         public DateTime startDateDeleteFilter { get; set; }
         public DateTime endDateDeleteFilter { get; set; }
+        public int branchId { get; set; }
     }
 }

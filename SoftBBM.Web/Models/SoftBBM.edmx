@@ -643,6 +643,9 @@
           <Property Name="Quantity" Type="float" />
           <Property Name="CreatedDate" Type="datetime" />
           <Property Name="CreatedBy" Type="int" />
+          <Property Name="BranchId" Type="int" />
+          <Property Name="StockTotal" Type="float" Nullable="false" />
+          <Property Name="StockTotalAll" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="shop-sanphamStatus">
           <Key>
@@ -1691,30 +1694,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_shop-sanphamLog_shop-sanpham">
-          <End Role="shop-sanpham" Type="Self.shop-sanpham" Multiplicity="0..1" />
-          <End Role="shop-sanphamLogs" Type="Self.shop-sanphamLogs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="shop-sanpham">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="shop-sanphamLogs">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_shop-sanphamLogs_ApplicationUsers">
-          <End Role="ApplicationUsers" Type="Self.ApplicationUsers" Multiplicity="0..1" />
-          <End Role="shop-sanphamLogs" Type="Self.shop-sanphamLogs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="shop-sanphamLogs">
-              <PropertyRef Name="CreatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_SoftAdjustmentStockDetails_shop-sanpham">
           <End Role="shop-sanpham" Type="Self.shop-sanpham" Multiplicity="1" />
           <End Role="SoftAdjustmentStockDetails" Type="Self.SoftAdjustmentStockDetails" Multiplicity="*" />
@@ -2675,14 +2654,6 @@
           <AssociationSet Name="FK_shop-sanphamCategories_ApplicationUsers1" Association="Self.FK_shop-sanphamCategories_ApplicationUsers1">
             <End Role="ApplicationUsers" EntitySet="ApplicationUsers" />
             <End Role="shop-sanphamCategories" EntitySet="shop-sanphamCategories" />
-          </AssociationSet>
-          <AssociationSet Name="FK_shop-sanphamLog_shop-sanpham" Association="Self.FK_shop-sanphamLog_shop-sanpham">
-            <End Role="shop-sanpham" EntitySet="shop-sanpham" />
-            <End Role="shop-sanphamLogs" EntitySet="shop-sanphamLogs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_shop-sanphamLogs_ApplicationUsers" Association="Self.FK_shop-sanphamLogs_ApplicationUsers">
-            <End Role="ApplicationUsers" EntitySet="ApplicationUsers" />
-            <End Role="shop-sanphamLogs" EntitySet="shop-sanphamLogs" />
           </AssociationSet>
           <AssociationSet Name="FK_SoftAdjustmentStockDetails_shop-sanpham" Association="Self.FK_SoftAdjustmentStockDetails_shop-sanpham">
             <End Role="shop-sanpham" EntitySet="shop-sanpham" />
@@ -4269,6 +4240,10 @@
             <End Role="SoftStockInPaymentStatus" EntitySet="SoftStockInPaymentStatuses" />
             <End Role="SoftStockIn" EntitySet="SoftStockIns" />
           </AssociationSet>
+          <AssociationSet Name="FK_shop_sanphamLogs_SoftBranches" Association="SoftBBMModels.FK_shop_sanphamLogs_SoftBranches">
+            <End Role="SoftBranch" EntitySet="SoftBranches" />
+            <End Role="shop_sanphamLogs" EntitySet="shop_sanphamLogs" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="spTB_DangNhap_TruyVanTheoTenDangNhap_Result">
           <Property Type="String" Name="TenDN" Nullable="false" MaxLength="100" />
@@ -5005,6 +4980,7 @@
           <NavigationProperty Name="SoftStockIns1" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches1" FromRole="SoftBranch" ToRole="SoftStockIn" />
           <NavigationProperty Name="SoftStockIns2" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches2" FromRole="SoftBranch" ToRole="SoftStockIn" />
           <Property Name="Priority" Type="Int32" />
+          <NavigationProperty Name="shop_sanphamLogs" Relationship="SoftBBMModels.FK_shop_sanphamLogs_SoftBranches" FromRole="SoftBranch" ToRole="shop_sanphamLogs" />
         </EntityType>
         <EntityType Name="SoftBranchProductStock">
           <Key>
@@ -5918,6 +5894,10 @@
           <Property Name="CreatedBy" Type="Int32" />
           <NavigationProperty Name="ApplicationUser" Relationship="SoftBBMModels.FK_shop_sanphamLogs_ApplicationUsers" FromRole="shop_sanphamLogs" ToRole="ApplicationUser" />
           <NavigationProperty Name="shop_sanpham" Relationship="SoftBBMModels.FK_shop_sanphamLog_shop_sanpham" FromRole="shop_sanphamLogs" ToRole="shop_sanpham" />
+          <Property Name="BranchId" Type="Int32" />
+          <NavigationProperty Name="SoftBranch" Relationship="SoftBBMModels.FK_shop_sanphamLogs_SoftBranches" FromRole="shop_sanphamLogs" ToRole="SoftBranch" />
+          <Property Name="StockTotal" Type="Double" Nullable="false" />
+          <Property Name="StockTotalAll" Type="Double" Nullable="false" />
         </EntityType>
         <Association Name="FK_shop_sanphamLogs_ApplicationUsers">
           <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
@@ -6009,6 +5989,18 @@
             </Principal>
             <Dependent Role="SoftStockIn">
               <PropertyRef Name="PaymentStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_shop_sanphamLogs_SoftBranches">
+          <End Type="SoftBBMModels.SoftBranch" Role="SoftBranch" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.shop_sanphamLogs" Role="shop_sanphamLogs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftBranch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="shop_sanphamLogs">
+              <PropertyRef Name="BranchId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7185,6 +7177,9 @@
           <EntitySetMapping Name="shop_sanphamLogs">
             <EntityTypeMapping TypeName="SoftBBMModels.shop_sanphamLogs">
               <MappingFragment StoreEntitySet="shop-sanphamLogs">
+                <ScalarProperty Name="StockTotalAll" ColumnName="StockTotalAll" />
+                <ScalarProperty Name="StockTotal" ColumnName="StockTotal" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />

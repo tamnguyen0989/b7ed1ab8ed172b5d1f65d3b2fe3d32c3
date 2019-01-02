@@ -169,7 +169,7 @@
                                 <th>Tình trạng <br />đơn</th>
                                 <th>Tình trạng <br />nhập kho</th>       
                                 <!--<th>Tình trạng <br />đặt kho</th>-->                      
-                                <th style="width:15%"></th>
+                                <th style="width:15%"><button ng-click="clearStamp()" class="btn btn-danger" style="background-color:indianred"><i class="fa fa-remove "></i> Xoá DS In Tem</button></th>
                             </tr>
                             <tr ng-form name="data{{$index}}" ng-repeat="item in books">
                                 <td>{{item.Id}}</td>
@@ -203,6 +203,7 @@
                                     <button ng-click="bookDetail(item)" title="Chi tiết" class="btn btn-sm btn-primary" style="margin-top:3px"><i class="fa fa-search"></i></button>
                                     <button ng-hide="item.FromBranchStatusId=='06'|| item.FromBranchStatusId=='02'|| item.CategoryId=='01'" ui-sref="edit_stockout({stockinId:item.Id})" title="Chỉnh sửa" class="btn btn-sm btn-info" style="margin-top:3px"><i class="fa fa-pencil"></i></button>
                                     <button ng-click="updateCancel(item)" ng-hide="item.FromBranchStatusId=='06'|| item.FromBranchStatusId=='02' || item.CategoryId=='01'" title="Huỷ" class="btn btn-sm btn-danger" style="margin-top:3px"><i class="fa fa-trash"></i></button>
+                                    <button ng-click="addStamp(item)" title="In tem" class="btn btn-sm" style="color:white;background-color:#fc7e81;margin-top:3px"><i class="fa fa-bookmark-o"></i></button>
                                     <!--<button ng-show="item.FromBranchStatusId == '06'" style="margin-top:3px" ng-click="getDetailStockoutToPrint(item)" title="In đơn" class="btn btn-sm btn-warning"><i class="fa fa-print"></i></button>-->
                                     <button style="margin-top:3px" ng-click="getDetailStockoutToPrint(item)" title="In đơn" class="btn btn-sm btn-warning"><i class="fa fa-print"></i></button>
                                 </td>

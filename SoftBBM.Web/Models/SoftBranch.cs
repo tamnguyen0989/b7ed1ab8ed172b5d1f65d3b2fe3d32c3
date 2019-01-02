@@ -28,6 +28,7 @@ namespace SoftBBM.Web.Models
             this.SoftStockIns = new HashSet<SoftStockIn>();
             this.SoftStockIns1 = new HashSet<SoftStockIn>();
             this.SoftStockIns2 = new HashSet<SoftStockIn>();
+            this.shop_sanphamLogs = new HashSet<shop_sanphamLogs>();
         }
     
         public int Id { get; set; }
@@ -61,5 +62,7 @@ namespace SoftBBM.Web.Models
         public virtual ICollection<SoftStockIn> SoftStockIns1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftStockIn> SoftStockIns2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<shop_sanphamLogs> shop_sanphamLogs { get; set; }
     }
 }

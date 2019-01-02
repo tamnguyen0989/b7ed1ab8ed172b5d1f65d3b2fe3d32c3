@@ -59,6 +59,8 @@
         $scope.resetTimeFilter = resetTimeFilter;
         $scope.resetStockoutTimeFilter = resetStockoutTimeFilter;
         $scope.getDetailStockoutToPrint = getDetailStockoutToPrint;
+        $scope.addStamp = addStamp;
+        $scope.clearStamp = clearStamp;
 
         function search(page) {
             page = page || 0;
@@ -389,6 +391,48 @@
             }, function (error) {
                 notificationService.displayError(error);
             });
+        }
+        function addStamp(item) {
+            $scope.loading = true;
+            var config = {
+                params: {
+                    stockinId: item.Id
+                }
+            }
+            apiService.get('/api/stockin/detailstockintoaddstamp', config, function (result) {
+                if (sessionStorage.getItem("arrayPrint")) {
+                    var arrayPrint = JSON.parse(sessionStorage.getItem("arrayPrint"));
+                    if (arrayPrint.length > 0) {
+                        $.each(result.data, function (index, value) {
+                            var exist = false;
+                            $.each(arrayPrint, function (indexRoot, valueRoot) {
+                                if (valueRoot.id == value.id) {
+                                    valueRoot.Quantity += value.Quantity;
+                                    exist = true;
+                                    return false;
+                                }
+                            });
+                            if (exist == false)
+                                arrayPrint.push(value);
+                        });
+                        sessionStorage.setItem("arrayPrint", JSON.stringify(arrayPrint));
+                    }
+                    else
+                        sessionStorage.setItem("arrayPrint", JSON.stringify(result.data));
+                }
+                else
+                    sessionStorage.setItem("arrayPrint", JSON.stringify(result.data));
+                $scope.loading = false;
+                //$state.go('add_stamp');
+                var url = $state.href('add_stamp');
+                window.open(url, '_blank');
+            }, function (error) {
+                notificationService.displayError(error);
+            });
+        }
+        function clearStamp() {
+            $scope.arrayPrint = [];
+            sessionStorage.removeItem('arrayPrint');
         }
 
         if (((Object.keys($scope.branchSelectedRoot).length === 0 && $scope.branchSelectedRoot.constructor === Object) || $scope.branchSelectedRoot == undefined) && localStorage.getItem("userId") != null) {
