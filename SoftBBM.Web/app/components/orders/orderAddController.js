@@ -71,6 +71,7 @@
         $scope.freeShipCart = false;
         $scope.VTPFeeHCM = 0;
         $scope.GHTKFeeHCM = 0;
+        $scope.VNPFeeHCM = 0;
         $scope.VNEPFeeHCM = 0;
         $scope.VTPEcoFee = 0;
         $scope.VTPFastFee = 0;
@@ -784,19 +785,83 @@
                         VNEPFeeHCM = VNEPFeeHCM * 100;
                         $scope.VNEPFeeHCM = VNEPFeeHCM;
 
+                        //VNPost huyen HCM
+                        debugger
+                        var VNPFeeHCM = 0;
+                        var regionsVNPHCM = [];
+                        $.each($scope.regions, function (index, value) {
+                            if (value.mavung == $scope.selectedDistrict.mavungvnpost)
+                                regionsVNPHCM.push(value);
+
+                        })
+                        if (regionsVNPHCM.length > 0) {
+                            var kglessthan10k = 0;
+                            if (kg <= 10) {
+                                switch (true) {
+                                    case (kg <= 1):
+                                        $.each(regionsVNPHCM, function (index, value) {
+                                            if (value.kilogram == 1)
+                                                VNPFeeHCM = value.ship;
+                                        });
+                                        break;
+                                    case (kg > 1 && kg <= 2):
+                                        $.each(regionsVNPHCM, function (index, value) {
+                                            if (value.kilogram == 2)
+                                                VNPFeeHCM = value.ship;
+                                        });
+                                        break;
+                                    case (kg > 2 && kg <= 5):
+                                        $.each(regionsVNPHCM, function (index, value) {
+                                            if (value.kilogram == 5)
+                                                VNPFeeHCM = value.ship;
+                                        });
+                                        break;
+                                    case (kg > 5 && kg <= 10):
+                                        $.each(regionsVNPHCM, function (index, value) {
+                                            if (value.kilogram == 10)
+                                                VNPFeeHCM = value.ship;
+                                        });
+                                }
+                                kglessthan10k = VNPFeeHCM;
+                            }
+                            else {
+                                var kg10 = 0;
+                                var kg1 = 0;
+                                $.each(regionsVNPHCM, function (index, value) {
+                                    if (value.kilogram == 10)
+                                        kg10 = value.ship;
+                                    if (value.kilogram == 0)
+                                        kg1 = value.ship;
+                                });
+                                var kgdu = Math.ceil(kg - 10);
+                                VNPFeeHCM = kg10 + (kgdu * kg1);
+                            }
+                            if (isTwoProductCart == true)
+                                VNPFeeHCM = VNPFeeHCM * 1.2;
+                            VNPFeeHCM = Math.ceil(VNPFeeHCM / 100);
+                            VNPFeeHCM = VNPFeeHCM * 100;
+                            $scope.VNPFeeHCM = VNPFeeHCM;
+                        }
+
                         //min ship
                         if ($scope.freeShipCart == true) {
-                            $scope.VTPFeeHCM /= 2;
+                            //$scope.VTPFeeHCM /= 2;
+                            $scope.VTPFeeHCM = 9999999;
                             $scope.GHTKFeeHCM /= 2;
-                            $scope.VNEPFeeHCM /= 2;
-                            var min = Math.min(VTPFeeHCM, GHTKFeeHCM, VNEPFeeHCM);
+                            //$scope.VNEPFeeHCM /= 2;
+                            $scope.VNEPFeeHCM = 9999999;
+                            var min = Math.min(VTPFeeHCM, GHTKFeeHCM, VNEPFeeHCM, VNPFeeHCM);
                             if (VTPFeeHCM == min) {
                                 $scope.freeShipType = 1;
                                 $scope.VTPFeeHCM = 0;
                             }
-                            else if (GHTKFeeHCM == min) {
+                            else if (VNPFeeHCM == min) {
                                 $scope.freeShipType = 2;
                                 $scope.GHTKFeeHCM = 0;
+                            }
+                            else if (VNPFeeHCM == min) {
+                                $scope.freeShipType = 3;
+                                $scope.VNPFeeHCM = 0;
                             }
                             else {
                                 $scope.freeShipType = 4;
@@ -1209,7 +1274,7 @@
                     $scope.VNPFastFee = VNPFastFee;
 
                     //VNPostEco
-                    debugger
+                    
                     var VNPEcoFee = 0;
                     var VNPEcoTime = 0;
 
@@ -1408,10 +1473,13 @@
 
                     //min ship
                     if ($scope.freeShipCart == true) {
-                        $scope.VTPEcoFee /= 2;
-                        $scope.VTPFastFee /= 2;
+                        //$scope.VTPEcoFee /= 2;
+                        $scope.VTPEcoFee = 99999999;
+                        //$scope.VTPFastFee /= 2;
+                        $scope.VTPFastFee = 99999999;
                         $scope.GHTKFee /= 2;
-                        $scope.VNEPFee /= 2;
+                        //$scope.VNEPFee /= 2;
+                        $scope.VNEPFee = 99999999;
                         $scope.VNPFastFee /= 2;
                         $scope.VNPEcoFee /= 2;
                         $scope.FUTAFee /= 2;
@@ -1542,6 +1610,10 @@
             if ($scope.selectedTypeShipHCM == 2) {
                 $scope.feeShip = $scope.GHTKFeeHCM;
                 $scope.nameTypeShip = 'GH Tiết Kiêm 24h';
+            }
+            if ($scope.selectedTypeShipHCM == 3) {
+                $scope.feeShip = $scope.VNPFeeHCM;
+                $scope.nameTypeShip = 'VNPost 48h';
             }
             if ($scope.selectedTypeShipHCM == 4) {
                 $scope.feeShip = $scope.VNEPFeeHCM;

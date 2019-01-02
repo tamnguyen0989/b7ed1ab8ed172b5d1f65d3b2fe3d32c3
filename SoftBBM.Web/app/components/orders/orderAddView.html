@@ -194,7 +194,7 @@
                                                         <label class="col-xs-4 cus-control-label"><span ng-show="frmOrderAdd.typeShipHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:</label>
                                                         <div class="col-xs-8">
                                                             <ul style="list-style-type: none;margin-left:-20px">
-                                                                <li>
+                                                                <!--<li>
                                                                     <input name="typeShipHCM" type="radio" value=1 ng-model="selectedTypeShipHCM" ng-change="updateTypeShipHCM()">
                                                                     <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
                                                                         Viettel Post 24h:
@@ -208,7 +208,7 @@
                                                                             Miễn phí!
                                                                         </span>
                                                                     </i>
-                                                                </li>
+                                                                </li>-->
                                                                 <li ng-show="passGHTKRules==true">
                                                                     <input name="typeShipHCM" type="radio" value=2 ng-model="selectedTypeShipHCM" ng-change="updateTypeShipHCM()">
                                                                     <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
@@ -224,7 +224,7 @@
                                                                         </span>
                                                                     </i>
                                                                 </li>
-                                                                <li ng-show="passVNEPRules==true">
+                                                                <!--<li ng-show="passVNEPRules==true">
                                                                     <input name="typeShipHCM" type="radio" value=4 ng-model="selectedTypeShipHCM" ng-change="updateTypeShipHCM()">
                                                                     <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
                                                                         GH Vnexpress 24h:
@@ -235,6 +235,21 @@
                                                                             giảm 50%
                                                                         </span>
                                                                         <span ng-show="freeShipType==4" style="color:red">
+                                                                            Miễn phí!
+                                                                        </span>
+                                                                    </i>
+                                                                </li>-->
+                                                                <li>
+                                                                    <input name="typeShipHCM" type="radio" value=3 ng-model="selectedTypeShipHCM" ng-change="updateTypeShipHCM()">
+                                                                    <i style="font-size:13px;margin-left:5px;font-weight:bold;color:green">
+                                                                        VNPost 48h:
+                                                                        <span ng-show="freeShipType!=3" style="color:blue">
+                                                                            {{VNPFeeHCM | currency:'':0}}
+                                                                        </span>
+                                                                        <span ng-show="freeShipType!=3 && freeShipCart==true" style="color:red">
+                                                                            giảm 50%
+                                                                        </span>
+                                                                        <span ng-show="freeShipType==3" style="color:red">
                                                                             Miễn phí!
                                                                         </span>
                                                                     </i>
