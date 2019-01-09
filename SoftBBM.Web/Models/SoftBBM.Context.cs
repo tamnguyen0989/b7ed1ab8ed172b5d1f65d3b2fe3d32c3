@@ -103,10 +103,10 @@ namespace SoftBBM.Web.Models
         public virtual DbSet<SoftSupplier> SoftSuppliers { get; set; }
         public virtual DbSet<SoftSupplierVatStatu> SoftSupplierVatStatus { get; set; }
         public virtual DbSet<donhang_ct> donhang_ct { get; set; }
-        public virtual DbSet<shop_sanphamLogs> shop_sanphamLogs { get; set; }
         public virtual DbSet<SoftStockInPaymentMethod> SoftStockInPaymentMethods { get; set; }
         public virtual DbSet<SoftStockInPaymentType> SoftStockInPaymentTypes { get; set; }
         public virtual DbSet<SoftStockInPaymentStatus> SoftStockInPaymentStatuses { get; set; }
+        public virtual DbSet<shop_sanphamLogs> shop_sanphamLogs { get; set; }
     
         public virtual int TinTuc_Phantrang(Nullable<int> currPage, Nullable<int> recodperpage, Nullable<int> pagesize, Nullable<int> cateID, string page)
         {

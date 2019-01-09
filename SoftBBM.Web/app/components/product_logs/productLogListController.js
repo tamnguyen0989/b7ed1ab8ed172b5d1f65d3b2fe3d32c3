@@ -146,6 +146,10 @@
                 });
         }
 
+        if (((Object.keys($scope.branchSelectedRoot).length === 0 && $scope.branchSelectedRoot.constructor === Object) || $scope.branchSelectedRoot == undefined) && localStorage.getItem("userId") != null) {
+            notificationService.displayError("Hãy chọn kho");
+            $state.go('home');
+        }
         $window.document.title = "Lịch sử sản phẩm";
         $scope.search();
         init();

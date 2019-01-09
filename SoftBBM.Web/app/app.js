@@ -16,6 +16,7 @@
         'softbbm.product_categories',
         'softbbm.product_logs',
         'softbbm.return_suppliers',
+        'softbbm.imports',
         'softbbm.common'
     ]).config(config)
       .config(configAuthentication);
@@ -27,7 +28,7 @@
             controller: 'baseController',
             abstract: true
         }).state('home', {
-            url: '/admin',
+            url: '/home',
             parent: 'base',
             templateUrl: '/app/components/home/homeView.html',
             controller: 'homeController'

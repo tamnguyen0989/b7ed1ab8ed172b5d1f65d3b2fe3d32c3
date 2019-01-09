@@ -289,6 +289,7 @@
                     init();
                 }, function (error) {
                     notificationService.displayError(error.data);
+                    $scope.addingOrder = false;
                 });
         }
         function saveOrder() {
@@ -364,6 +365,7 @@
                     //$state.go('orders');
                 }, function (error) {
                     notificationService.displayError(error.data);
+                    $scope.addingOrder = false;
                 });
         }
         function addToList(item) {
@@ -786,7 +788,6 @@
                         $scope.VNEPFeeHCM = VNEPFeeHCM;
 
                         //VNPost huyen HCM
-                        debugger
                         var VNPFeeHCM = 0;
                         var regionsVNPHCM = [];
                         $.each($scope.regions, function (index, value) {
@@ -902,10 +903,10 @@
                                 $scope.passVNEPRules = false;
                         }
                     });
-                    if (sumChieuDai >= 80 || sumChieuRong >= 80 || sumChieuCao >= 80 || sumKg() >= 20) {
+                    if (sumChieuDai >= 30 || sumChieuRong >= 30 || sumChieuCao >= 30 || sumKg() >= 20) {
                         $scope.passGHTKRules = false;
                     }
-
+                    debugger
                     var kg = sumKg();
                     var kgLWHFast = sumKgLWHFast();
                     if (kg < kgLWHFast)
@@ -1274,25 +1275,33 @@
                     $scope.VNPFastFee = VNPFastFee;
 
                     //VNPostEco
-                    
+
                     var VNPEcoFee = 0;
                     var VNPEcoTime = 0;
-
+                    var kg = sumKg();
+                    var kgLWH = sumKgLWH();
+                    if (kg < kgLWH)
+                        kg = kgLWH;
                     var regionsVNPEco = [];
                     $.each($scope.regions, function (index, value) {
                         if (value.mavung == $scope.selectedCity.mavungvnpostbuukien)
                             regionsVNPEco.push(value);
                     })
+                    var kg2 = 0;
+                    var kg10 = 0;
+                    var kg30 = 0;
+                    $.each(regionsVNPEco, function (index, value) {
+                        if (value.kilogram == 2)
+                            kg2 = value.ship;
+                        if (value.kilogram == 10)
+                            kg10 = value.ship;
+                        if (value.kilogram == 30)
+                            kg30 = value.ship;
+                    });
                     var kglessthan2k = 0;
                     if (kg <= 2) {
                         switch (true) {
-                            case (kg <= 0.05):
-                                $.each(regionsVNPEco, function (index, value) {
-                                    if (value.kilogram == 0.05)
-                                        VNPEcoFee = value.ship;
-                                });
-                                break;
-                            case (kg > 0.05 && kg <= 0.1):
+                            case (kg <= 0.1):
                                 $.each(regionsVNPEco, function (index, value) {
                                     if (value.kilogram == 0.1)
                                         VNPEcoFee = value.ship;
@@ -1310,19 +1319,37 @@
                                         VNPEcoFee = value.ship;
                                 });
                                 break;
-                            case (kg > 0.5 && kg <= 1):
+                            case (kg > 0.5 && kg <= 0.75):
+                                $.each(regionsVNPEco, function (index, value) {
+                                    if (value.kilogram == 0.75)
+                                        VNPEcoFee = value.ship;
+                                });
+                                break;
+                            case (kg > 0.75 && kg <= 1):
                                 $.each(regionsVNPEco, function (index, value) {
                                     if (value.kilogram == 1)
                                         VNPEcoFee = value.ship;
                                 });
                                 break;
-                            case (kg > 1 && kg <= 1.5):
+                            case (kg > 1 && kg <= 1.25):
+                                $.each(regionsVNPEco, function (index, value) {
+                                    if (value.kilogram == 1.25)
+                                        VNPEcoFee = value.ship;
+                                });
+                                break;
+                            case (kg > 1.25 && kg <= 1.5):
                                 $.each(regionsVNPEco, function (index, value) {
                                     if (value.kilogram == 1.5)
                                         VNPEcoFee = value.ship;
                                 });
                                 break;
-                            case (kg > 1.5 && kg <= 2):
+                            case (kg > 1.5 && kg <= 1.75):
+                                $.each(regionsVNPEco, function (index, value) {
+                                    if (value.kilogram == 1.75)
+                                        VNPEcoFee = value.ship;
+                                });
+                                break;
+                            case (kg > 1.75 && kg <= 2):
                                 $.each(regionsVNPEco, function (index, value) {
                                     if (value.kilogram == 2)
                                         VNPEcoFee = value.ship;
@@ -1332,18 +1359,13 @@
 
                         kglessthan2k = VNPEcoFee;
                     }
-                    else {
-                        var kg2 = 0;
-                        var kg05 = 0;
-                        $.each(regionsVNPEco, function (index, value) {
-                            if (value.kilogram == 2)
-                                kg2 = value.ship;
-                            if (value.kilogram == 0)
-                                kg05 = value.ship;
-                        });
+                    else if (kg > 2 && kg <= 10) {
                         var kgdu = kg - 2;
-                        var rm = Math.ceil(kgdu / 0.5);
-                        VNPEcoFee = kg2 + (rm * kg05);
+                        VNPEcoFee = kg2 + (Math.ceil(kgdu) * kg10);
+                    }
+                    else {
+                        var kgdu10 = kg - 10;
+                        VNPEcoFee = kg2 + 8 * kg10 + (Math.ceil(kgdu10) * kg30);
                     }
 
                     VNPEcoFee = VNPEcoFee * 1.1;
@@ -1390,6 +1412,10 @@
                     var FUTATime = 0;
                     var FUTAAddress = '';
                     var regionsFUTA = [];
+                    var kg = sumKg();
+                    var kgLWH = sumKgLWH();
+                    if (kg < kgLWH)
+                        kg = kgLWH;
                     $.each($scope.regions, function (index, value) {
                         if (value.mavung == $scope.selectedDistrict.mavungfuta)
                             regionsFUTA.push(value);

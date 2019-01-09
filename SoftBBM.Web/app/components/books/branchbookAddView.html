@@ -133,7 +133,7 @@
                                 <td>{{itemBookDetail.tensp}}</td>
                                 <td>{{itemBookDetail.StockTotal}}</td>
                                 <td>{{itemBookDetail.SelectedStockTotal}}</td>
-                                <td><input class="text-center width80px" type="number" min="1" ng-model="itemBookDetail.Quantity" /></td>
+                                <td><input class="text-center width80px" type="number" ng-model="itemBookDetail.Quantity" /></td>
                                 <td>{{itemBookDetail.PriceBase | currency:'':0}}</td>
                                 <td>{{itemBookDetail.PriceBase * itemBookDetail.Quantity | currency:'':0}}</td>
                                 <td><button class="btn btn-danger" ng-click="removeBookDetail($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>

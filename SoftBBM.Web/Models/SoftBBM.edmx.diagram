@@ -177,15 +177,15 @@
         <EntityTypeShape EntityType="SoftBBMModels.donhang_ct" Width="1.5" PointX="20.875" PointY="9.375" />
         <AssociationConnector Association="SoftBBMModels.dh_ctDH" />
         <AssociationConnector Association="SoftBBMModels.dh_sp" />
-        <EntityTypeShape EntityType="SoftBBMModels.shop_sanphamLogs" Width="1.5" PointX="28.625" PointY="25.25" />
-        <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLogs_ApplicationUsers" />
-        <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLog_shop_sanpham" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftStockInPaymentMethod" Width="1.5" PointX="11.25" PointY="41.25" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftStockInPaymentType" Width="1.5" PointX="13.375" PointY="16.875" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentMethods" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentTypes" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftStockInPaymentStatus" Width="1.5" PointX="15.375" PointY="16.875" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentStatuses" />
+        <EntityTypeShape EntityType="SoftBBMModels.shop_sanphamLogs" Width="1.5" PointX="31.625" PointY="25" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLogs_ApplicationUsers" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLogs_shop_sanpham" />
         <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLogs_SoftBranches" />
         </Diagram>
     </edmx:Diagrams>

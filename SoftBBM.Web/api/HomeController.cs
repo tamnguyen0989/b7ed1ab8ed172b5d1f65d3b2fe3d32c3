@@ -190,5 +190,34 @@ namespace SoftBBM.Web.api
                 return response;
             }
         }
+
+        [Route("resetpricediscount")]
+        [HttpGet]
+        public HttpResponseMessage ResetPriceDiscount(HttpRequestMessage request)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var prices = _softChannelProductPriceRepository.GetMulti(x => x.EndDateDiscount != null && x.EndDateDiscount <= DateTime.Now);
+                foreach (var item in prices)
+                {
+                    item.PriceDiscount = 0;
+                    item.StartDateDiscount = null;
+                    item.EndDateDiscount = null;
+                    item.UpdatedBy = 0;
+                    item.UpdatedDate = DateTime.Now;
+                    _softChannelProductPriceRepository.Update(item);                   
+                }
+                _unitOfWork.Commit();
+                response = request.CreateResponse(HttpStatusCode.OK, true);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
     }
 }

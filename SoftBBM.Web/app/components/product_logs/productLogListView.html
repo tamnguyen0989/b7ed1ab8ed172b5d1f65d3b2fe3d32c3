@@ -115,8 +115,9 @@
                     <div class="responsivetable">
                         <table class="table table-bordered table-striped table-hover table_data">
                             <tr>
-                                <th>Id</th>
-                                <th>Mã sản phẩm</th>
+                                <!--<th>Id</th>-->
+                                <th>Mã sp</th>
+                                <th>Tên sp</th>
                                 <th>Chi tiết</th>
                                 <th>Số lượng</th>
                                 <th>Tồn</th>
@@ -125,9 +126,12 @@
                                 <th>Nhân viên</th>
                             </tr>
                             <tr ng-repeat="item in productLogs">
-                                <td>{{item.Id}}</td>
+                                <!--<td>{{item.Id}}</td>-->
                                 <td>
                                     {{item.shop_sanpham.masp}}
+                                </td>
+                                <td>
+                                    {{item.shop_sanpham.tensp}}
                                 </td>
                                 <td>
                                     {{item.Description}}

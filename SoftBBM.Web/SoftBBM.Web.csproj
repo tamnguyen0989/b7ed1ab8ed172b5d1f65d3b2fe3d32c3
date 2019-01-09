@@ -243,6 +243,7 @@
     <Compile Include="api\donhangController.cs" />
     <Compile Include="api\donhangStatusController.cs" />
     <Compile Include="api\HomeController.cs" />
+    <Compile Include="api\ImportController.cs" />
     <Compile Include="api\khachhangController.cs" />
     <Compile Include="api\ShopSanPhamCategoryController.cs" />
     <Compile Include="api\ShopSanPhamController.cs" />
@@ -599,6 +600,7 @@
     <Compile Include="ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModel.cs" />
     <Compile Include="ViewModels\ProductCodeGenViewModel.cs" />
+    <Compile Include="ViewModels\ResultImportViewModel.cs" />
     <Compile Include="ViewModels\ShopImageViewModel.cs" />
     <Compile Include="ViewModels\ShopSanPhamLogViewModel.cs" />
     <Compile Include="ViewModels\ShopSanPhamViewModel.cs" />
@@ -681,6 +683,13 @@
     <Content Include="app\components\home\homeController.js" />
     <Content Include="app\components\home\homeView.html" />
     <Content Include="app\components\home\rootController.js" />
+    <Content Include="app\components\imports\imports.module.js" />
+    <Content Include="app\components\imports\importController.js" />
+    <Content Include="app\components\imports\importView.html" />
+    <Content Include="app\components\imports\channelPriceProcessImportController.js" />
+    <Content Include="app\components\imports\channelPriceProcessImportModal.html" />
+    <Content Include="app\components\imports\productProcessImportModal.html" />
+    <Content Include="app\components\imports\productProcessImportController.js" />
     <Content Include="app\components\login\loginController.js" />
     <Content Include="app\components\login\loginView.html" />
     <Content Include="app\components\orders\orderAddController.js" />

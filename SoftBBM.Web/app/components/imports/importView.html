@@ -1,0 +1,101 @@
+﻿  <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Import
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li class="active">Import</li>
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Import sản phẩm</h3>
+                    <a class="pull-right" href="http://soft.babymart.vn/UploadedFiles/Demo-Import-Products.xlsx" title="Mẫu import"><i class="fa fa-fw fa-file-excel-o fa-2"></i>Mẫu import</a>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4 text-right">
+                                <input class="form-control" file-upload type="file" style="width:115px;border:none;margin-right:-10px;display:inline">
+                            </div>
+                            <div class="col-xs-8">
+                                <button class="btn" title="Import Products" style="background-color:yellowgreen;color:white;width:60px;margin-left:20px" type="button" ng-click="authenImportProduct()"><i class="fa fa-fw fa-cloud-upload"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-xs-12">
+                            <div ng-show="successMessageProduct" class="callout callout-success">
+                                <button type="button" class="close" ng-click="closeSuccessMessageProduct()">×</button>
+                                {{successMessageProduct}}
+                            </div>
+                            <p class="help-block">- Nhà cung cấp (Supplier), Nhóm sản phẩm (Category): lấy từ web soft</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Import giá kênh của sản phẩm</h3>
+                    <a class="pull-right" href="http://soft.babymart.vn/UploadedFiles/Demo-Import-Channels.xlsx" title="Mẫu import"><i class="fa fa-fw fa-file-excel-o fa-2"></i>Mẫu import</a>
+                </div>
+                <div class="box-body">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4 margintop5px text-right">
+                                <label>Kênh sản phẩm: </label>
+                            </div>
+                            <div ng-form name="frmImportChannelPrices" class="col-xs-8">
+                                <select ng-options="option.Name for option in channels track by option.Id"
+                                        ng-model="selectedChannel"
+                                        name="channel"
+                                        required
+                                        class="marginleft5px form-control">
+                                    <option disabled value="">-- Chọn kênh --</option>
+                                </select>
+                                <span style="margin-left:10px" ng-show="frmImportChannelPrices.channel.$error.required" class="has-error">Vui lòng chọn kênh sản phẩm cần import!</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-4 text-right">
+                                <input class="form-control" file-upload type="file" style="width:115px;border:none;margin-right:-10px;display:inline">
+                            </div>
+                            <div class="col-xs-8">
+                                <button class="btn" title="Import Products" style="background-color:yellowgreen;color:white;width:60px;margin-left:20px" type="button" ng-click="authenImportChannelPrice()"><i class="fa fa-fw fa-cloud-upload"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-xs-12">
+                            <div ng-show="successMessageChannelPrice" class="callout callout-success">
+                                <button type="button" class="close" ng-click="closeSuccessMessageChannelPrice()">×</button>
+                                {{successMessageChannelPrice}}
+                            </div>
+                            <div ng-show="errorMessageChannelPrice" class="callout callout-danger" ng-click="closeErrorMessageChannelPrice()">
+                                <button type="button" class="close" >×</button>
+                                {{errorMessageChannelPrice}}
+                            </div>
+                            <p class="help-block">
+                                - Định dạng ngày tháng kiểu text: 'ngày-tháng-năm. Vd: StartDateDiscount = '20-01-2018
+                            </p>
+                            <p class="help-block">
+                                - Thời gian ngày start : 00:00:01 , ngày end: 23:59:59
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- /.content -->

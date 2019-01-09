@@ -44,13 +44,21 @@
                 notificationService.displayError(error.data);
             });
         }
+        function resetPriceDiscount() {
+            $scope.loading = true;
+            apiService.get('/api/home/resetpricediscount', null, function (result) {
+                $scope.loading = false;
+            }, function (error) {
+                notificationService.displayError(error.data);
+            });
+        }
 
         //authenticationService.setHeader();        
         //migrationChannelPriceAndProduct();
         //updatePriceWholesale();
         //migrationBranchProductStock();
         //migrationStockinSupplier();    
- 
+        resetPriceDiscount();
     }
 
 })(angular.module('softbbm'));

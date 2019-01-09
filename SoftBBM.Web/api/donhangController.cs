@@ -64,6 +64,14 @@ namespace SoftBBM.Web.api
         public HttpResponseMessage Save(HttpRequestMessage request, OrderViewModel orderVM)
         {
             HttpResponseMessage response = null;
+            foreach (var item in orderVM.OrderDetails)
+            {
+                if (item.Quantity == null)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, "Số lượng Mã SP " + item.masp.Trim() + " lỗi!");
+                    return response;
+                }
+            }
             try
             {
                 donhang donhang = new donhang();
@@ -158,7 +166,7 @@ namespace SoftBBM.Web.api
                     productLog.BranchId = orderVM.BranchId;
                     productLog.StockTotal = stockCurrent.StockTotal.Value;
                     productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id) - item.Quantity.Value;
-                    _shopSanPhamLogRepository.Add(productLog);  
+                    _shopSanPhamLogRepository.Add(productLog);
                 }
                 var donhangReturn = _donhangRepository.GetSingleById((int)donhang.id);
                 var donhangReturnVM = Mapper.Map<donhang, donhangDetailViewModel>(donhangReturn);
@@ -213,6 +221,14 @@ namespace SoftBBM.Web.api
         public HttpResponseMessage Add(HttpRequestMessage request, OrderViewModel orderVM)
         {
             HttpResponseMessage response = null;
+            foreach (var item in orderVM.OrderDetails)
+            {
+                if (item.Quantity == null)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, "Số lượng Mã SP " + item.masp.Trim() + " lỗi!");
+                    return response;
+                }
+            }
             try
             {
                 donhang donhang = new donhang();

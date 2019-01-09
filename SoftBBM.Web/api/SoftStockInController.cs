@@ -120,6 +120,11 @@ namespace SoftBBM.Web.api
                         response = request.CreateResponse(HttpStatusCode.BadRequest, "Tồn tại kho của " + item.masp.Trim() + " không đủ xuất!");
                         return response;
                     }
+                    if (item.Quantity == null)
+                    {
+                        response = request.CreateResponse(HttpStatusCode.BadRequest, "Số lượng mã " + item.masp.Trim() + " lỗi!");
+                        return response;
+                    }
                 }
                 SoftStockIn softStockIn = new SoftStockIn();
                 softStockIn.UpdateSoftStockIn(softStockInVm);
@@ -200,6 +205,14 @@ namespace SoftBBM.Web.api
         public HttpResponseMessage AddStockIn(HttpRequestMessage request, SoftStockInViewModel softStockInVm)
         {
             HttpResponseMessage response = null;
+            foreach (var item in softStockInVm.SoftStockInDetails)
+            {
+                if (item.Quantity == null)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, "Số lượng Mã SP " + item.masp.Trim() + " lỗi!");
+                    return response;
+                }
+            }
             try
             {
                 bool stockoutAble = false;
@@ -524,7 +537,7 @@ namespace SoftBBM.Web.api
 
                 foreach (var item in softStockIn.SoftStockInDetails)
                 {
-                    
+
 
                     //Update Product, Stock
                     //var shopSanPham = _shopSanPhamRepository.GetSingleById(item.ProductId);
@@ -822,6 +835,15 @@ namespace SoftBBM.Web.api
             HttpResponseMessage response = null;
             try
             {
+                foreach (var item in softStockInVm.SoftStockInDetails)
+                {
+                    if (item.Quantity == null)
+                    {
+                        response = request.CreateResponse(HttpStatusCode.BadRequest, "Số lượng mã " + item.masp.Trim() + " lỗi!");
+                        return response;
+                    }
+                }
+
                 double stockCurrent = 0;
                 var fromSuppliers = "";
                 SoftStockIn softStockIn = new SoftStockIn();
@@ -891,8 +913,16 @@ namespace SoftBBM.Web.api
             HttpResponseMessage response = null;
             if (softStockInVm == null)
             {
-                response = request.CreateResponse(HttpStatusCode.BadRequest,"Danh sách xuất kho lỗi");
+                response = request.CreateResponse(HttpStatusCode.BadRequest, "Danh sách xuất kho lỗi");
                 return response;
+            }
+            foreach (var item in softStockInVm.SoftStockInDetails)
+            {
+                if (item.Quantity == null)
+                {
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, "Số lượng mã " + item.masp.Trim() + " lỗi!");
+                    return response;
+                }
             }
             try
             {

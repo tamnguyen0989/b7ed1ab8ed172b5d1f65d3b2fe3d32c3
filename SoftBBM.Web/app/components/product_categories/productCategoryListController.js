@@ -65,7 +65,7 @@
                 params: {
                     page: page,
                     pageSize: parseInt($scope.pageSizeNumber),
-                    filter: $scope.filterProductCategorys
+                    filter: $scope.filterProductCategory
                 }
             };
 

@@ -10,7 +10,7 @@
         $scope.pageSizeNumber = '10';
         $scope.setupToogleDataVal = false;
         $scope.showId = false;
-        $scope.showImage = false;
+        $scope.showImage = true;
         $scope.showProductCode = true;
         $scope.showName = true;
         $scope.showStock = true;
