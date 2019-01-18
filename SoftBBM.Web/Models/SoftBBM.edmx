@@ -205,6 +205,7 @@
           <Property Name="IdPro" Type="bigint" Nullable="false" />
           <Property Name="Soluong" Type="float" Nullable="false" />
           <Property Name="Dongia" Type="int" />
+          <Property Name="PriceAvg" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="donhang_gio_giaohang">
           <Key>
@@ -5905,6 +5906,7 @@
           <Property Name="Dongia" Type="Int32" />
           <NavigationProperty Name="donhang" Relationship="SoftBBMModels.dh_ctDH" FromRole="donhang_ct" ToRole="donhang" />
           <NavigationProperty Name="shop_bienthe" Relationship="SoftBBMModels.dh_sp" FromRole="donhang_ct" ToRole="shop_bienthe" />
+          <Property Name="PriceAvg" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="dh_ctDH">
           <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="1" />
@@ -7214,6 +7216,7 @@
           <EntitySetMapping Name="donhang_ct">
             <EntityTypeMapping TypeName="SoftBBMModels.donhang_ct">
               <MappingFragment StoreEntitySet="donhang_ct">
+                <ScalarProperty Name="PriceAvg" ColumnName="PriceAvg" />
                 <ScalarProperty Name="Dongia" ColumnName="Dongia" />
                 <ScalarProperty Name="Soluong" ColumnName="Soluong" />
                 <ScalarProperty Name="IdPro" ColumnName="IdPro" />

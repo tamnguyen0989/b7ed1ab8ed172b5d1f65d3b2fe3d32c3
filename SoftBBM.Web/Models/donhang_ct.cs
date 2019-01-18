@@ -19,6 +19,7 @@ namespace SoftBBM.Web.Models
         public long IdPro { get; set; }
         public double Soluong { get; set; }
         public Nullable<int> Dongia { get; set; }
+        public int PriceAvg { get; set; }
     
         public virtual donhang donhang { get; set; }
         public virtual shop_bienthe shop_bienthe { get; set; }

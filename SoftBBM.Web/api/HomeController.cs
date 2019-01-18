@@ -88,9 +88,10 @@ namespace SoftBBM.Web.api
             try
             {
                 //var product = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Contains("M395"));
-                var products = _shopSanPhamRepository.GetAll();
-                foreach (var product in products)
+                var productIds = _shopSanPhamRepository.GetAllIds();
+                foreach (var productId in productIds)
                 {
+                    var product = _shopSanPhamRepository.GetSingleById(productId);
                     var priceWholesale = 0;
                     var priceONL = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == product.id && x.ChannelId == 2);
                     if (priceONL != null)
@@ -100,6 +101,8 @@ namespace SoftBBM.Web.api
                         priceWholesale = UtilExtensions.GetPriceWholesaleByPriceAvgOnl(avg, onl);
                     }
                     product.PriceWholesale = priceWholesale;
+                    product.UpdatedBy = 0;
+                    product.UpdatedDate = DateTime.Now;
                     _shopSanPhamRepository.Update(product);
                 }
                 _unitOfWork.Commit();

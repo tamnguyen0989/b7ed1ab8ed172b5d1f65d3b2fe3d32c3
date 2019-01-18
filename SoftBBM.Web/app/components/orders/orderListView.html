@@ -290,17 +290,17 @@
                                 <th class="text-center" style="padding:1px"></th>
                                 <th ng-hide="orderReturn.ChannelId==1" class="text-center" style="padding:1px">Mã</th>
                                 <th class="text-center">Tên sản phẩm</th>
-                                <th class="text-center">SL</th>
-                                <th class="text-center">Giá</th>
-                                <th class="text-center">T.Tiền</th>
+                                <th class="text-center" style="padding:1px">SL</th>
+                                <th class="text-center" style="padding:1px">Giá</th>
+                                <th class="text-center" style="padding:1px">T.Tiền</th>
                             </tr>
                             <tr ng-repeat="item in orderReturn.donhang_ct">
                                 <td style="padding:1px">{{$index+1}}</td>
                                 <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
                                 <td>{{item.shop_bienthe.tensp}}</td>
-                                <td>{{item.Soluong}}</td>
-                                <td>{{item.Dongia | currency:'':0}}</td>
-                                <td>{{item.Soluong * item.Dongia | currency:'':0}}</td>
+                                <td style="padding:1px">{{item.Soluong}}</td>
+                                <td style="padding:1px">{{item.Dongia | currency:'':0}}</td>
+                                <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}</td>
                             </tr>
                             <tr>
                                 <td colspan="4" class="text-right">Tổng thành tiền</td>
@@ -385,17 +385,17 @@
                                     <th class="text-center" style="padding:1px"></th>
                                     <th ng-hide="orderReturn.ChannelId==1" class="text-center" style="padding:1px">Mã</th>
                                     <th class="text-center">Tên sản phẩm</th>
-                                    <th class="text-center">SL</th>
-                                    <th class="text-center">Giá</th>
-                                    <th class="text-center">T.Tiền</th>
+                                    <th class="text-center" style="padding:1px">SL</th>
+                                    <th class="text-center" style="padding:1px">Giá</th>
+                                    <th class="text-center" style="padding:1px">T.Tiền</th>
                                 </tr>
                                 <tr ng-repeat="item in order.donhang_ct">
                                     <td style="padding:1px">{{$index+1}}</td>
                                     <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
                                     <td>{{item.shop_bienthe.tensp}}</td>
-                                    <td>{{item.Soluong}}</td>
-                                    <td>{{item.Dongia | currency:'':0}}</td>
-                                    <td>{{item.Soluong * item.Dongia | currency:'':0}}</td>
+                                    <td style="padding:1px">{{item.Soluong}}</td>
+                                    <td style="padding:1px">{{item.Dongia | currency:'':0}}</td>
+                                    <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="4" class="text-right">Tổng thành tiền</td>

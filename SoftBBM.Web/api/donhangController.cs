@@ -139,6 +139,11 @@ namespace SoftBBM.Web.api
                         _unitOfWork.Commit();
                     }
                     donhang_ct.IdPro = bienthe.id;
+                    var priceAvg = 0;
+                    var product = _shopSanPhamRepository.GetSingleById(item.id);
+                    if (product != null && product.PriceAvg.HasValue)
+                        priceAvg = product.PriceAvg.Value;
+                    donhang_ct.PriceAvg = priceAvg;
                     _donhangctRepository.Add(donhang_ct);
 
                     var stockCurrent = _softStockRepository.GetSingleByCondition(x => x.BranchId == orderVM.BranchId && x.ProductId == item.id);
@@ -295,6 +300,11 @@ namespace SoftBBM.Web.api
                         _unitOfWork.Commit();
                     }
                     donhang_ct.IdPro = bienthe.id;
+                    var priceAvg = 0;
+                    var product = _shopSanPhamRepository.GetSingleById(item.id);
+                    if (product != null && product.PriceAvg.HasValue)
+                        priceAvg = product.PriceAvg.Value;
+                    donhang_ct.PriceAvg = priceAvg;
                     _donhangctRepository.Add(donhang_ct);
 
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
@@ -1628,6 +1638,112 @@ namespace SoftBBM.Web.api
                     donhangVMs.Add(donhangVM);
                 }
                 response = request.CreateResponse(HttpStatusCode.OK, donhangVMs);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Route("channelsalesreport")]
+        public HttpResponseMessage ChannelSalesReport(HttpRequestMessage request, ChannelSalesRevenuesReportParamsViewModel ChannelSalesReportParamsVm)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var startDate = ChannelSalesReportParamsVm.startDate.ToLocalTime();
+                var startDateStr = startDate.ToString("yyyy-MM-dd") + " 00:00:00";
+                var endDate = ChannelSalesReportParamsVm.endDate.ToLocalTime();
+                var endDateStr = endDate.ToString("yyyy-MM-dd") + " 23:59:59.999";
+                var model = _donhangRepository.GetChannelSalesReport(startDateStr, endDateStr, ChannelSalesReportParamsVm.branchId);
+                response = request.CreateResponse(HttpStatusCode.OK, model);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Route("channelrevenuesreport")]
+        public HttpResponseMessage ChannelRevenuesReport(HttpRequestMessage request, ChannelSalesRevenuesReportParamsViewModel ChannelSalesReportParamsVm)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var startDate = ChannelSalesReportParamsVm.startDate.ToLocalTime();
+                var startDateStr = startDate.ToString("yyyy-MM-dd") + " 00:00:00";
+                var endDate = ChannelSalesReportParamsVm.endDate.ToLocalTime();
+                var endDateStr = endDate.ToString("yyyy-MM-dd") + " 23:59:59.999";
+                var model = _donhangRepository.GetChannelRevenuesReport(startDateStr, endDateStr, ChannelSalesReportParamsVm.branchId);
+                response = request.CreateResponse(HttpStatusCode.OK, model);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Route("salesreport")]
+        public HttpResponseMessage SalesReport(HttpRequestMessage request, SalesRevenuesReportParamsViewModel SalesReportParamsVm)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var startDate = SalesReportParamsVm.startDate.ToLocalTime();
+                var startDateStr = startDate.ToString("yyyy-MM-dd") + " 00:00:00";
+                var endDate = SalesReportParamsVm.endDate.ToLocalTime();
+                var endDateStr = endDate.ToString("yyyy-MM-dd") + " 23:59:59.999";
+                var model = _donhangRepository.GetSalesReport(startDateStr, endDateStr, SalesReportParamsVm.branchId, SalesReportParamsVm.channelId).ToList();
+                response = request.CreateResponse(HttpStatusCode.OK, model);
+                foreach (var item in model)
+                {
+                    if (item.NewDay == 1)
+                    {
+                        item.NewDayStr = item.NewDate;
+                    }
+                    else
+                        item.NewDayStr = item.NewDay.ToString();
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Route("revenuesreport")]
+        public HttpResponseMessage RevenuesReport(HttpRequestMessage request, SalesRevenuesReportParamsViewModel SalesReportParamsVm)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var startDate = SalesReportParamsVm.startDate.ToLocalTime();
+                var startDateStr = startDate.ToString("yyyy-MM-dd") + " 00:00:00";
+                var endDate = SalesReportParamsVm.endDate.ToLocalTime();
+                var endDateStr = endDate.ToString("yyyy-MM-dd") + " 23:59:59.999";
+                var model = _donhangRepository.GetRevenuesReport(startDateStr, endDateStr, SalesReportParamsVm.branchId, SalesReportParamsVm.channelId).ToList();
+                response = request.CreateResponse(HttpStatusCode.OK, model);
+                foreach (var item in model)
+                {
+                    if (item.NewDay == 1)
+                    {
+                        item.NewDayStr = item.NewDate;
+                    }
+                    else
+                        item.NewDayStr = item.NewDay.ToString();
+                }
                 return response;
             }
             catch (Exception ex)

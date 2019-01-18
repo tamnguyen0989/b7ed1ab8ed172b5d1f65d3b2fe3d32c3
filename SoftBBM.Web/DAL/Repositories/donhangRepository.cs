@@ -5,12 +5,17 @@ using System;
 using SoftBBM.Web.ViewModels;
 using System.Collections.Generic;
 using SoftBBM.Web.Infrastructure.Extensions;
+using System.Data.SqlClient;
 
 namespace SoftBBM.Web.DAL.Repositories
 {
     public interface IdonhangRepository : IRepository<donhang>
     {
         IQueryable<donhang> GetAllPaging(int page, int pageSize, out int totalRow, out long totalMoney, OrderFilterViewModel orderFilterVM);
+        IEnumerable<ChannelSalesRevenuesReportViewModel> GetChannelSalesReport(string fromDate, string toDate,int branchId);
+        IEnumerable<ChannelSalesRevenuesReportViewModel> GetChannelRevenuesReport(string fromDate, string toDate, int branchId);
+        IEnumerable<ChannelSalesRevenuesReportViewModel> GetSalesReport(string fromDate, string toDate, int branchId, int channelId);
+        IEnumerable<ChannelSalesRevenuesReportViewModel> GetRevenuesReport(string fromDate, string toDate, int branchId, int channelId);
     }
 
     public class donhangRepository : RepositoryBase<donhang>, IdonhangRepository
@@ -141,6 +146,45 @@ namespace SoftBBM.Web.DAL.Repositories
             }
 
             return donhangs.Skip(page * pageSize).Take(pageSize);
+        }
+
+        public IEnumerable<ChannelSalesRevenuesReportViewModel> GetChannelSalesReport(string fromDate, string toDate, int branchId)
+        {
+            var parameters = new SqlParameter[]{
+                new SqlParameter("@fromDate",fromDate),
+                new SqlParameter("@toDate",toDate),
+                new SqlParameter("@branchId",branchId)
+            };
+            return DbContext.Database.SqlQuery<ChannelSalesRevenuesReportViewModel>("GetChannelSalesReport @fromDate,@toDate,@branchId", parameters);
+        }
+        public IEnumerable<ChannelSalesRevenuesReportViewModel> GetChannelRevenuesReport(string fromDate, string toDate, int branchId)
+        {
+            var parameters = new SqlParameter[]{
+                new SqlParameter("@fromDate",fromDate),
+                new SqlParameter("@toDate",toDate),
+                new SqlParameter("@branchId",branchId)
+            };
+            return DbContext.Database.SqlQuery<ChannelSalesRevenuesReportViewModel>("GetChannelRevenuesReport @fromDate,@toDate,@branchId", parameters);
+        }
+        public IEnumerable<ChannelSalesRevenuesReportViewModel> GetSalesReport(string fromDate, string toDate, int branchId,int channelId)
+        {
+            var parameters = new SqlParameter[]{
+                new SqlParameter("@fromDate",fromDate),
+                new SqlParameter("@toDate",toDate),
+                new SqlParameter("@branchId",branchId),
+                new SqlParameter("@channelId",channelId)
+            };
+            return DbContext.Database.SqlQuery<ChannelSalesRevenuesReportViewModel>("GetSalesReport @fromDate,@toDate,@branchId,@channelId", parameters);
+        }
+        public IEnumerable<ChannelSalesRevenuesReportViewModel> GetRevenuesReport(string fromDate, string toDate, int branchId, int channelId)
+        {
+            var parameters = new SqlParameter[]{
+                new SqlParameter("@fromDate",fromDate),
+                new SqlParameter("@toDate",toDate),
+                new SqlParameter("@branchId",branchId),
+                new SqlParameter("@channelId",channelId)
+            };
+            return DbContext.Database.SqlQuery<ChannelSalesRevenuesReportViewModel>("GetRevenuesReport @fromDate,@toDate,@branchId,@channelId", parameters);
         }
     }
 }

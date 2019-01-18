@@ -16,16 +16,6 @@
                 notificationService.displayError(error.data);
             });
         }
-        function updatePriceWholesale() {
-            $scope.loading = true;
-            apiService.get('/api/home/updatepricewholesale', null, function (result) {
-                if (result.data == true)
-                    $scope.loading = false;
-                notificationService.displaySuccess('Migration thành công');
-            }, function (error) {
-                notificationService.displayError(error.data);
-            });
-        }
         function migrationBranchProductStock() {
             $scope.loading = true;
             apiService.get('/api/home/migrationbranchproductstock', null, function (result) {
@@ -45,9 +35,9 @@
             });
         }
         function resetPriceDiscount() {
-            $scope.loading = true;
+            $scope.reseting = true;
             apiService.get('/api/home/resetpricediscount', null, function (result) {
-                $scope.loading = false;
+                $scope.reseting = false;
             }, function (error) {
                 notificationService.displayError(error.data);
             });

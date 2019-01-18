@@ -241,29 +241,29 @@
                                 </div>
                                 <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px">
                                     <tr>
-                                        <th class="text-center" style="padding:1px">STT</th>
+                                        <th class="text-center" style="padding:1px"></th>
                                         <th class="text-center" style="padding:1px">Mã</th>
                                         <th class="text-center">Tên</th>
-                                        <th class="text-center">SL</th>
+                                        <th class="text-center" style="padding:1px">SL</th>
                                         <th class="text-center" style="padding:1px">Giá</th>
-                                        <th class="text-center" style="padding:1px">T.Tiền</th>
+                                        <!--<th class="text-center" style="padding:1px">T.Tiền</th>-->
                                     </tr>
                                     <tr ng-repeat="item in stockoutReturn.SoftStockInDetails">
                                         <td style="padding:1px">{{$index+1}}</td>
                                         <td style="padding:1px">{{item.masp}}</td>
-                                        <td>{{item.tensp}}</td>
-                                        <td>{{item.Quantity}}</td>
+                                        <td style="font-size:11px">{{item.tensp}}</td>
+                                        <td style="padding:1px">{{item.Quantity}}</td>
                                         <td style="padding:1px">{{item.PriceNew | currency:'':0}}</td>
-                                        <td style="padding:1px">{{item.Quantity * item.PriceNew | currency:'':0}}</td>
+                                        <!--<td style="padding:1px">{{item.Quantity * item.PriceNew | currency:'':0}}</td>-->
                                     </tr>
                                     <tr>
-                                        <td colspan="4" class="text-right">Tổng số lượng</td>
+                                        <td colspan="3" class="text-right">Tổng số lượng</td>
                                         <td colspan="2">{{totalQuantity | currency:'':0}} <span style="font-size:11px"></span></td>
                                     </tr>
-                                    <tr>
+                                    <!--<tr>
                                         <td colspan="4" class="text-right">Tổng thành tiền</td>
                                         <td colspan="2">{{totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
-                                    </tr>
+                                    </tr>-->
                                 </table>
                             </div>
 

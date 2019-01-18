@@ -96,12 +96,13 @@ namespace SoftBBM.Web.Infrastructure.Extensions
         }
         public static DateTime ConvertStartDate(DateTime src)
         {
-            var result = new DateTime(src.Year, src.Month, src.Day, 0, 0, 1);
+            var result = new DateTime(src.Year, src.Month, src.Day, 0, 0, 0);
             return result;
         }
         public static DateTime ConvertEndDate(DateTime src)
         {
-            var result = new DateTime(src.Year, src.Month, src.Day, 23, 59, 59);
+            src = new DateTime(src.Year, src.Month, src.Day, 0, 0, 0);
+            var result = src.AddDays(1).AddTicks(-1);
             return result;
         }
         public static int GetPriceWholesaleByPriceAvgOnl(int? priceAvg, int? priceOnl)

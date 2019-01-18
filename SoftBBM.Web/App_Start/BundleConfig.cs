@@ -59,7 +59,8 @@ namespace SoftBBM.Web
                       "~/app/components/customers/customers.module.js",
                       "~/app/components/product_categories/productCategories.module.js",
                       "~/app/components/product_logs/productLogs.module.js",
-                      "~/app/components/return_suppliers/returnSupplier.module.js"
+                      "~/app/components/return_suppliers/returnSupplier.module.js",
+                      "~/app/components/imports/imports.module.js"
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/controller").Include(
@@ -125,8 +126,11 @@ namespace SoftBBM.Web
                       "~/app/components/return_suppliers/returnSupplierDetailController.js",
                       "~/app/components/stockins/stockinThenUpdatePriceController.js",
                       "~/app/components/stocks/stockEditProductController.js",
-                      "~/app/components/stocks/stockinPaymentController.js",
-                      "~/app/components/product_categories/productCategoryEditController.js"
+                      "~/app/components/stockins/stockinPaymentController.js",
+                      "~/app/components/product_categories/productCategoryEditController.js",
+                      "~/app/components/imports/importController.js",
+                      "~/app/components/imports/productProcessImportController.js",
+                      "~/app/components/imports/channelPriceProcessImportController.js"
                       ));
 
             BundleTable.EnableOptimizations = true;
