@@ -127,7 +127,7 @@ namespace SoftBBM.Web.api
                         }
                     }
                 }
-                
+
             }
             response = request.CreateResponse(HttpStatusCode.OK, shopsanphamVm);
             return response;
@@ -426,6 +426,63 @@ namespace SoftBBM.Web.api
                 return response;
             }
 
+        }
+
+        [Route("updatekg")]
+        [HttpGet]
+        public HttpResponseMessage UpdateKg(HttpRequestMessage request, int productId, double kg, double chieudai, double chieurong, double chieucao)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var product = _shopSanPhamRepository.GetSingleById(productId);
+                product.kg = kg;
+                product.chieucao = chieucao;
+                product.chieudai = chieudai;
+                product.chieurong = chieurong;
+                _shopSanPhamRepository.Update(product);
+                _unitOfWork.Commit();
+                var productInfo = new ShopSanPhamInformation();
+                productInfo.kg = kg;
+                productInfo.chieudai = chieudai;
+                productInfo.chieucao = chieucao;
+                productInfo.chieurong = chieurong;
+                response = request.CreateResponse(HttpStatusCode.OK, productInfo);
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+
+        }
+
+        [Route("getinfo")]
+        [HttpGet]
+        public HttpResponseMessage GetInfo(HttpRequestMessage request, int productId)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var product = _shopSanPhamRepository.GetSingleById(productId);
+                var productInfo = new ShopSanPhamInformation();
+                productInfo.kg = product.kg;
+                productInfo.chieudai = product.chieudai;
+                productInfo.chieurong = product.chieurong;
+                productInfo.chieucao = product.chieucao;
+                productInfo.masp = product.masp.Trim();
+                productInfo.tensp = product.tensp;
+                response = request.CreateResponse(HttpStatusCode.OK, productInfo);
+                return response;
+            }
+
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
         }
     }
 }

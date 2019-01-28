@@ -88,7 +88,7 @@ namespace SoftBBM.Web
                       "~/app/components/stockins/stockinEditController.js",
                       "~/app/components/stockins/stockinAddController.js",
                       "~/app/components/orders/orderListController.js",
-                      "~/app/components/orders/orderAddController.js",
+                      //"~/app/components/orders/orderAddController.js",
                       "~/app/components/orders/orderDetailController.js",
                       "~/app/components/application_roles/applicationRoleListController.js",
                       "~/app/components/application_roles/applicationRoleAddController.js",

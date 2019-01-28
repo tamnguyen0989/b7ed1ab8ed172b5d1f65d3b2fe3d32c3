@@ -702,6 +702,8 @@
     <Content Include="app\components\orders\orderListController.js" />
     <Content Include="app\components\orders\orderListView.html" />
     <Content Include="app\components\orders\orders.module.js" />
+    <Content Include="app\components\orders\productKgUpdateController.js" />
+    <Content Include="app\components\orders\productKgUpdateModal.html" />
     <Content Include="app\components\product_categories\productCategoryEditController.js" />
     <Content Include="app\components\product_categories\productCategoryEditView.html" />
     <Content Include="app\components\product_categories\productCategoryAddController.js" />
@@ -714,14 +716,10 @@
     <Content Include="app\components\product_logs\productLogs.module.js" />
     <Content Include="app\components\product_logs\productLogListController.js" />
     <Content Include="app\components\product_logs\productLogListView.html" />
-    <Content Include="app\components\reports\channelRevenuesReportController.js" />
     <Content Include="app\components\reports\channelSalesReportController.js" />
-    <Content Include="app\components\reports\channelRevenuesReportView.html" />
     <Content Include="app\components\reports\channelSalesReportView.html" />
     <Content Include="app\components\reports\reports.module.js" />
-    <Content Include="app\components\reports\revenuesReportController.js" />
     <Content Include="app\components\reports\salesReportController.js" />
-    <Content Include="app\components\reports\revenuesReportView.html" />
     <Content Include="app\components\reports\salesReportView.html" />
     <Content Include="app\components\return_suppliers\returnSupplierAddController.js" />
     <Content Include="app\components\return_suppliers\returnSupplierAddView.html" />

@@ -118,5 +118,14 @@ namespace SoftBBM.Web.ViewModels
         public IEnumerable<SoftBranchProductStockViewModel> SoftBranchProductStocks { get; set; }
         public IEnumerable<SoftChannelProductPriceSearchViewModel> SoftChannelProductPrices { get; set; }
     }
+    public class ShopSanPhamInformation
+    {
+        public double? kg { get; set; }
+        public double? chieudai { get; set; }
+        public double? chieurong { get; set; }
+        public double? chieucao { get; set; }
+        public string masp { get; set; }
+        public string tensp { get; set; }
+    }
 
 }

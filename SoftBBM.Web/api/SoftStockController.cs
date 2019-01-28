@@ -126,7 +126,7 @@ namespace SoftBBM.Web.api
             foreach (var item in stocksVM)
             {
                 item.Stock_Total_All = _softStockRepository.GetStockTotalAll(item.ProductId);
-                var priceShop = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ChannelId == 2 && x.ProductId == item.ProductId);
+                var priceShop = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ChannelId == 1 && x.ProductId == item.ProductId);
                 item.PriceShop = 0;
                 if (priceShop != null)
                     item.PriceShop = priceShop.Price.Value;

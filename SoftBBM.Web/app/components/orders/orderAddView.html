@@ -191,7 +191,9 @@
                                                 </div>
                                                 <div class="box-body">
                                                     <div ng-show="selectedCity.id==1 && HCMType==3 " class="form-group" style="margin-bottom:10px">
-                                                        <label class="col-xs-4 cus-control-label"><span ng-show="frmOrderAdd.typeShipHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:</label>
+                                                        <label class="col-xs-4 cus-control-label">
+                                                        <span ng-show="frmOrderAdd.typeShipHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:<br />{{kg}} kg</label>
+                                                        
                                                         <div class="col-xs-8">
                                                             <ul style="list-style-type: none;margin-left:-20px">
                                                                 <!--<li>
@@ -264,7 +266,7 @@
                                                         </div>
                                                     </div>
                                                     <div ng-show="selectedCity.id!=1 && selectedDistrict.id>0 " class="form-group" style="margin-bottom:10px">
-                                                        <label class="col-xs-4 cus-control-label"><span ng-show="frmOrderAdd.typeShipOutHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:</label>
+                                                        <label class="col-xs-4 cus-control-label"><span ng-show="frmOrderAdd.typeShipOutHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:<br />{{kg}} kg</label>
                                                         <div class="col-xs-8">
                                                             <ul style="list-style-type: none;margin-left:-20px">
                                                                 <!--<li>

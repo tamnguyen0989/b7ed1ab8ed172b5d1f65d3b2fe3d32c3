@@ -1,0 +1,58 @@
+﻿<div class="modal-header">
+    <h4>Cập nhật kích thước - {{masp}} - {{tensp}}</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form name="frmUpdateKg">
+        <div class="row margintop10px">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Trọng lượng</label>
+            <div class="col-xs-7">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="kg" required ng-model="kg" format="number">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-flat" type="button">kg</button>
+                    </span>
+                </div>
+                <span ng-show="frmUpdateKg.kg.$error.required" class="has-error">Nhập trọng lượng!</span>
+            </div>
+        </div>
+        <div class="row margintop10px">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Chiều dài</label>
+            <div class="col-xs-7">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="chieudai" required ng-model="chieudai" format="number">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-flat" type="button">cm</button>
+                    </span>
+                </div>
+                <span ng-show="frmUpdateKg.chieudai.$error.required" class="has-error">Nhập chiều dài!</span>
+            </div>
+        </div>
+        <div class="row margintop10px">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Chiều rộng</label>
+            <div class="col-xs-7">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="chieurong" required ng-model="chieurong" format="number">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-flat" type="button">cm</button>
+                    </span>
+                </div>
+                <span ng-show="frmUpdateKg.chieurong.$error.required" class="has-error">Nhập chiều rộng!</span>
+            </div>
+        </div>
+        <div class="row margintop10px">
+            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Chiều cao</label>
+            <div class="col-xs-7">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="chieucao" required ng-model="chieucao" format="number">
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-flat" type="button">cm</button>
+                    </span>
+                </div>
+                <span ng-show="frmUpdateKg.chieucao.$error.required" class="has-error">Nhập chiều cao!</span>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button ng-disabled="frmUpdateKg.$invalid" ng-click="updateKg()" class="btn btn-success">Hoàn thành</button>
+</div>

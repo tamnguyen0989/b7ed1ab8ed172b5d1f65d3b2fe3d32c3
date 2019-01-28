@@ -141,7 +141,7 @@
                                 <td>{{itemBookDetail.tensp}}</td>
                                 <td>{{itemBookDetail.PriceChannel | currency:'':0}}</td>
                                 <td>
-                                    <input required name="quantity{{$index}}" class="text-center width80px" type="number"  ng-change="initStamp()" ng-model="itemBookDetail.Quantity" />
+                                    <input required name="quantity{{$index}}" class="text-center width80px" type="number" ng-change="initStamp()" ng-model="itemBookDetail.Quantity" />
                                     <br />
                                     <span ng-show="frmSelectedChannel.quantity{{$index}}.$error.required" class="has-error">Vui lòng nhập số lượng</span>
                                 </td>
@@ -308,7 +308,7 @@
                                     padding-left: 1.9mm;
                                     padding-right: 1.9mm;
                                     width: 20% !important;
-                                    height: 27mm !important;
+                                    height: 25.5mm !important;
                                 }
 
                                 /*.header-barcode,.barcode  {
@@ -329,8 +329,11 @@
                                     margin-left: 9px;
                                 }
 
+                                .pagebreak {
+                                    page-break-before: always;
+                                }
                             </style>
-                            <div style="margin-top:6mm;margin-left:4.4mm;margin-right:4.5mm" >
+                            <div style="margin-top:4mm;margin-left:4.4mm;margin-right:4.5mm">
                                 <div class="barcode-group" ng-repeat="itemPrint in arrayPrint">
                                     <p class="header-barcode">
                                         {{itemPrint.tensp}}
@@ -341,7 +344,7 @@
                                     </p>
                                     <p class="bottom-barcode">
                                         Giá: {{itemPrint.PriceChannel | currency:'':0}} đ
-                                    </p>
+                                    </p> 
                                 </div>
                             </div>
                         </div>

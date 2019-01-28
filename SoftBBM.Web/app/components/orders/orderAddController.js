@@ -1,9 +1,9 @@
 ﻿(function (app) {
     app.controller('orderAddController', orderAddController);
 
-    orderAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$timeout'];
+    orderAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$timeout', '$uibModal'];
 
-    function orderAddController(apiService, $window, $scope, notificationService, $state, $rootScope, $timeout) {
+    function orderAddController(apiService, $window, $scope, notificationService, $state, $rootScope, $timeout, $uibModal) {
         $scope.order = {
             Status: true
         }
@@ -102,6 +102,7 @@
         $scope.channelName = '';
         $scope.addingOrder = false;
         $scope.searching = false;
+        $scope.kg = 0;
 
         $scope.addOrder = addOrder;
         $scope.saveOrder = saveOrder;
@@ -143,6 +144,7 @@
         $scope.validDeliveryTimeFast = validDeliveryTimeFast;
         $scope.validSelectedTypeShipHCM = validSelectedTypeShipHCM;
         $scope.validSelectedTypeShipOutHCM = validSelectedTypeShipOutHCM;
+        $scope.sumKg = sumKg;
 
         function loadChannels() {
             $scope.loading = true;
@@ -369,29 +371,73 @@
                 });
         }
         function addToList(item) {
+            $scope.selectedProduct = null;
             $scope.isAdding = true;
-            if ($scope.detailOrders.length > 0) {
-                if ($scope.addedProductIds.indexOf(item.id) == -1) {
+            $scope.selectedProduct = item;
+            if ((!item.kg && (!item.chieucao && !item.chieudai && !item.chieurong)) && $scope.selectedChannel.Id != 1) {
+                var modalInstance = $uibModal.open({
+                    templateUrl: '/app/components/orders/productKgUpdateModal.html',
+                    controller: 'productKgUpdateController',
+                    scope: $scope,
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                modalInstance.result.then(function (data) {
+                    item.kg = data.kg;
+                    item.chieucao = data.chieucao;
+                    item.chieudai = data.chieudai;
+                    item.chieurong = data.chieurong;
+
+                    if ($scope.detailOrders.length > 0) {
+                        if ($scope.addedProductIds.indexOf(item.id) == -1) {
+                            $scope.detailOrders.push(item);
+                            $scope.addedProductIds.push(item.id);
+                        }
+                        else {
+                            $.each($scope.detailOrders, function (index, value) {
+                                if (value.id == item.id)
+                                    value.Quantity += 1;
+                            });
+                        }
+                    }
+                    else {
+                        $scope.detailOrders.push(item);
+                        $scope.addedProductIds.push(item.id);
+                    }
+                    setFoodCart();
+                    setFreeShipCart();
+                    updateDistrict();
+                    $scope.searchText = "";
+                    $scope.searchedProducts = [];
+                    $scope.selectedProduct = null;
+                }, function () {
+
+                });
+            }
+            else {
+                if ($scope.detailOrders.length > 0) {
+                    if ($scope.addedProductIds.indexOf(item.id) == -1) {
+                        $scope.detailOrders.push(item);
+                        $scope.addedProductIds.push(item.id);
+                    }
+                    else {
+                        $.each($scope.detailOrders, function (index, value) {
+                            if (value.id == item.id)
+                                value.Quantity += 1;
+                        });
+                    }
+                }
+                else {
                     $scope.detailOrders.push(item);
                     $scope.addedProductIds.push(item.id);
                 }
-                else {
-                    $.each($scope.detailOrders, function (index, value) {
-                        if (value.id == item.id)
-                            value.Quantity += 1;
-                    });
-                }
+                setFoodCart();
+                setFreeShipCart();
+                updateDistrict();
+                $scope.searchText = "";
+                $scope.searchedProducts = [];
+                $scope.selectedProduct = null;
             }
-            else {
-                $scope.detailOrders.push(item);
-                $scope.addedProductIds.push(item.id);
-            }
-            setFoodCart();
-            setFreeShipCart();
-            updateDistrict();
-            //getFeeShip();
-            $scope.searchText = "";
-            $scope.searchedProducts = [];
         }
         function removeFromList(index) {
             $scope.detailOrders.splice(index, 1);
@@ -711,24 +757,27 @@
                         //check GHTK, rules
                         $scope.passGHTKRules = true;
                         $scope.passVNEPRules = true;
-                        var sumChieuDai = 0;
-                        var sumChieuRong = 0;
-                        var sumChieuCao = 0;
+                        var maxChieuDai = $scope.detailOrders[0].chieudai;
+                        var maxChieuRong = $scope.detailOrders[0].chieurong;
+                        var maxChieuCao = $scope.detailOrders[0].chieucao;
                         $.each($scope.detailOrders, function (index, value) {
                             if (value.chieudai == null && value.chieucao == null && value.chieurong == null) {
                                 $scope.passGHTKRules = false;
                                 $scope.passVNEPRules = false;
                                 return false;
                             }
-                            else {
-                                sumChieuDai += value.chieudai == null ? 0 : parseFloat(value.chieudai) * value.Quantity;
-                                sumChieuRong += value.chieurong == null ? 0 : parseFloat(value.chieurong) * value.Quantity;
-                                sumChieuCao += value.chieucao == null ? 0 : parseFloat(value.chieucao) * value.Quantity;
+                            else {                                
                                 if (value.chieudai >= 30 || value.chieurong >= 30 || value.chieucao >= 30 || value.kg >= 3)
                                     $scope.passVNEPRules = false;
+                                if (value.chieudai > maxChieuDai)
+                                    maxChieuDai = value.chieudai;
+                                if (value.chieurong > maxChieuRong)
+                                    maxChieuRong = value.chieurong;
+                                if (value.chieucao > maxChieuCao)
+                                    maxChieuCao = value.chieucao;
                             }
                         });
-                        if (sumChieuDai >= 80 || sumChieuRong >= 80 || sumChieuCao >= 80 || sumKg() >= 20) {
+                        if (maxChieuDai >= 80 || maxChieuRong >= 80 || maxChieuCao >= 80 || sumKg() >= 20) {
                             $scope.passGHTKRules = false;
                         }
 
@@ -736,7 +785,7 @@
                         var kgLWHFast = sumKgLWHFast();
                         if (kg < kgLWHFast)
                             kg = kgLWHFast;
-
+                        kg = kg * 1.1;
                         //VT Huyen HCM
                         var VTPFeeHCM = 0;
                         if (kg <= 3) {
@@ -886,9 +935,9 @@
                     //check GHTK, rules
                     $scope.passGHTKRules = true;
                     $scope.passVNEPRules = true;
-                    var sumChieuDai = 0;
-                    var sumChieuRong = 0;
-                    var sumChieuCao = 0;
+                    var maxChieuDai = $scope.detailOrders[0].chieudai;;
+                    var maxChieuRong = $scope.detailOrders[0].chieurong;;
+                    var maxChieuCao = $scope.detailOrders[0].chieucao;
                     $.each($scope.detailOrders, function (index, value) {
                         if (value.chieudai == null && value.chieucao == null && value.chieurong == null) {
                             $scope.passGHTKRules = false;
@@ -896,21 +945,24 @@
                             return false;
                         }
                         else {
-                            sumChieuDai += value.chieudai == null ? 0 : parseFloat(value.chieudai) * value.Quantity;
-                            sumChieuRong += value.chieurong == null ? 0 : parseFloat(value.chieurong) * value.Quantity;
-                            sumChieuCao += value.chieucao == null ? 0 : parseFloat(value.chieucao) * value.Quantity;
                             if (value.chieudai >= 30 || value.chieurong >= 30 || value.chieucao >= 30 || value.kg >= 3)
                                 $scope.passVNEPRules = false;
+                            if (value.chieudai > maxChieuDai)
+                                maxChieuDai = value.chieudai;
+                            if (value.chieurong > maxChieuRong)
+                                maxChieuRong = value.chieurong;
+                            if (value.chieucao > maxChieuCao)
+                                maxChieuCao = value.chieucao;
                         }
                     });
-                    if (sumChieuDai >= 30 || sumChieuRong >= 30 || sumChieuCao >= 30 || sumKg() >= 20) {
+                    if (maxChieuDai >= 80 || maxChieuRong >= 80 || maxChieuCao >= 80 || sumKg() >= 20) {
                         $scope.passGHTKRules = false;
                     }
-                    debugger
                     var kg = sumKg();
                     var kgLWHFast = sumKgLWHFast();
                     if (kg < kgLWHFast)
                         kg = kgLWHFast;
+                    kg = kg * 1.1;
 
                     //GHTKFee out HCM
                     var GHTKFee = 0;
@@ -932,6 +984,8 @@
                         $scope.GHTKTime = GHTKTimeDay + 'd ' + GHTKTimeHour + 'h - ' + parseInt(GHTKTimeDay + 1) + 'd ' + GHTKTimeHour + 'h';
                     else
                         $scope.GHTKTime = GHTKTimeDay + 'd - ' + parseInt(GHTKTimeDay + 1) + 'd';
+                    if (isTwoProductCart == true)
+                        GHTKFee = GHTKFee * 1.2;
                     GHTKFee = Math.ceil(GHTKFee / 100);
                     GHTKFee = GHTKFee * 100;
                     $scope.GHTKFee = GHTKFee;
@@ -1275,13 +1329,14 @@
                     $scope.VNPFastFee = VNPFastFee;
 
                     //VNPostEco
-
+                    debugger
                     var VNPEcoFee = 0;
                     var VNPEcoTime = 0;
                     var kg = sumKg();
                     var kgLWH = sumKgLWH();
                     if (kg < kgLWH)
                         kg = kgLWH;
+                    kg = kg * 1.1;
                     var regionsVNPEco = [];
                     $.each($scope.regions, function (index, value) {
                         if (value.mavung == $scope.selectedCity.mavungvnpostbuukien)
@@ -1416,6 +1471,7 @@
                     var kgLWH = sumKgLWH();
                     if (kg < kgLWH)
                         kg = kgLWH;
+                    kg = kg * 1.1;
                     $.each($scope.regions, function (index, value) {
                         if (value.mavung == $scope.selectedDistrict.mavungfuta)
                             regionsFUTA.push(value);
@@ -1600,6 +1656,8 @@
             $.each($scope.detailOrders, function (index, value) {
                 total += value.kg * parseFloat(value.Quantity);
             });
+            //$scope.kg = roundToTwo(total);
+            $scope.kg = Math.floor(total*1000)/1000;
             return total;
         }
         function sumKgLWH() {
@@ -1774,6 +1832,9 @@
             }
             else
                 return false
+        }
+        function roundToTwo(num) {
+            return +(Math.round(num + "e+2") + "e-2");
         }
 
         //$scope.$watch('selectedChannel', function (n, o) {

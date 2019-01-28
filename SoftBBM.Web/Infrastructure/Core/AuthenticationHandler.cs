@@ -30,8 +30,8 @@ namespace SoftBBM.Web.Infrastructure.Core
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            try
-            {
+            //try
+            //{
                 var tokens = request.Headers.GetValues("Authorization").FirstOrDefault();
                 if (tokens != null)
                 {
@@ -75,16 +75,15 @@ namespace SoftBBM.Web.Infrastructure.Core
                     return tsc.Task;
                 }
                 return base.SendAsync(request, cancellationToken);
-            }
-            catch
-            {
-                //User did not set Authentication header  
-                var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
-                var tsc = new TaskCompletionSource<HttpResponseMessage>();
-                tsc.SetResult(response);
-                return tsc.Task;
-            }
+            //}
+            //catch
+            //{
+            //    //User did not set Authentication header  
+            //    var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
+            //    var tsc = new TaskCompletionSource<HttpResponseMessage>();
+            //    tsc.SetResult(response);
+            //    return tsc.Task;
+            //}
         }
-
     }
 }
