@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using OfficeOpenXml;
+using OfficeOpenXml.Table;
 using SoftBBM.Web.DAL.Infrastructure;
 using SoftBBM.Web.DAL.Repositories;
 using SoftBBM.Web.Infrastructure.Core;
@@ -10,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Script.Serialization;
 
@@ -166,39 +169,6 @@ namespace SoftBBM.Web.api
             return response;
         }
 
-        //[Route("getallpaging")]
-        //[HttpGet]
-        //public HttpResponseMessage GetAllPaging(HttpRequestMessage request, int page, int pageSize, int branchId, string stringSearch)
-        //{
-        //    int currentPage = page;
-        //    int currentPageSize = pageSize;
-        //    HttpResponseMessage response = null;
-        //    IEnumerable<shop_sanpham> products = null;
-        //    int totalproducts = new int();
-
-        //    products = _shopSanPhamRepository.GetAllPaging(currentPage, currentPageSize, out totalproducts, branchId, stringSearch).ToList();
-
-        //    IEnumerable<ShopSanPhamSearchBookViewModel> productsVM = Mapper.Map<IEnumerable<shop_sanpham>, IEnumerable<ShopSanPhamSearchBookViewModel>>(products);
-
-        //    foreach (var item in productsVM)
-        //    {
-        //        item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
-        //        item.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
-        //    }
-        //    PaginationSet<ShopSanPhamSearchBookViewModel> pagedSet = new PaginationSet<ShopSanPhamSearchBookViewModel>()
-        //    {
-        //        Page = currentPage,
-        //        TotalCount = totalproducts,
-        //        TotalPages = (int)Math.Ceiling((decimal)totalproducts / currentPageSize),
-        //        Items = productsVM
-        //    };
-
-
-
-        //    response = request.CreateResponse(HttpStatusCode.OK, pagedSet);
-        //    return response;
-        //}
-
         [Route("getallpaging")]
         [HttpPost]
         public HttpResponseMessage GetAllPaging(HttpRequestMessage request, ShopSanPhamFilterBookViewModel viewModel)
@@ -230,6 +200,46 @@ namespace SoftBBM.Web.api
                     if (quantityTmp != null)
                         item.AvgSoldQuantity = quantityTmp.Sum(x => x.Soluong);
                 }
+            }
+
+            PaginationSet<ShopSanPhamSearchBookViewModel> pagedSet = new PaginationSet<ShopSanPhamSearchBookViewModel>()
+            {
+                Page = currentPage,
+                TotalCount = totalproducts,
+                TotalPages = (int)Math.Ceiling((decimal)totalproducts / currentPageSize),
+                Items = productsVM
+            };
+
+
+
+            response = request.CreateResponse(HttpStatusCode.OK, pagedSet);
+            return response;
+        }
+
+        [Route("getallpagingexport")]
+        [HttpPost]
+        public HttpResponseMessage GetAllPagingExport(HttpRequestMessage request, ShopSanPhamFilterBookViewModel viewModel)
+        {
+            HttpResponseMessage response = null;
+
+            int currentPage = viewModel.page;
+            int currentPageSize = viewModel.pageSize;
+            int currentBranchId = viewModel.branchId;
+            IEnumerable<shop_sanpham> products = null;
+            int totalproducts = new int();
+            int channelId = 2;
+
+            products = _shopSanPhamRepository.GetAllPaging(currentPage, currentPageSize, out totalproducts, currentBranchId, viewModel).ToList();
+
+            IEnumerable<ShopSanPhamSearchBookViewModel> productsVM = Mapper.Map<IEnumerable<shop_sanpham>, IEnumerable<ShopSanPhamSearchBookViewModel>>(products);
+            foreach (var item in productsVM)
+            {
+                item.StockTotal = _softStockRepository.GetStockTotal(item.id, viewModel.branchId);
+                item.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
+                item.PriceChannel = 0;
+                var priceOnl = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == item.id && x.ChannelId == channelId);
+                if (priceOnl != null)
+                    item.PriceChannel = priceOnl.Price;
             }
 
             PaginationSet<ShopSanPhamSearchBookViewModel> pagedSet = new PaginationSet<ShopSanPhamSearchBookViewModel>()
@@ -482,6 +492,82 @@ namespace SoftBBM.Web.api
             {
                 response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
                 return response;
+            }
+        }
+
+        [Route("exportprice")]
+        [HttpPost]
+        public HttpResponseMessage ExportPrice(HttpRequestMessage request, ExportPriceParams ExportPriceParams)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = request.CreateResponse(HttpStatusCode.OK);
+                MediaTypeHeaderValue mediaType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                response.Content = new ByteArrayContent(GetExcelSheet(ExportPriceParams));
+                response.Content.Headers.ContentType = mediaType;
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+                response.Content.Headers.ContentDisposition.FileName = "Price-Products.xlsx";
+                return response;
+            }
+
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
+        public byte[] GetExcelSheet(ExportPriceParams ExportPriceParams)
+        {
+            var channelId = 2;
+            IEnumerable<ExportPriceViewModel> exportPrices = null;
+            IEnumerable<ExportPriceNoIdViewModel> exportPricesExcel = null;
+
+            exportPrices = Mapper.Map<IEnumerable<ExportPriceParamsDetail>, IEnumerable<ExportPriceViewModel>>(ExportPriceParams.ExportPriceParamsDetails);
+            foreach (var item in exportPrices)
+            {
+                var product = _shopSanPhamRepository.GetSingleById(item.id);
+                var price = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == item.id && x.ChannelId == channelId);
+                item.Code = product.masp;
+                item.Name = product.tensp;
+                item.PriceAvg = product.PriceAvg == null ? 0 : product.PriceAvg.Value;
+                item.PriceBase = product.PriceBase == null ? 0 : product.PriceBase.Value;
+                item.PriceChannel = price.Price == null ? 0 : price.Price.Value;
+                item.PriceBaseOld = product.PriceBaseOld == null ? 0 : product.PriceBaseOld.Value;
+                item.PriceWholesale = product.PriceWholesale == null ? 0 : product.PriceWholesale.Value;
+            }
+            exportPricesExcel = Mapper.Map<IEnumerable<ExportPriceViewModel>, IEnumerable<ExportPriceNoIdViewModel>>(exportPrices);
+            exportPricesExcel = exportPricesExcel.OrderBy(x => x.Code);
+            using (var package = new ExcelPackage())
+            {
+                // Tạo author cho file Excel
+                package.Workbook.Properties.Author = "SoftBBM";
+                // Tạo title cho file Excel
+                package.Workbook.Properties.Title = "Export Products";
+                // thêm tí comments vào làm màu 
+                package.Workbook.Properties.Comments = "This is my generated Comments";
+                // Add Sheet vào file Excel
+                package.Workbook.Worksheets.Add("Products");
+                // Lấy Sheet bạn vừa mới tạo ra để thao tác 
+                var worksheet = package.Workbook.Worksheets[1];
+                worksheet.Cells["A1"].LoadFromCollection(exportPricesExcel, true, TableStyles.Dark9);
+                worksheet.DefaultColWidth = 10;
+                worksheet.Cells["A1"].Value = "Mã";
+                worksheet.Cells["B1"].Value = "Tên";
+                worksheet.Cells["C1"].Value = "Giá nhập cũ";
+                worksheet.Cells["C2"].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["D1"].Value = "Giá nhập mới";
+                worksheet.Cells["D2"].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["E1"].Value = "Giá cơ bản";
+                worksheet.Cells["E2"].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["F1"].Value = "Giá sỉ";
+                worksheet.Cells["F2"].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells["G1"].Value = "Giá online";
+                worksheet.Cells["G2"].Style.Numberformat.Format = "#,##0";
+                
+                //package.Save();
+                return package.GetAsByteArray();
             }
         }
     }

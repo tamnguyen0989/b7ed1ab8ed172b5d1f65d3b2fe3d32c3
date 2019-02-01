@@ -70,6 +70,9 @@
             $.each($scope.applicationGroup.ReturnSupplierRoles, function (index, value) {
                 $scope.applicationGroup.Roles.push(value);
             });
+            $.each($scope.applicationGroup.ReportRoles, function (index, value) {
+                $scope.applicationGroup.Roles.push(value);
+            });
             apiService.post('api/applicationgroup/update', $scope.applicationGroup, function (result) {
                 notificationService.displaySuccess('Cập nhật ' + result.data.Name + ' thành công');
                 $state.go('application_groups');

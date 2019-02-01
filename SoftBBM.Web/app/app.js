@@ -17,6 +17,7 @@
         'softbbm.product_logs',
         'softbbm.return_suppliers',
         'softbbm.imports',
+        'softbbm.exports',
         'softbbm.reports',
         'softbbm.common'
     ]).config(config)

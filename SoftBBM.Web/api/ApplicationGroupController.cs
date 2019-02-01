@@ -105,6 +105,7 @@ namespace SoftBBM.Web.api
             responseData.CustomerRoles = new List<ApplicationRoleViewModel>();
             responseData.ProductCategoryRoles = new List<ApplicationRoleViewModel>();
             responseData.ReturnSupplierRoles = new List<ApplicationRoleViewModel>();
+            responseData.ReportRoles = new List<ApplicationRoleViewModel>();
 
             foreach (var item in responseData.Roles)
             {
@@ -160,6 +161,9 @@ namespace SoftBBM.Web.api
                         break;
                     case 17:
                         responseData.ReturnSupplierRoles.Add(item);
+                        break;
+                    case 18:
+                        responseData.ReportRoles.Add(item);
                         break;
                 }
             }

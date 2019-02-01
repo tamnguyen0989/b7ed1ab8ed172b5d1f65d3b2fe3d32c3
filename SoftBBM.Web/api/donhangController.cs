@@ -1648,6 +1648,7 @@ namespace SoftBBM.Web.api
         }
 
         [HttpPost]
+        [Authorize(Roles = "Report")]
         [Route("channelsalesreport")]
         public HttpResponseMessage ChannelSalesReport(HttpRequestMessage request, ChannelSalesRevenuesReportParamsViewModel ChannelSalesReportParamsVm)
         {
@@ -1692,6 +1693,7 @@ namespace SoftBBM.Web.api
         }
 
         [HttpPost]
+        [Authorize(Roles = "Report")]
         [Route("salesreport")]
         public HttpResponseMessage SalesReport(HttpRequestMessage request, SalesRevenuesReportParamsViewModel SalesReportParamsVm)
         {

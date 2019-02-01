@@ -144,6 +144,8 @@ namespace SoftBBM.Web.Mapping
             Mapper.CreateMap<SoftStockInPaymentType, SoftStockInPaymentTypeViewModel>();
             Mapper.CreateMap<SoftStockInPaymentStatus, SoftStockInPaymentStatusViewModel>();
             Mapper.CreateMap<SoftStockInPaymentMethod, SoftStockInPaymentMethodViewModel>();
+            Mapper.CreateMap<ExportPriceParamsDetail, ExportPriceViewModel>();
+            Mapper.CreateMap<ExportPriceViewModel, ExportPriceNoIdViewModel>();
             Mapper.CreateMap<SoftChannelProductPrice, PriceChannelViewModel>()
                 .ForMember(d => d.ChannelId, map => map.MapFrom(s => s.ChannelId))
                 .ForMember(d => d.Code, map => map.MapFrom(s => s.SoftChannel.Code))

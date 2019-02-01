@@ -329,5 +329,33 @@ namespace SoftBBM.Web.api
             }
 
         }
+
+        [Route("delete")]
+        [Authorize(Roles = "SupplierEdit")]
+        [HttpGet]
+        public HttpResponseMessage Detele(HttpRequestMessage request, int supplierId)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (supplierId > 0)
+                {
+                    _softSupplierRepository.DeleteSupplier(supplierId);
+                    _unitOfWork.Commit();
+                    response = request.CreateResponse(HttpStatusCode.OK, true);
+                }
+                else
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, "Lỗi! Không có nhà cung cấp này.");
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+
+        }
     }
 }

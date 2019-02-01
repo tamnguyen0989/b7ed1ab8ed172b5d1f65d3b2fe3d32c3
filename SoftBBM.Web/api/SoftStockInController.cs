@@ -2089,8 +2089,10 @@ namespace SoftBBM.Web.api
                 List<ShopSanPhamSoldByDateViewModel> shopsanphams = new List<ShopSanPhamSoldByDateViewModel>();
                 var startDate = InputVM.startDateFilter.ToLocalTime();
                 var endDate = InputVM.endDateFilter.ToLocalTime();
-                var startDateConvert = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 1);
-                var endDateConvert = new DateTime(endDate.Year, endDate.Month, endDate.Day, 0, 0, 1);
+                //var startDateConvert = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 1);
+                //var endDateConvert = new DateTime(endDate.Year, endDate.Month, endDate.Day, 0, 0, 1);
+                var startDateConvert = UtilExtensions.ConvertStartDate(startDate);
+                var endDateConvert = UtilExtensions.ConvertStartDate(endDate);
                 var soldOrders = _donhangRepository.GetMulti(x => x.BranchId == InputVM.branchId && x.CreatedDate >= startDateConvert && x.CreatedDate <= endDateConvert).ToList();
                 var endDateSold = DateTime.Now;
                 var startDateSold = endDate.AddDays(-30);

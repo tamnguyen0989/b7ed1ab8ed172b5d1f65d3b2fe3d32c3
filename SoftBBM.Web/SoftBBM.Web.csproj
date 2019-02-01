@@ -597,6 +597,7 @@
     <Compile Include="ViewModels\donhangchuyenphatvungViewModel.cs" />
     <Compile Include="ViewModels\donhangStatusViewModel.cs" />
     <Compile Include="ViewModels\donhangViewModel.cs" />
+    <Compile Include="ViewModels\ExportPriceViewModel.cs" />
     <Compile Include="ViewModels\khachhangViewModel.cs" />
     <Compile Include="ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModel.cs" />
@@ -681,6 +682,11 @@
     <Content Include="app\components\customers\customerListController.js" />
     <Content Include="app\components\customers\customerListView.html" />
     <Content Include="app\components\customers\customers.module.js" />
+    <Content Include="app\components\exports\priceExportController.js" />
+    <Content Include="app\components\exports\priceExportView.html" />
+    <Content Include="app\components\exports\exports.module.js" />
+    <Content Include="app\components\exports\priceExportProcessModal.html" />
+    <Content Include="app\components\exports\priceExportProcessController.js" />
     <Content Include="app\components\home\homeController.js" />
     <Content Include="app\components\home\homeView.html" />
     <Content Include="app\components\home\rootController.js" />

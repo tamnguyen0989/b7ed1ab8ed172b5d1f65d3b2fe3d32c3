@@ -8,16 +8,22 @@
                 <div class="col-xs-3" style="text-align:right">
                     <label>Từ:</label>
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-4">
                     <input type="text" class="form-control paddingleft5px width120px" uib-datepicker-popup="dd/MM/yyyy" ng-model="startDateFilter" is-open="picker.startDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openStartDateFilter($event)" />
+                </div>
+                <div class="col-xs-4">
+                    <label>00:00:00</label>
                 </div>
             </div>
             <div class="row margintop5px">
                 <div class="col-xs-3" style="text-align:right">
                     <label>Đến:</label>
                 </div>
-                <div class="col-xs-8">
+                <div class="col-xs-4">
                     <input type="text" class="form-control paddingleft5px width120px" uib-datepicker-popup="dd/MM/yyyy" ng-model="endDateFilter" is-open="picker.endDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openEndDateFilter($event)" ng-change="updateDateFilter()" />
+                </div>
+                <div class="col-xs-4">
+                    <label>23:59:59</label>
                 </div>
             </div>
             <!--<div ng-if="loadingModal">

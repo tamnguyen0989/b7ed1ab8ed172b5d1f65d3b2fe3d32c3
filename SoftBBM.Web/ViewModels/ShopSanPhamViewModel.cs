@@ -47,6 +47,7 @@ namespace SoftBBM.Web.ViewModels
         public double StockTotalAll { get; set; }
         public Nullable<int> PriceChannel { get; set; }
         public Nullable<double> AvgSoldQuantity { get; set; }
+        public Nullable<int> PriceWholesale { get; set; }
 
         public IEnumerable<SoftBranchProductStockViewModel> SoftBranchProductStocks { get; set; }
         public IEnumerable<SoftChannelProductPriceSearchViewModel> SoftChannelProductPrices { get; set; }

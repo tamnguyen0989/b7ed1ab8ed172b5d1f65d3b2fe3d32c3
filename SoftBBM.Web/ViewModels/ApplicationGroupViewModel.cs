@@ -30,5 +30,6 @@ namespace SoftBBM.Web.ViewModels
         public List<ApplicationRoleViewModel> CustomerRoles { get; set; }
         public List<ApplicationRoleViewModel> ProductCategoryRoles { get; set; }
         public List<ApplicationRoleViewModel> ReturnSupplierRoles { get; set; }
+        public List<ApplicationRoleViewModel> ReportRoles { get; set; }
     }
 }

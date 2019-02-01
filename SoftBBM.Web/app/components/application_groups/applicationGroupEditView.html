@@ -296,7 +296,20 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="col-sm-2" style="padding-left:0px;padding-right:0px">
+                                <div class="panel panel-default" style="border-color:white;box-shadow:unset;margin-bottom:0px">
+                                    <div class="panel-heading">
+                                        <h5 class="panel-title" style="font-size: 14px;">Báo cáo</h5>
+                                    </div>
+                                    <div class="panel-body" style="padding:0px">
+                                        <ul style="list-style-type: none;margin-left:-15px">
+                                            <li ng-repeat="role in roleCategory.ReportRoles">
+                                                <input type="checkbox" checklist-model="applicationGroup.ReportRoles" checklist-value="role"> {{role.Description}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

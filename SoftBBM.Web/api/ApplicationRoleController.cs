@@ -360,6 +360,10 @@ namespace SoftBBM.Web.api
             var returnSupplierRolesVM = Mapper.Map<IEnumerable<ApplicationRole>, IEnumerable<ApplicationRoleViewModel>>(returnSupplierRoles);
             result.ReturnSupplierRoles = returnSupplierRolesVM;
 
+            var reportRoles = _applicationRoleRepository.GetListRoleByCategoryId(18);
+            var reportRolesVM = Mapper.Map<IEnumerable<ApplicationRole>, IEnumerable<ApplicationRoleViewModel>>(reportRoles);
+            result.ReportRoles = reportRolesVM;
+
             response = request.CreateResponse(HttpStatusCode.OK, result);
             return response;
 
@@ -440,6 +444,10 @@ namespace SoftBBM.Web.api
             var returnSupplierRoles = _applicationRoleRepository.GetListRoleByCategoryId(17);
             var returnSupplierRolesVM = Mapper.Map<IEnumerable<ApplicationRole>, IEnumerable<ApplicationRoleViewModel>>(returnSupplierRoles);
             result.ReturnSupplierRoles = returnSupplierRolesVM;
+
+            var reportRoles = _applicationRoleRepository.GetListRoleByCategoryId(18);
+            var reportRolesVM = Mapper.Map<IEnumerable<ApplicationRole>, IEnumerable<ApplicationRoleViewModel>>(reportRoles);
+            result.ReportRoles = reportRolesVM;
 
             response = request.CreateResponse(HttpStatusCode.OK, result);
             return response;

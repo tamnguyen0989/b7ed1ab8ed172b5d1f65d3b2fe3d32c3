@@ -26,5 +26,6 @@ namespace SoftBBM.Web.Infrastructure.Core
         public IEnumerable<ApplicationRoleViewModel> CustomerRoles { get; set; }
         public IEnumerable<ApplicationRoleViewModel> ProductCategoryRoles { get; set; }
         public IEnumerable<ApplicationRoleViewModel> ReturnSupplierRoles { get; set; }
+        public IEnumerable<ApplicationRoleViewModel> ReportRoles { get; set; }
     }
 }

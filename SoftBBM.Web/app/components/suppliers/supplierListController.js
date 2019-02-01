@@ -9,6 +9,7 @@
         $scope.pagesCount = 0;
         $scope.enabledEdit = [];
         $scope.editSupplier = editSupplier;
+        $scope.deleteSupplier = deleteSupplier;
         $scope.updateSupplier = updateSupplier;
         $scope.cancelSupplier = cancelSupplier;
         $scope.pageSizeNumber = '10';
@@ -53,7 +54,6 @@
             $scope.filterSuppliers = '';
             search();
         }
-
         function editSupplier(supplier, index) {
             authen();
             $scope.selectedSupplier = supplier;
@@ -92,6 +92,23 @@
                 $scope.supplierVatStatuses = result.data;
             }, function (error) {
                 notificationService.displayError(error);
+            });
+        }
+        function deleteSupplier(supplier, index) {
+            authen();
+            var configs = {
+                params: {
+                    supplierID: supplier.Id
+                }
+            }
+            $scope.loading = true;
+            apiService.get('api/supplier/delete', configs, function (result) {
+                $scope.loading = false;
+                notificationService.displaySuccess("Xoá thành công");
+                search($scope.page);
+            }, function (error) {
+                $scope.loading = false;
+                notificationService.displayError(error.data);
             });
         }
 

@@ -20,7 +20,8 @@
             OwnRoles: [],
             GroupRoles: [],
             CustomerRoles: [],
-            ProductCategoryRoles: []
+            ProductCategoryRoles: [],
+            ReportRoles: []
         }
         $scope.applicationRoles = [];
         $scope.roleCategory = {};
@@ -77,6 +78,9 @@
                 $scope.applicationGroup.Roles.push(value);
             });
             $.each($scope.applicationGroup.ReturnSuppliersRoles, function (index, value) {
+                $scope.applicationGroup.Roles.push(value);
+            });
+            $.each($scope.applicationGroup.ReportRoles, function (index, value) {
                 $scope.applicationGroup.Roles.push(value);
             });
             apiService.post('api/applicationgroup/create', $scope.applicationGroup, function (result) {
