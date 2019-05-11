@@ -21,9 +21,9 @@
         $scope.branches = [];
         $scope.selectedBranch = null;
 
-        $scope.chatHub = null;
-        $scope.chatHub = $.connection.chatHub;
-        $.connection.hub.start();
+        //$scope.chatHub = null;
+        //$scope.chatHub = $.connection.chatHub;
+        //$.connection.hub.start();
 
         $scope.loadSuppliers = loadSuppliers;
         $scope.loadProductStatus = loadProductStatus;
@@ -74,7 +74,6 @@
                 FilterBookDetail: $scope.filters
             };
             apiService.post('/api/product/getallpaging/', config, function (result) {
-                debugger
                 $scope.searchedProducts = result.data.Items;
                 $scope.page = result.data.Page;
                 $scope.pagesCount = result.data.TotalPages;
@@ -173,7 +172,7 @@
                 apiService.post('api/stockin/save', $scope.stockin,
                     function (result) {
                         if (result.data > 0) {
-                            $scope.chatHub.server.send($scope.stockin.FromBranchId);
+                            //$scope.chatHub.server.send($scope.stockin.FromBranchId);
                             notificationService.displaySuccess('Đơn đã được thêm mới.');
                             $state.go('branch_books');
                         }

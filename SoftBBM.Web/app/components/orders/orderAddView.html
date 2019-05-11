@@ -163,7 +163,7 @@
                                             <div class="form-group">
                                                 <label class="col-xs-5 cus-control-label">Điểm KH:</label>
                                                 <div class="col-xs-7">
-                                                    <label class="fontweight600">{{customer.diem}}</label>&nbsp;điểm
+                                                    <label class="fontweight600">{{customer.diem | currency:'':0}}</label>&nbsp;điểm
                                                     <br />
                                                     <div ng-show="customer.diem>=1000">
                                                         <input type="checkbox" ng-change="updateDiscountMember()" ng-model="useDiscountMember" value="1" />&nbsp;Giảm 5%
@@ -174,7 +174,7 @@
                                             <div class="form-group">
                                                 <label class="col-xs-5 cus-control-label">Điểm KH mới:</label>
                                                 <div class="col-xs-7">
-                                                    <label class="fontweight600">{{sumPoint()}}</label>&nbsp;điểm
+                                                    <label class="fontweight600">{{sumPoint() | currency:'':0}}</label>&nbsp;điểm
                                                 </div>
                                             </div>
                                         </div>
@@ -501,8 +501,15 @@
                                                     <div class="form-group">
                                                         <textarea ng-model="ghichu" rows="2" style="width:90%" class="form-control marginleft20px"></textarea>
                                                     </div>
-                                                    <div class="form-group">
+                                                    <!--<div class="form-group">
                                                         <label class="cus-control-label marginleft20px" ng-show="frmOrderAdd.$invalid" style="font-style:italic;font-weight:500;font-size:12px;color:red">(*) Trường bắt buộc chọn</label>
+                                                    </div>-->
+                                                    <div class="form-group" ng-show="historyOrder">
+                                                        <label 
+                                                               class="cus-control-label marginleft20px"
+                                                               style="font-style:italic;font-weight:500;font-size:12px;color:red;text-align:left"
+                                                               ng-bind-html ="historyOrder">
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -550,6 +557,9 @@
                                                         <div class="col-xs-7" style="padding-left:2px">
                                                             {{discount + datru_diem | currency:'':0}} &nbsp;đ
                                                         </div>
+                                                    </div>
+                                                    <div ng-hide="selectedChannel.Id>1" class="form-group">
+                                                        <textarea ng-model="ghichu" rows="2" style="width:90%" class="form-control marginleft20px"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -619,6 +629,7 @@
                                     @media print {
                                         .ng-hide {
                                             visibility: collapse !important;
+                                            display:none;
                                         }
                                     }
 
@@ -662,7 +673,10 @@
                                             <td style="padding:1px">{{$index+1}}</td>
                                             <td>{{item.shop_bienthe.tensp}}</td>
                                             <td style="padding:1px">{{item.Soluong}}</td>
-                                            <td style="padding:1px">{{item.Dongia | currency:'':0}}</td>
+                                            <td style="padding:1px">
+                                                <span ng-hide="item.Dongiakm == 0" style="font-size:10px;text-decoration:line-through">{{item.Dongiakm | currency:'':0}}<br /></span>
+                                                {{item.Dongia | currency:'':0}}   
+                                            </td>
                                             <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}</td>
                                         </tr>
                                         <tr>
@@ -675,7 +689,7 @@
                                         </tr>
                                         <tr ng-hide="orderReturn.datru_diem==0">
                                             <td colspan="3" class="text-right">Giảm</td>
-                                            <td colspan="2">{{orderReturn.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                            <td colspan="2">{{orderReturn.datru_diem + orderReturn.Discount | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right" style="font-weight:700" colspan="3">Thanh toán</td>
@@ -742,8 +756,12 @@
                                             <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
                                             <td>{{item.shop_bienthe.tensp}}</td>
                                             <td style="padding:1px">{{item.Soluong}}</td>
-                                            <td style="padding:1px">{{item.Dongia | currency:'':0}}</td>
-                                            <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}</td>
+                                            <td style="padding:1px">
+                                                <span ng-hide="item.Dongiakm == 0" style="font-size:10px;text-decoration:line-through">{{item.Dongiakm | currency:'':0}}<br /></span>
+                                                {{item.Dongia | currency:'':0}}
+                                            </td>
+                                            <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td colspan="4" class="text-right">Tổng thành tiền</td>
@@ -755,7 +773,7 @@
                                         </tr>
                                         <tr ng-hide="orderReturn.datru_diem==0">
                                             <td colspan="4" class="text-right">Giảm</td>
-                                            <td colspan="2">{{orderReturn.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                            <td colspan="2">{{orderReturn.datru_diem + orderReturn.Discount | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                         </tr>
                                         <tr>
                                             <td class="text-right" style="font-weight:700" colspan="4">Thanh toán</td>

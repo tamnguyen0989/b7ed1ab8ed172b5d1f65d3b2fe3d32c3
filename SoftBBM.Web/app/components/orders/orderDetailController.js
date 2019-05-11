@@ -83,7 +83,6 @@
         }
         function loadOrderDetails() {
             apiService.get('/api/order/detail', config, function (result) {
-                debugger
                 $scope.order = result.data;
                 $scope.statusPrint = $sce.trustAsHtml($scope.order.StatusPrint);
                 if ($scope.order.Status == 3 || $scope.order.Status == 4 || $scope.order.Status == 6)

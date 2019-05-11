@@ -98,19 +98,23 @@
         $scope.updateChannelPricePopover = updateChannelPricePopover;
         $scope.openStockEditModal = openStockEditModal
         $scope.openChannelPricesModal = openChannelPricesModal;
+        $scope.exportPriceWholesale = exportPriceWholesale;
 
         function search(page) {
             page = page || 0;
-
             $scope.loading = true;
             $scope.filters.branchId = $scope.branchSelectedRoot.Id;
             $scope.filters.page = page;
             $scope.filters.pageSize = parseInt($scope.pageSizeNumber);
             $scope.filters.stringFilter = $scope.filterStocks;
-            $scope.filters.selectedStockFilter = parseInt($scope.filters.selectedStockFilter);
-            $scope.filters.selectedStockFilterValue = parseInt($scope.filters.selectedStockFilterValue);
-            $scope.filters.selectedStockTotalFilter = parseInt($scope.filters.selectedStockTotalFilter);
-            $scope.filters.selectedStockTotalFilterValue = parseInt($scope.filters.selectedStockTotalFilterValue);
+            if ($scope.filters.selectedStockFilter)
+                $scope.filters.selectedStockFilter = parseInt($scope.filters.selectedStockFilter);
+            if ($scope.filters.selectedStockFilterValue)
+                $scope.filters.selectedStockFilterValue = parseInt($scope.filters.selectedStockFilterValue);
+            if ($scope.filters.selectedStockTotalFilter)
+                $scope.filters.selectedStockTotalFilter = parseInt($scope.filters.selectedStockTotalFilter);
+            if ($scope.filters.selectedStockTotalFilterValue)
+                $scope.filters.selectedStockTotalFilterValue = parseInt($scope.filters.selectedStockTotalFilterValue);
             $scope.filters.channelId = $scope.selectedChannel.Id;
             apiService.post('/api/stock/search/', $scope.filters, function (result) {
                 $scope.stocks = result.data.Items;
@@ -233,6 +237,22 @@
                 notificationService.displayError(error.data);
             });
         }
+        function exportPriceWholesale() {
+            apiService.get('api/stock/authenexport', null, function (result) {
+                $uibModal.open({
+                    templateUrl: '/app/components/stocks/exportPriceWholesaleModal.html',
+                    controller: 'exportPriceWholesaleController',
+                    scope: $scope,
+                    backdrop: 'static',
+                    keyboard: false,
+                    size: 'sm'
+                }).result.finally(function ($scope) {
+
+                });
+            }, function (error) {
+                notificationService.displayError(error.data);
+            });
+        }
         function authenImport() {
             apiService.get('api/stock/authenimport', null, function (result) {
                 importProductsExcel();
@@ -271,7 +291,7 @@
             if ($scope.files.length > 0) {
                 $uibModal.open({
                     templateUrl: '/app/components/stocks/processImportModal.html',
-                    controller: 'processImportModalController',
+                    controller: 'exportPriceWholesaleController',
                     scope: $scope,
                     backdrop: 'static',
                     keyboard: false,
@@ -485,7 +505,37 @@
                 $scope.files.push(args.file);
             });
         });
-
+        $scope.$watch('filterStocks', function (tmpStr) {
+            if (!tmpStr || tmpStr.length == 0) {
+                return 0;
+            }
+            $scope.loading = true;
+            $scope.filters.branchId = $scope.branchSelectedRoot.Id;
+            $scope.filters.page = 0;
+            $scope.filters.pageSize = parseInt($scope.pageSizeNumber);
+            $scope.filters.stringFilter = $scope.filterStocks;
+            if ($scope.filters.selectedStockFilter)
+                $scope.filters.selectedStockFilter = parseInt($scope.filters.selectedStockFilter);
+            if ($scope.filters.selectedStockFilterValue)
+                $scope.filters.selectedStockFilterValue = parseInt($scope.filters.selectedStockFilterValue);
+            if ($scope.filters.selectedStockTotalFilter)
+                $scope.filters.selectedStockTotalFilter = parseInt($scope.filters.selectedStockTotalFilter);
+            if ($scope.filters.selectedStockTotalFilterValue)
+                $scope.filters.selectedStockTotalFilterValue = parseInt($scope.filters.selectedStockTotalFilterValue);
+            $scope.filters.channelId = $scope.selectedChannel.Id;
+            apiService.post('/api/stock/search/', $scope.filters, function (result) {
+                $scope.stocks = result.data.Items;
+                $scope.page = result.data.Page;
+                $scope.pagesCount = result.data.TotalPages;
+                $scope.totalCount = result.data.TotalCount;
+                $scope.loading = false;
+                if ($scope.filterStocks && $scope.filterStocks.length && $scope.page == 0) {
+                    //notificationService.displaySuccess($scope.totalCount + ' sản phẩm tìm được');
+                }
+            }, function (response) {
+                notificationService.displayError(response.data);
+            });
+        });
 
         if (((Object.keys($scope.branchSelectedRoot).length === 0 && $scope.branchSelectedRoot.constructor === Object) || $scope.branchSelectedRoot == undefined) && localStorage.getItem("userId") != null) {
             notificationService.displayError("Hãy chọn kho");

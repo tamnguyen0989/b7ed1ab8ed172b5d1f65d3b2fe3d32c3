@@ -16,6 +16,7 @@ namespace SoftBBM.Web.DAL.Repositories
         IQueryable<SoftBranchProductStock> GetAllFilter(int branchId, string filter);
         IQueryable<SoftBranchProductStock> GetAllPagingFilter(out int totalRow, SoftStockSearchFilterViewModel softStockSearchFilterVM);
         SoftBranchProductStock Init(int branchId, int productId);
+        IQueryable<SoftBranchProductStock> GetAllPagingFilter(SoftStockSearchFilterViewModel softStockSearchFilterVM);
     }
     public class SoftStockRepository : RepositoryBase<SoftBranchProductStock>, ISoftStockRepository
     {
@@ -59,6 +60,213 @@ namespace SoftBBM.Web.DAL.Repositories
             }
             totalRow = stocks.Count();
             return stocks.OrderByDescending(x => x.ProductId).Skip(page * pageSize).Take(pageSize);
+        }
+
+        public IQueryable<SoftBranchProductStock> GetAllPagingFilter(SoftStockSearchFilterViewModel softStockSearchFilterVM)
+
+        {
+            var query = from d in DbContext.SoftBranchProductStocks
+                        where d.BranchId == softStockSearchFilterVM.branchId
+                        select d;
+            IQueryable<SoftBranchProductStock> stocks = null;
+            {
+                bool rootExist = false;
+                IQueryable<SoftBranchProductStock> stocksFilter = null;
+                if (!string.IsNullOrEmpty(softStockSearchFilterVM.stringFilter) || softStockSearchFilterVM.selectedProductCategoryFilters.Count > 0 || softStockSearchFilterVM.selectedSupplierFilters.Count > 0 ||
+                    softStockSearchFilterVM.selectedProductStatusFilters.Count > 0 || softStockSearchFilterVM.selectedVatStatusFilters.Count > 0 || (softStockSearchFilterVM.selectedStockFilter > 0 && softStockSearchFilterVM.selectedStockFilterValue != null) || (softStockSearchFilterVM.selectedStockTotalFilter > 0 && softStockSearchFilterVM.selectedStockTotalFilterValue != null))
+                {
+                    if (!string.IsNullOrEmpty(softStockSearchFilterVM.stringFilter))
+                    {
+                        if (rootExist == false)
+                            stocks = query.Where(c => c.shop_sanpham.tensp.ToLower().Contains(softStockSearchFilterVM.stringFilter) || c.shop_sanpham.id.ToString() == softStockSearchFilterVM.stringFilter || c.shop_sanpham.masp.Contains(softStockSearchFilterVM.stringFilter) || c.shop_sanpham.SoftSupplier.Name.Contains(softStockSearchFilterVM.stringFilter));
+                        else
+                            stocks = stocks.Where(c => c.shop_sanpham.tensp.ToLower().Contains(softStockSearchFilterVM.stringFilter) || c.shop_sanpham.id.ToString() == softStockSearchFilterVM.stringFilter || c.shop_sanpham.masp.Contains(softStockSearchFilterVM.stringFilter) || c.shop_sanpham.SoftSupplier.Name.Contains(softStockSearchFilterVM.stringFilter));
+                        if (rootExist == false) rootExist = true;
+                    }
+                    if (softStockSearchFilterVM.selectedProductCategoryFilters.Count > 0)
+                    {
+                        foreach (var item in softStockSearchFilterVM.selectedProductCategoryFilters)
+                        {
+                            IQueryable<SoftBranchProductStock> donhangstmp = null;
+                            if (rootExist == false)
+                                donhangstmp = query.Where(x => x.shop_sanpham.CategoryId == item.Id);
+                            else
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.CategoryId == item.Id);
+                            if (stocksFilter == null)
+                                stocksFilter = donhangstmp;
+                            else
+                                stocksFilter = stocksFilter.Union(donhangstmp);
+                        }
+                        stocks = stocksFilter;
+                        if (rootExist == false) rootExist = true;
+                        stocksFilter = null;
+                    }
+                    if (softStockSearchFilterVM.selectedSupplierFilters.Count > 0)
+                    {
+                        foreach (var item in softStockSearchFilterVM.selectedSupplierFilters)
+                        {
+                            IQueryable<SoftBranchProductStock> donhangstmp = null;
+                            if (rootExist == false)
+                                donhangstmp = query.Where(x => x.shop_sanpham.SupplierId == item.Id);
+                            else
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.SupplierId == item.Id);
+                            if (stocksFilter == null)
+                                stocksFilter = donhangstmp;
+                            else
+                                stocksFilter = stocksFilter.Union(donhangstmp);
+                        }
+                        stocks = stocksFilter;
+                        if (rootExist == false) rootExist = true;
+                        stocksFilter = null;
+                    }
+                    if (softStockSearchFilterVM.selectedProductStatusFilters.Count > 0)
+                    {
+                        foreach (var item in softStockSearchFilterVM.selectedProductStatusFilters)
+                        {
+                            IQueryable<SoftBranchProductStock> donhangstmp = null;
+                            if (rootExist == false)
+                                donhangstmp = query.Where(x => x.shop_sanpham.StatusId == item.Id);
+                            else
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.StatusId == item.Id);
+                            if (stocksFilter == null)
+                                stocksFilter = donhangstmp;
+                            else
+                                stocksFilter = stocksFilter.Union(donhangstmp);
+                        }
+                        stocks = stocksFilter;
+                        if (rootExist == false) rootExist = true;
+                        stocksFilter = null;
+                    }
+                    if (softStockSearchFilterVM.selectedVatStatusFilters.Count > 0)
+                    {
+                        foreach (var item in softStockSearchFilterVM.selectedVatStatusFilters)
+                        {
+                            IQueryable<SoftBranchProductStock> donhangstmp = null;
+                            if (rootExist == false)
+                                donhangstmp = query.Where(x => x.shop_sanpham.SoftSupplier.VatId == item.Id);
+                            else
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.SoftSupplier.VatId == item.Id);
+                            if (stocksFilter == null)
+                                stocksFilter = donhangstmp;
+                            else
+                                stocksFilter = stocksFilter.Union(donhangstmp);
+                        }
+                        stocks = stocksFilter;
+                        if (rootExist == false) rootExist = true;
+                        stocksFilter = null;
+                    }
+                    if (softStockSearchFilterVM.selectedStockFilter > 0 && softStockSearchFilterVM.selectedStockFilterValue != null)
+                    {
+                        if (rootExist == false)
+                        {
+                            switch (softStockSearchFilterVM.selectedStockFilter)
+                            {
+                                case 1:
+                                    stocks = query.Where(x => x.StockTotal > softStockSearchFilterVM.selectedStockFilterValue);
+                                    break;
+                                case 2:
+                                    stocks = query.Where(x => x.StockTotal < softStockSearchFilterVM.selectedStockFilterValue);
+                                    break;
+                                case 3:
+                                    stocks = query.Where(x => x.StockTotal == softStockSearchFilterVM.selectedStockFilterValue);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch (softStockSearchFilterVM.selectedStockFilter)
+                            {
+                                case 1:
+                                    stocks = stocks.Where(x => x.StockTotal > softStockSearchFilterVM.selectedStockFilterValue);
+                                    break;
+                                case 2:
+                                    stocks = stocks.Where(x => x.StockTotal < softStockSearchFilterVM.selectedStockFilterValue);
+                                    break;
+                                case 3:
+                                    stocks = stocks.Where(x => x.StockTotal == softStockSearchFilterVM.selectedStockFilterValue);
+                                    break;
+                            }
+                        }
+                        if (rootExist == false) rootExist = true;
+                    }
+                    if (softStockSearchFilterVM.selectedStockTotalFilter > 0 && softStockSearchFilterVM.selectedStockTotalFilterValue != null)
+                    {
+                        if (rootExist == false)
+                        {
+                            switch (softStockSearchFilterVM.selectedStockTotalFilter)
+                            {
+                                case 1:
+                                    stocks = query.Where(x => x.shop_sanpham.SoftBranchProductStocks.Sum(y => y.StockTotal) > softStockSearchFilterVM.selectedStockTotalFilterValue);
+                                    break;
+                                case 2:
+                                    stocks = query.Where(x => x.shop_sanpham.SoftBranchProductStocks.Sum(y => y.StockTotal) < softStockSearchFilterVM.selectedStockTotalFilterValue);
+                                    break;
+                                case 3:
+                                    stocks = query.Where(x => x.shop_sanpham.SoftBranchProductStocks.Sum(y => y.StockTotal) == softStockSearchFilterVM.selectedStockTotalFilterValue);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch (softStockSearchFilterVM.selectedStockTotalFilter)
+                            {
+                                case 1:
+                                    stocks = stocks.Where(x => x.shop_sanpham.SoftBranchProductStocks.Sum(y => y.StockTotal) > softStockSearchFilterVM.selectedStockTotalFilterValue);
+                                    break;
+                                case 2:
+                                    stocks = stocks.Where(x => x.shop_sanpham.SoftBranchProductStocks.Sum(y => y.StockTotal) < softStockSearchFilterVM.selectedStockTotalFilterValue);
+                                    break;
+                                case 3:
+                                    stocks = stocks.Where(x => x.shop_sanpham.SoftBranchProductStocks.Sum(y => y.StockTotal) == softStockSearchFilterVM.selectedStockTotalFilterValue);
+                                    break;
+                            }
+                        }
+                        if (rootExist == false) rootExist = true;
+                    }
+                }
+                else
+                {
+                    stocks = query;
+                }
+            }
+
+            switch (softStockSearchFilterVM.sortBy)
+            {
+                case "productCode_Des":
+                    stocks = stocks.OrderByDescending(x => x.shop_sanpham.masp);
+                    break;
+                case "productCode_Asc":
+                    stocks = stocks.OrderBy(x => x.shop_sanpham.masp);
+                    break;
+                case "productName_Des":
+                    stocks = stocks.OrderByDescending(x => x.shop_sanpham.tensp);
+                    break;
+                case "productName_Asc":
+                    stocks = stocks.OrderBy(x => x.shop_sanpham.tensp);
+                    break;
+                case "stock_Des":
+                    stocks = stocks.OrderByDescending(x => x.StockTotal);
+                    break;
+                case "stock_Asc":
+                    stocks = stocks.OrderBy(x => x.StockTotal);
+                    break;
+                case "stockTotal_Des":
+                    stocks = stocks.OrderByDescending(x => x.shop_sanpham.SoftBranchProductStocks.Sum(y => y.StockTotal));
+                    break;
+                case "stockTotal_Asc":
+                    stocks = stocks.OrderBy(x => x.shop_sanpham.SoftBranchProductStocks.Sum(y => y.StockTotal));
+                    break;
+                case "priceBase_Des":
+                    stocks = stocks.OrderByDescending(x => x.shop_sanpham.PriceBase);
+                    break;
+                case "priceBase_Asc":
+                    stocks = stocks.OrderBy(x => x.shop_sanpham.PriceBase);
+                    break;
+                default:
+                    stocks = stocks.OrderBy(x => x.shop_sanpham.tensp);
+                    break;
+            }
+            return stocks;
         }
 
         public IQueryable<SoftBranchProductStock> GetAllPagingFilter(out int totalRow, SoftStockSearchFilterViewModel softStockSearchFilterVM)

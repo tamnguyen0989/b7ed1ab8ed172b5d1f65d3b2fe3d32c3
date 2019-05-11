@@ -106,6 +106,12 @@ namespace SoftBBM.Web.api
                         model.UpdatedDate = DateTime.Now;
                         _softChannelProductPriceRepository.Update(model);
                     }
+                    if (item.ChannelId == 2 && item.Price > 0)
+                    {
+                        var product = _shopSanPhamRepository.GetSingleById(SoftChannelProductPriceVm.ProductId);
+                        product.PriceWholesale = UtilExtensions.GetPriceWholesaleByPriceAvgOnl(product.PriceAvg, item.Price);
+                        _shopSanPhamRepository.Update(product);
+                    }
                 }
                 _unitOfWork.Commit();
                 response = request.CreateResponse(HttpStatusCode.OK);

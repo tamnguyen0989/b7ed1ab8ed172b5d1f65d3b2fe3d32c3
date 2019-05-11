@@ -209,6 +209,7 @@ namespace SoftBBM.Web.ViewModels
         public int priceBaseOld { get; set; }
         public int priceAvg { get; set; }
         public int priceRef { get; set; }
+        public int? shopeeId { get; set; }
         
         public ShopSanPhamCategoryViewModel productCategory { get; set; }
         public SoftSupplierViewModel supplier { get; set; }
@@ -228,5 +229,6 @@ namespace SoftBBM.Web.ViewModels
         public int? supplierId { get; set; }
         public string statusId { get; set; }
         public int userId { get; set; }
+        public int? shopeeId { get; set; }
     }
 }

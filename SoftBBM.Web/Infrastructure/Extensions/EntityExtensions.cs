@@ -16,7 +16,7 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             softSupplier.Address = softSupplierVm.Address;
             softSupplier.Phone = softSupplierVm.Phone;
             softSupplier.Email = softSupplierVm.Email;
-            softSupplier.VatId = softSupplierVm.SoftSupplierVatStatu.Id;
+            softSupplier.VatId = softSupplierVm.VatId;
             softSupplier.AccBank = softSupplierVm.AccBank;
             softSupplier.Status = softSupplierVm.Status;
         }
@@ -37,6 +37,7 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             softChannel.Description = softChannelVm.Description;
             softChannel.Status = softChannelVm.Status;
             softChannel.Code = softChannelVm.Code;
+            softChannel.Enabled = softChannelVm.Enabled;
         }
         public static void UpdateSoftStock(this SoftBranchProductStock softBranchProductStock, SoftStockViewModel SoftStockVm)
         {

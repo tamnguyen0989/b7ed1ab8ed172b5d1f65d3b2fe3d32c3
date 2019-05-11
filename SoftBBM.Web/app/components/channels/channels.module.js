@@ -7,6 +7,11 @@
             parent: 'base',
             templateUrl: '/app/components/channels/channelListView.html',
             controller: 'channelListController'
+        }).state('edit_channel', {
+            url: '/edit_channel/:id',
+            parent: 'base',
+            templateUrl: '/app/components/channels/channelEditView.html',
+            controller: 'channelEditController'
         }).state('add_channel', {
             url: '/add_channel',
             parent: 'base',

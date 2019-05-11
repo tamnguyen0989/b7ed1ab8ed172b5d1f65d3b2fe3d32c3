@@ -1,0 +1,23 @@
+﻿<div class="modal-header">
+    <h4>Lọc theo tồn kho sản phẩm</h4>
+</div>
+<div class="modal-body" id="modal-body">
+    <form name="frmAddStockFilter">
+        <div class="row ">
+            <div class="col-xs-10">
+                <input name="rbStockFilter" type="radio" value="1" ng-model="selectedStockFilter" /> Lớn hơn
+                &emsp;<input name="rbStockFilter" type="radio" value="2" ng-model="selectedStockFilter" /> Nhỏ hơn
+                &emsp;<input name="rbStockFilter" type="radio" value="3" ng-model="selectedStockFilter" /> Bằng
+            </div>
+        </div>
+        <div class="row margintop10px">
+            <div class="col-xs-12">
+                <input ng-disabled="!selectedStockFilter" type="number" class="form-control" ng-model="selectedStockFilterValue" />
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button ng-click="addStockFilter()" class="btn btn-success">Hoàn thành</button>
+    <button ng-click="backButton()" title="Trở về" class="btn btn-default" type="button">Trở về</button>
+</div>

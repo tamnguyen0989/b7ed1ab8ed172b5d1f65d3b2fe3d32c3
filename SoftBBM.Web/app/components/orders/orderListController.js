@@ -55,6 +55,7 @@
         $scope.getDetailOrderToPrint = getDetailOrderToPrint;
         $scope.getDetailOrdersToPrint = getDetailOrdersToPrint;
         $scope.resetSelectedOrders = resetSelectedOrders;
+        $scope.authenExport = authenExport;
 
         function search(page) {
             if ($scope.selectedChannel) {
@@ -72,7 +73,6 @@
                 $scope.filters.startDateFilter = $scope.startDateFilter;
                 $scope.filters.endDateFilter = $scope.endDateFilter;
                 apiService.post('/api/order/search', $scope.filters, function (result) {
-                    debugger
                     $scope.orders = result.data.Items;
                     $scope.page = result.data.Page;
                     $scope.pagesCount = result.data.TotalPages;
@@ -272,7 +272,7 @@
                 function (result) {
                     if (result.data == true) {
                         notificationService.displaySuccess('Cập nhật tình trạng thành công!');
-                        //$scope.selectedOrders = [];
+                        resetSelectedOrders();
                         search($scope.page);
                     }
                 }, function (error) {
@@ -299,7 +299,7 @@
                 function (result) {
                     if (result.data == true) {
                         notificationService.displaySuccess('Cập nhật NV giao hàng thành công!');
-                        //$scope.selectedOrders = [];
+                        resetSelectedOrders();
                         search($scope.page);
                     }
                 }, function (error) {
@@ -323,6 +323,8 @@
                         $rootScope.channel = result.data.channel;
                         $rootScope.customer = result.data.customer;
                         $rootScope.detailOrders = result.data.orderDetails;
+                        $rootScope.historyOrder = result.data.historyOrder;
+                        //$rootScope.shipperId = result.data.shipperId;
                         $state.go('add_order');
                     }
                 }, function (error) {
@@ -409,6 +411,25 @@
             });
             $scope.isAll = false;
             $scope.selectedOrders = [];
+        }
+        function authenExport() {
+            apiService.get('api/order/authenexport', null, function (result) {
+                exportOrdersExcel();
+            }, function (error) {
+                notificationService.displayError(error.data);
+            });
+        }
+        function exportOrdersExcel() {
+            $uibModal.open({
+                templateUrl: '/app/components/orders/orderExportProcessModal.html',
+                controller: 'orderExportProcessController',
+                scope: $scope,
+                backdrop: 'static',
+                keyboard: false,
+                size: 'sm'
+            }).result.finally(function ($scope) {
+
+            });
         }
 
         $scope.$watch('selectedChannel', function (n, o) {

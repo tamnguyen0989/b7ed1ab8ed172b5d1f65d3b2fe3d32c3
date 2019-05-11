@@ -75,7 +75,7 @@ namespace SoftBBM.Web.ViewModels
         public string tenpttt { get; set; }
         public string giogiao { get; set; }
         public Nullable<int> CreatedUserId { get; set; }
-        public Nullable<int> Discount { get; set; }
+        public int Discount { get; set; }
         public Nullable<int> DiscountMoney { get; set; }
         public Nullable<int> DiscountPercent { get; set; }
         public string DiscountCode { get; set; }
@@ -97,6 +97,7 @@ namespace SoftBBM.Web.ViewModels
         public long IdPro { get; set; }
         public double Soluong { get; set; }
         public Nullable<int> Dongia { get; set; }
+        public Nullable<int> Dongiakm { get; set; }
         public string masp;
 
         public shopbientheViewModel shop_bienthe { get; set; }
@@ -125,7 +126,26 @@ namespace SoftBBM.Web.ViewModels
     {
         public SoftChannelViewModel channel { get; set; }
         public khachhangViewModel customer { get; set; }
+        public string historyOrder { get; set; }
+        public int? shipperId { get; set; }
         public IEnumerable<SoftOrderDetailViewModel> orderDetails { get; set; }
     }
-
+    public class donhangExcel
+    {
+        public long id { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string CreatedDateConvert { get; set; }
+        public string chitiet { get; set; }
+        public Nullable<long> tongtien { get; set; }
+        public string ghichu { get; set; }
+        public string StatusName { get; set; }       
+    }
+    public class donhangExcelNoId
+    {
+        public string CreatedDateConvert { get; set; }
+        public string chitiet { get; set; }
+        public Nullable<long> tongtien { get; set; }
+        public string ghichu { get; set; }
+        public string StatusName { get; set; }
+    }
 }

@@ -165,16 +165,16 @@ namespace SoftBBM.Web.api
                     _shopSanPhamLogRepository.Add(productLog);
                 }
 
-                var newSoftNotification = new SoftNotification();
-                newSoftNotification.StockinId = softStockIn.Id;
-                newSoftNotification.Message = "Đơn xuất kho " + softStockIn.Id + " cần được xử lý";
-                newSoftNotification.Url = "stockins";
-                newSoftNotification.FromBranchId = softStockInVm.FromBranchId;
-                newSoftNotification.ToBranchId = softStockInVm.ToBranchId;
-                newSoftNotification.IsRead = false;
-                newSoftNotification.Status = false;
-                newSoftNotification.CreatedDate = DateTime.Now;
-                _softNotificationRepository.Add(newSoftNotification);
+                //var newSoftNotification = new SoftNotification();
+                //newSoftNotification.StockinId = softStockIn.Id;
+                //newSoftNotification.Message = "Đơn xuất kho " + softStockIn.Id + " cần được xử lý";
+                //newSoftNotification.Url = "stockins";
+                //newSoftNotification.FromBranchId = softStockInVm.FromBranchId;
+                //newSoftNotification.ToBranchId = softStockInVm.ToBranchId;
+                //newSoftNotification.IsRead = false;
+                //newSoftNotification.Status = false;
+                //newSoftNotification.CreatedDate = DateTime.Now;
+                //_softNotificationRepository.Add(newSoftNotification);
 
                 _unitOfWork.Commit();
 
@@ -579,16 +579,16 @@ namespace SoftBBM.Web.api
                     _shopSanPhamLogRepository.Add(productLog);
                 }
 
-                var newSoftNotification = new SoftNotification();
-                newSoftNotification.StockinId = softStockIn.Id;
-                newSoftNotification.Message = "Đơn xuất kho " + softStockIn.Id + " cần được xử lý";
-                newSoftNotification.Url = "stockins";
-                newSoftNotification.FromBranchId = softStockIn.FromBranchId;
-                newSoftNotification.ToBranchId = softStockIn.ToBranchId;
-                newSoftNotification.IsRead = false;
-                newSoftNotification.Status = false;
-                newSoftNotification.CreatedDate = DateTime.Now;
-                _softNotificationRepository.Add(newSoftNotification);
+                //var newSoftNotification = new SoftNotification();
+                //newSoftNotification.StockinId = softStockIn.Id;
+                //newSoftNotification.Message = "Đơn xuất kho " + softStockIn.Id + " cần được xử lý";
+                //newSoftNotification.Url = "stockins";
+                //newSoftNotification.FromBranchId = softStockIn.FromBranchId;
+                //newSoftNotification.ToBranchId = softStockIn.ToBranchId;
+                //newSoftNotification.IsRead = false;
+                //newSoftNotification.Status = false;
+                //newSoftNotification.CreatedDate = DateTime.Now;
+                //_softNotificationRepository.Add(newSoftNotification);
 
                 _unitOfWork.Commit();
                 response = request.CreateResponse(HttpStatusCode.OK, softStockIn.ToBranchId);
@@ -786,16 +786,17 @@ namespace SoftBBM.Web.api
 
                     oldSoftStockIn.FromBranchId = softStockInVm.FromBranchId;
                     oldSoftStockIn.SupplierStatusId = "05";
-                    var newSoftNotification = new SoftNotification();
-                    newSoftNotification.StockinId = oldSoftStockIn.Id;
-                    newSoftNotification.Message = "Đơn ĐH kho " + oldSoftStockIn.Id + " đã được cập nhật";
-                    newSoftNotification.Url = "stockouts";
-                    newSoftNotification.FromBranchId = oldSoftStockIn.ToBranchId;
-                    newSoftNotification.ToBranchId = oldSoftStockIn.FromBranchId;
-                    newSoftNotification.IsRead = false;
-                    newSoftNotification.Status = false;
-                    newSoftNotification.CreatedDate = DateTime.Now;
-                    _softNotificationRepository.Add(newSoftNotification);
+
+                    //var newSoftNotification = new SoftNotification();
+                    //newSoftNotification.StockinId = oldSoftStockIn.Id;
+                    //newSoftNotification.Message = "Đơn ĐH kho " + oldSoftStockIn.Id + " đã được cập nhật";
+                    //newSoftNotification.Url = "stockouts";
+                    //newSoftNotification.FromBranchId = oldSoftStockIn.ToBranchId;
+                    //newSoftNotification.ToBranchId = oldSoftStockIn.FromBranchId;
+                    //newSoftNotification.IsRead = false;
+                    //newSoftNotification.Status = false;
+                    //newSoftNotification.CreatedDate = DateTime.Now;
+                    //_softNotificationRepository.Add(newSoftNotification);
 
 
                 }
@@ -858,16 +859,16 @@ namespace SoftBBM.Web.api
                 _unitOfWork.Commit();
                 if (softStockInVm.CategoryId == "01")
                 {
-                    var newSoftNotification = new SoftNotification();
-                    newSoftNotification.StockinId = softStockIn.Id;
-                    newSoftNotification.Message = "Đơn ĐH kho " + softStockIn.Id + " cần được xử lý";
-                    newSoftNotification.Url = "stockouts";
-                    newSoftNotification.FromBranchId = softStockInVm.ToBranchId;
-                    newSoftNotification.ToBranchId = softStockInVm.FromBranchId;
-                    newSoftNotification.IsRead = false;
-                    newSoftNotification.Status = false;
-                    newSoftNotification.CreatedDate = DateTime.Now;
-                    _softNotificationRepository.Add(newSoftNotification);
+                    //var newSoftNotification = new SoftNotification();
+                    //newSoftNotification.StockinId = softStockIn.Id;
+                    //newSoftNotification.Message = "Đơn ĐH kho " + softStockIn.Id + " cần được xử lý";
+                    //newSoftNotification.Url = "stockouts";
+                    //newSoftNotification.FromBranchId = softStockInVm.ToBranchId;
+                    //newSoftNotification.ToBranchId = softStockInVm.FromBranchId;
+                    //newSoftNotification.IsRead = false;
+                    //newSoftNotification.Status = false;
+                    //newSoftNotification.CreatedDate = DateTime.Now;
+                    //_softNotificationRepository.Add(newSoftNotification);
                 }
                 foreach (var item in softStockInVm.SoftStockInDetails)
                 {
@@ -1647,16 +1648,17 @@ namespace SoftBBM.Web.api
                             return response;
                         }
                         softStockIn.SupplierStatusId = "02";
-                        var newSoftNotification = new SoftNotification();
-                        newSoftNotification.StockinId = softStockIn.Id;
-                        newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
-                        newSoftNotification.Url = "#";
-                        newSoftNotification.FromBranchId = softStockIn.BranchId;
-                        newSoftNotification.ToBranchId = softStockIn.FromBranchId;
-                        newSoftNotification.IsRead = false;
-                        newSoftNotification.Status = false;
-                        newSoftNotification.CreatedDate = DateTime.Now;
-                        _softNotificationRepository.Add(newSoftNotification);
+
+                        //var newSoftNotification = new SoftNotification();
+                        //newSoftNotification.StockinId = softStockIn.Id;
+                        //newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
+                        //newSoftNotification.Url = "#";
+                        //newSoftNotification.FromBranchId = softStockIn.BranchId;
+                        //newSoftNotification.ToBranchId = softStockIn.FromBranchId;
+                        //newSoftNotification.IsRead = false;
+                        //newSoftNotification.Status = false;
+                        //newSoftNotification.CreatedDate = DateTime.Now;
+                        //_softNotificationRepository.Add(newSoftNotification);
                         break;
                     case "stockout":
                         if (softStockIn.FromBranchStatusId == "07" || softStockIn.FromBranchStatusId == "02")
@@ -1732,16 +1734,18 @@ namespace SoftBBM.Web.api
                             return response;
                         }
                         softStockIn.SupplierStatusId = "02";
-                        var newSoftNotification = new SoftNotification();
-                        newSoftNotification.StockinId = softStockIn.Id;
-                        newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
-                        newSoftNotification.Url = "#";
-                        newSoftNotification.FromBranchId = softStockIn.BranchId;
-                        newSoftNotification.ToBranchId = softStockIn.FromBranchId;
-                        newSoftNotification.IsRead = false;
-                        newSoftNotification.Status = false;
-                        newSoftNotification.CreatedDate = DateTime.Now;
-                        _softNotificationRepository.Add(newSoftNotification);
+
+                        //var newSoftNotification = new SoftNotification();
+                        //newSoftNotification.StockinId = softStockIn.Id;
+                        //newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
+                        //newSoftNotification.Url = "#";
+                        //newSoftNotification.FromBranchId = softStockIn.BranchId;
+                        //newSoftNotification.ToBranchId = softStockIn.FromBranchId;
+                        //newSoftNotification.IsRead = false;
+                        //newSoftNotification.Status = false;
+                        //newSoftNotification.CreatedDate = DateTime.Now;
+                        //_softNotificationRepository.Add(newSoftNotification);
+
                         break;
                     case "stockout":
                         if (softStockIn.FromBranchStatusId == "07" || softStockIn.FromBranchStatusId == "02")
@@ -1817,16 +1821,18 @@ namespace SoftBBM.Web.api
                             return response;
                         }
                         softStockIn.SupplierStatusId = "02";
-                        var newSoftNotification = new SoftNotification();
-                        newSoftNotification.StockinId = softStockIn.Id;
-                        newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
-                        newSoftNotification.Url = "#";
-                        newSoftNotification.FromBranchId = softStockIn.BranchId;
-                        newSoftNotification.ToBranchId = softStockIn.FromBranchId;
-                        newSoftNotification.IsRead = false;
-                        newSoftNotification.Status = false;
-                        newSoftNotification.CreatedDate = DateTime.Now;
-                        _softNotificationRepository.Add(newSoftNotification);
+
+                        //var newSoftNotification = new SoftNotification();
+                        //newSoftNotification.StockinId = softStockIn.Id;
+                        //newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
+                        //newSoftNotification.Url = "#";
+                        //newSoftNotification.FromBranchId = softStockIn.BranchId;
+                        //newSoftNotification.ToBranchId = softStockIn.FromBranchId;
+                        //newSoftNotification.IsRead = false;
+                        //newSoftNotification.Status = false;
+                        //newSoftNotification.CreatedDate = DateTime.Now;
+                        //_softNotificationRepository.Add(newSoftNotification);
+
                         break;
                     case "stockout":
                         if (softStockIn.FromBranchStatusId == "07" || softStockIn.FromBranchStatusId == "02")
@@ -1902,16 +1908,18 @@ namespace SoftBBM.Web.api
                             return response;
                         }
                         softStockIn.SupplierStatusId = "02";
-                        var newSoftNotification = new SoftNotification();
-                        newSoftNotification.StockinId = softStockIn.Id;
-                        newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
-                        newSoftNotification.Url = "#";
-                        newSoftNotification.FromBranchId = softStockIn.BranchId;
-                        newSoftNotification.ToBranchId = softStockIn.FromBranchId;
-                        newSoftNotification.IsRead = false;
-                        newSoftNotification.Status = false;
-                        newSoftNotification.CreatedDate = DateTime.Now;
-                        _softNotificationRepository.Add(newSoftNotification);
+
+                        //var newSoftNotification = new SoftNotification();
+                        //newSoftNotification.StockinId = softStockIn.Id;
+                        //newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
+                        //newSoftNotification.Url = "#";
+                        //newSoftNotification.FromBranchId = softStockIn.BranchId;
+                        //newSoftNotification.ToBranchId = softStockIn.FromBranchId;
+                        //newSoftNotification.IsRead = false;
+                        //newSoftNotification.Status = false;
+                        //newSoftNotification.CreatedDate = DateTime.Now;
+                        //_softNotificationRepository.Add(newSoftNotification);
+
                         break;
                     case "stockout":
                         if (softStockIn.FromBranchStatusId == "07" || softStockIn.FromBranchStatusId == "02")
@@ -1987,16 +1995,18 @@ namespace SoftBBM.Web.api
                             return response;
                         }
                         softStockIn.SupplierStatusId = "02";
-                        var newSoftNotification = new SoftNotification();
-                        newSoftNotification.StockinId = softStockIn.Id;
-                        newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
-                        newSoftNotification.Url = "#";
-                        newSoftNotification.FromBranchId = softStockIn.BranchId;
-                        newSoftNotification.ToBranchId = softStockIn.FromBranchId;
-                        newSoftNotification.IsRead = false;
-                        newSoftNotification.Status = false;
-                        newSoftNotification.CreatedDate = DateTime.Now;
-                        _softNotificationRepository.Add(newSoftNotification);
+
+                        //var newSoftNotification = new SoftNotification();
+                        //newSoftNotification.StockinId = softStockIn.Id;
+                        //newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " đã huỷ";
+                        //newSoftNotification.Url = "#";
+                        //newSoftNotification.FromBranchId = softStockIn.BranchId;
+                        //newSoftNotification.ToBranchId = softStockIn.FromBranchId;
+                        //newSoftNotification.IsRead = false;
+                        //newSoftNotification.Status = false;
+                        //newSoftNotification.CreatedDate = DateTime.Now;
+                        //_softNotificationRepository.Add(newSoftNotification);
+
                         break;
                     case "stockout":
                         if (softStockIn.FromBranchStatusId == "07" || softStockIn.FromBranchStatusId == "02")
@@ -2056,16 +2066,16 @@ namespace SoftBBM.Web.api
                 softStockIn.UpdatedBy = userId;
                 _softStockInRepository.Update(softStockIn);
 
-                var newSoftNotification = new SoftNotification();
-                newSoftNotification.StockinId = softStockIn.Id;
-                newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " có tồn không đủ xuất";
-                newSoftNotification.Url = "branch_books";
-                newSoftNotification.FromBranchId = softStockIn.FromBranchId;
-                newSoftNotification.ToBranchId = softStockIn.ToBranchId;
-                newSoftNotification.IsRead = false;
-                newSoftNotification.Status = false;
-                newSoftNotification.CreatedDate = DateTime.Now;
-                _softNotificationRepository.Add(newSoftNotification);
+                //var newSoftNotification = new SoftNotification();
+                //newSoftNotification.StockinId = softStockIn.Id;
+                //newSoftNotification.Message = "Đơn ĐH kho nội bộ " + softStockIn.Id + " có tồn không đủ xuất";
+                //newSoftNotification.Url = "branch_books";
+                //newSoftNotification.FromBranchId = softStockIn.FromBranchId;
+                //newSoftNotification.ToBranchId = softStockIn.ToBranchId;
+                //newSoftNotification.IsRead = false;
+                //newSoftNotification.Status = false;
+                //newSoftNotification.CreatedDate = DateTime.Now;
+                //_softNotificationRepository.Add(newSoftNotification);
 
                 _unitOfWork.Commit();
                 response = request.CreateResponse(HttpStatusCode.OK, softStockIn.ToBranchId);
@@ -2092,7 +2102,7 @@ namespace SoftBBM.Web.api
                 //var startDateConvert = new DateTime(startDate.Year, startDate.Month, startDate.Day, 0, 0, 1);
                 //var endDateConvert = new DateTime(endDate.Year, endDate.Month, endDate.Day, 0, 0, 1);
                 var startDateConvert = UtilExtensions.ConvertStartDate(startDate);
-                var endDateConvert = UtilExtensions.ConvertStartDate(endDate);
+                var endDateConvert = UtilExtensions.ConvertEndDate(endDate);
                 var soldOrders = _donhangRepository.GetMulti(x => x.BranchId == InputVM.branchId && x.CreatedDate >= startDateConvert && x.CreatedDate <= endDateConvert).ToList();
                 var endDateSold = DateTime.Now;
                 var startDateSold = endDate.AddDays(-30);

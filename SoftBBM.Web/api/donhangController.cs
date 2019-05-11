@@ -13,6 +13,11 @@ using SoftBBM.Web.Infrastructure.Core;
 using AutoMapper;
 using SoftBBM.Web.Enum;
 using System.Text.RegularExpressions;
+using System.Net.Http.Headers;
+using OfficeOpenXml;
+using OfficeOpenXml.Table;
+using OfficeOpenXml.Style;
+using System.Drawing;
 
 namespace SoftBBM.Web.api
 {
@@ -144,6 +149,7 @@ namespace SoftBBM.Web.api
                     if (product != null && product.PriceAvg.HasValue)
                         priceAvg = product.PriceAvg.Value;
                     donhang_ct.PriceAvg = priceAvg;
+                    donhang_ct.Dongiakm = item.PriceBeforeDiscount;
                     _donhangctRepository.Add(donhang_ct);
 
                     var stockCurrent = _softStockRepository.GetSingleByCondition(x => x.BranchId == orderVM.BranchId && x.ProductId == item.id);
@@ -236,6 +242,7 @@ namespace SoftBBM.Web.api
             }
             try
             {
+                bool flagDiscountOrder = false;
                 donhang donhang = new donhang();
                 donhang.Updatedonhang(orderVM);
                 donhang.CreatedDate = DateTime.Now;
@@ -305,6 +312,16 @@ namespace SoftBBM.Web.api
                     if (product != null && product.PriceAvg.HasValue)
                         priceAvg = product.PriceAvg.Value;
                     donhang_ct.PriceAvg = priceAvg;
+                    donhang_ct.Dongiakm = item.PriceBeforeDiscount;
+                    if (!flagDiscountOrder)
+                    {
+                        var memberDis = orderVM.datru_diem == null ? 0 : orderVM.datru_diem.Value;
+                        var orderDis = orderVM.Discount == null ? 0 : orderVM.Discount.Value;
+                        donhang_ct.TotalDiscount = memberDis + orderDis;
+                        flagDiscountOrder = true;
+                    }
+                    else
+                        donhang_ct.TotalDiscount = 0;
                     _donhangctRepository.Add(donhang_ct);
 
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
@@ -1519,6 +1536,33 @@ namespace SoftBBM.Web.api
                     donhangAfterEdit.channel = channelVM;
                     donhangAfterEdit.customer = khachhangVM;
                     donhangAfterEdit.orderDetails = orderDetails;
+                    //donhangAfterEdit.shipperId = donhang.ShipperId;
+
+                    var historyOrder = "Thông tin đơn cũ:<br>";
+                    if (donhang.khachhang.idtp.HasValue)
+                    {
+                        var tp = _donhangchuyenphattpRepository.GetSingleById(donhang.khachhang.idtp.Value);
+                        historyOrder += "TP: " + tp.tentp;
+                    }
+                    if (donhang.khachhang.idquan.HasValue)
+                    {
+                        var quan = _donhangchuyenphattinhRepository.GetSingleById(donhang.khachhang.idquan.Value);
+                        historyOrder += ", Quận: " + quan.tentinh;
+                    }
+                    historyOrder += "<br>";
+                    if (!string.IsNullOrEmpty(donhang.tenptgh))
+                        historyOrder += "PTGH: " + donhang.tenptgh + "<br>";
+                    if (donhang.pttt != null)
+                        historyOrder += "PTTT: " + UtilExtensions.ConvertPaymentMethod(donhang.pttt.Value);
+                    if (donhang.ShipperId > 0)
+                    {
+                        var shipper = _applicationUserRepository.GetSingleById(donhang.ShipperId.Value);
+                        historyOrder += ", NVGH: " + shipper.UserName;
+                    }
+                    historyOrder += "<br>";
+                    if (donhang.idgiogiao != null)
+                        historyOrder += "TG: " + UtilExtensions.ConvertDeliveryTime(donhang.idgiogiao.Value) + "<br>";  
+                    donhangAfterEdit.historyOrder = historyOrder;
 
                     donhang.ghichu = donhangVM.ghichu;
                     if (donhangVM.ShipperId > 0)
@@ -1533,9 +1577,9 @@ namespace SoftBBM.Web.api
 
                     if (donhang.pttt != (int)PaymentMethod.OnlinePayment || (donhang.pttt == (int)PaymentMethod.OnlinePayment && donhang.tinhtrang == "00"))
                     {
-                        if (donhangVM.makh > 0)
+                        if (donhang.makh > 0)
                         {
-                            var khachhang = _khachhangRepository.GetSingleById(donhangVM.makh.Value);
+                            var khachhang = _khachhangRepository.GetSingleById(donhang.makh.Value);
                             if (donhang.datru_diem > 0)
                             {
                                 khachhang.diem = (int.Parse(khachhang.diem) - donhang.diemsp.Value + 1000).ToString();
@@ -1648,29 +1692,6 @@ namespace SoftBBM.Web.api
         }
 
         [HttpPost]
-        [Authorize(Roles = "Report")]
-        [Route("channelsalesreport")]
-        public HttpResponseMessage ChannelSalesReport(HttpRequestMessage request, ChannelSalesRevenuesReportParamsViewModel ChannelSalesReportParamsVm)
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                var startDate = ChannelSalesReportParamsVm.startDate.ToLocalTime();
-                var startDateStr = startDate.ToString("yyyy-MM-dd") + " 00:00:00";
-                var endDate = ChannelSalesReportParamsVm.endDate.ToLocalTime();
-                var endDateStr = endDate.ToString("yyyy-MM-dd") + " 23:59:59.999";
-                var model = _donhangRepository.GetChannelSalesReport(startDateStr, endDateStr, ChannelSalesReportParamsVm.branchId);
-                response = request.CreateResponse(HttpStatusCode.OK, model);
-                return response;
-            }
-            catch (Exception ex)
-            {
-                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-                return response;
-            }
-        }
-
-        [HttpPost]
         [Route("channelrevenuesreport")]
         public HttpResponseMessage ChannelRevenuesReport(HttpRequestMessage request, ChannelSalesRevenuesReportParamsViewModel ChannelSalesReportParamsVm)
         {
@@ -1683,6 +1704,37 @@ namespace SoftBBM.Web.api
                 var endDateStr = endDate.ToString("yyyy-MM-dd") + " 23:59:59.999";
                 var model = _donhangRepository.GetChannelRevenuesReport(startDateStr, endDateStr, ChannelSalesReportParamsVm.branchId);
                 response = request.CreateResponse(HttpStatusCode.OK, model);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Route("revenuesreport")]
+        public HttpResponseMessage RevenuesReport(HttpRequestMessage request, SalesRevenuesReportParamsViewModel SalesReportParamsVm)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var startDate = SalesReportParamsVm.startDate.ToLocalTime();
+                var startDateStr = startDate.ToString("yyyy-MM-dd") + " 00:00:00";
+                var endDate = SalesReportParamsVm.endDate.ToLocalTime();
+                var endDateStr = endDate.ToString("yyyy-MM-dd") + " 23:59:59.999";
+                var model = _donhangRepository.GetRevenuesReport(startDateStr, endDateStr, SalesReportParamsVm.branchId, SalesReportParamsVm.channelId).ToList();
+                response = request.CreateResponse(HttpStatusCode.OK, model);
+                foreach (var item in model)
+                {
+                    if (item.NewDay == 1)
+                    {
+                        item.NewDayStr = item.NewDate;
+                    }
+                    else
+                        item.NewDayStr = item.NewDay.ToString();
+                }
                 return response;
             }
             catch (Exception ex)
@@ -1725,17 +1777,44 @@ namespace SoftBBM.Web.api
         }
 
         [HttpPost]
-        [Route("revenuesreport")]
-        public HttpResponseMessage RevenuesReport(HttpRequestMessage request, SalesRevenuesReportParamsViewModel SalesReportParamsVm)
+        [Authorize(Roles = "Report")]
+        [Route("channelsalesreport")]
+        public HttpResponseMessage ChannelSalesReport(HttpRequestMessage request, ChannelSalesRevenuesReportParamsViewModel ChannelSalesReportParamsVm)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var startDate = ChannelSalesReportParamsVm.startDate.ToLocalTime();
+                var startDateStr = startDate.ToString("yyyy-MM-dd") + " 00:00:00";
+                var endDate = ChannelSalesReportParamsVm.endDate.ToLocalTime();
+                var endDateStr = endDate.ToString("yyyy-MM-dd") + " 23:59:59.999";
+                var model = _donhangRepository.GetChannelSalesReport(startDateStr, endDateStr, ChannelSalesReportParamsVm.branchId).ToList();
+                response = request.CreateResponse(HttpStatusCode.OK, model);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Report")]
+        [Route("salesreportmonth")]
+        public HttpResponseMessage SalesReportMonth(HttpRequestMessage request, SalesRevenuesReportParamsViewModel SalesReportParamsVm)
         {
             HttpResponseMessage response = null;
             try
             {
                 var startDate = SalesReportParamsVm.startDate.ToLocalTime();
-                var startDateStr = startDate.ToString("yyyy-MM-dd") + " 00:00:00";
-                var endDate = SalesReportParamsVm.endDate.ToLocalTime();
-                var endDateStr = endDate.ToString("yyyy-MM-dd") + " 23:59:59.999";
-                var model = _donhangRepository.GetRevenuesReport(startDateStr, endDateStr, SalesReportParamsVm.branchId, SalesReportParamsVm.channelId).ToList();
+                var startDateStr = startDate.ToString("yyyy-MM-01 00:00:00");
+
+                var end = SalesReportParamsVm.endDate.ToLocalTime();
+                var newEndDate = new DateTime(end.Year, end.Month, 1, 0, 0, 0);
+                newEndDate = newEndDate.AddMonths(1).AddDays(-1);
+                var endDateStr = newEndDate.ToString("yyyy-MM-dd 23:59:59.999");
+                var model = _donhangRepository.GetSalesReportMonth(startDateStr, endDateStr, SalesReportParamsVm.branchId, SalesReportParamsVm.channelId).ToList();
                 response = request.CreateResponse(HttpStatusCode.OK, model);
                 foreach (var item in model)
                 {
@@ -1752,6 +1831,142 @@ namespace SoftBBM.Web.api
             {
                 response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
                 return response;
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Report")]
+        [Route("salesreportyear")]
+        public HttpResponseMessage SalesReportYear(HttpRequestMessage request, SalesRevenuesReportParamsViewModel SalesReportParamsVm)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var startDate = SalesReportParamsVm.startDate.ToLocalTime();
+                var startDateStr = startDate.ToString("yyyy-01-01 00:00:00");
+                var end = SalesReportParamsVm.endDate.ToLocalTime();
+                var newEndDate = new DateTime(end.Year, 12, 1, 0, 0, 0);
+                newEndDate = newEndDate.AddMonths(1).AddDays(-1);
+                var endDateStr = newEndDate.ToString("yyyy-MM-dd 23:59:59.999");
+                var model = _donhangRepository.GetSalesReportYear(startDateStr, endDateStr, SalesReportParamsVm.branchId, SalesReportParamsVm.channelId).ToList();
+                response = request.CreateResponse(HttpStatusCode.OK, model);
+                foreach (var item in model)
+                {
+                    if (item.NewDay == 1)
+                    {
+                        item.NewDayStr = item.NewDate;
+                    }
+                    else
+                        item.NewDayStr = item.NewDay.ToString();
+                }
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
+        [Route("authenexport")]
+        [Authorize(Roles = "OrderExport")]
+        [HttpGet]
+        public HttpResponseMessage AuthenExport(HttpRequestMessage request)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = request.CreateResponse(HttpStatusCode.OK, true);
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+
+        }
+
+        [Route("exportordersexcel")]
+        [Authorize(Roles = "OrderExport")]
+        [HttpPost]
+        public HttpResponseMessage ExportOrdersExcel(HttpRequestMessage request, OrderFilterViewModel orderFilterVM)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+
+                response = request.CreateResponse(HttpStatusCode.OK);
+                MediaTypeHeaderValue mediaType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+                response.Content = new ByteArrayContent(GetExcelSheet(orderFilterVM));
+                response.Content.Headers.ContentType = mediaType;
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+                response.Content.Headers.ContentDisposition.FileName = "Orders.xlsx";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
+
+        public byte[] GetExcelSheet(OrderFilterViewModel orderFilterVM)
+        {
+            IEnumerable<donhang> donhangs = null;
+            donhangs = _donhangRepository.GetAllPagingFilter(orderFilterVM).ToList();
+            if (donhangs.Count() > 0)
+            {
+
+            }
+            var donhangsVM = Mapper.Map<IEnumerable<donhang>, IEnumerable<donhangExcel>>(donhangs);
+            foreach (var item in donhangsVM)
+            {
+                string chitiet = "";
+                var orderDetails = _donhangctRepository.GetMulti(x => x.Sodh == item.id).ToList();
+                var lengthOrderDetails = orderDetails.Count();
+                for (int i = 0; i < lengthOrderDetails; i++)
+                {
+                    var orderDetail = orderDetails[i];
+                    var bienthe = _shopbientheRepository.GetSingleByCondition(x => x.id == orderDetail.IdPro);
+                    var product = _shopSanPhamRepository.GetSingleById(bienthe.idsp.Value);
+                    chitiet += string.Format("{0}. {1} | Số lượng: {2}\r\n", i + 1, product.tensp, orderDetail.Soluong);
+                }
+                item.chitiet = chitiet;
+                item.CreatedDateConvert = item.CreatedDate.ToString("dd-MM-yyyy");
+            }
+            var donhangsVMExcel = Mapper.Map<IEnumerable<donhangExcel>, IEnumerable<donhangExcelNoId>>(donhangsVM);
+            using (var package = new ExcelPackage())
+            {
+                // Tạo author cho file Excel
+                package.Workbook.Properties.Author = "SoftBBM";
+                // Tạo title cho file Excel
+                package.Workbook.Properties.Title = "Export Orders";
+                // thêm tí comments vào làm màu 
+                package.Workbook.Properties.Comments = "This is my generated Comments";
+                // Add Sheet vào file Excel
+                package.Workbook.Worksheets.Add("Orders");
+                // Lấy Sheet bạn vừa mới tạo ra để thao tác 
+                var worksheet = package.Workbook.Worksheets[1];
+                worksheet.Cells["A1"].LoadFromCollection(donhangsVMExcel, true, TableStyles.Dark9);
+                worksheet.DefaultColWidth = 15;
+                worksheet.Column(2).Width = 80;
+                worksheet.Column(2).Style.WrapText = true;
+                worksheet.Column(1).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+                worksheet.Column(2).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+                worksheet.Column(3).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+                worksheet.Column(4).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+                worksheet.Column(5).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+                worksheet.Cells[2, 3, donhangsVMExcel.Count() + 1, 3].Style.Numberformat.Format = "#,##0";
+
+                worksheet.Cells["A1"].Value = "Ngày tạo";
+                worksheet.Cells["B1"].Value = "SP bán";
+                worksheet.Cells["C1"].Value = "Tổng tiền";
+                worksheet.Cells["D1"].Value = "Ghi chú";
+                worksheet.Cells["E1"].Value = "Tình trạng";
+                //package.Save();
+                return package.GetAsByteArray();
             }
         }
     }

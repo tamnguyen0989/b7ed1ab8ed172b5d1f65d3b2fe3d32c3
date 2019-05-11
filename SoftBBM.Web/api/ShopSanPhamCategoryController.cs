@@ -223,5 +223,34 @@ namespace SoftBBM.Web.api
 
         }
 
+        [Route("delete")]
+        [Authorize(Roles = "ProductCategoryEdit")]
+        [HttpGet]
+        public HttpResponseMessage Delete(HttpRequestMessage request, int categoryId)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+
+                if (categoryId > 0)
+                {
+                    _shopSanPhamCategoryRepository.DeleteSanPhamCategory(categoryId);
+                    _unitOfWork.Commit();
+                    response = request.CreateResponse(HttpStatusCode.OK, true);
+                }
+                else
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, "Lỗi! Không có nhóm sản phẩm này.");
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+
+        }
+
     }
 }

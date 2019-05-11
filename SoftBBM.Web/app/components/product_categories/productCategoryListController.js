@@ -16,6 +16,7 @@
         $scope.edit2ProductCategory = edit2ProductCategory;
         $scope.updateProductCategory = updateProductCategory;
         $scope.cancelProductCategory = cancelProductCategory;
+        $scope.deleteCategory = deleteCategory
 
         $scope.search = search;
         $scope.refeshPage = refeshPage;
@@ -97,6 +98,24 @@
             if (localStorage.getItem("userId")) {
                 $scope.userId = JSON.parse(localStorage.getItem("userId"));
             }
+        }
+        function deleteCategory(id) {
+            $ngBootbox.confirm('Bạn có chắc chắn muốn xoá?').then(function () {
+                var configs = {
+                    params: {
+                        categoryId: id
+                    }
+                }
+                $scope.loading = true;
+                apiService.get('api/productcategory/delete', configs, function (result) {
+                    $scope.loading = false;
+                    notificationService.displaySuccess("Xoá thành công");
+                    search($scope.page);
+                }, function (error) {
+                    $scope.loading = false;
+                    notificationService.displayError(error.data);
+                });
+            });
         }
 
         $window.document.title = "DS nhóm sản phẩm";

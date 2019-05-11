@@ -50,7 +50,7 @@
             $scope.applicationUser.userId = $scope.userId;
             apiService.post('api/applicationuser/updateinfo', $scope.applicationUser, function (result) {
                 notificationService.displaySuccess('Cập nhật ' + result.data + ' thành công');
-                $state.go('home');
+                $state.go('login');
             }, function (error) {
                 notificationService.displayError('Cập nhật không thành công');
             });

@@ -28,6 +28,10 @@ namespace SoftBBM.Web.Models
         public string Description { get; set; }
         public Nullable<bool> Status { get; set; }
         public Nullable<int> Priority { get; set; }
+        public string ApiId { get; set; }
+        public string ApiPassword { get; set; }
+        public string ApiPartnerId { get; set; }
+        public Nullable<bool> Enabled { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<donhang> donhangs { get; set; }

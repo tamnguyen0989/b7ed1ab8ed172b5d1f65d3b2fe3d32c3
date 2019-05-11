@@ -9,7 +9,6 @@
             $scope.loading = true;
             apiService.get('/api/home/migrationchannelpriceandproduct', null, function (result) {
                 if (result.data == true)
-                    debugger
                 $scope.loading = false;
                 notificationService.displaySuccess('Migration thành công');
             }, function (error) {

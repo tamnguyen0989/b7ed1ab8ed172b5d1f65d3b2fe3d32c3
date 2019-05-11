@@ -21,9 +21,9 @@
         $scope.branches = [];
         $scope.selectedBranch = null;
 
-        $scope.chatHub = null;
-        $scope.chatHub = $.connection.chatHub;
-        $.connection.hub.start();
+        //$scope.chatHub = null;
+        //$scope.chatHub = $.connection.chatHub;
+        //$.connection.hub.start();
 
         $scope.loadSuppliers = loadSuppliers;
         $scope.loadProductStatus = loadProductStatus;
@@ -170,7 +170,7 @@
                 apiService.post('api/stockin/updatebook', $scope.stockin,
                     function (result) {
                         if (result.data == true) {
-                            $scope.chatHub.server.send($scope.selectedBranch.Id);
+                            //$scope.chatHub.server.send($scope.selectedBranch.Id);
                             notificationService.displaySuccess('Đơn đã được cập nhật.');
                             $state.go('branch_books');
                         }

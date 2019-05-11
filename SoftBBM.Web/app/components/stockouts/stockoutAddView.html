@@ -71,7 +71,7 @@
                                     <!--<td>{{($index+1)+(page*pageSizeNumber)}}</td>-->
                                     <td>
                                         {{item.masp}}<br />
-                                        <img ng-src="{{item.Image}}" onerror="this.src='../../../Assets/Admin/img/no-img.jpg'" />
+                                        <img ng-src="{{item.Image || 'Assets/Admin/img/no-img.jpg' }}" />
                                     </td>
                                     <td>{{item.tensp}}</td>
                                     <td>{{item.StockTotal}}</td>
@@ -84,7 +84,7 @@
                         <div ng-if="loading">
                             <div class="col-xs-4"></div>
                             <div class="col-xs-4">
-                                <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                                <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Vui lòng đợi...</label>
                             </div>
                             <div class="col-xs-4"></div>
                         </div>
@@ -157,7 +157,7 @@
                                     <td>{{itemBookDetail.tensp}}</td>
                                     <td>{{itemBookDetail.StockTotal}}</td>
                                     <td>{{itemBookDetail.SelectedStockTotal}}</td>
-                                    <td><input class="text-center width80px" type="number"  ng-model="itemBookDetail.Quantity" /></td>
+                                    <td><input class="text-center width80px" type="number" ng-model="itemBookDetail.Quantity" /></td>
                                     <td>{{itemBookDetail.AvgSoldQuantity}}</td>
                                     <td>{{itemBookDetail.PriceBase | currency:'':0}}</td>
                                     <td><button class="btn btn-danger" ng-click="removeBookDetail($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
@@ -186,20 +186,22 @@
                                 <tr>
                                     <td colspan="2" style="text-align:right">Ghi chú</td>
                                     <td colspan="5">
-                                        <textarea ng-model="description" class="form-control" rows="3"></textarea>
+                                        <textarea ng-disabled="adding" ng-model="description" class="form-control" rows="3"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="7">
-                                        <button ng-disabled="frmSelectedBranch.$invalid" ng-click="saveBook()" class="btn btn-warning">Lưu tạm</button>
-                                        <button ng-disabled="frmSelectedBranch.$invalid" ng-click="addBook()" class="btn btn-success">Hoàn thành</button>
-                                        <button ui-sref="stockouts" title="Trở về" class="btn btn-default">Trở về</button>
-                                        <button ng-click="clearBookDetails()" title="Xoá danh sách SP" class="btn btn-danger">Xoá danh sách</button>
+                                        <button ng-disabled="frmSelectedBranch.$invalid || adding" ng-click="saveBook()" class="btn btn-warning">Lưu tạm</button>
+                                        <button ng-disabled="frmSelectedBranch.$invalid || adding" ng-click="addBook()" class="btn btn-success">Hoàn thành</button>
+                                        <button ng-disabled="adding" ui-sref="stockouts" title="Trở về" class="btn btn-default">Trở về</button>
+                                        <button ng-disabled="adding" ng-click="clearBookDetails()" title="Xoá danh sách SP" class="btn btn-danger">Xoá danh sách</button>
                                     </td>
+                                </tr>
+                                <tr ng-if="adding">
+                                    <td colspan="7" class="text-center"><i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Vui lòng đợi...</label></td>
                                 </tr>
                             </table>
                         </div>
-
                         <span ng-hide="bookDetails.length>0">Chưa có đơn hàng nào</span>
                     </div>
                     <div class="row" style="display:none">
@@ -265,12 +267,11 @@
                                         <td colspan="2">{{totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                     </tr>-->
                                 </table>
-                            </div>
-
                         </div>
                     </div>
                 </div>
             </div>
+                </div>
+            </div>
         </div>
-
 </section><!-- /.content -->

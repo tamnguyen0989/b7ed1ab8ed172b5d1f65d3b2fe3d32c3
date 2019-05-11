@@ -126,7 +126,7 @@
                                     <td>{{$index+1}}</td>
                                     <td>{{itemBookDetail.masp}}</td>
                                     <td>{{itemBookDetail.tensp}}</td>
-                                    <td><input class="text-center width80px" type="number"  ng-model="itemBookDetail.Quantity" /></td>
+                                    <td><input class="text-center width80px" type="number" ng-model="itemBookDetail.Quantity" /></td>
                                     <td><button class="btn btn-danger" ng-click="removeBookDetail($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
                                 </tr>
                                 <tr>
@@ -150,3 +150,186 @@
         </div>
     </div>
 </section><!-- /.content -->
+
+<!--<section class="content-header">
+    <h1>
+        Thêm mới phiếu điều chỉnh tồn kho
+    </h1>
+    <ol class="breadcrumb">
+        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a ui-sref="adjustment_stocks">Danh sách phiếu điều chỉnh tồn kho</a></li>
+        <li class="active">Thêm mới</li>
+    </ol>
+</section>
+
+<section class="content">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="col-sm-4">
+                <div class="box box-info">
+                    <div class="box-body">
+                        <div class="row">
+                            <form role="form" novalidate angular-validator name="frmBook" ng-submit="search()">
+                                <div class="input-group margin">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Bộ lọc <span class="fa fa-caret-down"></span></button>
+                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="-1">Nhà cung cấp</a>
+                                                <ul class="dropdown-menu overflow_y">
+                                                    <li ng-repeat="itemSupplier in suppliers">
+                                                        <a ng-click="addFilter(itemSupplier,0,'')" tabindex="-1">{{itemSupplier.Name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="-1">Tình trạng</a>
+                                                <ul class="dropdown-menu overflow_y">
+                                                    <li ng-repeat="itemProductStatus in productStatus">
+                                                        <a ng-click="addFilter(itemProductStatus,1,'')" tabindex="-1">{{itemProductStatus.Name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown-submenu">
+                                                <a tabindex="-1">Nhóm sp</a>
+                                                <ul class="dropdown-menu overflow_y">
+                                                    <li ng-repeat="itemProductCategories in productCategories">
+                                                        <a ng-click="addFilter(itemProductCategories,3,'')" tabindex="-1">{{itemProductCategories.Name}}</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <a tabindex="-1" ng-click="openAddStockFilterModal()">Tồn kho</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <input ng-model="stringSearch" type="text" placeholder="Tìm kiếm" class="form-control">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default btn-flat" ng-click="search()" type="button"><i class="fa fa-search"></i></button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="row">
+                            <a ng-click="removeFilter($index)" ng-repeat="itemFilter in filters" class="btn btn-tag">
+                                <i class="fa fa-fw fa-close"></i>{{itemFilter.alias}}: {{itemFilter.name}}
+                            </a>
+                        </div>
+
+                        <div class="row">
+                            <table ng-show="searchedProducts.length>0" id="tblwithimage" class="table table-bordered table-striped table-hover product-data text-center" style="width:95%;margin-left:10px;padding-bottom:0px">
+                                <tr>
+                                    <th></th>
+                                    <th>Mã</th>
+                                    <th>Tên</th>
+                                    <th>Tồn</th>
+                                    <th>Tồn chung</th>
+                                </tr>
+                                <tr ng-repeat="item in searchedProducts">
+                                    <td style="padding:5px"><button ng-click="addBookDetails(item)" class="btn btn-success"><i class="fa fa-plus"></i></button></td>
+                                    <td>
+                                        {{item.masp}}<br />
+                                        <img ng-src="{{item.Image || 'Assets/Admin/img/no-img.jpg' }}" />
+                                    </td>
+                                    <td>{{item.tensp}}</td>
+                                    <td>{{item.StockTotal}}</td>
+                                    <td>{{item.StockTotalAll}}</td>
+                                </tr>
+                            </table>
+
+                            <div ng-if="loading">
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-4">
+                                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                                </div>
+                                <div class="col-xs-4"></div>
+                            </div>
+                        </div>
+                        <div ng-show="searchedProducts.length>0" class="row col-xs-12 infopaging">Từ {{(page*pageSizeNumber)+1}} đến {{((page+1)*pageSizeNumber)}} của {{totalCount}} sp</div>
+                        <div ng-show="searchedProducts.length>0" class="row">
+                            <div class="col-xs-4 text-center">
+                                <div>
+                                    <span>
+                                        <select ng-model="pageSizeNumber" ng-change="search()">
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                            <option value="15">15</option>
+                                            <option value="20">20</option>
+                                        </select> dòng
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-8" style="text-align:right">
+                                <custom-pager-small page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager-small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Phiếu điều chỉnh</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row col-sm-12 marginleft5px text-center">
+                            <table ng-show="bookDetails.length>0" class="table table-bordered table-striped table-hover text-center">
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Mã</th>
+                                    <th>Tên</th>
+                                    <th>Số lượng</th>
+                                    <th></th>
+                                </tr>
+                                <tr ng-repeat="itemBookDetail in bookDetails">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{itemBookDetail.masp}}</td>
+                                    <td>{{itemBookDetail.tensp}}</td>
+                                    <td><input class="text-center width80px" type="number" ng-model="itemBookDetail.Quantity" /></td>
+                                    <td><button class="btn btn-danger" ng-click="removeBookDetail($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" style="text-align:right">Lí do:</td>
+                                    <td colspan="3">
+                                        <textarea ng-model="description" class="form-control" rows="3"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <button ng-click="addAjustmentStock()" class="btn btn-success">Hoàn thành</button>
+                                        <button ui-sref="adjustment_stocks" class="btn btn-default">Trở về</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <div ng-if="adding">
+                                            <div class="col-xs-4"></div>
+                                            <div class="col-xs-4">
+                                                <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Vui lòng chờ...</label>
+                                            </div>
+                                            <div class="col-xs-4"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="row" ng-show="message.Success">
+                                <div class="callout callout-success">
+                                    <button type="button" class="close" ng-click="closeSuccessMessage()">×</button>
+                                    <span ng-bind-html="message.Success"></span>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="message.Error">
+                                <div class="callout callout-danger">
+                                    <button type="button" class="close" ng-click="closeErrorMessage()">×</button>
+                                    <span ng-bind-html="message.Error"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>-->
+

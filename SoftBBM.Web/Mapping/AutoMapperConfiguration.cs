@@ -150,6 +150,22 @@ namespace SoftBBM.Web.Mapping
                 .ForMember(d => d.ChannelId, map => map.MapFrom(s => s.ChannelId))
                 .ForMember(d => d.Code, map => map.MapFrom(s => s.SoftChannel.Code))
                 .ForMember(d => d.Name, map => map.MapFrom(s => s.SoftChannel.Name));
+            Mapper.CreateMap<SoftBranchProductStock, ShopSanPhamSearchBookFilterStockViewModel>()
+                .ForMember(d => d.id, map => map.MapFrom(s => s.shop_sanpham.id))
+                .ForMember(d => d.masp, map => map.MapFrom(s => s.shop_sanpham.masp))
+                .ForMember(d => d.Image, map => map.MapFrom(s => "https://babymart.vn/Images/hinhdulieu/thumbnail/" + s.shop_sanpham.shop_image.FirstOrDefault().url))
+                .ForMember(d => d.tensp, map => map.MapFrom(s => s.shop_sanpham.tensp));
+            Mapper.CreateMap<SoftBranchProductStock, ExportPriceViewModel>()
+                .ForMember(d => d.id, map => map.MapFrom(s => s.shop_sanpham.id))
+                .ForMember(d => d.Code, map => map.MapFrom(s => s.shop_sanpham.masp))
+                .ForMember(d => d.PriceAvg, map => map.MapFrom(s => s.shop_sanpham.PriceAvg))
+                .ForMember(d => d.PriceBase, map => map.MapFrom(s => s.shop_sanpham.PriceBase))
+                .ForMember(d => d.PriceBaseOld, map => map.MapFrom(s => s.shop_sanpham.PriceBaseOld))
+                .ForMember(d => d.PriceWholesale, map => map.MapFrom(s => s.shop_sanpham.PriceWholesale))
+                .ForMember(d => d.Name, map => map.MapFrom(s => s.shop_sanpham.tensp));
+            Mapper.CreateMap<donhang, donhangExcel>()
+                .ForMember(d => d.StatusName, map => map.MapFrom(s => s.donhangStatu.Name));
+            Mapper.CreateMap<donhangExcel, donhangExcelNoId>();
         }
 
         public class PriceResolver : ValueResolver<int?, int>

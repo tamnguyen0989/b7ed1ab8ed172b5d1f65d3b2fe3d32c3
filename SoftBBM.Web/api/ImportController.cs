@@ -255,23 +255,20 @@ namespace SoftBBM.Web.api
                                     var branches = _softBranchRepository.GetAllIds();
                                     foreach (var item in branches.ToList())
                                     {
-                                        if (item == branchId)
+                                        var newStock = new SoftBranchProductStock();
+                                        if (item == branchId && workSheet.Cells[i, 3].Value != null)
                                         {
-                                            var newStock = new SoftBranchProductStock();
-                                            newStock.ProductId = newsp.id;
-                                            newStock.BranchId = item;
-                                            newStock.CreatedBy = userId;
-                                            newStock.CreatedDate = DateTime.Now;
-                                            if (workSheet.Cells[i, 3].Value != null)
-                                            {
-                                                int stockTotalImport = 0;
-                                                int.TryParse(workSheet.Cells[i, 3].Value.ToString(), out stockTotalImport);
-                                                newStock.StockTotal = stockTotalImport;
-                                            }
-                                            else
-                                                newStock.StockTotal = 0;
-                                            _softStockRepository.Add(newStock);
+                                            int stockTotalImport = 0;
+                                            int.TryParse(workSheet.Cells[i, 3].Value.ToString(), out stockTotalImport);
+                                            newStock.StockTotal = stockTotalImport;
                                         }
+                                        else
+                                            newStock.StockTotal = 0;
+                                        newStock.BranchId = item;
+                                        newStock.ProductId = newsp.id;
+                                        newStock.CreatedBy = userId;
+                                        newStock.CreatedDate = DateTime.Now;
+                                        _softStockRepository.Add(newStock);
                                     }
 
                                     //add bien the
@@ -351,189 +348,196 @@ namespace SoftBBM.Web.api
             int.TryParse(result.FormData["userId"], out userId);
             int.TryParse(result.FormData["branchId"], out branchId);
             int.TryParse(result.FormData["channelId"], out channelId);
-            foreach (MultipartFileData fileData in result.FileData)
+            try
             {
-                if (string.IsNullOrEmpty(fileData.Headers.ContentDisposition.FileName))
+                foreach (MultipartFileData fileData in result.FileData)
                 {
-                    return Request.CreateResponse(HttpStatusCode.NotAcceptable, "Yêu cầu không đúng định dạng");
-                }
-                string fileName = fileData.Headers.ContentDisposition.FileName;
-                if (fileName.StartsWith("\"") && fileName.EndsWith("\""))
-                {
-                    fileName = fileName.Trim('"');
-                }
-                if (fileName.Contains(@"/") || fileName.Contains(@"\"))
-                {
-                    fileName = Path.GetFileName(fileName);
-                }
-                var dtNow = DateTime.Now;
-                fileName = userId.ToString() + fileName;
-                var fullPath = Path.Combine(root, fileName);
-                File.Copy(fileData.LocalFileName, fullPath, true);
-                //insert,update to DB
-                using (var package = new ExcelPackage(new FileInfo(fullPath)))
-                {
-                    ExcelWorksheet workSheet = package.Workbook.Worksheets[1];
-                    if (workSheet.Cells[2, 1].Value != null)
+                    if (string.IsNullOrEmpty(fileData.Headers.ContentDisposition.FileName))
                     {
-                        for (int i = workSheet.Dimension.Start.Row + 1; i <= workSheet.Dimension.End.Row; i++)
+                        return Request.CreateResponse(HttpStatusCode.NotAcceptable, "Yêu cầu không đúng định dạng");
+                    }
+                    string fileName = fileData.Headers.ContentDisposition.FileName;
+                    if (fileName.StartsWith("\"") && fileName.EndsWith("\""))
+                    {
+                        fileName = fileName.Trim('"');
+                    }
+                    if (fileName.Contains(@"/") || fileName.Contains(@"\"))
+                    {
+                        fileName = Path.GetFileName(fileName);
+                    }
+                    var dtNow = DateTime.Now;
+                    fileName = userId.ToString() + fileName;
+                    var fullPath = Path.Combine(root, fileName);
+                    File.Copy(fileData.LocalFileName, fullPath, true);
+                    //insert,update to DB
+                    using (var package = new ExcelPackage(new FileInfo(fullPath)))
+                    {
+                        ExcelWorksheet workSheet = package.Workbook.Worksheets[1];
+                        if (workSheet.Cells[2, 1].Value != null)
                         {
-                            if (workSheet.Cells[i, 1].Value != null)
+                            for (int i = workSheet.Dimension.Start.Row + 1; i <= workSheet.Dimension.End.Row; i++)
                             {
-                                var code = workSheet.Cells[i, 1].Value.ToString().Trim();
-                                var product = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim() == code);
-                                //update
-                                if (product != null)
+                                if (workSheet.Cells[i, 1].Value != null)
                                 {
-                                    var price = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ChannelId == channelId && x.ProductId == product.id);
-                                    if (price != null)
+                                    var code = workSheet.Cells[i, 1].Value.ToString().Trim();
+                                    var product = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim() == code);
+                                    //update
+                                    if (product != null)
                                     {
-                                        bool updated = false;
-                                        if (workSheet.Cells[i, 2].Value != null)
+                                        var price = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ChannelId == channelId && x.ProductId == product.id);
+                                        if (price != null)
                                         {
-                                            int priceTmp = 0;
-                                            int.TryParse(workSheet.Cells[i, 2].Value.ToString(), out priceTmp);
-                                            price.Price = priceTmp;
-                                            updated = true;
+                                            bool updated = false;
+                                            if (workSheet.Cells[i, 2].Value != null)
+                                            {
+                                                int priceTmp = 0;
+                                                int.TryParse(workSheet.Cells[i, 2].Value.ToString(), out priceTmp);
+                                                price.Price = priceTmp;
+                                                updated = true;
+                                            }
+                                            if (workSheet.Cells[i, 3].Value != null)
+                                            {
+                                                int priceTmp = 0;
+                                                int.TryParse(workSheet.Cells[i, 3].Value.ToString(), out priceTmp);
+                                                price.PriceDiscount = priceTmp;
+                                                updated = true;
+                                            }
+                                            if (workSheet.Cells[i, 4].Value != null)
+                                            {
+                                                var val = workSheet.Cells[i, 4].Value;
+                                                var startDateONL = val.ToString().Split('-');
+                                                int dayONL = 1;
+                                                int.TryParse(startDateONL[0], out dayONL);
+                                                if (dayONL == 0) dayONL = 1;
+                                                int monthONL = 1;
+                                                int.TryParse(startDateONL[1], out monthONL);
+                                                if (monthONL == 0) monthONL = 1;
+                                                int yearONL = 2018;
+                                                int.TryParse(startDateONL[2], out yearONL);
+                                                if (yearONL == 0) yearONL = 2018;
+                                                DateTime dtONL = new DateTime(yearONL, monthONL, dayONL, 0, 0, 1);
+                                                price.StartDateDiscount = dtONL;
+                                                updated = true;
+                                            }
+                                            if (workSheet.Cells[i, 5].Value != null)
+                                            {
+                                                var val = workSheet.Cells[i, 5].Value;
+                                                var endDateONL = val.ToString().Split('-');
+                                                int dayEndONL = 1;
+                                                int.TryParse(endDateONL[0], out dayEndONL);
+                                                if (dayEndONL == 0) dayEndONL = 1;
+                                                int monthEndONL = 1;
+                                                int.TryParse(endDateONL[1], out monthEndONL);
+                                                if (monthEndONL == 0) monthEndONL = 1;
+                                                int yearEndONL = 2018;
+                                                int.TryParse(endDateONL[2], out yearEndONL);
+                                                if (yearEndONL == 0) yearEndONL = 2018;
+                                                DateTime dtEndONL = new DateTime(yearEndONL, monthEndONL, dayEndONL, 0, 0, 1);
+                                                price.EndDateDiscount = dtEndONL;
+                                                updated = true;
+                                            }
+                                            if (updated)
+                                            {
+                                                price.UpdatedBy = userId;
+                                                price.UpdatedDate = DateTime.Now;
+                                                _softChannelProductPriceRepository.Update(price);
+                                                _unitOfWork.Commit();
+                                                updatedCount++;
+                                            }
                                         }
-                                        if (workSheet.Cells[i, 3].Value != null)
+                                        else
                                         {
-                                            int priceTmp = 0;
-                                            int.TryParse(workSheet.Cells[i, 3].Value.ToString(), out priceTmp);
-                                            price.PriceDiscount = priceTmp;
-                                            updated = true;
-                                        }
-                                        if (workSheet.Cells[i, 4].Value != null)
-                                        {
-                                            var val = workSheet.Cells[i, 4].Value;
-                                            var startDateONL = val.ToString().Split('-');
-                                            int dayONL = 1;
-                                            int.TryParse(startDateONL[0], out dayONL);
-                                            if (dayONL == 0) dayONL = 1;
-                                            int monthONL = 1;
-                                            int.TryParse(startDateONL[1], out monthONL);
-                                            if (monthONL == 0) monthONL = 1;
-                                            int yearONL = 2018;
-                                            int.TryParse(startDateONL[2], out yearONL);
-                                            if (yearONL == 0) yearONL = 2018;
-                                            DateTime dtONL = new DateTime(yearONL, monthONL, dayONL, 0, 0, 1);
-                                            price.StartDateDiscount = dtONL;
-                                            updated = true;
-                                        }
-                                        if (workSheet.Cells[i, 5].Value != null)
-                                        {
-                                            var val = workSheet.Cells[i, 5].Value;
-                                            var endDateONL = val.ToString().Split('-');
-                                            int dayEndONL = 1;
-                                            int.TryParse(endDateONL[0], out dayEndONL);
-                                            if (dayEndONL == 0) dayEndONL = 1;
-                                            int monthEndONL = 1;
-                                            int.TryParse(endDateONL[1], out monthEndONL);
-                                            if (monthEndONL == 0) monthEndONL = 1;
-                                            int yearEndONL = 2018;
-                                            int.TryParse(endDateONL[2], out yearEndONL);
-                                            if (yearEndONL == 0) yearEndONL = 2018;
-                                            DateTime dtEndONL = new DateTime(yearEndONL, monthEndONL, dayEndONL, 0, 0, 1);
-                                            price.EndDateDiscount = dtEndONL;
-                                            updated = true;
-                                        }
-                                        if (updated)
-                                        {
-                                            price.UpdatedBy = userId;
-                                            price.UpdatedDate = DateTime.Now;
-                                            _softChannelProductPriceRepository.Update(price);
+                                            var nwPrice = new SoftChannelProductPrice();
+                                            if (workSheet.Cells[i, 2].Value != null)
+                                            {
+                                                int priceTmp = 0;
+                                                int.TryParse(workSheet.Cells[i, 2].Value.ToString(), out priceTmp);
+                                                nwPrice.Price = priceTmp;
+                                            }
+                                            if (workSheet.Cells[i, 3].Value != null)
+                                            {
+                                                int priceTmp = 0;
+                                                int.TryParse(workSheet.Cells[i, 3].Value.ToString(), out priceTmp);
+                                                nwPrice.PriceDiscount = priceTmp;
+                                            }
+                                            if (workSheet.Cells[i, 4].Value != null)
+                                            {
+                                                var val = workSheet.Cells[i, 4].Value;
+                                                var startDateONL = val.ToString().Split('-');
+                                                int dayONL = 1;
+                                                int.TryParse(startDateONL[0], out dayONL);
+                                                if (dayONL == 0) dayONL = 1;
+                                                int monthONL = 1;
+                                                int.TryParse(startDateONL[1], out monthONL);
+                                                if (monthONL == 0) monthONL = 1;
+                                                int yearONL = 2018;
+                                                int.TryParse(startDateONL[2], out yearONL);
+                                                if (yearONL == 0) yearONL = 2018;
+                                                DateTime dtONL = new DateTime(yearONL, monthONL, dayONL, 0, 0, 1);
+                                                nwPrice.StartDateDiscount = dtONL;
+                                            }
+                                            if (workSheet.Cells[i, 5].Value != null)
+                                            {
+                                                var val = workSheet.Cells[i, 5].Value;
+                                                var endDateONL = val.ToString().Split('-');
+                                                int dayEndONL = 1;
+                                                int.TryParse(endDateONL[0], out dayEndONL);
+                                                if (dayEndONL == 0) dayEndONL = 1;
+                                                int monthEndONL = 1;
+                                                int.TryParse(endDateONL[1], out monthEndONL);
+                                                if (monthEndONL == 0) monthEndONL = 1;
+                                                int yearEndONL = 2018;
+                                                int.TryParse(endDateONL[2], out yearEndONL);
+                                                if (yearEndONL == 0) yearEndONL = 2018;
+                                                DateTime dtEndONL = new DateTime(yearEndONL, monthEndONL, dayEndONL, 0, 0, 1);
+                                                nwPrice.EndDateDiscount = dtEndONL;
+                                            }
+                                            nwPrice.ProductId = product.id;
+                                            nwPrice.ChannelId = channelId;
+                                            nwPrice.CreatedBy = userId;
+                                            nwPrice.CreatedDate = DateTime.Now;
+                                            _softChannelProductPriceRepository.Add(nwPrice);
                                             _unitOfWork.Commit();
                                             updatedCount++;
                                         }
                                     }
                                     else
                                     {
-                                        var nwPrice = new SoftChannelProductPrice();
-                                        if (workSheet.Cells[i, 2].Value != null)
-                                        {
-                                            int priceTmp = 0;
-                                            int.TryParse(workSheet.Cells[i, 2].Value.ToString(), out priceTmp);
-                                            nwPrice.Price = priceTmp;
-                                        }
-                                        if (workSheet.Cells[i, 3].Value != null)
-                                        {
-                                            int priceTmp = 0;
-                                            int.TryParse(workSheet.Cells[i, 3].Value.ToString(), out priceTmp);
-                                            nwPrice.PriceDiscount = priceTmp;
-                                        }
-                                        if (workSheet.Cells[i, 4].Value != null)
-                                        {
-                                            var val = workSheet.Cells[i, 4];
-                                            var startDateONL = val.ToString().Split('-');
-                                            int dayONL = 1;
-                                            int.TryParse(startDateONL[0], out dayONL);
-                                            if (dayONL == 0) dayONL = 1;
-                                            int monthONL = 1;
-                                            int.TryParse(startDateONL[1], out monthONL);
-                                            if (monthONL == 0) monthONL = 1;
-                                            int yearONL = 2018;
-                                            int.TryParse(startDateONL[2], out yearONL);
-                                            if (yearONL == 0) yearONL = 2018;
-                                            DateTime dtONL = new DateTime(yearONL, monthONL, dayONL, 0, 0, 1);
-                                            nwPrice.StartDateDiscount = dtONL;
-                                        }
-                                        if (workSheet.Cells[i, 5].Value != null)
-                                        {
-                                            var val = workSheet.Cells[i, 5];
-                                            var endDateONL = val.ToString().Split('-');
-                                            int dayEndONL = 1;
-                                            int.TryParse(endDateONL[0], out dayEndONL);
-                                            if (dayEndONL == 0) dayEndONL = 1;
-                                            int monthEndONL = 1;
-                                            int.TryParse(endDateONL[1], out monthEndONL);
-                                            if (monthEndONL == 0) monthEndONL = 1;
-                                            int yearEndONL = 2018;
-                                            int.TryParse(endDateONL[2], out yearEndONL);
-                                            if (yearEndONL == 0) yearEndONL = 2018;
-                                            DateTime dtEndONL = new DateTime(yearEndONL, monthEndONL, dayEndONL, 0, 0, 1);
-                                            nwPrice.EndDateDiscount = dtEndONL;
-                                        }
-                                        nwPrice.ProductId = product.id;
-                                        nwPrice.ChannelId = channelId;
-                                        nwPrice.CreatedBy = userId;
-                                        nwPrice.CreatedDate = DateTime.Now;
-                                        _softChannelProductPriceRepository.Add(nwPrice);
-                                        _unitOfWork.Commit();
-                                        updatedCount++;
+                                        errorProduct.Add(code.Trim());
                                     }
-                                }
-                                else
-                                {
-                                    errorProduct.Add(code.Trim());
                                 }
                             }
                         }
-                    }
-                    else
-                        return Request.CreateResponse(HttpStatusCode.BadRequest, "File rỗng!!!");
+                        else
+                            return Request.CreateResponse(HttpStatusCode.BadRequest, "File rỗng!!!");
 
-                }
-                string[] files = Directory.GetFiles(root);
-                foreach (string file in files)
-                {
-                    File.Delete(file);
-                }
-                if (updatedCount > 0)
-                {
-                    resultStr = "Đã cập nhật giá kênh " + updatedCount + " sp thành công!";
-                }
-                resultVm.SuccessMessage = resultStr;
-                var errorMessage = "";
-                if (errorProduct.Count > 0)
-                {
-                    errorMessage = "Không tìm thấy "+ errorProduct.Count + " sp: ";
-                    foreach (var item in errorProduct)
-                    {
-                        errorMessage += item + ", ";
                     }
-                    errorMessage = errorMessage.Substring(0, errorMessage.Length - 2);
+                    string[] files = Directory.GetFiles(root);
+                    foreach (string file in files)
+                    {
+                        File.Delete(file);
+                    }
+                    if (updatedCount > 0)
+                    {
+                        resultStr = "Đã cập nhật giá kênh " + updatedCount + " sp thành công!";
+                    }
+                    resultVm.SuccessMessage = resultStr;
+                    var errorMessage = "";
+                    if (errorProduct.Count > 0)
+                    {
+                        errorMessage = "Không tìm thấy " + errorProduct.Count + " sp: ";
+                        foreach (var item in errorProduct)
+                        {
+                            errorMessage += item + ", ";
+                        }
+                        errorMessage = errorMessage.Substring(0, errorMessage.Length - 2);
+                    }
+                    resultVm.ErrorMessage = errorMessage;
                 }
-                resultVm.ErrorMessage = errorMessage;
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, ex.Message);
             }
             return Request.CreateResponse(HttpStatusCode.OK, resultVm);
         }

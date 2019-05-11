@@ -102,18 +102,18 @@ namespace SoftBBM.Web.api
             return response;
         }
 
-        [Route("delete")]
-        [HttpDelete]
-        public HttpResponseMessage Delete(HttpRequestMessage request, int id)
-        {
-            HttpResponseMessage response = null;
-            var oldModel = _softSupplierRepository.Delete(id);
-            _unitOfWork.Commit();
-            var responseData = Mapper.Map<SoftSupplier, SoftSupplierViewModel>(oldModel);
-            response = request.CreateResponse(HttpStatusCode.OK, responseData);
+        //[Route("delete")]
+        //[HttpDelete]
+        //public HttpResponseMessage Delete(HttpRequestMessage request, int id)
+        //{
+        //    HttpResponseMessage response = null;
+        //    var oldModel = _softSupplierRepository.Delete(id);
+        //    _unitOfWork.Commit();
+        //    var responseData = Mapper.Map<SoftSupplier, SoftSupplierViewModel>(oldModel);
+        //    response = request.CreateResponse(HttpStatusCode.OK, responseData);
 
-            return response;
-        }
+        //    return response;
+        //}
 
         [Route("Update")]
         [Authorize(Roles = "SupplierEdit")]

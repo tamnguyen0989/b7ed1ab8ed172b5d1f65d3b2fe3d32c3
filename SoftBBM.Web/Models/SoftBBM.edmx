@@ -206,6 +206,8 @@
           <Property Name="Soluong" Type="float" Nullable="false" />
           <Property Name="Dongia" Type="int" />
           <Property Name="PriceAvg" Type="int" Nullable="false" />
+          <Property Name="Dongiakm" Type="int" />
+          <Property Name="TotalDiscount" Type="float" />
         </EntityType>
         <EntityType Name="donhang_gio_giaohang">
           <Key>
@@ -618,6 +620,7 @@
           <Property Name="NotDiscountMember" Type="bit" />
           <Property Name="CategoryId" Type="int" />
           <Property Name="FromCreate" Type="int" />
+          <Property Name="ShopeeId" Type="int" />
         </EntityType>
         <EntityType Name="shop-sanphamCategories">
           <Key>
@@ -754,6 +757,10 @@
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="Status" Type="bit" />
           <Property Name="Priority" Type="int" />
+          <Property Name="ApiId" Type="varchar" MaxLength="256" />
+          <Property Name="ApiPassword" Type="varchar" MaxLength="256" />
+          <Property Name="ApiPartnerId" Type="varchar" MaxLength="256" />
+          <Property Name="Enabled" Type="bit" />
         </EntityType>
         <EntityType Name="SoftNotifications">
           <Key>
@@ -1695,6 +1702,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_shop-sanphamLog_shop-sanpham">
+          <End Role="shop-sanpham" Type="Self.shop-sanpham" Multiplicity="0..1" />
+          <End Role="shop-sanphamLogs" Type="Self.shop-sanphamLogs" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shop-sanpham">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="shop-sanphamLogs">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_shop-sanphamLogs_ApplicationUsers">
           <End Role="ApplicationUsers" Type="Self.ApplicationUsers" Multiplicity="0..1" />
           <End Role="shop-sanphamLogs" Type="Self.shop-sanphamLogs" Multiplicity="*" />
@@ -1704,18 +1723,6 @@
             </Principal>
             <Dependent Role="shop-sanphamLogs">
               <PropertyRef Name="CreatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_shop-sanphamLogs_shop-sanpham">
-          <End Role="shop-sanpham" Type="Self.shop-sanpham" Multiplicity="0..1" />
-          <End Role="shop-sanphamLogs" Type="Self.shop-sanphamLogs" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="shop-sanpham">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="shop-sanphamLogs">
-              <PropertyRef Name="ProductId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2692,12 +2699,12 @@
             <End Role="ApplicationUsers" EntitySet="ApplicationUsers" />
             <End Role="shop-sanphamCategories" EntitySet="shop-sanphamCategories" />
           </AssociationSet>
-          <AssociationSet Name="FK_shop-sanphamLogs_ApplicationUsers" Association="Self.FK_shop-sanphamLogs_ApplicationUsers">
-            <End Role="ApplicationUsers" EntitySet="ApplicationUsers" />
+          <AssociationSet Name="FK_shop-sanphamLog_shop-sanpham" Association="Self.FK_shop-sanphamLog_shop-sanpham">
+            <End Role="shop-sanpham" EntitySet="shop-sanpham" />
             <End Role="shop-sanphamLogs" EntitySet="shop-sanphamLogs" />
           </AssociationSet>
-          <AssociationSet Name="FK_shop-sanphamLogs_shop-sanpham" Association="Self.FK_shop-sanphamLogs_shop-sanpham">
-            <End Role="shop-sanpham" EntitySet="shop-sanpham" />
+          <AssociationSet Name="FK_shop-sanphamLogs_ApplicationUsers" Association="Self.FK_shop-sanphamLogs_ApplicationUsers">
+            <End Role="ApplicationUsers" EntitySet="ApplicationUsers" />
             <End Role="shop-sanphamLogs" EntitySet="shop-sanphamLogs" />
           </AssociationSet>
           <AssociationSet Name="FK_shop-sanphamLogs_SoftBranches" Association="Self.FK_shop-sanphamLogs_SoftBranches">
@@ -4566,6 +4573,7 @@
           <Property Name="FromCreate" Type="Int32" />
           <Property Name="PriceWholesale" Type="Int32" />
           <NavigationProperty Name="shop_sanphamLogs" Relationship="SoftBBMModels.FK_shop_sanphamLogs_shop_sanpham" FromRole="shop_sanpham" ToRole="shop_sanphamLogs" />
+          <Property Name="ShopeeId" Type="Int32" />
         </EntityType>
         <Association Name="FK_shop_sanpham_ApplicationUsers">
           <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
@@ -5085,6 +5093,10 @@
           <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_SoftChannels" FromRole="SoftChannel" ToRole="donhang" />
           <NavigationProperty Name="SoftChannelProductPrices" Relationship="SoftBBMModels.FK_SoftChannelProductPrices_SoftChannels" FromRole="SoftChannel" ToRole="SoftChannelProductPrice" />
           <NavigationProperty Name="SoftOrders" Relationship="SoftBBMModels.FK_SoftOrders_SoftChannels" FromRole="SoftChannel" ToRole="SoftOrder" />
+          <Property Name="ApiId" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="ApiPassword" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="ApiPartnerId" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Enabled" Type="Boolean" />
         </EntityType>
         <EntityType Name="SoftNotification">
           <Key>
@@ -5907,6 +5919,8 @@
           <NavigationProperty Name="donhang" Relationship="SoftBBMModels.dh_ctDH" FromRole="donhang_ct" ToRole="donhang" />
           <NavigationProperty Name="shop_bienthe" Relationship="SoftBBMModels.dh_sp" FromRole="donhang_ct" ToRole="shop_bienthe" />
           <Property Name="PriceAvg" Type="Int32" Nullable="false" />
+          <Property Name="Dongiakm" Type="Int32" />
+          <Property Name="TotalDiscount" Type="Double" />
         </EntityType>
         <Association Name="dh_ctDH">
           <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="1" />
@@ -6779,6 +6793,7 @@
           <EntitySetMapping Name="shop_sanpham">
             <EntityTypeMapping TypeName="SoftBBMModels.shop_sanpham">
               <MappingFragment StoreEntitySet="shop-sanpham">
+                <ScalarProperty Name="ShopeeId" ColumnName="ShopeeId" />
                 <ScalarProperty Name="PriceWholesale" ColumnName="PriceWholesale" />
                 <ScalarProperty Name="FromCreate" ColumnName="FromCreate" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
@@ -7023,6 +7038,10 @@
           <EntitySetMapping Name="SoftChannels">
             <EntityTypeMapping TypeName="SoftBBMModels.SoftChannel">
               <MappingFragment StoreEntitySet="SoftChannels">
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="ApiPartnerId" ColumnName="ApiPartnerId" />
+                <ScalarProperty Name="ApiPassword" ColumnName="ApiPassword" />
+                <ScalarProperty Name="ApiId" ColumnName="ApiId" />
                 <ScalarProperty Name="Priority" ColumnName="Priority" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -7216,6 +7235,8 @@
           <EntitySetMapping Name="donhang_ct">
             <EntityTypeMapping TypeName="SoftBBMModels.donhang_ct">
               <MappingFragment StoreEntitySet="donhang_ct">
+                <ScalarProperty Name="TotalDiscount" ColumnName="TotalDiscount" />
+                <ScalarProperty Name="Dongiakm" ColumnName="Dongiakm" />
                 <ScalarProperty Name="PriceAvg" ColumnName="PriceAvg" />
                 <ScalarProperty Name="Dongia" ColumnName="Dongia" />
                 <ScalarProperty Name="Soluong" ColumnName="Soluong" />

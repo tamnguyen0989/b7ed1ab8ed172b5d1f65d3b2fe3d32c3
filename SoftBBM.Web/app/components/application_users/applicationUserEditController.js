@@ -41,10 +41,9 @@
             });
         }
         function UpdateApplicationUser() {
-            debugger
             apiService.post('api/applicationuser/update', $scope.applicationUser, function (result) {
                 notificationService.displaySuccess('Cập nhật ' + result.data + ' thành công');
-                $state.go('application_users');
+                $state.go('login');
             }, function (error) {
                 notificationService.displayError('Cập nhật không thành công');
             });

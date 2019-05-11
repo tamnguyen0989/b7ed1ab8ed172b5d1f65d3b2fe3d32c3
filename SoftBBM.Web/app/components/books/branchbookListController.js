@@ -28,9 +28,10 @@
         $scope.endDateFilter = null;
         $scope.branchFilters = [];
         $scope.categoryId = '01';
-        $scope.chatHub = null;
-        $scope.chatHub = $.connection.chatHub;
-        $.connection.hub.start();
+
+        //$scope.chatHub = null;
+        //$scope.chatHub = $.connection.chatHub;
+        //$.connection.hub.start();
 
         $scope.search = search;
         $scope.refeshPage = refeshPage;
@@ -235,7 +236,7 @@
                 }
                 apiService.get('/api/stockin/updatecancelbranchbook', config, function (result) {
                     if (result.data.Id > 0) {
-                        $scope.chatHub.server.send(result.data.FromBranchId);
+                        //$scope.chatHub.server.send(result.data.FromBranchId);
                         notificationService.displaySuccess("Cập nhật trạng thái huỷ thành công!")
                         search($scope.page);
                     }

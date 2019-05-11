@@ -40,7 +40,7 @@
                         <div class="box box-solid">
                             <div class="box-body">
                                 <div class="col-xs-5">
-                                   <table class="table table-bordered table-striped table-hover table_data">
+                                    <table class="table table-bordered table-striped table-hover table_data">
                                         <thead>
                                             <tr>
                                                 <th>Kênh</th>
@@ -55,20 +55,20 @@
                                                     {{item.Name}}
                                                 </td>
                                                 <td>
-                                                    {{item.Quantity | currency:'':0}}
+                                                    {{item.Quantity | currency:'':0}}<span style="float:right;color:cornflowerblue">({{item.Quantity *100/ totalQuantities | currency:'':2}} %)</span>
                                                 </td>
                                                 <td>
                                                     {{item.Sales | currency:'':0}}
                                                 </td>
                                                 <td>
-                                                    {{item.Revenues | currency:'':0}}
+                                                    {{item.Revenues | currency:'':0}}<span style="float:right;color:cornflowerblue">({{item.Revenues *100/ item.Sales | currency:'':2}} %)</span>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="col-xs-7">
-                                   <table class="table table-bordered table-striped table-hover table_data" style="width:50%">
+                                    <table class="table table-bordered table-striped table-hover table_data" style="width:50%">
                                         <thead>
                                             <tr>
                                                 <th class="text-right">Tổng</th>
@@ -97,12 +97,12 @@
                                                     Lợi nhuận
                                                 </td>
                                                 <td style="color:red">
-                                                    {{totalRevenues | currency:'':0}}
+                                                    {{totalRevenues | currency:'':0}}<span style="float:right;color:cornflowerblue">({{totalRevenues *100/ totalSales | currency:'':2}} %)</span>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                   <div class="nav-tabs-custom">
+                                    <div class="nav-tabs-custom">
                                         <div class="tab-content no-padding">
                                             <canvas id="line"
                                                     class="chart chart-line"
@@ -119,7 +119,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

@@ -52,7 +52,8 @@
                 categoryId: catId,
                 supplierId: supId,
                 statusId: statusId,
-                userId: $scope.userId
+                userId: $scope.userId,
+                shopeeId: $scope.product.shopeeId
             }
             apiService.post('/api/stock/updatedetailproduct', $scope.modelUpdate, function (result) {
                 notificationService.displaySuccess('Cập nhật thành công !');

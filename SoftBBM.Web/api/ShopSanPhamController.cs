@@ -216,6 +216,42 @@ namespace SoftBBM.Web.api
             return response;
         }
 
+        [Route("getallpagingstockfilter")]
+        [HttpPost]
+        public HttpResponseMessage GetAllPagingStockFilter(HttpRequestMessage request, ShopSanPhamFilterBookViewModel viewModel)
+        {
+            HttpResponseMessage response = null;
+
+            int currentPage = viewModel.page;
+            int currentPageSize = viewModel.pageSize;
+            int currentBranchId = viewModel.branchId;
+            IEnumerable<SoftBranchProductStock> products = null;
+            int totalproducts = new int();
+
+            products = _shopSanPhamRepository.GetAllPagingStockFilter(currentPage, currentPageSize, out totalproducts, currentBranchId, viewModel).ToList();
+
+            IEnumerable<ShopSanPhamSearchBookFilterStockViewModel> productsVM = Mapper.Map<IEnumerable<SoftBranchProductStock>, IEnumerable<ShopSanPhamSearchBookFilterStockViewModel>>(products);
+
+            foreach (var item in productsVM)
+            {
+                item.StockTotal = _softStockRepository.GetStockTotal(item.id, viewModel.branchId);
+                item.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
+            }
+
+            PaginationSet<ShopSanPhamSearchBookFilterStockViewModel> pagedSet = new PaginationSet<ShopSanPhamSearchBookFilterStockViewModel>()
+            {
+                Page = currentPage,
+                TotalCount = totalproducts,
+                TotalPages = (int)Math.Ceiling((decimal)totalproducts / currentPageSize),
+                Items = productsVM
+            };
+
+
+
+            response = request.CreateResponse(HttpStatusCode.OK, pagedSet);
+            return response;
+        }
+
         [Route("getallpagingexport")]
         [HttpPost]
         public HttpResponseMessage GetAllPagingExport(HttpRequestMessage request, ShopSanPhamFilterBookViewModel viewModel)
@@ -539,6 +575,7 @@ namespace SoftBBM.Web.api
             }
             exportPricesExcel = Mapper.Map<IEnumerable<ExportPriceViewModel>, IEnumerable<ExportPriceNoIdViewModel>>(exportPrices);
             exportPricesExcel = exportPricesExcel.OrderBy(x => x.Code);
+            var len = exportPricesExcel.Count();
             using (var package = new ExcelPackage())
             {
                 // Tạo author cho file Excel
@@ -556,16 +593,16 @@ namespace SoftBBM.Web.api
                 worksheet.Cells["A1"].Value = "Mã";
                 worksheet.Cells["B1"].Value = "Tên";
                 worksheet.Cells["C1"].Value = "Giá nhập cũ";
-                worksheet.Cells["C2"].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells[2, 3, len + 1, 3].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells["D1"].Value = "Giá nhập mới";
-                worksheet.Cells["D2"].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells[2, 4, len + 1, 4].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells["E1"].Value = "Giá cơ bản";
-                worksheet.Cells["E2"].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells[2, 5, len + 1, 5].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells["F1"].Value = "Giá sỉ";
-                worksheet.Cells["F2"].Style.Numberformat.Format = "#,##0";
+                worksheet.Cells[2, 6, len + 1, 6].Style.Numberformat.Format = "#,##0";
                 worksheet.Cells["G1"].Value = "Giá online";
-                worksheet.Cells["G2"].Style.Numberformat.Format = "#,##0";
-                
+                worksheet.Cells[2, 7, len + 1, 7].Style.Numberformat.Format = "#,##0";
+
                 //package.Save();
                 return package.GetAsByteArray();
             }

@@ -1,26 +1,25 @@
 ﻿(function (app) {
     app.controller('processModalController', processModalController);
 
-    processModalController.$inject = ['apiService', '$window',  '$scope', 'notificationService', '$state', '$uibModalInstance', '$filter','FileSaver'];
+    processModalController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$uibModalInstance', '$filter', 'FileSaver', '$http'];
 
-    function processModalController(apiService, $window, $scope, notificationService, $state, $uibModalInstance, $filter, FileSaver) {
+    function processModalController(apiService, $window, $scope, notificationService, $state, $uibModalInstance, $filter, FileSaver, $http) {
         $scope.loadingModal = true;
-        var config = {
-            params: {
-                branchId: $scope.branchSelectedRoot.Id,
-                filter: $scope.filterStocks
-            },
+        $http({
+            method: 'POST',
+            url: "api/stock/exportproductsexcel",
+            data: $scope.filters,
             responseType: "arraybuffer"
-        };
-        apiService.get('/api/stock/exportProductsExcel/', config, function (result) {
+        }).then(function (result, status, headers, config) {
             var blob = new Blob([result.data], {
                 type: 'application/vnd.ms-excel;charset=charset=utf-8'
             });
             FileSaver.saveAs(blob, 'Products.xlsx');
             $scope.loadingModal = false;
             $uibModalInstance.dismiss();
-        }, function (response) {
-            notificationService.displayError(response.data);
+        },
+        function (result, status, headers, config) {
+            notificationService.displayError(result.data);
         });
     }
 

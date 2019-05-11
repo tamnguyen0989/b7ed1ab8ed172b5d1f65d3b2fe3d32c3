@@ -44,6 +44,7 @@
             { Id: 1, Name: 'Đã trả' },
             { Id: 2, Name: 'Chưa trả' }
         ]
+        $scope.adding = false;
 
         $scope.search = search;
         $scope.refeshPage = refeshPage;
@@ -288,6 +289,7 @@
             });
         }
         function addBook(val) {
+            $scope.adding = true;
             $scope.bookDetails = [];
             $scope.selectedStockin = val;
             $ngBootbox.confirm('Bạn có chắc chắn muốn nhập kho đơn ' + val.Id + ' ?').then(function () {
@@ -308,6 +310,7 @@
                         }
                         apiService.get('api/stockin/addexist', config,
                                 function (result) {
+                                    $scope.adding = false;
                                     notificationService.displaySuccess('Đơn đã được nhập kho thành công.');
                                     $scope.bookDetails = result.data.SoftStockInDetails;
                                     if (result.data.stockoutAble == true) {
@@ -358,6 +361,7 @@
                     }
                     apiService.get('api/stockin/addexist', config,
                             function (result) {
+                                $scope.adding = false;
                                 notificationService.displaySuccess('Đơn đã được nhập kho thành công.');
                                 $scope.bookDetails = result.data.SoftStockInDetails;
                                 if (result.data.stockoutAble == true) {
@@ -397,6 +401,8 @@
                                 notificationService.displayError(error.data);
                             });
                 }
+            }, function() {
+                $scope.adding = false;
             });
         }
         function loadStockinCategories() {
@@ -448,7 +454,6 @@
                         $.each(result.data, function (index, value) {
                             var exist = false;
                             $.each(arrayPrint, function (indexRoot, valueRoot) {
-                                debugger
                                 if (valueRoot.id == value.id) {
                                     valueRoot.Quantity += value.Quantity;
                                     exist = true;

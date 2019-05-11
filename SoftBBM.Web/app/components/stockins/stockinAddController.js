@@ -1,9 +1,9 @@
 ﻿(function (app) {
     app.controller('stockinAddController', stockinAddController);
 
-    stockinAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$ngBootbox', '$uibModal'];
+    stockinAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$ngBootbox', '$uibModal', '$q'];
 
-    function stockinAddController(apiService, $window, $scope, notificationService, $state, $rootScope, $ngBootbox, $uibModal) {
+    function stockinAddController(apiService, $window, $scope, notificationService, $state, $rootScope, $ngBootbox, $uibModal, $q) {
         $scope.stockin = {
             CreatedDate: new Date(),
             Status: true
@@ -20,6 +20,7 @@
         $scope.loading = true;
         $scope.branches = [];
         $scope.selectedBranch = {};
+        $scope.adding = false;
 
         $scope.loadSuppliers = loadSuppliers;
         $scope.loadProductStatus = loadProductStatus;
@@ -178,6 +179,7 @@
         }
         function addBook() {
             if ($scope.bookDetails.length > 0) {
+                $scope.adding = true;
                 $scope.stockin.BranchId = $scope.branchSelectedRoot.Id;
                 $scope.stockin.CategoryId = '02';
                 $scope.stockin.Total = sumMoney();
@@ -198,7 +200,7 @@
                 $scope.stockin.PaymentMethodId = paymentMethodId;
                 apiService.post('api/stockin/addstockin', $scope.stockin,
                     function (result) {
-                        debugger
+                        $scope.adding = false;
                         notificationService.displaySuccess('Đơn đã được nhập kho thành công.');
                         if (result.data.stockoutAble == true) {
                             $ngBootbox.confirm('Bạn có muốn xuất đến kho đang thiếu các sản phẩm này?').then(function () {
@@ -292,12 +294,12 @@
             $state.go('home');
         }
         else {
+            $window.document.title = "Thêm mới đơn nhập kho";
             loadSuppliers();
             loadProductStatus();
             loadPaymentStatuses();
             loadPaymentMethods();
             init();
-            $window.document.title = "Thêm mới đơn nhập kho";
         }
 
     }

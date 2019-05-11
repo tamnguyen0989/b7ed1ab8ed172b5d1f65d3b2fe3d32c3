@@ -72,26 +72,26 @@ namespace SoftBBM.Web.api
             return response;
         }
 
-        [Route("delete")]
-        [HttpDelete]
-        public HttpResponseMessage Delete(HttpRequestMessage request, int id)
-        {
-            HttpResponseMessage response = null;
-            if (!ModelState.IsValid)
-            {
-                response = request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
-            }
-            else
-            {
-                var oldModel = _applicationUserRepository.Delete(id);
-                _unitOfWork.Commit();
+        //[Route("delete")]
+        //[HttpDelete]
+        //public HttpResponseMessage Delete(HttpRequestMessage request, int id)
+        //{
+        //    HttpResponseMessage response = null;
+        //    if (!ModelState.IsValid)
+        //    {
+        //        response = request.CreateResponse(HttpStatusCode.BadRequest, ModelState);
+        //    }
+        //    else
+        //    {
+        //        var oldModel = _applicationUserRepository.Delete(id);
+        //        _unitOfWork.Commit();
 
-                var responseData = Mapper.Map<ApplicationUser, ApplicationUserViewModel>(oldModel);
-                response = request.CreateResponse(HttpStatusCode.OK, responseData);
-            }
+        //        var responseData = Mapper.Map<ApplicationUser, ApplicationUserViewModel>(oldModel);
+        //        response = request.CreateResponse(HttpStatusCode.OK, responseData);
+        //    }
 
-            return response;
-        }
+        //    return response;
+        //}
 
         //[Authorize]
         [Route("create")]
@@ -397,6 +397,34 @@ namespace SoftBBM.Web.api
             try
             {
                 response = request.CreateResponse(HttpStatusCode.OK, true);
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+
+        }
+
+        [Route("delete")]
+        [Authorize(Roles = "UserEdit")]
+        [HttpGet]
+        public HttpResponseMessage Detele(HttpRequestMessage request, int applicationUserId)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (applicationUserId > 0)
+                {
+                    _applicationUserRepository.DeleteApplicationUser(applicationUserId);
+                    _unitOfWork.Commit();
+                    response = request.CreateResponse(HttpStatusCode.OK, true);
+                }
+                else
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, "Lỗi! Không có tài khoản này.");
+
                 return response;
             }
             catch (Exception ex)

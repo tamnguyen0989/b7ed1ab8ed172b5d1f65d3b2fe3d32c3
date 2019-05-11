@@ -1,9 +1,9 @@
 ﻿(function (app) {
-    app.controller('processImportModalController', processImportModalController);
+    app.controller('exportPriceWholesaleController', exportPriceWholesaleController);
 
-    processImportModalController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$uibModalInstance', '$http', 'authenticationService'];
+    exportPriceWholesaleController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$uibModalInstance', '$http', 'authenticationService'];
 
-    function processImportModalController(apiService, $window, $scope, notificationService, $state, $uibModalInstance, $http, authenticationService) {
+    function exportPriceWholesaleController(apiService, $window, $scope, notificationService, $state, $uibModalInstance, $http, authenticationService) {
         $scope.loadingModal = true;
         authenticationService.setHeader();
         $http({

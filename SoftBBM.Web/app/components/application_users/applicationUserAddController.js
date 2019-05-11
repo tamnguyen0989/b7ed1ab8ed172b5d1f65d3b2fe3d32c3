@@ -57,6 +57,5 @@
         $scope.LoadApplicationGroups();
         LoadApplicationBranches();
         $window.document.title = "Thêm mới User";
-        debugger
     }
 })(angular.module('softbbm.application_users'));

@@ -63,7 +63,8 @@
                                     <!--<button ng-show="!enabledEdit[{{$index}}]" title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="editProductCategory(item,$index)"><i class="fa fa-pencil"></i></button>-->
                                     <!--<button ng-hide="!enabledEdit[{{$index}}]" title="Cập nhật" class="btn btn-sm btn-success" ng-click="updateProductCategory(item,$index)"><i class="fa fa-check"></i></button>
                                     <button ng-hide="!enabledEdit[{{$index}}]" title="Hoàn tác" class="btn btn-sm btn-default" ng-click="cancelProductCategory(item,$index)"><i class="fa fa-refresh"></i></button>-->
-                                    <button title="Chỉnh sửa" class="btn btn-sm btn-info" ui-sref="edit_product_category({id:item.Id})"><i class="fa fa-pencil"></i></button>                                    
+                                    <button title="Chỉnh sửa" class="btn btn-sm btn-info" ui-sref="edit_product_category({id:item.Id})"><i class="fa fa-pencil"></i></button>     
+                                    <button title="Xoá" class="btn btn-sm btn-danger" ng-click="deleteCategory(item.Id)"><i class="fa fa-trash"></i></button>                                
                                 </td>
                             </tr>
                         </table>

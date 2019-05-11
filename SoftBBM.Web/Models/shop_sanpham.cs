@@ -90,6 +90,7 @@ namespace SoftBBM.Web.Models
         public Nullable<int> CategoryId { get; set; }
         public Nullable<int> FromCreate { get; set; }
         public Nullable<int> PriceWholesale { get; set; }
+        public Nullable<int> ShopeeId { get; set; }
     
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ApplicationUser ApplicationUser1 { get; set; }

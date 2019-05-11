@@ -18,5 +18,9 @@ namespace SoftBBM.Web.ViewModels
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public Nullable<bool> Status { get; set; }
+        public string ApiId { get; set; }
+        public string ApiPassword { get; set; }
+        public string ApiPartnerId { get; set; }
+        public Nullable<Boolean> Enabled { get; set; }
     }
 }

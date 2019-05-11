@@ -2,6 +2,7 @@
 using SoftBBM.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -12,6 +13,7 @@ namespace SoftBBM.Web.DAL.Repositories
         IEnumerable<ApplicationRole> GetListRoleByUserId(int userId);
         IQueryable<ApplicationUser> GetAllPaging(int page, int pageSize, out int totalRow, string filter);
         IEnumerable<SoftBranch> GetListBranchByUserName(string userName);
+        void DeleteApplicationUser(int userId);
     }
     public class ApplicationUserRepository : RepositoryBase<ApplicationUser>, IApplicationUserRepository
     {
@@ -53,6 +55,14 @@ namespace SoftBBM.Web.DAL.Repositories
                         where u.UserName == userName
                         select b;
             return query;
+        }
+
+        public void DeleteApplicationUser(int userId)
+        {
+            var parameters = new SqlParameter[]{
+                new SqlParameter("@userId",userId)
+            };
+            DbContext.Database.ExecuteSqlCommand("exec DeleteApplicationUser @userId", parameters);
         }
     }
 }

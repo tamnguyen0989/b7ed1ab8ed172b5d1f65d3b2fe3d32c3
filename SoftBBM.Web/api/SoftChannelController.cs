@@ -1,16 +1,21 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
 using SoftBBM.Web.Common;
 using SoftBBM.Web.DAL.Infrastructure;
 using SoftBBM.Web.DAL.Repositories;
+using SoftBBM.Web.Enum;
 using SoftBBM.Web.Infrastructure.Core;
 using SoftBBM.Web.Infrastructure.Extensions;
 using SoftBBM.Web.Models;
 using SoftBBM.Web.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Http;
 
 namespace SoftBBM.Web.api
@@ -100,6 +105,7 @@ namespace SoftBBM.Web.api
             {
                 var newSoftChannel = new SoftChannel();
                 newSoftChannel.UpdateSoftChannel(SoftChannelViewModel);
+
                 _softChannelRepository.Add(newSoftChannel);
                 _unitOfWork.Commit();
 
@@ -144,9 +150,38 @@ namespace SoftBBM.Web.api
                 var oldChannel = _softChannelRepository.GetSingleById(softChannelViewModel.Id);
                 oldChannel.UpdateSoftChannel(softChannelViewModel);
                 _softChannelRepository.Update(oldChannel);
-                _unitOfWork.Commit();
-                var responseData = Mapper.Map<SoftChannel, SoftChannelViewModel>(oldChannel);
-                response = request.CreateResponse(HttpStatusCode.Created, responseData);
+                switch (softChannelViewModel.Id)
+                {
+                    case (int)ChannelEnum.SPE:
+                        var result = "";
+                        if (!string.IsNullOrEmpty(softChannelViewModel.ApiId) && !string.IsNullOrEmpty(softChannelViewModel.ApiPartnerId) && !string.IsNullOrEmpty(softChannelViewModel.ApiPassword))
+                        {
+                            var apiPartnerId = 0;
+                            var apiId = 0;
+                            int.TryParse(softChannelViewModel.ApiId, out apiId);
+                            int.TryParse(softChannelViewModel.ApiPartnerId, out apiPartnerId);
+                            result = authenShopee(apiId, softChannelViewModel.ApiPassword, apiPartnerId);
+                            var resultJson = JsonConvert.DeserializeObject<ShopInfo>(result);
+                            if (resultJson.status == "NORMAL")
+                            {
+                                oldChannel.ApiId = softChannelViewModel.ApiId;
+                                oldChannel.ApiPassword = softChannelViewModel.ApiPassword;
+                                oldChannel.ApiPartnerId = softChannelViewModel.ApiPartnerId;
+                                response = request.CreateResponse(HttpStatusCode.OK, "Cập nhật và kết nối API thành công!");
+                            }
+                            else
+                            {
+                                response = request.CreateResponse(HttpStatusCode.BadRequest, "Kết nối API thất bại");
+                            }
+                        }
+                        else
+                            response = request.CreateResponse(HttpStatusCode.OK, "Cập nhật thành công!");
+                        break;
+                    default:
+                        response = request.CreateResponse(HttpStatusCode.OK, "Cập nhật thành công!");
+                        break;
+                }
+                _unitOfWork.Commit();                
             }
             return response;
         }
@@ -203,5 +238,83 @@ namespace SoftBBM.Web.api
             }
 
         }
+
+        [Route("detail/{id}")]
+        [HttpGet]
+        public HttpResponseMessage Detail(HttpRequestMessage request, int id)
+        {
+            HttpResponseMessage response = null;
+            var channel = _softChannelRepository.GetSingleById(id);
+            var responseData = Mapper.Map<SoftChannel, SoftChannelViewModel>(channel);
+            response = request.CreateResponse(HttpStatusCode.OK, responseData);
+            return response;
+        }
+
+
+        public string authenShopee(int apiId, string apiPassword, int apiPartnerId)
+        {
+            var jsonStrResult = "";
+            //var channel = _softChannelRepository.GetSingleById((int)ChannelEnum.SPE);
+            var timeStamp = getTimestamp();
+            string url = "https://partner.shopeemobile.com/api/v1/shop/get";
+            string dataJson = "{'partner_id':" + apiPartnerId + "," +
+                              "'shopid':" + apiId + "," +
+                              "'timestamp':" + timeStamp + "}";
+            dataJson = dataJson.Replace("'", "\"");
+            string signatureBaseString = url + '|' + dataJson;
+            string signatureAuth = createSignature(apiPassword, signatureBaseString);
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+            httpWebRequest.Headers.Add("Authorization", signatureAuth);
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                streamWriter.Write(dataJson);
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
+            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Encoding.Default, true))
+            {
+                jsonStrResult = streamReader.ReadToEnd();
+            }
+
+            return jsonStrResult;
+        }
+
+        public int getTimestamp()
+        {
+            var unixTimestamp = (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            return unixTimestamp;
+        }
+
+        //key=password, data = dataJson
+        public string createSignature(string key, string data)
+        {
+            var result = "";
+
+            //ASCIIEncoding encoding = new ASCIIEncoding();
+            //byte[] keyByte = encoding.GetBytes(key);
+            //HMACSHA256 hmacsha256 = new HMACSHA256(keyByte);
+            //byte[] messageBytes = encoding.GetBytes(data);
+            //byte[] hashmessage = hmacsha256.ComputeHash(messageBytes);
+            //result = Encoding.ASCII.GetString(hashmessage);
+
+            ASCIIEncoding encoding = new ASCIIEncoding();
+
+            Byte[] textBytes = encoding.GetBytes(data);
+            Byte[] keyBytes = encoding.GetBytes(key);
+
+            Byte[] hashBytes;
+
+            using (HMACSHA256 hash = new HMACSHA256(keyBytes))
+                hashBytes = hash.ComputeHash(textBytes);
+
+            result = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+
+            return result;
+        }
+
     }
 }

@@ -233,7 +233,6 @@
                         type: "fromsupplier"
                     }
                 }
-                debugger
                 apiService.get('/api/stockin/updatecancelbook', config, function (result) {
                     if (result.data.Id > 0) {
                         notificationService.displaySuccess("Cập nhật trạng thái huỷ thành công!")

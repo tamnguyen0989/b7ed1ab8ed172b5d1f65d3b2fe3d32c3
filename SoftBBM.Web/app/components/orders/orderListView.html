@@ -22,6 +22,7 @@
                             <a class="btn btn-success" ui-sref="add_order" style="width:60px" title="Thêm mới" target="_blank"><i class="fa fa-plus"></i></a>
                             <button type="button" class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
                             <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
+                            <button class="btn" title="Xuất DS đơn hàng" style="background-color:yellowgreen;color:white;width:60px" type="button" ng-click="authenExport()"><i class="fa fa-fw fa-cloud-download"></i></button>
                             <div class="pull-right totalcount">
                                 <span>
                                     Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
@@ -191,7 +192,8 @@
                                 <th ng-click="sortBy('tongtien')">Tổng tiền <i class="fa fa-fw fa-sort"></i></th>
                                 <th ng-hide="selectedChannel.Id==1">TPhố/T</th>
                                 <th ng-hide="selectedChannel.Id==1">Quận/H</th>
-                                <th>NV giao hàng</th>
+                                <th ng-hide="selectedChannel.Id==1">NV giao hàng</th>
+                                <th ng-show="selectedChannel.Id==1">NV bán hàng</th>
                                 <th>Ghi chú</th>
                                 <th class="padding_1px">Tình trạng</th>
                                 <th style="padding:0px !important">Đã in</th>
@@ -218,8 +220,11 @@
                                 <td ng-hide="selectedChannel.Id==1">
                                     {{item.District}}
                                 </td>
-                                <td>
+                                <td ng-hide="selectedChannel.Id==1">
                                     {{item.ShipperUserName}}
+                                </td>
+                                <td ng-show="selectedChannel.Id==1">
+                                    {{item.CreatedUserName}}
                                 </td>
                                 <td>{{item.ghichu}}</td>
                                 <td class="padding_1px">
@@ -299,7 +304,10 @@
                                 <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
                                 <td>{{item.shop_bienthe.tensp}}</td>
                                 <td style="padding:1px">{{item.Soluong}}</td>
-                                <td style="padding:1px">{{item.Dongia | currency:'':0}}</td>
+                                <td style="padding:1px">
+                                    <span ng-hide="item.Dongiakm == 0" style="font-size:10px;text-decoration:line-through">{{item.Dongiakm | currency:'':0}}<br /></span>
+                                    {{item.Dongia | currency:'':0}}
+                                </td>
                                 <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}</td>
                             </tr>
                             <tr>
@@ -394,7 +402,10 @@
                                     <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
                                     <td>{{item.shop_bienthe.tensp}}</td>
                                     <td style="padding:1px">{{item.Soluong}}</td>
-                                    <td style="padding:1px">{{item.Dongia | currency:'':0}}</td>
+                                    <td style="padding:1px">
+                                        <span ng-hide="item.Dongiakm == 0" style="font-size:10px;text-decoration:line-through">{{item.Dongiakm | currency:'':0}}<br /></span>
+                                        {{item.Dongia | currency:'':0}}
+                                    </td>
                                     <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}</td>
                                 </tr>
                                 <tr>

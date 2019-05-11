@@ -198,14 +198,14 @@
                                     </span>
                                 </td>-->
                                 <td style="width:15%">
-                                    <button ng-hide="item.FromBranchStatusId=='06' || item.FromBranchStatusId=='02'" ng-click="outBook(item)" title="Xuất kho" class="btn btn-sm btn-success" style="margin-top:3px"><i class="fa fa-upload"></i></button>
+                                    <button ng-disabled="adding" ng-hide="item.FromBranchStatusId=='06' || item.FromBranchStatusId=='02'" ng-click="outBook(item)" title="Xuất kho" class="btn btn-sm btn-success" style="margin-top:3px"><i class="fa fa-upload"></i></button>
                                     <button ng-hide="item.FromBranchStatusId=='06'|| item.FromBranchStatusId=='02' || item.CategoryId!='01'" ng-click="updateOutStock(item)" title="Báo tồn không đủ xuất" class="btn btn-sm btn-warning" style="margin-top:3px"><i class="fa fa-warning"></i></button>
-                                    <button ng-click="bookDetail(item)" title="Chi tiết" class="btn btn-sm btn-primary" style="margin-top:3px"><i class="fa fa-search"></i></button>
-                                    <button ng-hide="item.FromBranchStatusId=='06'|| item.FromBranchStatusId=='02'|| item.CategoryId=='01'" ui-sref="edit_stockout({stockinId:item.Id})" title="Chỉnh sửa" class="btn btn-sm btn-info" style="margin-top:3px"><i class="fa fa-pencil"></i></button>
-                                    <button ng-click="updateCancel(item)" ng-hide="item.FromBranchStatusId=='06'|| item.FromBranchStatusId=='02' || item.CategoryId=='01'" title="Huỷ" class="btn btn-sm btn-danger" style="margin-top:3px"><i class="fa fa-trash"></i></button>
-                                    <button ng-click="addStamp(item)" title="In tem" class="btn btn-sm" style="color:white;background-color:#fc7e81;margin-top:3px"><i class="fa fa-bookmark-o"></i></button>
+                                    <button ng-disabled="adding" ng-click="bookDetail(item)" title="Chi tiết" class="btn btn-sm btn-primary" style="margin-top:3px"><i class="fa fa-search"></i></button>
+                                    <button ng-disabled="adding" ng-hide="item.FromBranchStatusId=='06'|| item.FromBranchStatusId=='02'|| item.CategoryId=='01'" ui-sref="edit_stockout({stockinId:item.Id})" title="Chỉnh sửa" class="btn btn-sm btn-info" style="margin-top:3px"><i class="fa fa-pencil"></i></button>
+                                    <button ng-disabled="adding" ng-click="updateCancel(item)" ng-hide="item.FromBranchStatusId=='06'|| item.FromBranchStatusId=='02' || item.CategoryId=='01'" title="Huỷ" class="btn btn-sm btn-danger" style="margin-top:3px"><i class="fa fa-trash"></i></button>
+                                    <button ng-disabled="adding" ng-click="addStamp(item)" title="In tem" class="btn btn-sm" style="color:white;background-color:#fc7e81;margin-top:3px"><i class="fa fa-bookmark-o"></i></button>
                                     <!--<button ng-show="item.FromBranchStatusId == '06'" style="margin-top:3px" ng-click="getDetailStockoutToPrint(item)" title="In đơn" class="btn btn-sm btn-warning"><i class="fa fa-print"></i></button>-->
-                                    <button style="margin-top:3px" ng-click="getDetailStockoutToPrint(item)" title="In đơn" class="btn btn-sm btn-warning"><i class="fa fa-print"></i></button>
+                                    <button ng-disabled="adding" style="margin-top:3px" ng-click="getDetailStockoutToPrint(item)" title="In đơn" class="btn btn-sm btn-warning"><i class="fa fa-print"></i></button>
                                 </td>
                             </tr>
                         </table>

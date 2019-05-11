@@ -62,7 +62,6 @@
                     search($scope.page);
                 }, function (error) {
                     //notificationService.displayError('Cập nhật không thành công.');
-                    debugger
                     notificationService.displayError(error.data);
                 });
         }

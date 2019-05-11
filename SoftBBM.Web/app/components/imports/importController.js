@@ -19,7 +19,6 @@
 
         function importProductsExcel() {        
             if ($scope.files.length > 0) {
-                debugger
                 var modalInstance = $uibModal.open({
                     templateUrl: '/app/components/imports/productProcessImportModal.html',
                     controller: 'productProcessImportController',

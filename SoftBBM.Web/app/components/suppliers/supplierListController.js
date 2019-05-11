@@ -95,20 +95,21 @@
             });
         }
         function deleteSupplier(supplier, index) {
-            authen();
-            var configs = {
-                params: {
-                    supplierID: supplier.Id
+            $ngBootbox.confirm('Bạn có chắc chắn muốn xoá?').then(function () {
+                var configs = {
+                    params: {
+                        supplierID: supplier.Id
+                    }
                 }
-            }
-            $scope.loading = true;
-            apiService.get('api/supplier/delete', configs, function (result) {
-                $scope.loading = false;
-                notificationService.displaySuccess("Xoá thành công");
-                search($scope.page);
-            }, function (error) {
-                $scope.loading = false;
-                notificationService.displayError(error.data);
+                $scope.loading = true;
+                apiService.get('api/supplier/delete', configs, function (result) {
+                    $scope.loading = false;
+                    notificationService.displaySuccess("Xoá thành công");
+                    search($scope.page);
+                }, function (error) {
+                    $scope.loading = false;
+                    notificationService.displayError(error.data);
+                });
             });
         }
 

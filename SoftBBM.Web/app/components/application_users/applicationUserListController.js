@@ -13,7 +13,7 @@
 
         $scope.GetApplicationUsers = GetApplicationUsers;
         $scope.Search = Search;
-        $scope.DeleteApplicationUser = DeleteApplicationUser;
+        $scope.deleteApplicationUser = deleteApplicationUser;
         $scope.SelectAll = SelectAll;
         $scope.DeleteMultiple = DeleteMultiple;
         $scope.refeshPage = refeshPage;
@@ -49,27 +49,29 @@
                 $scope.pagesCount = result.data.TotalPages;
                 $scope.totalCount = result.data.TotalCount;
             }, function (error) {
-                debugger
                 console.log('Load applicationUser fail!');
             })
         }
 
         function Search() {
-            GetApplicationUsers();
+            GetApplicationUsers($scope.page);
         }
 
-        function DeleteApplicationUser(id) {
+        function deleteApplicationUser(id) {
             $ngBootbox.confirm('Bạn có chắc chắn muốn xoá?').then(function () {
-                var config = {
+                var configs = {
                     params: {
-                        id: id
+                        applicationUserId: id
                     }
                 }
-                apiService.del('api/applicationuser/delete', config, function (result) {
-                    notificationService.displaySuccess('Xoá thành công');
+                $scope.loading = true;
+                apiService.get('api/applicationuser/delete', configs, function (result) {
+                    $scope.loading = false;
+                    notificationService.displaySuccess("Xoá thành công");
                     Search();
                 }, function (error) {
-                    notificationService.displayError('Xoá không thành công' + error);
+                    $scope.loading = false;
+                    notificationService.displayError(error.data);
                 });
             });
         }

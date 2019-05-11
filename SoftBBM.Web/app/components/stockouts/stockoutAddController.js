@@ -25,10 +25,11 @@
         }
         $scope.totalQuantity = 0;
         $scope.totalMoneyPrint = 0;
+        $scope.adding = false;
 
-        $scope.chatHub = null;
-        $scope.chatHub = $.connection.chatHub;
-        $.connection.hub.start();
+        //$scope.chatHub = null;
+        //$scope.chatHub = $.connection.chatHub;
+        //$.connection.hub.start();
 
         $scope.loadSuppliers = loadSuppliers;
         $scope.loadProductStatus = loadProductStatus;
@@ -169,6 +170,7 @@
         }
         function saveBook() {
             if ($scope.bookDetails.length > 0) {
+                $scope.adding = true;
                 $scope.stockin.BranchId = $scope.branchSelectedRoot.Id;
                 $scope.stockin.CategoryId = '03';
                 $scope.stockin.Total = sumMoney();
@@ -179,6 +181,7 @@
                 $scope.stockin.Description = $scope.description;
                 apiService.post('api/stockin/savestockout', $scope.stockin,
                     function (result) {
+                        $scope.adding = false;
                         notificationService.displaySuccess('Đơn đã được lưu tạm.');
                         $state.go('stockouts');
                     }, function (error) {
@@ -188,6 +191,7 @@
         }
         function addBook() {
             if ($scope.bookDetails.length > 0) {
+                $scope.adding = true;
                 $scope.stockin.BranchId = $scope.branchSelectedRoot.Id;
                 $scope.stockin.CategoryId = '03';
                 $scope.stockin.Total = sumMoney();
@@ -199,12 +203,12 @@
                 apiService.post('api/stockin/addstockout', $scope.stockin,
                     function (result) {
                         if (result.data.Id > 0) {
+                            $scope.adding = false;
                             $scope.stockoutReturn = {};
                             $scope.totalQuantity = 0;
                             $scope.totalMoneyPrint = 0;
                             $scope.stockoutReturn = result.data;
-                            debugger
-                            $scope.chatHub.server.send(result.data.ToBranchId);
+                            //$scope.chatHub.server.send(result.data.ToBranchId);
                             notificationService.displaySuccess('Đơn đã được xuất kho thành công.');
                             $scope.thenOut = null;
                             localStorage.removeItem("thenOut");

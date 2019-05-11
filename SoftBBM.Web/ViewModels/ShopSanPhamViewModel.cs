@@ -52,6 +52,15 @@ namespace SoftBBM.Web.ViewModels
         public IEnumerable<SoftBranchProductStockViewModel> SoftBranchProductStocks { get; set; }
         public IEnumerable<SoftChannelProductPriceSearchViewModel> SoftChannelProductPrices { get; set; }
     }
+    public class ShopSanPhamSearchBookFilterStockViewModel
+    {
+        public int id { get; set; }
+        public string masp { get; set; }
+        public string tensp { get; set; }
+        public string Image { get; set; }
+        public double StockTotal { get; set; }
+        public double StockTotalAll { get; set; }
+    }
     public class ShopSanPhamSoldByDateViewModel
     {
         public int id { get; set; }
@@ -85,6 +94,8 @@ namespace SoftBBM.Web.ViewModels
     {
         public int key { get; set; }
         public int value { get; set; }
+        public string name { get; set; }
+        public string aliasName { get; set; }
     }
     public class SoftBranchProductStockViewModel
     {

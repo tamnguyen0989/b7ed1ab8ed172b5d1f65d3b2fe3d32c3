@@ -1,9 +1,9 @@
 ﻿(function (app) {
     app.controller('orderAddController', orderAddController);
 
-    orderAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$timeout', '$uibModal'];
+    orderAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$timeout', '$uibModal', '$sce','$http','$q'];
 
-    function orderAddController(apiService, $window, $scope, notificationService, $state, $rootScope, $timeout, $uibModal) {
+    function orderAddController(apiService, $window, $scope, notificationService, $state, $rootScope, $timeout, $uibModal, $sce, $http, $q) {
         $scope.order = {
             Status: true
         }
@@ -103,6 +103,7 @@
         $scope.addingOrder = false;
         $scope.searching = false;
         $scope.kg = 0;
+        $scope.historyOrder = null;
 
         $scope.addOrder = addOrder;
         $scope.saveOrder = saveOrder;
@@ -171,6 +172,15 @@
                 notificationService.displayError(error);
             });
         }
+        //var usersPromise = $http({
+        //    method: 'GET',
+        //    url: "api/applicationuser/getall"
+        //}).then(function (result, status, headers, config) {
+        //    $scope.users = result.data;
+        //},
+        //function (result, status, headers, config) {
+
+        //});
         function loadCities() {
             $scope.loading = true;
             apiService.get('api/city/getall', null, function (result) {
@@ -239,7 +249,7 @@
             $scope.order.Status = 3;
             $scope.order.ghichu = $scope.ghichu;
             $scope.order.diemsp = Math.floor(($scope.diemsp - $scope.discount) / 1000);
-            $scope.order.datru_diem = ($scope.datru_diem);
+            $scope.order.datru_diem = Math.ceil($scope.datru_diem);
             $scope.order.Discount = $scope.discount;
             var anotherfee = 0;
             if ($scope.anotherFee != null && $scope.anotherFee != "")
@@ -265,6 +275,7 @@
             $scope.order.Customer.diem = sumPoint();
             var currentDate = $scope.currentDate;
             $scope.order.Code = $scope.branchSelectedRoot.Code + ('0' + (currentDate.getDate())).slice(-2) + ('0' + (currentDate.getMonth() + 1)).slice(-2) + String(currentDate.getFullYear()).slice(-2) + $scope.selectedChannel.Code;
+
             apiService.post('api/order/add/', $scope.order,
                 function (result) {
                     $scope.addingOrder = false;
@@ -310,7 +321,7 @@
             $scope.order.Status = 1;
             $scope.order.ghichu = $scope.ghichu;
             $scope.order.diemsp = Math.floor(($scope.diemsp - $scope.discount) / 1000);
-            $scope.order.datru_diem = ($scope.datru_diem);
+            $scope.order.datru_diem = Math.ceil($scope.datru_diem);
             $scope.order.Discount = $scope.discount;
             var anotherfee = 0;
             if ($scope.anotherFee != null && $scope.anotherFee != "")
@@ -571,6 +582,20 @@
                 $scope.selectedChannel = $rootScope.channel;
                 $scope.customer = $rootScope.customer;
                 $scope.searchPhone = $scope.customer.dienthoai;
+                $scope.historyOrder = $sce.trustAsHtml($rootScope.historyOrder);
+                
+                //$q.all([usersPromise]).then(function (result) {
+                //    debugger
+                //    if ($rootScope.shipperId > 0)
+                //    $.each($scope.users, function (index, value) {
+                //        if (value.Id == $rootScope.shipperId) {
+                //            $scope.selectedShipper = value;
+                //            return false;
+                //        }
+                            
+                //    });
+                //});
+
                 $.each($rootScope.detailOrders, function (index, value) {
                     $scope.detailOrders.push(value);
                     $scope.addedProductIds.push(value.id);
@@ -766,7 +791,7 @@
                                 $scope.passVNEPRules = false;
                                 return false;
                             }
-                            else {                                
+                            else {
                                 if (value.chieudai >= 30 || value.chieurong >= 30 || value.chieucao >= 30 || value.kg >= 3)
                                     $scope.passVNEPRules = false;
                                 if (value.chieudai > maxChieuDai)
@@ -1329,7 +1354,6 @@
                     $scope.VNPFastFee = VNPFastFee;
 
                     //VNPostEco
-                    debugger
                     var VNPEcoFee = 0;
                     var VNPEcoTime = 0;
                     var kg = sumKg();
@@ -1657,7 +1681,7 @@
                 total += value.kg * parseFloat(value.Quantity);
             });
             //$scope.kg = roundToTwo(total);
-            $scope.kg = Math.floor(total*1000)/1000;
+            $scope.kg = Math.floor(total * 1000) / 1000;
             return total;
         }
         function sumKgLWH() {
@@ -1694,10 +1718,22 @@
             if ($scope.selectedTypeShipHCM == 2) {
                 $scope.feeShip = $scope.GHTKFeeHCM;
                 $scope.nameTypeShip = 'GH Tiết Kiêm 24h';
+                var ghtkShipper = {};
+                $.each($scope.users, function (index, value) {
+                    if (value.Id == 11)
+                        ghtkShipper = value;
+                })
+                $scope.selectedShipper = ghtkShipper;
             }
             if ($scope.selectedTypeShipHCM == 3) {
                 $scope.feeShip = $scope.VNPFeeHCM;
                 $scope.nameTypeShip = 'VNPost 48h';
+                var vnpShipper = {};
+                $.each($scope.users, function (index, value) {
+                    if (value.Id == 10)
+                        vnpShipper = value;
+                })
+                $scope.selectedShipper = vnpShipper;
             }
             if ($scope.selectedTypeShipHCM == 4) {
                 $scope.feeShip = $scope.VNEPFeeHCM;
@@ -1724,6 +1760,12 @@
             if ($scope.selectedTypeShipOutHCM == 4) {
                 $scope.feeShip = $scope.GHTKFee;
                 $scope.nameTypeShip = 'GH Tiết Kiệm ' + $scope.GHTKTime;
+                var ghtkShipper = {};
+                $.each($scope.users, function (index, value) {
+                    if (value.Id == 11)
+                        ghtkShipper = value;
+                })
+                $scope.selectedShipper = ghtkShipper;
             }
             if ($scope.selectedTypeShipOutHCM == 9) {
                 $scope.feeShip = $scope.VNEPFee;
@@ -1742,10 +1784,22 @@
             if ($scope.selectedTypeShipOutHCM == 7) {
                 $scope.feeShip = $scope.VNPFastFee;
                 $scope.nameTypeShip = 'VNPost nhanh ' + $scope.VNPFastTime;
+                var vnpShipper = {};
+                $.each($scope.users, function (index, value) {
+                    if (value.Id == 10)
+                        vnpShipper = value;
+                })
+                $scope.selectedShipper = vnpShipper;
             }
             if ($scope.selectedTypeShipOutHCM == 8) {
                 $scope.feeShip = $scope.VNPEcoFee;
-                $scope.nameTypeShip = 'VNPost thường ' + $scope.VNPFastTime;
+                $scope.nameTypeShip = 'VNPost thường ' + $scope.VNPEcoTime;
+                var vnpShipper = {};
+                $.each($scope.users, function (index, value) {
+                    if (value.Id == 10)
+                        vnpShipper = value;
+                })
+                $scope.selectedShipper = vnpShipper;
             }
             $scope.selectedPayment = null;
         }

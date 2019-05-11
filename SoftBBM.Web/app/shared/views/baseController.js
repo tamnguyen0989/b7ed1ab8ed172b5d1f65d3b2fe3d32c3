@@ -35,14 +35,16 @@
         $scope.pagesCount = 0;
         $scope.pageSizeNumber = '10';
         $scope.notifications = [];
-        $scope.chatHub = null;
-        $scope.chatHub = $.connection.chatHub; // initializes hub
-        $.connection.hub.start(); // starts hub
-        $scope.chatHub.client.broadcastMessage = function (branchId) {
-            if ($scope.branchSelectedRoot.Id == branchId) {
-                search($scope.page);
-            }
-        };
+
+        //$scope.chatHub = null;
+        //$scope.chatHub = $.connection.chatHub; // initializes hub
+        //$.connection.hub.start(); // starts hub
+        //$scope.chatHub.client.broadcastMessage = function (branchId) {
+        //    if ($scope.branchSelectedRoot.Id == branchId) {
+        //        search($scope.page);
+        //    }
+        //};
+
         $scope.authentication = authData.authenticationData;
         $scope.sideBar = "/app/shared/views/sideBar.html";
         //refesh lost session
@@ -85,7 +87,7 @@
             authData.authenticationData.selectedBranch = branchSelectedRoot;
             localStorage.setItem("selectedBranch", JSON.stringify($scope.branchSelectedRoot));
             localStorage.removeItem('selectedChannel');
-            search($scope.page);
+            //search($scope.page);
             $state.go('home');
         }
         function init() {
@@ -93,7 +95,6 @@
                 if (localStorage.getItem("userId")) {
                     $scope.notification.UpdatedBy = JSON.parse(localStorage.getItem("userId"));
                 }
-                debugger
                 var isLogin = JSON.parse(localStorage.getItem("isLogin"));
                 if (isLogin == "1") {
                     authData.authenticationData.selectedBranch = null;
@@ -107,7 +108,7 @@
                 if (localStorage.getItem("selectedBranch") && localStorage.getItem("selectedBranch") != "undefined") {
                     var _selectedBranch = JSON.parse(localStorage.getItem("selectedBranch"));
                     $scope.branchSelectedRoot = _selectedBranch;
-                    search($scope.page);
+                    //search($scope.page);
                 }
             }
         }

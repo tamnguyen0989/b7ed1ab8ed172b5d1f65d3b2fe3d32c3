@@ -287,6 +287,7 @@
     <Compile Include="DAL\Repositories\donhangchuyenphatdiachifutaRepository.cs" />
     <Compile Include="DAL\Repositories\donhangRepository.cs" />
     <Compile Include="DAL\Repositories\donhangStatusRepository.cs" />
+    <Compile Include="DAL\Repositories\ShopeeRepository.cs" />
     <Compile Include="DAL\Repositories\SoftStockInPaymentMethodRepository.cs" />
     <Compile Include="DAL\Repositories\SoftStockInPaymentStatusRepository.cs" />
     <Compile Include="DAL\Repositories\khachhangRepository.cs" />
@@ -313,6 +314,7 @@
     <Compile Include="DAL\Repositories\SoftChannelRepository.cs" />
     <Compile Include="DAL\Repositories\SoftSupplierRepository.cs" />
     <Compile Include="DAL\Repositories\SoftSupplierVatStatusRepository.cs" />
+    <Compile Include="Enum\Channel.cs" />
     <Compile Include="Enum\DeliveryTime.cs" />
     <Compile Include="Enum\PaymentMethod.cs" />
     <Compile Include="Enum\StatusOrder.cs" />
@@ -602,7 +604,9 @@
     <Compile Include="ViewModels\OrderDetailViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModel.cs" />
     <Compile Include="ViewModels\ProductCodeGenViewModel.cs" />
+    <Compile Include="ViewModels\ResponseBBM.cs" />
     <Compile Include="ViewModels\ResultImportViewModel.cs" />
+    <Compile Include="ViewModels\ShopeeViewModel.cs" />
     <Compile Include="ViewModels\ShopImageViewModel.cs" />
     <Compile Include="ViewModels\ShopSanPhamLogViewModel.cs" />
     <Compile Include="ViewModels\ShopSanPhamViewModel.cs" />
@@ -672,6 +676,8 @@
     <Content Include="app\components\branches\branchAddView.html" />
     <Content Include="app\components\branches\branchListController.js" />
     <Content Include="app\components\branches\branchListView.html" />
+    <Content Include="app\components\channels\channelEditController.js" />
+    <Content Include="app\components\channels\channelEditView.html" />
     <Content Include="app\components\channels\channelAddController.js" />
     <Content Include="app\components\channels\channelAddView.html" />
     <Content Include="app\components\channels\channelListController.js" />
@@ -708,6 +714,8 @@
     <Content Include="app\components\orders\orderListController.js" />
     <Content Include="app\components\orders\orderListView.html" />
     <Content Include="app\components\orders\orders.module.js" />
+    <Content Include="app\components\orders\orderExportProcessModal.html" />
+    <Content Include="app\components\orders\orderExportProcessController.js" />
     <Content Include="app\components\orders\productKgUpdateController.js" />
     <Content Include="app\components\orders\productKgUpdateModal.html" />
     <Content Include="app\components\product_categories\productCategoryEditController.js" />
@@ -769,7 +777,11 @@
     <Content Include="app\components\stocks\adjustmentStockListView.html" />
     <Content Include="app\components\stocks\adjustmentStockDetailController.js" />
     <Content Include="app\components\stocks\adjustmentStockDetailModal.html" />
+    <Content Include="app\components\stocks\adjustmentStockAddStockFilterModal.html" />
+    <Content Include="app\components\stocks\exportPriceWholesaleModal.html" />
     <Content Include="app\components\stocks\processImportModal.html" />
+    <Content Include="app\components\stocks\adjustmentStockAddStockFilterController.js" />
+    <Content Include="app\components\stocks\exportPriceWholesaleController.js" />
     <Content Include="app\components\stocks\processImportModalController.js" />
     <Content Include="app\components\stocks\productAddModal.html" />
     <Content Include="app\components\stocks\productAddController.js" />

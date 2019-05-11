@@ -14,6 +14,7 @@ namespace SoftBBM.Web.DAL.Repositories
         IEnumerable<int> GetAllIds();
         IQueryable<shop_sanpham> GetAllPaging(int page, int pageSize, out int totalRow, int branchId, string searchString = "");
         IQueryable<shop_sanpham> GetAllPaging(int page, int pageSize, out int totalRow, int branchId, ShopSanPhamFilterBookViewModel model);
+        IQueryable<SoftBranchProductStock> GetAllPagingStockFilter(int page, int pageSize, out int totalRow, int branchId, ShopSanPhamFilterBookViewModel model);
     }
     public class ShopSanPhamRepository : RepositoryBase<shop_sanpham>, IShopSanPhamRepository
     {
@@ -69,7 +70,7 @@ namespace SoftBBM.Web.DAL.Repositories
             }
 
             totalRow = products.Count();
-            products = products.OrderByDescending(x => x.id);
+            products = products.OrderBy(x => x.masp);
             return products.Skip(page * pageSize).Take(pageSize);
         }
 
@@ -87,6 +88,60 @@ namespace SoftBBM.Web.DAL.Repositories
                 products = query;
             totalRow = products.Count();
             products = products.OrderByDescending(x => x.id);
+            return products.Skip(page * pageSize).Take(pageSize);
+        }
+
+        public IQueryable<SoftBranchProductStock> GetAllPagingStockFilter(int page, int pageSize, out int totalRow, int branchId, ShopSanPhamFilterBookViewModel model)
+        {
+            var query = from st in DbContext.SoftBranchProductStocks
+                        where st.BranchId == branchId
+                        select st;
+            IQueryable<SoftBranchProductStock> products = null;
+
+            if (!string.IsNullOrEmpty(model.stringSearch))
+            {
+                products = query.Where(x => x.shop_sanpham.masp.Contains(model.stringSearch) || x.shop_sanpham.tensp.Contains(model.stringSearch));
+            }
+            else
+                products = query;
+
+            foreach (var item in model.FilterBookDetail)
+            {
+                switch (item.key)
+                {
+                    case 0:
+                        products = products.Where(x => x.shop_sanpham.SupplierId == item.value);
+                        break;
+                    case 1:
+                        var convert = item.value.ToString();
+                        if (convert.Length == 1)
+                        {
+                            convert = '0' + convert;
+                        }
+                        products = products.Where(x => x.shop_sanpham.StatusId == convert);
+                        break;
+                    case 2:
+                        switch (item.aliasName)
+                        {
+                            case ">":
+                                products = products.Where(x => x.StockTotal > item.value);
+                                break;
+                            case "<":
+                                products = products.Where(x => x.StockTotal < item.value);
+                                break;
+                            case "=":
+                                products = products.Where(x => x.StockTotal == item.value);
+                                break;
+                        }
+                        break;
+                    case 3:
+                        products = products.Where(x => x.shop_sanpham.CategoryId == item.value);
+                        break;
+                }
+            }
+
+            totalRow = products.Count();
+            products = products.OrderBy(x => x.shop_sanpham.masp);
             return products.Skip(page * pageSize).Take(pageSize);
         }
     }

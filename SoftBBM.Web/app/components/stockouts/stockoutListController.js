@@ -31,10 +31,11 @@
         $scope.endDateFilter = null;
         $scope.startStockoutDateFilter = null;
         $scope.endStockoutDateFilter = null;
+        $scope.adding = false;
 
-        $scope.chatHub = null;
-        $scope.chatHub = $.connection.chatHub;
-        $.connection.hub.start();
+        //$scope.chatHub = null;
+        //$scope.chatHub = $.connection.chatHub;
+        //$.connection.hub.start();
 
         $scope.search = search;
         $scope.refeshPage = refeshPage;
@@ -173,7 +174,6 @@
 
         }
         function updateDateFilter() {
-            debugger
             if ($scope.startDateFilter && $scope.endDateFilter) {
                 if ($scope.startDateFilter <= $scope.endDateFilter) {
                     $scope.page = $scope.page || 0;
@@ -290,6 +290,7 @@
             });
         }
         function outBook(val) {
+            $scope.adding = true;
             $ngBootbox.confirm('Bạn có chắc chắn muốn xuất kho đơn ' + val.Id + ' ?').then(function () {
                 var config = {
                     params: {
@@ -300,7 +301,8 @@
                 apiService.get('api/stockin/outexist', config,
                         function (result) {
                             if (result.data > 0) {
-                                $scope.chatHub.server.send(result.data);
+                                $scope.adding = false;
+                                //$scope.chatHub.server.send(result.data);
                                 notificationService.displaySuccess('Đơn đã được xuất kho thành công.');
                                 search($scope.page);
                             }
@@ -308,6 +310,8 @@
                         }, function (error) {
                             notificationService.displayError(error.data);
                         });
+            }, function () {
+                $scope.adding = false;
             });
         }
         function updateOutStock(val) {
@@ -319,7 +323,7 @@
             }
             apiService.get('/api/stockin/updateoutstock', config, function (result) {
                 if (result.data > 0) {
-                    $scope.chatHub.server.send(result.data);
+                    //$scope.chatHub.server.send(result.data);
                     notificationService.displaySuccess("Cập nhật trạng thái tồn không đủ xuất thành công!")
                     search($scope.page);
                 }

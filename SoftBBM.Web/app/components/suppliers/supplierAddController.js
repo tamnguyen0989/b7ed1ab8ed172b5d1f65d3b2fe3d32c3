@@ -1,7 +1,7 @@
 ﻿(function (app) {
     app.controller('supplierAddController', supplierAddController);
 
-    supplierAddController.$inject = ['apiService', '$window',  '$scope', 'notificationService', '$state'];
+    supplierAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state'];
 
     function supplierAddController(apiService, $window, $scope, notificationService, $state) {
         $scope.supplier = {
@@ -14,7 +14,8 @@
         $scope.addSupplier = addSupplier;
 
         function addSupplier() {
-            $scope.supplier.vatId = $scope.VAT.Id;
+            if ($scope.VAT)
+                $scope.supplier.vatId = $scope.VAT.Id;
             apiService.post('api/supplier/add', $scope.supplier,
                 function (result) {
                     notificationService.displaySuccess(result.data.Name + ' đã được thêm mới.');
