@@ -60,7 +60,9 @@ namespace SoftBBM.Web
                       "~/app/components/product_categories/productCategories.module.js",
                       "~/app/components/product_logs/productLogs.module.js",
                       "~/app/components/return_suppliers/returnSupplier.module.js",
-                      "~/app/components/imports/imports.module.js"
+                      "~/app/components/imports/imports.module.js",
+                      "~/app/components/reports/reports.module.js",
+                      "~/app/components/exports/exports.module.js"
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/controller").Include(
@@ -86,9 +88,9 @@ namespace SoftBBM.Web
                       "~/app/components/stockins/stockinListController.js",
                       "~/app/components/stockins/stockinDetailController.js",
                       "~/app/components/stockins/stockinEditController.js",
-                      //"~/app/components/stockins/stockinAddController.js",
+                      "~/app/components/stockins/stockinAddController.js",
                       "~/app/components/orders/orderListController.js",
-                      //"~/app/components/orders/orderAddController.js",
+                      "~/app/components/orders/orderAddController.js",
                       "~/app/components/orders/orderDetailController.js",
                       "~/app/components/application_roles/applicationRoleListController.js",
                       "~/app/components/application_roles/applicationRoleAddController.js",
@@ -130,7 +132,14 @@ namespace SoftBBM.Web
                       "~/app/components/product_categories/productCategoryEditController.js",
                       "~/app/components/imports/importController.js",
                       "~/app/components/imports/productProcessImportController.js",
-                      "~/app/components/imports/channelPriceProcessImportController.js"
+                      "~/app/components/imports/channelPriceProcessImportController.js",
+                      "~/app/components/reports/channelSalesReportController.js",
+                      "~/app/components/reports/salesReportController.js",
+                      "~/app/components/orders/productKgUpdateController.js",
+                      "~/app/components/exports/priceExportController.js",
+                      "~/app/components/exports/priceExportProcessController.js",
+                      "~/app/components/exports/priceExportProcessController.js",
+                      "~/app/components/orders/orderExportProcessController.js"
                       ));
 
             BundleTable.EnableOptimizations = true;

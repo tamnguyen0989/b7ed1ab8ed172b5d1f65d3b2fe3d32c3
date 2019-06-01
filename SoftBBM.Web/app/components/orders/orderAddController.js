@@ -280,6 +280,11 @@
                 function (result) {
                     $scope.addingOrder = false;
                     notificationService.displaySuccess('Đơn đã được hoàn thành.');
+                    $rootScope.channel = null;
+                    $rootScope.customer = null;
+                    $rootScope.historyOrder = null;
+                    $rootScope.detailOrders = null;
+                    $scope.historyOrder = null;
                     $scope.orderReturn = result.data;
                     var sum = 0;
                     $.each($scope.orderReturn.donhang_ct, function (index, value) {
@@ -372,7 +377,11 @@
                         }, 500);
                     $scope.addingOrder = false;
                     notificationService.displaySuccess('Tạo đơn thành công.');
-
+                    $rootScope.channel = null;
+                    $rootScope.customer = null;
+                    $rootScope.historyOrder = null;
+                    $rootScope.detailOrders = null;
+                    $scope.historyOrder = null;
                     resetOrder();
                     init();
                     //$state.go('orders');

@@ -79,6 +79,7 @@ namespace SoftBBM.Web.api
             }
             try
             {
+                bool flagDiscountOrder = false;
                 donhang donhang = new donhang();
                 donhang.Updatedonhang(orderVM);
                 donhang.CreatedDate = DateTime.Now;
@@ -150,6 +151,15 @@ namespace SoftBBM.Web.api
                         priceAvg = product.PriceAvg.Value;
                     donhang_ct.PriceAvg = priceAvg;
                     donhang_ct.Dongiakm = item.PriceBeforeDiscount;
+                    if (!flagDiscountOrder)
+                    {
+                        var memberDis = orderVM.datru_diem == null ? 0 : orderVM.datru_diem.Value;
+                        var orderDis = orderVM.Discount == null ? 0 : orderVM.Discount.Value;
+                        donhang_ct.TotalDiscount = memberDis + orderDis;
+                        flagDiscountOrder = true;
+                    }
+                    else
+                        donhang_ct.TotalDiscount = 0;
                     _donhangctRepository.Add(donhang_ct);
 
                     var stockCurrent = _softStockRepository.GetSingleByCondition(x => x.BranchId == orderVM.BranchId && x.ProductId == item.id);
@@ -370,21 +380,23 @@ namespace SoftBBM.Web.api
 
             foreach (var item in donhangsVM)
             {
-
-                var khachhang = _khachhangRepository.GetSingleById(item.makh.Value);
-                if (khachhang != null)
+                if (item.makh > 0)
                 {
-                    if (khachhang.idquan.HasValue)
+                    var khachhang = _khachhangRepository.GetSingleById(item.makh.Value);
+                    if (khachhang != null)
                     {
-                        var tmpDis = _donhangchuyenphattinhRepository.GetSingleById(khachhang.idquan.Value);
-                        if (tmpDis != null)
-                            item.District = tmpDis.tentinh;
-                    }
-                    if (khachhang.idtp.HasValue)
-                    {
-                        var tmpCity = _donhangchuyenphattpRepository.GetSingleById(khachhang.idtp.Value);
-                        if (tmpCity != null)
-                            item.City = tmpCity.tentp;
+                        if (khachhang.idquan.HasValue)
+                        {
+                            var tmpDis = _donhangchuyenphattinhRepository.GetSingleById(khachhang.idquan.Value);
+                            if (tmpDis != null)
+                                item.District = tmpDis.tentinh;
+                        }
+                        if (khachhang.idtp.HasValue)
+                        {
+                            var tmpCity = _donhangchuyenphattpRepository.GetSingleById(khachhang.idtp.Value);
+                            if (tmpCity != null)
+                                item.City = tmpCity.tentp;
+                        }
                     }
                 }
                 if (item.CreatedDate != null)
@@ -1501,11 +1513,11 @@ namespace SoftBBM.Web.api
                     khachhangViewModel khachhangVM = new khachhangViewModel();
                     var channel = _softChannelRepository.GetSingleById(donhang.ChannelId.Value);
                     var channelVM = Mapper.Map<SoftChannel, SoftChannelViewModel>(channel);
-                    if (donhang.makh.Value > 0)
-                    {
-                        var khachhangModel = _khachhangRepository.GetSingleById(donhang.makh.Value);
-                        khachhangVM = Mapper.Map<khachhang, khachhangViewModel>(khachhangModel);
-                    }
+                    //if (donhang.makh.Value > 0)
+                    //{
+                    //    var khachhangModel = _khachhangRepository.GetSingleById(donhang.makh.Value);
+                    //    khachhangVM = Mapper.Map<khachhang, khachhangViewModel>(khachhangModel);
+                    //}
 
                     List<SoftOrderDetailViewModel> orderDetails = new List<SoftOrderDetailViewModel>();
                     foreach (var item in donhang.donhang_ct)
@@ -1534,7 +1546,7 @@ namespace SoftBBM.Web.api
 
                     donhangAfterEditViewModel donhangAfterEdit = new donhangAfterEditViewModel();
                     donhangAfterEdit.channel = channelVM;
-                    donhangAfterEdit.customer = khachhangVM;
+                    //donhangAfterEdit.customer = khachhangVM;
                     donhangAfterEdit.orderDetails = orderDetails;
                     //donhangAfterEdit.shipperId = donhang.ShipperId;
 
@@ -1590,6 +1602,8 @@ namespace SoftBBM.Web.api
                             }
                             _khachhangRepository.Update(khachhang);
                             _unitOfWork.Commit();
+                            khachhangVM = Mapper.Map<khachhang, khachhangViewModel>(khachhang);
+                            donhangAfterEdit.customer = khachhangVM;
                         }
 
                         foreach (var item in donhang.donhang_ct)
