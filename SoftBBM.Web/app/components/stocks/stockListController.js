@@ -314,6 +314,7 @@
                 templateUrl: '/app/components/stocks/productAddModal.html',
                 controller: 'productAddController',
                 scope: $scope,
+                size: 'lg',
                 backdrop: 'static',
                 keyboard: false
             }).result.finally(function () {

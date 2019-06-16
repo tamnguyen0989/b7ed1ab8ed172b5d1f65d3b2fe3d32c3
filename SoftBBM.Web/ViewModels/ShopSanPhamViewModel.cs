@@ -139,5 +139,17 @@ namespace SoftBBM.Web.ViewModels
         public string masp { get; set; }
         public string tensp { get; set; }
     }
-
+    public class ShopSanPhamInputAddVM
+    {
+        public ShopSanPhamCategoryViewModel selectedProductCategory { get; set; }
+        public string productCode { get; set; }
+        public string productName { get; set; }
+        public SoftSupplierViewModel selectedSupplier { get; set; }
+        public ShopSanPhamStatusViewModel selectedProductStatus { get; set; }
+        public string barCode { get; set; }
+        public int priceRef { get; set; }
+        public int priceCHA { get; set; }
+        public int priceONL { get; set; }
+        public int userId { get; set; }
+    }
 }

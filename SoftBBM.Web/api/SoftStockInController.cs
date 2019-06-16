@@ -259,7 +259,7 @@ namespace SoftBBM.Web.api
                         shopSanPham.UpdatedDate = DateTime.Now;
                         shopSanPham.UpdatedBy = softStockInVm.CreatedBy;
                         var checkZero = ((int)stockTotalAll + item.Quantity);
-                        if (checkZero == 0)
+                        if (checkZero == 0 || (int)stockTotalAll==0)
                             shopSanPham.PriceAvg = shopSanPham.PriceBase;
                         else
                             shopSanPham.PriceAvg = (shopSanPham.PriceAvg * (int)stockTotalAll + item.PriceNew * item.Quantity) / ((int)stockTotalAll + item.Quantity);
@@ -392,7 +392,7 @@ namespace SoftBBM.Web.api
                             shopSanPham.UpdatedDate = DateTime.Now;
                             shopSanPham.UpdatedBy = userId;
                             var checkZero = ((int)stockTotalAll + item.Quantity);
-                            if (checkZero == 0)
+                            if (checkZero == 0 || (int)stockTotalAll == 0)
                                 shopSanPham.PriceAvg = shopSanPham.PriceBase;
                             else
                                 shopSanPham.PriceAvg = (shopSanPham.PriceAvg * (int)stockTotalAll + item.PriceNew * item.Quantity) / ((int)stockTotalAll + item.Quantity);

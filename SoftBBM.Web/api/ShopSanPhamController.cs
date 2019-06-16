@@ -3,6 +3,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Table;
 using SoftBBM.Web.DAL.Infrastructure;
 using SoftBBM.Web.DAL.Repositories;
+using SoftBBM.Web.Enum;
 using SoftBBM.Web.Infrastructure.Core;
 using SoftBBM.Web.Infrastructure.Extensions;
 using SoftBBM.Web.Models;
@@ -332,44 +333,116 @@ namespace SoftBBM.Web.api
 
         }
 
+        //[Route("add")]
+        //[Authorize(Roles = "ProductAdd")]
+        //[HttpPost]
+        //public HttpResponseMessage Add(HttpRequestMessage request, ShopSanPhamViewModel productVM)
+        //{
+        //    HttpResponseMessage response = null;
+        //    try
+        //    {
+        //        var existShopSanPham = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim() == productVM.masp.Trim());
+        //        if (existShopSanPham == null)
+        //        {
+        //            shop_sanpham newShopSanPham = new shop_sanpham();
+        //            newShopSanPham.UpdateNewShopSanPham(productVM);
+        //            _shopSanPhamRepository.Add(newShopSanPham);
+        //            _unitOfWork.Commit();
+
+        //            var branches = _softBranchRepository.GetAllIds();
+        //            //var channels = _softChannelRepository.GetAllIds();
+        //            //foreach (var channel in channels.ToList())
+        //            //{
+        //            //    var newPrice = new SoftChannelProductPrice();
+        //            //    newPrice.ProductId = newShopSanPham.id;
+        //            //    newPrice.ChannelId = channel;
+        //            //    newPrice.Price = 0;
+        //            //    newPrice.CreatedDate = DateTime.Now;
+        //            //    _softChannelProductPriceRepository.Add(newPrice);
+        //            //}
+        //            foreach (var branch in branches.ToList())
+        //            {
+        //                var newstock = new SoftBranchProductStock();
+        //                newstock.ProductId = newShopSanPham.id;
+        //                newstock.BranchId = branch;
+        //                newstock.StockTotal = 0;
+        //                newstock.CreatedDate = DateTime.Now;
+        //                _softStockRepository.Add(newstock);
+        //            }
+        //            shop_bienthe newbt = new shop_bienthe();
+        //            newbt.idsp = newShopSanPham.id;
+        //            newbt.title = "default";
+        //            newbt.gia = 100000;
+        //            newbt.giasosanh = 0;
+        //            newbt.isdelete = false;
+        //            _shopbientheRepository.Add(newbt);
+        //            _unitOfWork.Commit();
+        //            response = request.CreateResponse(HttpStatusCode.OK, true);
+        //        }
+        //        else
+        //            response = request.CreateResponse(HttpStatusCode.BadRequest, "Lỗi! Đã có mã sản phẩm này !");
+
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+        //        return response;
+        //    }
+
+        //}
+
         [Route("add")]
         [Authorize(Roles = "ProductAdd")]
         [HttpPost]
-        public HttpResponseMessage Add(HttpRequestMessage request, ShopSanPhamViewModel productVM)
+        public HttpResponseMessage Add(HttpRequestMessage request, ShopSanPhamInputAddVM input)
         {
             HttpResponseMessage response = null;
             try
             {
-                var existShopSanPham = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim() == productVM.masp.Trim());
+                var existShopSanPham = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim() == input.productCode.Trim());
                 if (existShopSanPham == null)
                 {
-                    shop_sanpham newShopSanPham = new shop_sanpham();
-                    newShopSanPham.UpdateNewShopSanPham(productVM);
-                    _shopSanPhamRepository.Add(newShopSanPham);
+                    shop_sanpham shopSanPham = new shop_sanpham();
+                    shopSanPham.masp = input.productCode.Trim();
+                    shopSanPham.tensp = input.productName.Trim();
+                    shopSanPham.FromCreate = 2;
+                    shopSanPham.PriceAvg = 0;
+                    shopSanPham.PriceBase = 0;
+                    shopSanPham.PriceBaseOld = 0;
+                    shopSanPham.PriceRef = input.priceRef;
+                    shopSanPham.CreatedBy = input.userId;
+                    shopSanPham.CreatedDate = DateTime.Now;
+                    shopSanPham.CategoryId = input.selectedProductCategory.Id;
+                    _shopSanPhamRepository.Add(shopSanPham);
                     _unitOfWork.Commit();
 
+                    var priceCHA = new SoftChannelProductPrice();
+                    priceCHA.ProductId = shopSanPham.id;
+                    priceCHA.ChannelId = (int)ChannelEnum.CHA;
+                    priceCHA.Price = input.priceCHA;
+                    priceCHA.CreatedDate = DateTime.Now;
+                    _softChannelProductPriceRepository.Add(priceCHA);
+
+                    var priceONL = new SoftChannelProductPrice();
+                    priceONL.ProductId = shopSanPham.id;
+                    priceONL.ChannelId = (int)ChannelEnum.ONL;
+                    priceONL.Price = input.priceONL;
+                    priceONL.CreatedDate = DateTime.Now;
+                    _softChannelProductPriceRepository.Add(priceONL);
+
                     var branches = _softBranchRepository.GetAllIds();
-                    //var channels = _softChannelRepository.GetAllIds();
-                    //foreach (var channel in channels.ToList())
-                    //{
-                    //    var newPrice = new SoftChannelProductPrice();
-                    //    newPrice.ProductId = newShopSanPham.id;
-                    //    newPrice.ChannelId = channel;
-                    //    newPrice.Price = 0;
-                    //    newPrice.CreatedDate = DateTime.Now;
-                    //    _softChannelProductPriceRepository.Add(newPrice);
-                    //}
                     foreach (var branch in branches.ToList())
                     {
                         var newstock = new SoftBranchProductStock();
-                        newstock.ProductId = newShopSanPham.id;
+                        newstock.ProductId = shopSanPham.id;
                         newstock.BranchId = branch;
                         newstock.StockTotal = 0;
                         newstock.CreatedDate = DateTime.Now;
                         _softStockRepository.Add(newstock);
                     }
                     shop_bienthe newbt = new shop_bienthe();
-                    newbt.idsp = newShopSanPham.id;
+                    newbt.idsp = shopSanPham.id;
                     newbt.title = "default";
                     newbt.gia = 100000;
                     newbt.giasosanh = 0;

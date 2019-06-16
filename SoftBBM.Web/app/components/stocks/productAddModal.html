@@ -3,42 +3,125 @@
 </div>
 <div class="modal-body" id="modal-body">
     <form name="frmAddProduct">
-        <div class="row ">
-            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Nhóm sp</label>
-            <div class="col-xs-7">
-                <select ng-change="genNewProductCodeByCategory()" ng-options="option.Name for option in productCategories track by option.Id"
-                        ng-model="selectedProductCategory"
-                        name="selectedProductCategory"
-                        class="form-control">
-                    <option disabled value="">--- Chọn nhóm sản phẩm ---</option>
-                </select>
+        <div class="col col-xs-6">
+            <div class="row">
+                <div class="col col-xs-4 text-right">
+                    <label class="has-error custom_label" ng-show="frmAddProduct.selectedProductCategory.$invalid">*&nbsp;</label><label class="custom_label">Nhóm sp</label>
+                </div>
+                <div class="col col-xs-8">
+                    <select ng-change="genNewProductCodeByCategory()" ng-options="option.Name for option in productCategories track by option.Id"
+                            ng-model="selectedProductCategory"
+                            name="selectedProductCategory"
+                            required
+                            class="form-control width100">
+                        <option disabled value="">--- Chọn nhóm sản phẩm ---</option>
+                    </select>
+                </div>
+            </div>
+
+            <div ng-show="selectedProductCategory" class="row margintop5px">
+                <div class="col col-xs-4 text-right">
+                    <label class="custom_label"></label>
+                </div>
+                <div class="col col-xs-8">
+                    <label class="control-label">{{lastestProductCodeByCategory}}</label> <span ng-show="lastestProductCodeByCategory">- Mã gần nhất của nhóm</span>
+                </div>
+            </div>
+            <div class="row margintop5px">
+                <div class="col col-xs-4 text-right">
+                    <label class="has-error custom_label" ng-show="frmAddProduct.productCode.$invalid">*&nbsp;</label><label class="custom_label">Mã SP</label>
+                </div>
+                <div class="col col-xs-8">
+                    <input type="text" name="productCode" ng-maxlength="256" required ng-model="productCode" class="form-control width100">
+                </div>
+            </div>
+            <div class="row margintop5px">
+                <div class="col col-xs-4 text-right">
+                    <label class="has-error custom_label" ng-show="frmAddProduct.productName.$invalid">*&nbsp;</label><label class="custom_label">Tên SP</label>
+                </div>
+                <div class="col col-xs-8">
+                    <input type="text" name="productName" ng-maxlength="256" required ng-model="productName" class="form-control width100">
+                </div>
+            </div>
+            <div class="row margintop5px">
+                <div class="col col-xs-4 text-right">
+                    <label class="has-error custom_label" ng-show="frmAddProduct.supplier.$invalid">*&nbsp;</label><label class="custom_label text-right">Nhà cung cấp:</label>
+                </div>
+                <div class="col col-xs-8">
+                    <select ng-options="option.Name for option in suppliers track by option.Id"
+                            ng-model="selectedSupplier"
+                            name="supplier"
+                            required
+                            class="form-control width100">
+                        <option value="">--- Chọn nhà NCC ---</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row margintop5px">
+                <div class="col col-xs-4  text-right">
+                    <label class="has-error custom_label" ng-show="frmAddProduct.productStatus.$invalid">*&nbsp;</label><label class="custom_label">Tình trạng:</label>
+                </div>
+                <div class="col col-xs-8">
+                    <select ng-options="option.Name for option in productStatuses track by option.Id"
+                            ng-model="selectedProductStatus"
+                            name="productStatus"
+                            required
+                            class="form-control width100">
+                        <option value="">--- Chọn tình trạng ---</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row margintop5px">
+                <div class="col col-xs-4 text-right">
+                    <label class="custom_label">Mã vạch</label>
+                </div>
+                <div class="col col-xs-8">
+                    <input type="text" name="barCode" ng-model="barCode" class="form-control width100">
+                </div>
             </div>
         </div>
-        <div ng-show="selectedProductCategory" class="row margintop10px">
-            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;"></label>
-            <div class="col-xs-8">
-                <label class="control-label">{{lastestProductCodeByCategory}}</label> <span ng-show="lastestProductCodeByCategory">- Mã gần nhất của nhóm</span>
+        <div class="col col-xs-6">
+            <div class="row">
+                <div class="col col-xs-4 text-right">
+                    <label class="has-error custom_label" ng-show="frmAddProduct.priceRef.$invalid">*&nbsp;</label><label class="custom_label">Giá tham chiếu:</label>
+                </div>
+                <div class="col col-xs-8">
+                    <input type="text" class="form-control width100" format="number" ng-model="priceRef" name="priceRef" required/>
+                </div>
+            </div>
+            <div class="row margintop5px">
+                <div class="col col-xs-4 text-right">
+                    <label class="has-error custom_label" ng-show="frmAddProduct.priceCHA.$invalid">*&nbsp;</label><label class="custom_label">Giá cửa hàng:</label>
+                </div>
+                <div class="col col-xs-8">
+                    <input type="text" class="form-control width100" format="number" ng-model="priceCHA" name="priceCHA" required/>
+                </div>
+            </div>
+            <div class="row margintop5px">
+                <div class="col col-xs-4 text-right">
+                    <label class="has-error custom_label" ng-show="frmAddProduct.priceONL.$invalid">*&nbsp;</label><label class="custom_label">Giá online:</label>
+                </div>
+                <div class="col col-xs-8">
+                    <input type="text" class="form-control width100" format="number" ng-model="priceONL" name="priceONL" required/>
+                </div>
+            </div>
+            <div class="row margintop20px text-center">
+                <button ng-click="addProduct()" ng-disabled="frmAddProduct.$invalid" class="btn btn-success">Hoàn thành</button>
+                <button ng-click="backButton()" title="Trở về" class="btn btn-default" type="button">Trở về</button>
+            </div>
+            <div class="row margintop20px">
+                <label class="cus-control-label marginleft20px" ng-show="frmAddProduct.$invalid" style="font-style:italic;font-weight:500;font-size:12px;color:red">(*) Trường bắt buộc nhập</label>
             </div>
         </div>
-        <div class="row margintop10px">
-            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Mã sp</label>
-            <div class="col-xs-7">
-                <input type="text" name="productCode" ng-maxlength="256" required ng-model="productCode" class="form-control">
-                <span ng-show="frmAddProduct.productCode.$invalid" class="has-error">Phải nhập mã sp</span>
-                <span ng-show="frmAddProduct.productCode.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
-            </div>
-        </div>
-        <div class="row margintop10px">
-            <label class="col-xs-3" style="padding-top: 7px;margin-bottom: 0;text-align: right;">Tên sp</label>
-            <div class="col-xs-7">
-                <input type="text" name="productName" ng-maxlength="256" required ng-model="productName" class="form-control">
-                <span ng-show="frmAddProduct.productName.$invalid" class="has-error">Phải nhập tên sp</span>
-                <span ng-show="frmAddProduct.productName.$error.maxlength" class="has-error"> chỉ được 256 kí tự</span>
+
+        <div class="row nomarginleft">
+            <div ng-if="loading">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-4">
+                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                </div>
+                <div class="col-xs-4"></div>
             </div>
         </div>
     </form>
-</div>
-<div class="modal-footer">
-    <button ng-click="addProduct()" class="btn btn-success">Hoàn thành</button>
-    <button ng-click="backButton()" title="Trở về" class="btn btn-default" type="button">Trở về</button>
 </div>
