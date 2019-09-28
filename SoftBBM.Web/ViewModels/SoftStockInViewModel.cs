@@ -41,6 +41,7 @@ namespace SoftBBM.Web.ViewModels
         public int? PaymentTypeId { get; set; }
         public int? PaymentMethodId { get; set; }
         public int? PaymentStatusId { get; set; }
+        public string FromSuppliers { get; set; }
 
         public IEnumerable<SoftStockInProductViewModel> SoftStockInDetails { get; set; }
         public virtual SoftStockInStatusViewModel SoftStockInStatu { get; set; }
@@ -193,5 +194,11 @@ namespace SoftBBM.Web.ViewModels
         public int paymentStatusId { get; set; }
         public int? paymentMethodId { get; set; }       
         public int? updatedBy { get; set; }
+    }
+    public class UpdateStockInInput
+    {
+        public int stockinId { get; set; }
+        public string description { get; set; }
+        public int userId { get; set; }
     }
 }

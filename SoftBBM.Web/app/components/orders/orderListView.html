@@ -145,7 +145,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="responsivetable">
-                        <table class="table table-bordered table-striped table-hover text-center table_data" style="margin-bottom:10px">
+                        <table class="table table-bordered table-striped table-hover text-left table_data" style="margin-bottom:10px">
                             <tr style="background-color:white">
                                 <td colspan="7" style="text-align:left;">
                                     <div class="input-group" ng-show="selectedOrders.length>0">
@@ -213,7 +213,7 @@
                                 </td>-->
                                 <td>{{item.CustomerName}}</td>
                                 <td>{{item.CreatedDateConvert}}</td>
-                                <td>{{item.tongtien | currency:'':0}}</td>
+                                <td style="text-align:right">{{item.tongtien | currency:'':0}}</td>
                                 <td ng-hide="selectedChannel.Id==1">
                                     {{item.City}}
                                 </td>
@@ -290,7 +290,7 @@
                             <div class="col col-xs-2 text-right" style="padding-right:5px">TT :</div>
                             <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.tenpttt}}<span ng-hide="!orderReturn.giogiao"> | TG: {{orderReturn.giogiao}}</span><span ng-hide="!orderReturn.tenptgh"> | GH: {{orderReturn.tenptgh}}</span></div>
                         </div>
-                        <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px;margin-top:3px">
+                        <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:0px;margin-top:3px">
                             <tr>
                                 <th class="text-center" style="padding:1px"></th>
                                 <th ng-hide="orderReturn.ChannelId==1" class="text-center" style="padding:1px">Mã</th>
@@ -388,7 +388,7 @@
                                 <div class="col col-xs-2 text-right" style="padding-right:5px">TT :</div>
                                 <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.tenpttt}}<span ng-hide="!order.giogiao"> | TG: {{order.giogiao}}</span><span ng-hide="!order.tenptgh"> | GH: {{order.tenptgh}}</span></div>
                             </div>
-                            <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px;margin-top:3px">
+                            <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:0px;margin-top:3px">
                                 <tr>
                                     <th class="text-center" style="padding:1px"></th>
                                     <th ng-hide="orderReturn.ChannelId==1" class="text-center" style="padding:1px">Mã</th>

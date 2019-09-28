@@ -27,6 +27,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -245,6 +246,7 @@
     <Compile Include="api\HomeController.cs" />
     <Compile Include="api\ImportController.cs" />
     <Compile Include="api\khachhangController.cs" />
+    <Compile Include="api\ShopeeController.cs" />
     <Compile Include="api\ShopSanPhamCategoryController.cs" />
     <Compile Include="api\ShopSanPhamController.cs" />
     <Compile Include="api\ShopSanPhamLogController.cs" />
@@ -288,6 +290,7 @@
     <Compile Include="DAL\Repositories\donhangRepository.cs" />
     <Compile Include="DAL\Repositories\donhangStatusRepository.cs" />
     <Compile Include="DAL\Repositories\ShopeeRepository.cs" />
+    <Compile Include="DAL\Repositories\SoftPointUpdateLogRepository.cs" />
     <Compile Include="DAL\Repositories\SoftStockInPaymentMethodRepository.cs" />
     <Compile Include="DAL\Repositories\SoftStockInPaymentStatusRepository.cs" />
     <Compile Include="DAL\Repositories\khachhangRepository.cs" />
@@ -504,6 +507,9 @@
       <DependentUpon>SoftBBM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SoftOrderStatu.cs">
+      <DependentUpon>SoftBBM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SoftPointUpdateLog.cs">
       <DependentUpon>SoftBBM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SoftReturnSupplier.cs">

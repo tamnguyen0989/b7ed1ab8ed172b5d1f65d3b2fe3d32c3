@@ -12,25 +12,20 @@ namespace SoftBBM.Web.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class SoftChannelProductPrice
+    public partial class SoftPointUpdateLog
     {
-        public int Id { get; set; }
-        public Nullable<int> ChannelId { get; set; }
-        public Nullable<int> ProductId { get; set; }
-        public Nullable<int> Price { get; set; }
-        public Nullable<int> PriceDiscount { get; set; }
-        public Nullable<System.DateTime> StartDateDiscount { get; set; }
-        public Nullable<System.DateTime> EndDateDiscount { get; set; }
-        public string Description { get; set; }
+        public long Id { get; set; }
+        public Nullable<int> CustomerId { get; set; }
+        public Nullable<long> OrderId { get; set; }
+        public Nullable<int> PointAdd { get; set; }
+        public Nullable<int> PointBefore { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
         public Nullable<bool> Status { get; set; }
     
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        public virtual ApplicationUser ApplicationUser1 { get; set; }
-        public virtual SoftChannel SoftChannel { get; set; }
-        public virtual shop_sanpham shop_sanpham { get; set; }
+        public virtual donhang donhang { get; set; }
+        public virtual khachhang khachhang { get; set; }
     }
 }

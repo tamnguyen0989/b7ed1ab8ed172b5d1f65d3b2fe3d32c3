@@ -20,8 +20,6 @@ namespace SoftBBM.Web.Models
             this.ApplicationUserGroups = new HashSet<ApplicationUserGroup>();
             this.ApplicationUserRoles = new HashSet<ApplicationUserRole>();
             this.ApplicationUserSoftBranches = new HashSet<ApplicationUserSoftBranch>();
-            this.shop_sanpham = new HashSet<shop_sanpham>();
-            this.shop_sanpham1 = new HashSet<shop_sanpham>();
             this.donhangs = new HashSet<donhang>();
             this.donhangs1 = new HashSet<donhang>();
             this.donhangs2 = new HashSet<donhang>();
@@ -44,6 +42,8 @@ namespace SoftBBM.Web.Models
             this.SoftSupplierVatStatus = new HashSet<SoftSupplierVatStatu>();
             this.SoftSupplierVatStatus1 = new HashSet<SoftSupplierVatStatu>();
             this.shop_sanphamLogs = new HashSet<shop_sanphamLogs>();
+            this.shop_sanpham = new HashSet<shop_sanpham>();
+            this.shop_sanpham1 = new HashSet<shop_sanpham>();
         }
     
         public int Id { get; set; }
@@ -67,10 +67,6 @@ namespace SoftBBM.Web.Models
         public virtual ICollection<ApplicationUserRole> ApplicationUserRoles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ApplicationUserSoftBranch> ApplicationUserSoftBranches { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<shop_sanpham> shop_sanpham { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<shop_sanpham> shop_sanpham1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<donhang> donhangs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -115,5 +111,9 @@ namespace SoftBBM.Web.Models
         public virtual ICollection<SoftSupplierVatStatu> SoftSupplierVatStatus1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<shop_sanphamLogs> shop_sanphamLogs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<shop_sanpham> shop_sanpham { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<shop_sanpham> shop_sanpham1 { get; set; }
     }
 }

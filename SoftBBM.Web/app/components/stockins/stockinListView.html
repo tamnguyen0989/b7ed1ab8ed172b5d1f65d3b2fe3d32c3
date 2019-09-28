@@ -184,7 +184,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="responsivetable">
-                        <table class="table table-bordered table-striped table-hover text-center table_data" style="margin-bottom:10px">
+                        <table class="table table-bordered table-striped table-hover text-left table_data" style="margin-bottom:10px">
                             <tr style="background-color:white">
                                 <th colspan="11" style="text-align:right;">Tổng tiền ds:&emsp; <span style="color:red">{{totalMoney | currency:'':0}} đ</span></th>
                             </tr>
@@ -212,7 +212,7 @@
                                 <!--<td>{{item.ToBranch}}</td>-->
                                 <td>{{item.CreatedDateConvert}}</td>
                                 <td>{{item.StockInDateConvert}}</td>
-                                <td>{{item.Total | currency:'':0}} đ</td>
+                                <td class="price_currency">{{item.Total | currency:'':0}}</td>
                                 <td>{{item.TotalQuantity}}</td>
                                 <td>
                                     {{item.Description}}
@@ -306,7 +306,7 @@
                             <div class="col col-xs-5 text-right" style="padding-right:5px">Ngày nhập kho :</div>
                             <div class="col col-xs-7 text-left" style="padding-left:5px">{{stockinReturn.StockinDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
                         </div>
-                        <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px">
+                        <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:0px">
                             <tr>
                                 <th class="text-center" style="padding:1px"></th>
                                 <th class="text-center" style="padding:1px">Mã</th>

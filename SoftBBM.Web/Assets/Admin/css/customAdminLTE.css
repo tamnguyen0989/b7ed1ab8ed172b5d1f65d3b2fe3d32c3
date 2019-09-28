@@ -16,7 +16,8 @@ tr td button {
 
 tr td input {
     display: initial;
-    text-align: center;
+    /*text-align: center;*/
+    padding-left:5px
 }
 
 table tr:first-child th {
@@ -440,4 +441,18 @@ li > a > p {
 
 .padding_1px {
     padding: 1px !important;
+}
+
+.price_currency{
+    text-align:right
+}
+
+.padding_right_5px{
+    padding-right:5px
+}
+.padding_left_5px {
+    padding-left: 5px
+}
+.padding_left_20px {
+    padding-left: 20px
 }

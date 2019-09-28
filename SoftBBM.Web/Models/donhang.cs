@@ -18,6 +18,7 @@ namespace SoftBBM.Web.Models
         public donhang()
         {
             this.donhang_ct = new HashSet<donhang_ct>();
+            this.SoftPointUpdateLogs = new HashSet<SoftPointUpdateLog>();
         }
     
         public long id { get; set; }
@@ -74,5 +75,7 @@ namespace SoftBBM.Web.Models
         public virtual SoftChannel SoftChannel { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<donhang_ct> donhang_ct { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SoftPointUpdateLog> SoftPointUpdateLogs { get; set; }
     }
 }

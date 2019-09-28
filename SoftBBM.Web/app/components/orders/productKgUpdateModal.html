@@ -1,5 +1,6 @@
 ﻿<div class="modal-header">
     <h4>Cập nhật kích thước - {{masp}} - {{tensp}}</h4>
+    <button style="position:absolute;top:0px;right:5px" class="btn btn-box-tool" data-widget="remove" ng-click="back()"><i class="fa fa-2 fa-times"></i></button>
 </div>
 <div class="modal-body" id="modal-body">
     <form name="frmUpdateKg">
@@ -55,4 +56,5 @@
 </div>
 <div class="modal-footer">
     <button ng-disabled="frmUpdateKg.$invalid" ng-click="updateKg()" class="btn btn-success">Hoàn thành</button>
+    <!--<button type="button" class="btn btn-default" style="background-color:white" ng-click="back()">Trở về</button>-->
 </div>

@@ -48,6 +48,8 @@ namespace SoftBBM.Web.DAL.Repositories
                             donhangs = query.Where(c => c.khachhang.hoten.ToLower().Contains(orderFilterVM.filter) || c.id.ToString() == orderFilterVM.filter || c.khachhang.dienthoai.Contains(orderFilterVM.filter) || c.khachhang.hoten.Contains(orderFilterVM.filter) || c.khachhang.duong.Contains(orderFilterVM.filter) || c.ghichu.Contains(orderFilterVM.filter));
                         else
                             donhangs = donhangs.Where(c => c.khachhang.hoten.ToLower().Contains(orderFilterVM.filter) || c.id.ToString() == orderFilterVM.filter || c.khachhang.dienthoai.Contains(orderFilterVM.filter) || c.khachhang.hoten.Contains(orderFilterVM.filter) || c.khachhang.duong.Contains(orderFilterVM.filter) || c.ghichu.Contains(orderFilterVM.filter));
+                        if (rootExist == false) rootExist = true;
+
                     }
                     if (orderFilterVM.selectedOrderStatusFilters.Count > 0)
                     {
@@ -144,7 +146,7 @@ namespace SoftBBM.Web.DAL.Repositories
                     donhangs = donhangs.OrderBy(x => x.CreatedDate);
                     break;
                 default:
-                    donhangs = donhangs.OrderByDescending(x => x.id);
+                    donhangs = donhangs.OrderByDescending(x => x.CreatedDate);
                     break;
             }
 

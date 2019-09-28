@@ -12,6 +12,7 @@
         $scope.tensp = '';
 
         $scope.updateKg = updateKg;
+        $scope.back = back;
 
         function updateKg() {
             var config = {
@@ -45,6 +46,9 @@
             }, function (result) {
                 notificationService.displayError(result.data);
             });
+        }
+        function back() {
+            $uibModalInstance.close(null);
         }
 
         loadProductInfo();

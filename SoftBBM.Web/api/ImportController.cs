@@ -144,7 +144,55 @@ namespace SoftBBM.Web.api
                                     }
                                     if (workSheet.Cells[i, 6].Value != null)
                                     {
-                                        var categoryEx = workSheet.Cells[i, 6].Value.ToString();
+                                        int priceOnl = 0;
+                                        int.TryParse(workSheet.Cells[i, 6].Value.ToString(), out priceOnl);
+                                        var channelProductPrice = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == product.id && x.ChannelId == 2);
+                                        if (channelProductPrice != null)
+                                        {
+                                            channelProductPrice.Price = priceOnl;
+                                            channelProductPrice.UpdatedBy = userId;
+                                            channelProductPrice.UpdatedDate = DateTime.Now;
+                                            _softChannelProductPriceRepository.Update(channelProductPrice);
+                                        }
+                                        else
+                                        {
+                                            var newChannelProductPrice = new SoftChannelProductPrice();
+                                            newChannelProductPrice.ChannelId = 2;
+                                            newChannelProductPrice.ProductId = product.id;
+                                            newChannelProductPrice.Price = priceOnl;
+                                            newChannelProductPrice.CreatedBy = userId;
+                                            newChannelProductPrice.CreatedDate = DateTime.Now;
+                                            _softChannelProductPriceRepository.Add(newChannelProductPrice);
+                                        }
+                                        updated = true;
+                                    }
+                                    if (workSheet.Cells[i, 7].Value != null)
+                                    {
+                                        int priceCha = 0;
+                                        int.TryParse(workSheet.Cells[i, 7].Value.ToString(), out priceCha);
+                                        var channelProductPrice = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == product.id && x.ChannelId == 1);
+                                        if (channelProductPrice != null)
+                                        {
+                                            channelProductPrice.Price = priceCha;
+                                            channelProductPrice.UpdatedBy = userId;
+                                            channelProductPrice.UpdatedDate = DateTime.Now;
+                                            _softChannelProductPriceRepository.Update(channelProductPrice);
+                                        }
+                                        else
+                                        {
+                                            var newChannelProductPrice = new SoftChannelProductPrice();
+                                            newChannelProductPrice.ChannelId = 1;
+                                            newChannelProductPrice.ProductId = product.id;
+                                            newChannelProductPrice.Price = priceCha;
+                                            newChannelProductPrice.CreatedBy = userId;
+                                            newChannelProductPrice.CreatedDate = DateTime.Now;
+                                            _softChannelProductPriceRepository.Add(newChannelProductPrice);
+                                        }
+                                        updated = true;
+                                    }
+                                    if (workSheet.Cells[i, 8].Value != null)
+                                    {
+                                        var categoryEx = workSheet.Cells[i, 8].Value.ToString();
                                         var category = _shopSanPhamCategoryRepository.GetSingleByCondition(x => x.Name == categoryEx);
                                         if (category != null)
                                         {
@@ -152,9 +200,9 @@ namespace SoftBBM.Web.api
                                             updated = true;
                                         }
                                     }
-                                    if (workSheet.Cells[i, 7].Value != null)
+                                    if (workSheet.Cells[i, 9].Value != null)
                                     {
-                                        var supplierEx = workSheet.Cells[i, 7].Value.ToString();
+                                        var supplierEx = workSheet.Cells[i, 9].Value.ToString();
                                         var supplier = _softSupplierRepository.GetSingleByCondition(x => x.Name == supplierEx);
                                         if (supplier != null)
                                         {
@@ -163,9 +211,9 @@ namespace SoftBBM.Web.api
                                         }
 
                                     }
-                                    if (workSheet.Cells[i, 8].Value != null)
+                                    if (workSheet.Cells[i, 10].Value != null)
                                     {
-                                        product.Barcode = workSheet.Cells[i, 8].Value.ToString();
+                                        product.Barcode = workSheet.Cells[i, 10].Value.ToString();
                                         updated = true;
                                     }
                                     //product.PriceAvg = 
@@ -197,6 +245,9 @@ namespace SoftBBM.Web.api
                                     //add product
                                     shop_sanpham sp = new shop_sanpham();
                                     sp.masp = code;
+                                    int num;
+                                    var isNum = int.TryParse(code.RemoveChar(), out num);
+                                    sp.CodeSuffix = num;
                                     if (workSheet.Cells[i, 2].Value != null)
                                     {
                                         sp.tensp = workSheet.Cells[i, 2].Value.ToString();
@@ -223,23 +274,23 @@ namespace SoftBBM.Web.api
                                     }
                                     else
                                         sp.PriceRef = 0;
-                                    if (workSheet.Cells[i, 6].Value != null)
+                                    if (workSheet.Cells[i, 8].Value != null)
                                     {
-                                        var categoryEx = workSheet.Cells[i, 6].Value.ToString();
+                                        var categoryEx = workSheet.Cells[i, 8].Value.ToString();
                                         var category = _shopSanPhamCategoryRepository.GetSingleByCondition(x => x.Name == categoryEx);
                                         if (category != null)
                                             sp.CategoryId = category.Id;
                                     }
-                                    if (workSheet.Cells[i, 7].Value != null)
+                                    if (workSheet.Cells[i, 9].Value != null)
                                     {
-                                        var supplierEx = workSheet.Cells[i, 7].Value.ToString();
+                                        var supplierEx = workSheet.Cells[i, 9].Value.ToString();
                                         var supplier = _softSupplierRepository.GetSingleByCondition(x => x.Name == supplierEx);
                                         if (supplier != null)
                                             sp.SupplierId = supplier.Id;
                                     }
-                                    if (workSheet.Cells[i, 8].Value != null)
+                                    if (workSheet.Cells[i, 10].Value != null)
                                     {
-                                        sp.Barcode = workSheet.Cells[i, 8].Value.ToString();
+                                        sp.Barcode = workSheet.Cells[i, 10].Value.ToString();
                                     }
                                     sp.PriceBaseOld = 0;
                                     sp.PriceAvg = sp.PriceBase;
@@ -247,8 +298,36 @@ namespace SoftBBM.Web.api
                                     sp.CreatedBy = userId;
                                     sp.CreatedDate = DateTime.Now;
                                     sp.StatusId = "00";
+                                    sp.hide = true;
+                                    sp.FromCreate = 2;
                                     var newsp = _shopSanPhamRepository.Add(sp);
                                     _unitOfWork.Commit();
+
+                                    if (workSheet.Cells[i, 6].Value != null)
+                                    {
+                                        int priceOnl = 0;
+                                        int.TryParse(workSheet.Cells[i, 6].Value.ToString(), out priceOnl);
+                                        var channelProductPrice = new SoftChannelProductPrice();
+                                        channelProductPrice.ChannelId = 2;
+                                        channelProductPrice.ProductId = newsp.id;
+                                        channelProductPrice.Price = priceOnl;
+                                        channelProductPrice.CreatedBy = userId;
+                                        channelProductPrice.CreatedDate = DateTime.Now;
+                                        _softChannelProductPriceRepository.Add(channelProductPrice);
+                                    }
+                                    if (workSheet.Cells[i, 7].Value != null)
+                                    {
+                                        int priceCha = 0;
+                                        int.TryParse(workSheet.Cells[i, 7].Value.ToString(), out priceCha);
+                                        var channelProductPrice = new SoftChannelProductPrice();
+                                        channelProductPrice.ChannelId = 1;
+                                        channelProductPrice.ProductId = newsp.id;
+                                        channelProductPrice.Price = priceCha;
+                                        channelProductPrice.CreatedBy = userId;
+                                        channelProductPrice.CreatedDate = DateTime.Now;
+                                        _softChannelProductPriceRepository.Add(channelProductPrice);
+                                    }
+
                                     addedCount++;
 
                                     //add stock

@@ -403,10 +403,12 @@
                     keyboard: false
                 });
                 modalInstance.result.then(function (data) {
-                    item.kg = data.kg;
-                    item.chieucao = data.chieucao;
-                    item.chieudai = data.chieudai;
-                    item.chieurong = data.chieurong;
+                    if (data) {
+                        item.kg = data.kg;
+                        item.chieucao = data.chieucao;
+                        item.chieudai = data.chieudai;
+                        item.chieurong = data.chieurong;
+                    }
 
                     if ($scope.detailOrders.length > 0) {
                         if ($scope.addedProductIds.indexOf(item.id) == -1) {

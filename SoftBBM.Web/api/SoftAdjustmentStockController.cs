@@ -92,6 +92,7 @@ namespace SoftBBM.Web.api
                     stock.UpdatedDate = DateTime.Now;
                     stock.UpdatedBy = softAdjustmentStockAddVM.CreatedBy;
                     _softStockRepository.Update(stock);
+                    _unitOfWork.Commit();
 
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                     productLog.ProductId = item.id;
@@ -100,6 +101,8 @@ namespace SoftBBM.Web.api
                     productLog.CreatedBy = softAdjustmentStockAddVM.CreatedBy;
                     productLog.CreatedDate = DateTime.Now;
                     productLog.BranchId = softAdjustmentStockAddVM.BranchId;
+                    productLog.StockTotal = item.Quantity.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
                     _shopSanPhamLogRepository.Add(productLog);
                 }
                 _unitOfWork.Commit();

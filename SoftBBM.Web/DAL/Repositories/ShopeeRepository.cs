@@ -28,27 +28,30 @@ namespace SoftBBM.Web.DAL.Repositories
         public ShopeeRepository(ISoftChannelRepository softChannelRepository)
         {
             _softChannelRepository = softChannelRepository;
-            _apiId = 0;
-            _apiPassowrd = "";
-            _apiPartnerId = 0;
-            _validApi = false;
-            var channel = _softChannelRepository.GetSingleById((int)ChannelEnum.SPE);
-            var apiPartnerId = 0;
-            var apiId = 0;
-            int.TryParse(channel.ApiId, out apiId);
-            int.TryParse(channel.ApiPartnerId, out apiPartnerId);
-            var result = authenShopee(apiId, channel.ApiPassword, apiPartnerId);
-            if(!string.IsNullOrEmpty(result))
-            {
-                var resultJson = JsonConvert.DeserializeObject<ShopInfo>(result);
-                if (resultJson.status == "NORMAL" && channel.Enabled == true)
-                {
-                    _apiId = apiId;
-                    _apiPassowrd = channel.ApiPassword;
-                    _apiPartnerId = apiPartnerId;
-                    _validApi = true;
-                }
-            }
+
+            _apiId = 1928354;
+            _apiPassowrd = "64e256a952a7d79e9c0d09cd2075b8249b6cbba27586a4238e2733af28e26266";
+            _apiPartnerId = 842214;
+
+            //_validApi = false;
+            //var channel = _softChannelRepository.GetSingleById((int)ChannelEnum.SPE);
+            //var apiPartnerId = 0;
+            //var apiId = 0;
+            //int.TryParse(channel.ApiId, out apiId);
+            //int.TryParse(channel.ApiPartnerId, out apiPartnerId);
+
+            //var result = authenShopee(apiId, channel.ApiPassword, apiPartnerId);
+            //if(!string.IsNullOrEmpty(result))
+            //{
+            //    var resultJson = JsonConvert.DeserializeObject<ShopInfo>(result);
+            //    if (resultJson.status == "NORMAL" && channel.Enabled == true)
+            //    {
+            //        _apiId = apiId;
+            //        _apiPassowrd = channel.ApiPassword;
+            //        _apiPartnerId = apiPartnerId;
+            //        _validApi = true;
+            //    }
+            //}
         }
 
         public string authenShopee(int apiId, string apiPassword, int apiPartnerId)
@@ -112,8 +115,7 @@ namespace SoftBBM.Web.DAL.Repositories
             var jsonStrResult = "";
             var timeStamp = getTimestamp();
             string signatureBaseString = url + '|' + dataJson;
-            //sandbox
-            _apiPassowrd = "ea53c071f3c437688458fe8ec77225277dc6df1cb4ce8de5f8731d789fdb9cf4";
+            _apiPassowrd = "64e256a952a7d79e9c0d09cd2075b8249b6cbba27586a4238e2733af28e26266";
 
             string signatureAuth = createSignature(_apiPassowrd, signatureBaseString);
 
@@ -140,9 +142,7 @@ namespace SoftBBM.Web.DAL.Repositories
         {
             var timestamp = getTimestamp();
             var result = "";
-            //var url = "https://partner.shopeemobile.com/api/v1/items/update_stock";
-            //sand box
-            var url= "https://partner.uat.shopeemobile.com/api/v1/items/update_stock";
+            var url= "https://partner.shopeemobile.com/api/v1/items/update_stock";
             string dataJson = "{'item_id':" + item_id + "," +
                               "'stock':" + stock + "," +
                               "'partner_id':" + partner_id + "," +

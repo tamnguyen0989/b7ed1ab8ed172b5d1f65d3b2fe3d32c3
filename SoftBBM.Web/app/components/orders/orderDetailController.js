@@ -10,6 +10,8 @@
         $scope.order = {
             donhang_ct: []
         };
+        $scope.newCustomerPhone = '';
+        $scope.updating = false;
 
         $scope.loadOrderDetails = loadOrderDetails;
         $scope.updateOrderDetails = updateOrderDetails;
@@ -22,6 +24,9 @@
         $scope.sumMoney = sumMoney;
         $scope.back = back;
         $scope.authenShippedOrder = authenShippedOrder;
+        $scope.editNewCustomerPhone = editNewCustomerPhone;
+        $scope.updateNewCustomerPhone = updateNewCustomerPhone;
+        $scope.cancelUpdateNewCustomerPhone = cancelUpdateNewCustomerPhone;
 
         var config = {
             params: {
@@ -268,6 +273,32 @@
                 notificationService.displayError(error.data);
 
             });
+        }
+        function editNewCustomerPhone() {
+            $scope.updating = true;
+            $scope.newCustomerPhone = '';
+        }
+        function updateNewCustomerPhone() {
+            if ($scope.newCustomerPhone) {
+                $scope.orderUpdate = {
+                    Id: $scope.selectedOrder.id,
+                    Phone: $scope.newCustomerPhone,
+                    UserId: $scope.userId
+                }
+                apiService.post('/api/order/updatenewcustomerphone', $scope.orderUpdate, function (result) {
+                    if (result.data == true) {
+                        notificationService.displaySuccess("Cập nhật thành công!");
+                        $scope.updating = false;
+                        loadOrderDetails();
+                    }
+                }, function (error) {
+                    notificationService.displayError(error.data);
+                });
+            }   
+        }
+        function cancelUpdateNewCustomerPhone() {
+            $scope.updating = false;
+            $scope.newCustomerPhone = '';
         }
 
         init();

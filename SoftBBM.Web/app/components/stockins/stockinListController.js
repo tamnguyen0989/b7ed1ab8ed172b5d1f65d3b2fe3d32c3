@@ -124,12 +124,17 @@
         }
         function bookDetail(selectedBook) {
             $scope.selectedBook = selectedBook;
-            $uibModal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: '/app/components/stockins/stockinDetailModal.html',
                 controller: 'stockinDetailController',
                 scope: $scope,
                 windowClass: 'app-modal-window-medium'
-            }).result.finally(function () {
+            });
+            modalInstance.result.then(function (data) {
+                if (data == 1) {
+                    search($scope.page);
+                }
+            }, function () {
 
             });
         }

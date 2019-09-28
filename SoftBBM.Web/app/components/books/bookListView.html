@@ -106,7 +106,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="responsivetable">
-                        <table class="table table-bordered table-striped table-hover text-center table_data" style="margin-bottom:10px">
+                        <table class="table table-bordered table-striped table-hover text-left table_data" style="margin-bottom:10px">
                             <tr>
                                 <th>Mã</th>
                                 <th>Nhà cung cấp</th>
@@ -122,7 +122,7 @@
                                 <td>{{item.Id}}</td>
                                 <td>{{item.FromSuppliers}}</td>
                                 <td>{{item.CreatedDate| date: 'dd/MM/yyyy HH:mm'}}</td>
-                                <td>{{item.Total | currency:'':0}} đ</td>
+                                <td class="price_currency">{{item.Total | currency:'':0}}</td>
                                 <td>{{item.TotalQuantity}}</td>
                                 <td>
                                     {{item.Description}}
@@ -183,7 +183,7 @@
                             <li>Email: {{supplierPrint.Email}}</li>
                             <li>Người tạo đơn: {{userName}}</li>
                         </ul>
-                        <table class="table table-bordered table-striped table-hover text-center">
+                        <table class="table table-bordered table-striped table-hover text-left">
                             <tr>
                                 <th>Mã sản phẩm</th>
                                 <th>Tên sản phẩm</th>

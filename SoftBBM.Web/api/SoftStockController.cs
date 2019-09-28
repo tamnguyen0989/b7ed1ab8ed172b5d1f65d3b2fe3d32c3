@@ -1252,6 +1252,9 @@ namespace SoftBBM.Web.api
             try
             {
                 var product = _shopSanPhamRepository.GetSingleById(detailProductInputVm.id);
+                int num;
+                var isNum = int.TryParse(detailProductInputVm.productCode.RemoveChar(), out num);
+                product.CodeSuffix = num;
                 product.masp = detailProductInputVm.productCode;
                 product.Barcode = detailProductInputVm.barCode;
                 product.tensp = detailProductInputVm.name;

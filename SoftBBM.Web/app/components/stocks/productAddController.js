@@ -58,8 +58,9 @@
                     }
                 }
                 apiService.get('api/product/gennewproductcodebycategory', config, function (result) {
-                    $scope.productCode = result.data.brandnew;
+                    //$scope.lastestProductCodeByCategory = result.data;
                     $scope.lastestProductCodeByCategory = result.data.lastest;
+                    $scope.productCode = result.data.brandnew;
                 }, function (error) {
                     notificationService.displayError(error.data);
                 });

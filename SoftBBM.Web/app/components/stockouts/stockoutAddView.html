@@ -58,13 +58,13 @@
 
                     <div class="row">
                         <div class="responsivetable">
-                            <table ng-show="searchedProducts.length>0" id="tblwithimage" class="table table-bordered table-striped table-hover product-data text-center" style="width:95%;margin-left:10px;padding-bottom:0px">
+                            <table ng-show="searchedProducts.length>0" id="tblwithimage" class="table table-bordered table-striped table-hover product-data" style="width:95%;margin-left:10px;padding-bottom:0px">
                                 <tr>
                                     <th></th>
                                     <th>Mã</th>
                                     <th>Tên</th>
                                     <th>Tồn</th>
-                                    <th>Tồn chung</th>
+                                    <th>Tổng</th>
                                 </tr>
                                 <tr ng-repeat="item in searchedProducts">
                                     <td style="padding:5px"><button ng-click="addBookDetails(item)" class="btn btn-success"><i class="fa fa-plus"></i></button></td>
@@ -73,7 +73,7 @@
                                         {{item.masp}}<br />
                                         <img ng-src="{{item.Image || 'Assets/Admin/img/no-img.jpg' }}" />
                                     </td>
-                                    <td>{{item.tensp}}</td>
+                                    <td style="text-align:left">{{item.tensp}}</td>
                                     <td>{{item.StockTotal}}</td>
                                     <td>{{item.StockTotalAll}}</td>
                                 </tr>
@@ -99,6 +99,7 @@
                                         <option value="10">10</option>
                                         <option value="15">15</option>
                                         <option value="20">20</option>
+                                        <option value="50">50</option>
                                     </select> dòng
                                 </span>
                             </div>
@@ -136,9 +137,9 @@
                     </div>
                 </div>
                 <div class="box-body">
-                    <div class="row col-sm-12 marginleft5px text-center">
+                    <div class="row col-sm-12 marginleft5px">
                         <div class="responsivetable">
-                            <table ng-show="bookDetails.length>0" class="table table-bordered table-striped table-hover text-center">
+                            <table ng-show="bookDetails.length>0" class="table table-bordered table-striped table-hover">
                                 <tr>
                                     <th>STT</th>
                                     <th>Mã</th>
@@ -154,19 +155,19 @@
 
                                     <td>{{$index+1}}</td>
                                     <td>{{itemBookDetail.masp}}</td>
-                                    <td>{{itemBookDetail.tensp}}</td>
+                                    <td style="text-align:left">{{itemBookDetail.tensp}}</td>
                                     <td>{{itemBookDetail.StockTotal}}</td>
                                     <td>{{itemBookDetail.SelectedStockTotal}}</td>
-                                    <td><input class="text-center width80px" type="number" ng-model="itemBookDetail.Quantity" /></td>
+                                    <td><input class="padding_left_5px width80px" type="number" ng-model="itemBookDetail.Quantity" /></td>
                                     <td>{{itemBookDetail.AvgSoldQuantity}}</td>
-                                    <td>{{itemBookDetail.PriceBase | currency:'':0}}</td>
+                                    <td class="price_currency">{{itemBookDetail.PriceBase | currency:'':0}}</td>
                                     <td><button class="btn btn-danger" ng-click="removeBookDetail($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
                                 </tr>
                                 <tr>
                                     <th colspan="5" style="text-align:right">Tổng số lượng:</th>
-                                    <td>{{sumQuantity()}}</td>
+                                    <td style="padding-left:20px">{{sumQuantity()}}</td>
                                     <th style="text-align:right">Tổng tiền:</th>
-                                    <td>{{sumMoney() | currency:'':0}}</td>
+                                    <td class="price_currency">{{sumMoney() | currency:'':0}}</td>
                                     <td style="text-align:left">đ</td>
                                 </tr>
                                 <!--<tr>
@@ -241,7 +242,7 @@
                                     <div class="col col-xs-5 text-right" style="padding-right:5px">Ngày xuất kho :</div>
                                     <div class="col col-xs-7 text-left" style="padding-left:5px">{{stockoutReturn.StockoutDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
                                 </div>
-                                <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px">
+                                <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:0px">
                                     <tr>
                                         <th class="text-center" style="padding:1px"></th>
                                         <th class="text-center" style="padding:1px">Mã</th>

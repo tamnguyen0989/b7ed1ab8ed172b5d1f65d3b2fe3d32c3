@@ -174,7 +174,7 @@
         </div>
     </div>
     <div class="row nomarginleft margintop20px col-xs-12">
-        <table align="center" style="width:80%" class="table table-bordered table-striped table-hover text-center">
+        <table align="center" style="width:80%" class="table table-bordered table-striped table-hover">
             <tr>
                 <th>STT</th>
                 <th>Mã</th>
@@ -209,7 +209,14 @@
     <div class="row col col-xs-12">
         <div class="pull-left">
             <button type="button" class="btn btn-default" style="background-color:white" ng-click="back()">Trở về</button>
+            <span ng-show="order.ChannelId == 1 && order.makh == 0">
+                <input type="text" ng-model="newCustomerPhone" placeholder="Nhập sđt KH cần cộng điểm" ng-show="updating" style="margin-left:5px;width:200px" />
+                <button ng-hide="updating" type="button" class="btn btn-info" ng-click="editNewCustomerPhone()"><i class="fa fa-pencil"></i></button>
+                <button ng-hide="!updating" title="Cập nhật" class="btn btn-success" ng-click="updateNewCustomerPhone()" style=""><i class="fa fa-check"></i></button>
+                <button ng-hide="!updating" title="Hoàn tác" class="btn btn-default" ng-click="cancelUpdateNewCustomerPhone()" style=""><i class="fa fa-refresh"></i></button>
+            </span>
         </div>
+
         <div class="pull-right">
             <button ng-hide="isUpdated==true" type="button" class="btn btn-info" ng-click="updateOrderDetails()">Cập nhật</button>
             <button ng-hide="order.Status==1 || isUpdated==true" type="button" class="btn" ng-click="processOrder()">Chờ xử lý</button>

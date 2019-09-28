@@ -1,5 +1,6 @@
 ﻿using SoftBBM.Web.DAL.Infrastructure;
 using SoftBBM.Web.Models;
+using SoftBBM.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,5 @@ namespace SoftBBM.Web.DAL.Repositories
         {
             return DbContext.SoftBranches.Select(x => x.Id);
         }
-
     }
 }

@@ -40,9 +40,10 @@ namespace SoftBBM.Web.api
         ISoftChannelProductPriceRepository _softChannelProductPriceRepository;
         ISoftBranchRepository _softBranchRepository;
         IShopSanPhamLogRepository _shopSanPhamLogRepository;
+        ISoftPointUpdateLogRepository _softPointUpdateLogRepository;
         IUnitOfWork _unitOfWork;
 
-        public donhangController(IUnitOfWork unitOfWork, IdonhangRepository donhangRepository, IdonhangctRepository donhangctRepository, IkhachhangRepository khachhangRepository, IshopbientheRepository shopbientheRepository, ISoftStockRepository softStockRepository, IdonhangchuyenphattinhRepository donhangchuyenphattinhRepository, IdonhangchuyenphattpRepository donhangchuyenphattpRepository, IApplicationUserRepository applicationUserRepository, IdonhangchuyenphatvungRepository donhangchuyenphatvungRepository, IdonhangchuyenphatdiachifutaRepository donhangchuyenphatdiachifutaRepository, IApplicationUserSoftBranchRepository applicationUserSoftBranchRepository, ISoftChannelRepository softChannelRepository, IShopSanPhamRepository shopSanPhamRepository, ISoftChannelProductPriceRepository softChannelProductPriceRepository, ISoftBranchRepository softBranchRepository, IShopSanPhamLogRepository shopSanPhamLogRepository)
+        public donhangController(IUnitOfWork unitOfWork, IdonhangRepository donhangRepository, IdonhangctRepository donhangctRepository, IkhachhangRepository khachhangRepository, IshopbientheRepository shopbientheRepository, ISoftStockRepository softStockRepository, IdonhangchuyenphattinhRepository donhangchuyenphattinhRepository, IdonhangchuyenphattpRepository donhangchuyenphattpRepository, IApplicationUserRepository applicationUserRepository, IdonhangchuyenphatvungRepository donhangchuyenphatvungRepository, IdonhangchuyenphatdiachifutaRepository donhangchuyenphatdiachifutaRepository, IApplicationUserSoftBranchRepository applicationUserSoftBranchRepository, ISoftChannelRepository softChannelRepository, IShopSanPhamRepository shopSanPhamRepository, ISoftChannelProductPriceRepository softChannelProductPriceRepository, ISoftBranchRepository softBranchRepository, IShopSanPhamLogRepository shopSanPhamLogRepository, ISoftPointUpdateLogRepository softPointUpdateLogRepository)
         {
             _unitOfWork = unitOfWork;
             _donhangRepository = donhangRepository;
@@ -61,6 +62,7 @@ namespace SoftBBM.Web.api
             _softChannelProductPriceRepository = softChannelProductPriceRepository;
             _softBranchRepository = softBranchRepository;
             _shopSanPhamLogRepository = shopSanPhamLogRepository;
+            _softPointUpdateLogRepository = softPointUpdateLogRepository;
         }
 
         [Route("save")]
@@ -1573,7 +1575,7 @@ namespace SoftBBM.Web.api
                     }
                     historyOrder += "<br>";
                     if (donhang.idgiogiao != null)
-                        historyOrder += "TG: " + UtilExtensions.ConvertDeliveryTime(donhang.idgiogiao.Value) + "<br>";  
+                        historyOrder += "TG: " + UtilExtensions.ConvertDeliveryTime(donhang.idgiogiao.Value) + "<br>";
                     donhangAfterEdit.historyOrder = historyOrder;
 
                     donhang.ghichu = donhangVM.ghichu;
@@ -1981,6 +1983,54 @@ namespace SoftBBM.Web.api
                 worksheet.Cells["E1"].Value = "Tình trạng";
                 //package.Save();
                 return package.GetAsByteArray();
+            }
+        }
+
+        [HttpPost]
+        [Route("updatenewcustomerphone")]
+        [Authorize(Roles = "OrderUpdate")]
+        public HttpResponseMessage UpdateNewCustomerPhone(HttpRequestMessage request, donhangUpdateNewPhoneInput input)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                if (!string.IsNullOrEmpty(input.Phone))
+                {
+                    var cus = _khachhangRepository.GetSingleByCondition(x => x.dienthoai == input.Phone);
+                    if (cus != null)
+                    {
+                        var order = _donhangRepository.GetSingleById(input.Id);
+                        order.makh = cus.MaKH;
+                        order.UpdatedBy = input.UserId;
+                        order.UpdatedDate = DateTime.Now;
+                        _donhangRepository.Update(order);
+
+                        var log = new SoftPointUpdateLog();
+                        log.OrderId = order.id;
+                        log.CustomerId = cus.MaKH;
+                        log.PointBefore = int.Parse(cus.diem);
+                        log.PointAdd = (int)order.tongtien / 1000;
+                        log.CreatedBy = input.UserId;
+                        log.CreatedDate = DateTime.Now;
+                        _softPointUpdateLogRepository.Add(log);
+
+                        cus.diem = (int.Parse(cus.diem) + (int)(order.tongtien / 1000)).ToString();
+                        _khachhangRepository.Update(cus);
+
+                        _unitOfWork.Commit();
+                        response = request.CreateResponse(HttpStatusCode.OK, true);
+                    }
+                    else
+                        response = request.CreateResponse(HttpStatusCode.BadRequest, "Không tồn tại khách hàng này!");
+                }
+                else
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, "Nhập SĐT KH cần cộng điểm!");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
             }
         }
     }

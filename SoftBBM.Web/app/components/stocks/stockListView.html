@@ -243,7 +243,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="responsivetable">
-                        <table class="table table-bordered table-striped table-hover product-data text-center table_data" style="margin-bottom:0px">
+                        <table class="table table-bordered table-striped table-hover product-data table_data" style="margin-bottom:0px">
                             <tr>
                                 <th ng-show="showId">Id</th>
                                 <th ng-show="showImage">Hình</th>
@@ -282,27 +282,27 @@
                                     <!--<input ng-click="openStockTotalAll(item)" readonly type="text" ng-model="item.Stock_Total_All" class="form-control width50px" />-->
                                     {{item.Stock_Total_All | currency:'':0}}
                                 </td>
-                                <td ng-show="showPriceBase">
+                                <td ng-show="showPriceBase" class="text-right">
                                     <span>
                                         {{item.shop_sanpham.PriceBase | currency:'':0}}
                                     </span>
                                     <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.shop_sanpham.PriceBase" class="form-control width90px" />-->
                                 </td>
-                                <td class="padding_left_right2px" ng-show="showPriceBaseOld">
+                                <td class="padding_left_right2px text-right" ng-show="showPriceBaseOld">
                                     <!--<span ng-show="!enabledEdit[{{$index}}]">
                                         {{item.shop_sanpham.PriceBaseOld | currency:'':0}}
                                     </span>-->
                                     {{item.shop_sanpham.PriceBaseOld | currency:'':0}}
                                     <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.shop_sanpham.PriceBaseOld" class="form-control width_stock_input" />
                                     </td>-->
-                                <td class="padding_left_right2px" ng-show="showPriceAvg">
+                                <td class="padding_left_right2px text-right" ng-show="showPriceAvg">
                                     <!--<span ng-show="!enabledEdit[{{$index}}]">
                                          {{item.shop_sanpham.PriceAvg | currency:'':0}}
                                     </span>-->
                                     {{item.shop_sanpham.PriceAvg | currency:'':0}}
                                     <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.shop_sanpham.PriceAvg" class="form-control width_stock_input" />
                                     </td>-->
-                                <td class="padding_left_right2px" ng-show="showPriceRef">
+                                <td class="padding_left_right2px text-right" ng-show="showPriceRef">
                                     <!--<span ng-show="!enabledEdit[{{$index}}]">
                                        {{item.shop_sanpham.PriceRef | currency:'':0}}
                                     </span>-->
@@ -310,15 +310,15 @@
                                     <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.shop_sanpham.PriceRef" class="form-control width_stock_input" />
                                     </td>-->
 
-                                <td ng-show="showPriceWholesale">
+                                <td ng-show="showPriceWholesale" class="text-right">
                                     <span>{{item.shop_sanpham.PriceWholesale | currency:'':0}}</span>
                                     <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.PriceWholesale" class="form-control width90px" />-->
                                 </td>
-                                <td ng-show="showPriceShop">
+                                <td ng-show="showPriceShop" class="text-right">
                                     <span>{{item.PriceShop | currency:'':0}}</span>
                                     <!--<input format="number" type="text" ng-hide="!enabledEdit[{{$index}}]" ng-model="item.PriceShop" class="form-control width90px" />-->
                                 </td>
-                                <td class="padding_left_right2px" ng-show="showPriceChannel">
+                                <td class="padding_left_right2px text-right" ng-show="showPriceChannel">
                                     <span class="current_obj"
                                           style="padding:10px"
                                           popover-placement="top-right"
@@ -331,7 +331,7 @@
 
                                     <!--<button ng-click="openChannelPrices(item)" class="btn btn-primary">Giá kênh</button>-->
                                 </td>
-                                <td ng-show="showPriceChannelDiscount">
+                                <td ng-show="showPriceChannelDiscount" class="text-right">
                                     {{item.PriceDiscount | currency:'':0}}
                                 </td>
                                 <td ng-show="showSupplier">
@@ -369,9 +369,10 @@
                                     <button title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="openStockEditModal(item)"><i class="fa fa-pencil"></i></button>
                                     <button title="Giá tất cả kênh" class="btn btn-sm btn-primary" ng-click="openChannelPricesModal(item)"><i class="fa fa-bar-chart"></i></button>
                                     <!--<button title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="editStock(item,$index)"><i class="fa fa-pencil"></i></button>
-                                    <button ng-show="!enabledEdit[{{$index}}]" title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="editStock(item,$index)"><i class="fa fa-pencil"></i></button>
-                                    <button ng-disabled="data{{$index}}.$invalid" ng-hide="!enabledEdit[{{$index}}]" title="Cập nhật" class="btn btn-sm btn-success" ng-click="updateStock(item,$index)"><i class="fa fa-check"></i></button>
-                                    <button ng-hide="!enabledEdit[{{$index}}]" title="Hoàn tác" class="btn btn-sm btn-default" ng-click="cancelStock(item,$index)"><i class="fa fa-refresh"></i></button>-->
+    <button ng-show="!enabledEdit[{{$index}}]" title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="editStock(item,$index)"><i class="fa fa-pencil"></i></button>
+    <button ng-disabled="data{{$index}}.$invalid" ng-hide="!enabledEdit[{{$index}}]" title="Cập nhật" class="btn btn-sm btn-success" ng-click="updateStock(item,$index)"><i class="fa fa-check"></i></button>
+    <button ng-hide="!enabledEdit[{{$index}}]" title="Hoàn tác" class="btn btn-sm btn-default" ng-click="cancelStock(item,$index)"><i class="fa fa-refresh"></i></button>-->
+                                    <button title="Đồng bộ tới Shopee" class="btn btn-sm btn-warning" ng-click="syncToShopee(item)">S</button>
                                 </td>
                             </tr>
                         </table>

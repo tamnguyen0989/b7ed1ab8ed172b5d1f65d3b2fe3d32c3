@@ -19,7 +19,7 @@
                         <div class="row">
                             <input type="text" ng-model="filterBooks" class="form-control" placeholder="Từ khoá...">
                             <button class="btn btn-default" type="submit" style="width:60px" title="Tìm kiếm"><i class="fa fa-search"></i></button>
-                            <a class="btn btn-success" ui-sref="add_stockout" style="width:60px" title="Thêm mới" target ="_blank"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-success" ui-sref="add_stockout" style="width:60px" title="Thêm mới" target="_blank"><i class="fa fa-plus"></i></a>
                             <button type="button" class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
                             <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
                             <div class="pull-right totalcount">
@@ -33,7 +33,7 @@
                                 </span>
                             </div>
                             <span ng-hide="pagesCount==0" class="pull-right totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>
-                        </div>                       
+                        </div>
                     </form>
                 </div>
             </div>
@@ -148,11 +148,11 @@
             </div>
         </div>
         <div class="box-body">
-            
+
             <div class="row">
                 <div class="col-xs-12">
                     <div class="responsivetable">
-                        <table class="table table-bordered table-striped table-hover text-center table_data" style="margin-bottom:10px">
+                        <table class="table table-bordered table-striped table-hover text-left table_data" style="margin-bottom:10px">
                             <tr style="background-color:white">
                                 <th colspan="12" style="text-align:right;">Tổng tiền:&emsp; <span style="color:red">{{totalMoney | currency:'':0}} đ</span></th>
                             </tr>
@@ -167,8 +167,8 @@
                                 <th>Số lượng</th>
                                 <th>Ghi chú</th>
                                 <th>Tình trạng <br />đơn</th>
-                                <th>Tình trạng <br />nhập kho</th>       
-                                <!--<th>Tình trạng <br />đặt kho</th>-->                      
+                                <th>Tình trạng <br />nhập kho</th>
+                                <!--<th>Tình trạng <br />đặt kho</th>-->
                                 <th style="width:15%"><button ng-click="clearStamp()" class="btn btn-danger" style="background-color:indianred"><i class="fa fa-remove "></i> Xoá DS In Tem</button></th>
                             </tr>
                             <tr ng-form name="data{{$index}}" ng-repeat="item in books">
@@ -177,7 +177,7 @@
                                 <td>{{item.ToBranch}}</td>
                                 <td>{{item.CreatedDateConvert}}</td>
                                 <td>{{item.StockOutDateConvert}}</td>
-                                <td>{{item.Total | currency:'':0}} đ</td>
+                                <td class="price_currency">{{item.Total | currency:'':0}}</td>
                                 <td>{{item.TotalQuantity}}</td>
                                 <td>
                                     {{item.Description}}
@@ -254,11 +254,11 @@
                             <div class="col col-xs-5 text-right" style="padding-right:5px">Ngày xuất kho :</div>
                             <div class="col col-xs-7 text-left" style="padding-left:5px">{{stockoutReturn.StockoutDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
                         </div>
-                        <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px">
+                        <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:0px">
                             <tr>
                                 <th class="text-center" style="padding:1px"></th>
                                 <th class="text-center" style="padding:1px">Mã</th>
-                                <th class="text-center">Tên</th>                              
+                                <th class="text-center">Tên</th>
                                 <th class="text-center" style="padding:1px">SL</th>
                                 <th class="text-center" style="padding:1px">Giá</th>
                                 <!--<th class="text-center" style="padding:1px">T.Tiền</th>-->
@@ -274,6 +274,10 @@
                             <tr>
                                 <td colspan="3" class="text-right">Tổng số lượng</td>
                                 <td colspan="2">{{totalQuantity | currency:'':0}} <span style="font-size:11px"></span></td>
+                            </tr>
+                            <tr ng-if="stockoutReturn.Description">
+                                <td colspan="2" class="text-right" style="font-size:10px">Ghi chú</td>
+                                <td colspan="3"><i>{{stockoutReturn.Description}}</i><span style="font-size:11px"></span></td>
                             </tr>
                             <!--<tr>
                                 <td colspan="4" class="text-right">Tổng thành tiền</td>

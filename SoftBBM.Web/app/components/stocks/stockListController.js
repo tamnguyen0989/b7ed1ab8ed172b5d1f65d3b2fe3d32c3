@@ -99,6 +99,7 @@
         $scope.openStockEditModal = openStockEditModal
         $scope.openChannelPricesModal = openChannelPricesModal;
         $scope.exportPriceWholesale = exportPriceWholesale;
+        $scope.syncToShopee = syncToShopee;
 
         function search(page) {
             page = page || 0;
@@ -496,6 +497,15 @@
                 windowClass: 'app-modal-window'
             }).result.finally(function () {
                 //search($scope.page);
+            });
+        }
+        function syncToShopee(stock) {
+            apiService.post('/api/stock/updateproductchannelprice', $scope.selectedStockPopover, function (result) {
+                closeChannelPricePopover();
+                notificationService.displaySuccess('Cập nhật giá kênh thành công!');
+                search($scope.page);
+            }, function (response) {
+                notificationService.displayError(response.data);
             });
         }
 

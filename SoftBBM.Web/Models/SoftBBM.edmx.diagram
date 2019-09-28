@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5b0d6ac2d6d64cd2a1b81398c9e7592f" Name="Diagram1" ZoomLevel="48">
+      <Diagram DiagramId="5b0d6ac2d6d64cd2a1b81398c9e7592f" Name="Diagram1" ZoomLevel="34">
         <EntityTypeShape EntityType="SoftBBMModels.admin" Width="1.5" PointX="0.75" PointY="2.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SoftBBMModels.admin_role" Width="1.5" PointX="2.75" PointY="2.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SoftBBMModels.cart" Width="1.5" PointX="12.75" PointY="21.875" IsExpanded="true" />
@@ -77,17 +77,6 @@
         <AssociationConnector Association="SoftBBMModels.FK_ApplicationUserGroups_ApplicationUsers" />
         <AssociationConnector Association="SoftBBMModels.FK_ApplicationUserRoles_ApplicationUsers" />
         <AssociationConnector Association="SoftBBMModels.FK_ApplicationUserSoftBranches_ApplicationUsers" />
-        <EntityTypeShape EntityType="SoftBBMModels.shop_sanpham" Width="1.5" PointX="26.375" PointY="31.5" />
-        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_ApplicationUsers" />
-        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_ApplicationUsers1" />
-        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_shop_showhome" />
-        <AssociationConnector Association="SoftBBMModels.FK_bienthe_sanpham1" />
-        <AssociationConnector Association="SoftBBMModels.FK_collection_sanpham" />
-        <AssociationConnector Association="SoftBBMModels.FK_image_sanpham" />
-        <AssociationConnector Association="SoftBBMModels.FK_bangtin_conhang_sanpham" />
-        <AssociationConnector Association="SoftBBMModels.FK_maloai_sanpham" />
-        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_shop_sanphamStatus" />
-        <AssociationConnector Association="SoftBBMModels.FK_sp_ma_phanloai_nhanhieu" />
         <EntityTypeShape EntityType="SoftBBMModels.ApplicationRole" Width="1.5" PointX="29.375" PointY="1.125" />
         <AssociationConnector Association="SoftBBMModels.FK_ApplicationRoleGroups_ApplicationRoles" />
         <AssociationConnector Association="SoftBBMModels.FK_ApplicationUserRoles_ApplicationRoles" />
@@ -104,7 +93,6 @@
         <AssociationConnector Association="SoftBBMModels.FK_khachhang_ApplicationUsers1" />
         <AssociationConnector Association="SoftBBMModels.FK_KHHH_DH" />
         <EntityTypeShape EntityType="SoftBBMModels.shop_sanphamCategories" Width="1.5" PointX="8.375" PointY="4.875" />
-        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_shop_sanphamCategories" />
         <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamCategories_ApplicationUsers" />
         <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamCategories_ApplicationUsers1" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftAdjustmentStockDetail" Width="1.5" PointX="28.625" PointY="36.875" />
@@ -142,13 +130,6 @@
         <AssociationConnector Association="SoftBBMModels.FK_ApplicationUserSoftBranches_SoftBranches" />
         <AssociationConnector Association="SoftBBMModels.FK_donhang_SoftBranches" />
         <AssociationConnector Association="SoftBBMModels.FK_donhang_SoftChannels" />
-        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_SoftSuppliers" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftAdjustmentStockDetails_shop_sanpham" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftBranchProductStocks_shop_sanpham" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftChannelProductPrices_shop_sanpham" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftOrderDetails_shop_sanpham" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftReturnSupplierDetails_shop_sanpham" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockInDetails_shop_sanpham" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftAdjustmentStockDetails_SoftAdjustmentStocks" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftAdjustmentStocks_SoftBranches" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftBranchProductStocks_SoftBranches" />
@@ -185,8 +166,30 @@
         <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentStatuses" />
         <EntityTypeShape EntityType="SoftBBMModels.shop_sanphamLogs" Width="1.5" PointX="31.625" PointY="25" />
         <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLogs_ApplicationUsers" />
-        <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLogs_shop_sanpham" />
         <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLogs_SoftBranches" />
+        <EntityTypeShape EntityType="SoftBBMModels.shop_sanpham" Width="1.5" PointX="16.625" PointY="29.5" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_ApplicationUsers" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_ApplicationUsers1" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_shop_showhome" />
+        <AssociationConnector Association="SoftBBMModels.FK_bienthe_sanpham1" />
+        <AssociationConnector Association="SoftBBMModels.FK_collection_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_image_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_bangtin_conhang_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_maloai_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_shop_sanphamCategories" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_shop_sanphamStatus" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanpham_SoftSuppliers" />
+        <AssociationConnector Association="SoftBBMModels.FK_shop_sanphamLog_shop_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftAdjustmentStockDetails_shop_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftBranchProductStocks_shop_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftChannelProductPrices_shop_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftOrderDetails_shop_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftReturnSupplierDetails_shop_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockInDetails_shop_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_sp_ma_phanloai_nhanhieu" />
+        <EntityTypeShape EntityType="SoftBBMModels.SoftPointUpdateLog" Width="1.5" PointX="24.875" PointY="19.75" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftPointUpdateLogs_donhang" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftPointUpdateLogs_SoftPointUpdateLogs" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

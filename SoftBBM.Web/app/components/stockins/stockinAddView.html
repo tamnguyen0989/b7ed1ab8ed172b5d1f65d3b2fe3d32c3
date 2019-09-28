@@ -58,13 +58,13 @@
                         </div>
 
                         <div class="row">
-                            <table ng-show="searchedProducts.length>0" id="tblwithimage" class="table table-bordered table-striped table-hover product-data text-center" style="width:95%;margin-left:10px;padding-bottom:0px">
+                            <table ng-show="searchedProducts.length>0" id="tblwithimage" class="table table-bordered table-striped table-hover product-data" style="width:95%;margin-left:10px;padding-bottom:0px">
                                 <tr>
                                     <th></th>
                                     <th>Mã</th>
                                     <th>Tên</th>
                                     <th>Tồn</th>
-                                    <th>Tồn chung</th>
+                                    <th>Tổng</th>
                                 </tr>
                                 <tr ng-repeat="item in searchedProducts">
                                     <td style="padding:5px"><button 
@@ -76,7 +76,7 @@
                                         {{item.masp}}<br />
                                         <img ng-src="{{item.Image || 'Assets/Admin/img/no-img.jpg' }}" />
                                     </td>
-                                    <td>{{item.tensp}}</td>
+                                    <td style="text-align:left">{{item.tensp}}</td>
                                     <td>{{item.StockTotal}}</td>
                                     <td>{{item.StockTotalAll}}</td>
                                 </tr>
@@ -92,6 +92,7 @@
                                             <option value="10">10</option>
                                             <option value="15">15</option>
                                             <option value="20">20</option>
+                                            <option value="50">50</option>
                                         </select> dòng
                                     </span>
                                 </div>
@@ -109,8 +110,8 @@
                         <h3 class="box-title">Đơn hàng</h3>
                     </div>
                     <div class="box-body">
-                        <div ng-form="frmStockinAdd" class="row col-sm-12 marginleft5px text-center">
-                            <table ng-show="bookDetails.length>0" class="table table-bordered table-striped table-hover text-center">
+                        <div ng-form="frmStockinAdd" class="row col-sm-12 marginleft5px">
+                            <table ng-show="bookDetails.length>0" class="table table-bordered table-striped table-hover">
                                 <tr>
                                     <th>STT</th>
                                     <th>Mã</th>
@@ -127,23 +128,23 @@
                                 <tr ng-repeat="itemBookDetail in bookDetails">
                                     <td>{{$index+1}}</td>
                                     <td>{{itemBookDetail.masp}}</td>
-                                    <td>{{itemBookDetail.tensp}}</td>
+                                    <td style="text-align:left">{{itemBookDetail.tensp}}</td>
                                     <td>{{itemBookDetail.SupplierName}}</td>
                                     <td>{{itemBookDetail.StockTotal}}</td>
-                                    <td>{{itemBookDetail.PriceBase | currency:'':0}}</td>
-                                    <td><input class="text-center width80px" type="number"  ng-model="itemBookDetail.Quantity" ng-disabled="adding" /></td>
-                                    <td><input format="number" class="text-center width80px" type="text"  ng-model="itemBookDetail.PriceNew" ng-disabled="adding" /></td>
-                                    <td><input format="number" class="text-center width80px" type="text"  ng-model="itemBookDetail.PriceRef" ng-disabled="adding" /></td>
-                                    <td width="10%">{{itemBookDetail.PriceNew*itemBookDetail.Quantity | currency:'':0}} đ</td>
+                                    <td class="price_currency">{{itemBookDetail.PriceBase | currency:'':0}}</td>
+                                    <td><input class="paddingleft5px width80px" type="number"  ng-model="itemBookDetail.Quantity" ng-disabled="adding" /></td>
+                                    <td><input format="number" class="price_currency padding_right_5px width80px" type="text"  ng-model="itemBookDetail.PriceNew" ng-disabled="adding" /></td>
+                                    <td><input format="number" class="price_currency padding_right_5px width80px" type="text"  ng-model="itemBookDetail.PriceRef" ng-disabled="adding" /></td>
+                                    <td class="price_currency" width="10%">{{itemBookDetail.PriceNew*itemBookDetail.Quantity | currency:'':0}}</td>
                                     <td><button ng-disabled="loading || adding"
                                                 class="btn btn-danger" 
                                                 ng-click="removeBookDetail($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
                                 </tr>
                                 <tr>
                                     <th colspan="6" style="text-align:right">Tổng số lượng</th>
-                                    <td>{{sumQuantity()}}</td>
+                                    <td style="padding-left:20px">{{sumQuantity()}}</td>
                                     <th colspan="2" style="text-align:right">Tổng tiền</th>
-                                    <td >{{sumMoney() | currency:'':0}}</td>
+                                    <td class="price_currency">{{sumMoney() | currency:'':0}}</td>
                                     <td style="text-align:left">đ</td>
                                 </tr>
                                 <tr>

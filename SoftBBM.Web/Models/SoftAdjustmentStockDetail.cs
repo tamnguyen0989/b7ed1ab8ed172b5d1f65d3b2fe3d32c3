@@ -18,7 +18,7 @@ namespace SoftBBM.Web.Models
         public int ProductId { get; set; }
         public Nullable<int> Quantity { get; set; }
     
-        public virtual shop_sanpham shop_sanpham { get; set; }
         public virtual SoftAdjustmentStock SoftAdjustmentStock { get; set; }
+        public virtual shop_sanpham shop_sanpham { get; set; }
     }
 }

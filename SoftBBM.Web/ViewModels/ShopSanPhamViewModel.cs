@@ -152,4 +152,9 @@ namespace SoftBBM.Web.ViewModels
         public int priceONL { get; set; }
         public int userId { get; set; }
     }
+    public class ShopSanPhamMaxCodeProductVM
+    {
+        public string masp { get; set; }
+        public int len { get; set; }
+    }
 }

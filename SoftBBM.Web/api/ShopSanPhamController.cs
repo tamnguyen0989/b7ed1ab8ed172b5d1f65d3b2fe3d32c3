@@ -405,6 +405,9 @@ namespace SoftBBM.Web.api
                 {
                     shop_sanpham shopSanPham = new shop_sanpham();
                     shopSanPham.masp = input.productCode.Trim();
+                    int num;
+                    var isNum = int.TryParse(input.productCode.RemoveChar(), out num);
+                    shopSanPham.CodeSuffix = num;
                     shopSanPham.tensp = input.productName.Trim();
                     shopSanPham.FromCreate = 2;
                     shopSanPham.PriceAvg = 0;
@@ -414,6 +417,8 @@ namespace SoftBBM.Web.api
                     shopSanPham.CreatedBy = input.userId;
                     shopSanPham.CreatedDate = DateTime.Now;
                     shopSanPham.CategoryId = input.selectedProductCategory.Id;
+                    shopSanPham.SupplierId = input.selectedSupplier.Id;
+                    shopSanPham.StatusId = input.selectedProductStatus.Id;
                     _shopSanPhamRepository.Add(shopSanPham);
                     _unitOfWork.Commit();
 
@@ -536,6 +541,11 @@ namespace SoftBBM.Web.api
                 }
                 else
                     response = request.CreateResponse(HttpStatusCode.BadRequest, "Nhóm đã chọn chưa có sản phẩm nào! ");
+                //var result = "";
+                //var shopSanPham = _shopSanPhamRepository.GetMaxCodeProduct(categoryId);
+                //if (shopSanPham != null)
+                //    result = shopSanPham.masp;
+                //response = request.CreateResponse(HttpStatusCode.OK, result);
                 return response;
             }
             catch (Exception ex)

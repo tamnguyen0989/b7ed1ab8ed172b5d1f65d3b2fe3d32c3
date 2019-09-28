@@ -106,7 +106,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="responsivetable">
-                        <table class="table table-bordered table-striped table-hover text-center table_data" style="margin-bottom:10px">
+                        <table class="table table-bordered table-striped table-hover text-left table_data" style="margin-bottom:10px">
                             <tr>
                                 <th>Mã</th>
                                 <th>Đặt kho<br />nội bộ</th>
@@ -123,7 +123,7 @@
                                 <td>{{item.Id}}</td>
                                 <td>{{item.FromBranch}}</td>
                                 <td>{{item.CreatedDate| date: 'dd/MM/yyyy HH:mm'}}</td>
-                                <td>{{item.Total | currency:'':0}} đ</td>
+                                <td class="price_currency">{{item.Total | currency:'':0}}</td>
                                 <td>{{item.TotalQuantity}}</td>
                                 <td>
                                     {{item.Description}}
@@ -192,7 +192,7 @@
                             <div class="col col-xs-5 text-right" style="padding-right:5px">Ngày tạo đơn :</div>
                             <div class="col col-xs-7 text-left" style="padding-left:5px">{{stockinReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
                         </div>
-                        <table class="table table-bordered table-striped table-hover text-center" style="margin-bottom:0px">
+                        <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:0px">
                             <tr>
                                 <th class="text-center">STT</th>
                                 <th class="text-center">Tên sản phẩm</th>
@@ -202,7 +202,7 @@
                             </tr>
                             <tr ng-repeat="item in stockinReturn.SoftStockInDetails">
                                 <td>{{$index+1}}</td>
-                                <td>{{item.tensp}}</td>
+                                <td style="text-align:left">{{item.tensp}}</td>
                                 <td>{{item.Quantity}}</td>
                                 <td>{{item.PriceNew | currency:'':0}}</td>
                                 <td>{{item.Quantity * item.PriceNew | currency:'':0}}</td>

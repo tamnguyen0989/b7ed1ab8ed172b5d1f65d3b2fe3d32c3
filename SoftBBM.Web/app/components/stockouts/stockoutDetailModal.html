@@ -64,7 +64,7 @@
             </div>
         </div>
         <div class="row nomarginleft margintop20px">
-            <table ng-show="book.SoftStockInDetails.length>0" class="table table-bordered table-striped table-hover text-center">
+            <table ng-show="book.SoftStockInDetails.length>0" class="table table-bordered table-striped table-hover">
                 <tr>
                     <th>STT</th>
                     <th>Mã sản phẩm</th>
@@ -77,7 +77,7 @@
                 <tr ng-class="{'has-error':itemBookDetail.StockTotal<itemBookDetail.Quantity && (book.FromBranchStatusId!='06' && book.FromBranchStatusId!='02')}" ng-repeat="itemBookDetail in book.SoftStockInDetails">
                     <td>{{$index+1}}</td>
                     <td>{{itemBookDetail.masp}}</td>
-                    <td>{{itemBookDetail.tensp}}</td>
+                    <td style="text-align:left">{{itemBookDetail.tensp}}</td>
                     <td ng-hide="book.FromBranchStatusId=='06'|| book.FromBranchStatusId=='02'">{{itemBookDetail.StockTotal}}</td>
                     <td>{{itemBookDetail.Quantity}}</td>
                     <td>{{itemBookDetail.PriceBase | currency:'':0}}</td>

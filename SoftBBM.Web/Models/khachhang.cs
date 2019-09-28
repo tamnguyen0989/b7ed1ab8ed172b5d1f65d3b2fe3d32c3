@@ -18,6 +18,7 @@ namespace SoftBBM.Web.Models
         public khachhang()
         {
             this.donhangs = new HashSet<donhang>();
+            this.SoftPointUpdateLogs = new HashSet<SoftPointUpdateLog>();
         }
     
         public int MaKH { get; set; }
@@ -41,5 +42,7 @@ namespace SoftBBM.Web.Models
         public virtual ApplicationUser ApplicationUser1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<donhang> donhangs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SoftPointUpdateLog> SoftPointUpdateLogs { get; set; }
     }
 }

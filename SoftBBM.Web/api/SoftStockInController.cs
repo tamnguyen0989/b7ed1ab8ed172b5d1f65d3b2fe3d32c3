@@ -2495,5 +2495,30 @@ namespace SoftBBM.Web.api
             }
             return response;
         }
+
+        [Route("updatestockindescriptionfromsupplier")]
+        [HttpPost]
+        public HttpResponseMessage UpdateStockoutDescription(HttpRequestMessage request, UpdateStockInInput input)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                
+                var oldStockout = _softStockInRepository.GetSingleById(input.stockinId);
+                oldStockout.Description = input.description;
+                oldStockout.UpdatedDate = DateTime.Now;
+                oldStockout.UpdatedBy = input.userId;
+                _softStockInRepository.Update(oldStockout);
+                _unitOfWork.Commit();
+                response = request.CreateResponse(HttpStatusCode.OK, true);
+                return response;
+            }
+
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+        }
     }
 }

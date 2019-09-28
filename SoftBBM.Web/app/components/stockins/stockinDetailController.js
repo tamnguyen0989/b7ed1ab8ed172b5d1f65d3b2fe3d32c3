@@ -1,7 +1,7 @@
 ﻿(function (app) {
     app.controller('stockinDetailController', stockinDetailController);
 
-    stockinDetailController.$inject = ['apiService', '$window',  '$scope', 'notificationService', '$state', '$uibModalInstance', '$filter'];
+    stockinDetailController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$uibModalInstance', '$filter'];
 
     function stockinDetailController(apiService, $window, $scope, notificationService, $state, $uibModalInstance, $filter) {
         $scope.book = {
@@ -12,6 +12,7 @@
         $scope.okBook = okBook;
         $scope.sumMoney = sumMoney;
         $scope.updateCancel = updateCancel;
+        $scope.updateDescription = updateDescription;
 
         function okBook() {
             $scope.selectedBook = {};
@@ -26,6 +27,7 @@
             }
             apiService.get('/api/stockin/detailstockin', config, function (result) {
                 $scope.book = result.data;
+                console.log($scope.book.FromSuppliers);
             }, function (error) {
                 notificationService.displayError(error);
             });
@@ -57,6 +59,24 @@
                 notificationService.displayError(error.data);
             });
         }
+        function updateDescription() {
+            $scope.loading = true;
+            var config = {
+                stockinId: $scope.selectedBook.Id,
+                description: $scope.book.Description,
+                userId: $scope.userId
+            }
+            apiService.post('/api/stockin/updatestockindescriptionfromsupplier', config, function (result) {
+                $scope.loading = false;
+                notificationService.displaySuccess("Cập nhật ghi chú thành công");
+                $scope.selectedBook = {};
+                //$uibModalInstance.dismiss();
+                $uibModalInstance.close(1);
+            }, function (error) {
+                notificationService.displayError(error);
+            });
+        }
+
         loadStockInDetails();
     }
 

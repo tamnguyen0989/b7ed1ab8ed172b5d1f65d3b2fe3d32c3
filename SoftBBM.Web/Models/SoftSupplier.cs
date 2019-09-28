@@ -17,9 +17,9 @@ namespace SoftBBM.Web.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SoftSupplier()
         {
-            this.shop_sanpham = new HashSet<shop_sanpham>();
             this.SoftReturnSuppliers = new HashSet<SoftReturnSupplier>();
             this.SoftStockIns = new HashSet<SoftStockIn>();
+            this.shop_sanpham = new HashSet<shop_sanpham>();
         }
     
         public int Id { get; set; }
@@ -37,11 +37,11 @@ namespace SoftBBM.Web.Models
         public Nullable<int> Prioty { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<shop_sanpham> shop_sanpham { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftReturnSupplier> SoftReturnSuppliers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftStockIn> SoftStockIns { get; set; }
         public virtual SoftSupplierVatStatu SoftSupplierVatStatu { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<shop_sanpham> shop_sanpham { get; set; }
     }
 }

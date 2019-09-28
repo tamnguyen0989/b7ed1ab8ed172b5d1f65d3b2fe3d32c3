@@ -11,6 +11,7 @@
 
         $scope.loadStockInDetails = loadStockInDetails;
         $scope.okBook = okBook;
+
         $scope.sumMoney = sumMoney;
         $scope.sumQuantity = sumQuantity;
         $scope.updateCancel = updateCancel;
@@ -66,6 +67,7 @@
                 notificationService.displayError(error.data);
             });
         }
+
         loadStockInDetails();
     }
 

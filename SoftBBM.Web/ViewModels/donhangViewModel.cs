@@ -138,7 +138,7 @@ namespace SoftBBM.Web.ViewModels
         public string chitiet { get; set; }
         public Nullable<long> tongtien { get; set; }
         public string ghichu { get; set; }
-        public string StatusName { get; set; }       
+        public string StatusName { get; set; }
     }
     public class donhangExcelNoId
     {
@@ -147,5 +147,11 @@ namespace SoftBBM.Web.ViewModels
         public Nullable<long> tongtien { get; set; }
         public string ghichu { get; set; }
         public string StatusName { get; set; }
+    }
+    public class donhangUpdateNewPhoneInput
+    {
+        public int Id { get; set; }
+        public string Phone { get; set; }
+        public int UserId { get; set; }
     }
 }

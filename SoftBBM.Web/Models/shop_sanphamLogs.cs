@@ -25,7 +25,7 @@ namespace SoftBBM.Web.Models
         public double StockTotalAll { get; set; }
     
         public virtual ApplicationUser ApplicationUser { get; set; }
-        public virtual shop_sanpham shop_sanpham { get; set; }
         public virtual SoftBranch SoftBranch { get; set; }
+        public virtual shop_sanpham shop_sanpham { get; set; }
     }
 }

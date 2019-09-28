@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="row nomarginleft margintop20px">
-            <table ng-show="book.SoftStockInDetails.length>0" class="table table-bordered table-striped table-hover text-center">
+            <table ng-show="book.SoftStockInDetails.length>0" class="table table-bordered table-striped table-hover">
                 <tr>
                     <th>STT</th>
                     <th>Mã sản phẩm</th>
@@ -57,7 +57,7 @@
 
                     <td>{{$index+1}}</td>
                     <td>{{itemBookDetail.masp}}</td>
-                    <td>{{itemBookDetail.tensp}}</td>
+                    <td style="text-align:left">{{itemBookDetail.tensp}}</td>
                     <td>{{itemBookDetail.SupplierName}}</td>
                     <td>{{itemBookDetail.Quantity}}</td>
                     <td>{{itemBookDetail.PriceNew | currency:'':0}}</td>                   

@@ -31,9 +31,9 @@ namespace SoftBBM.Web.Models
         public Nullable<int> UpdatedBy { get; set; }
         public Nullable<bool> NotDiscountMember { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<shop_sanpham> shop_sanpham { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ApplicationUser ApplicationUser1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<shop_sanpham> shop_sanpham { get; set; }
     }
 }

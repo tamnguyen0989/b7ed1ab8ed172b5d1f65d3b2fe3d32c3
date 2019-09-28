@@ -19,7 +19,7 @@ namespace SoftBBM.Web.Models
         public Nullable<int> Quantity { get; set; }
         public Nullable<int> Price { get; set; }
     
-        public virtual shop_sanpham shop_sanpham { get; set; }
         public virtual SoftOrder SoftOrder { get; set; }
+        public virtual shop_sanpham shop_sanpham { get; set; }
     }
 }

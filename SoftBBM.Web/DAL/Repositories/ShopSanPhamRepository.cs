@@ -15,6 +15,7 @@ namespace SoftBBM.Web.DAL.Repositories
         IQueryable<shop_sanpham> GetAllPaging(int page, int pageSize, out int totalRow, int branchId, string searchString = "");
         IQueryable<shop_sanpham> GetAllPaging(int page, int pageSize, out int totalRow, int branchId, ShopSanPhamFilterBookViewModel model);
         IQueryable<SoftBranchProductStock> GetAllPagingStockFilter(int page, int pageSize, out int totalRow, int branchId, ShopSanPhamFilterBookViewModel model);
+        shop_sanpham GetMaxCodeProduct(int catecoryId);
     }
     public class ShopSanPhamRepository : RepositoryBase<shop_sanpham>, IShopSanPhamRepository
     {
@@ -70,7 +71,7 @@ namespace SoftBBM.Web.DAL.Repositories
             }
 
             totalRow = products.Count();
-            products = products.OrderBy(x => x.masp);
+            products = products.OrderBy(x => x.tensp);
             return products.Skip(page * pageSize).Take(pageSize);
         }
 
@@ -143,6 +144,12 @@ namespace SoftBBM.Web.DAL.Repositories
             totalRow = products.Count();
             products = products.OrderBy(x => x.shop_sanpham.masp);
             return products.Skip(page * pageSize).Take(pageSize);
+        }
+
+        public shop_sanpham GetMaxCodeProduct(int catecoryId)
+        {
+            var query = DbContext.shop_sanpham.Where(x=>x.CategoryId==catecoryId).OrderByDescending(x => x.CodeSuffix).FirstOrDefault();
+            return query;
         }
     }
 }

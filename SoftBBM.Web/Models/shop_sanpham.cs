@@ -22,13 +22,13 @@ namespace SoftBBM.Web.Models
             this.shop_image = new HashSet<shop_image>();
             this.sys_bangtin_conhang = new HashSet<sys_bangtin_conhang>();
             this.support_cauhoi = new HashSet<support_cauhoi>();
+            this.shop_sanphamLogs = new HashSet<shop_sanphamLogs>();
             this.SoftAdjustmentStockDetails = new HashSet<SoftAdjustmentStockDetail>();
             this.SoftBranchProductStocks = new HashSet<SoftBranchProductStock>();
             this.SoftChannelProductPrices = new HashSet<SoftChannelProductPrice>();
             this.SoftOrderDetails = new HashSet<SoftOrderDetail>();
             this.SoftReturnSupplierDetails = new HashSet<SoftReturnSupplierDetail>();
             this.SoftStockInDetails = new HashSet<SoftStockInDetail>();
-            this.shop_sanphamLogs = new HashSet<shop_sanphamLogs>();
         }
     
         public int id { get; set; }
@@ -77,6 +77,7 @@ namespace SoftBBM.Web.Models
         public Nullable<int> PriceBase { get; set; }
         public Nullable<int> PriceBaseOld { get; set; }
         public Nullable<int> PriceAvg { get; set; }
+        public Nullable<int> PriceWholesale { get; set; }
         public Nullable<int> PriceRef { get; set; }
         public Nullable<bool> freeship { get; set; }
         public Nullable<int> SupplierId { get; set; }
@@ -89,8 +90,8 @@ namespace SoftBBM.Web.Models
         public Nullable<bool> NotDiscountMember { get; set; }
         public Nullable<int> CategoryId { get; set; }
         public Nullable<int> FromCreate { get; set; }
-        public Nullable<int> PriceWholesale { get; set; }
         public Nullable<int> ShopeeId { get; set; }
+        public Nullable<int> CodeSuffix { get; set; }
     
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ApplicationUser ApplicationUser1 { get; set; }
@@ -105,10 +106,11 @@ namespace SoftBBM.Web.Models
         public virtual ICollection<sys_bangtin_conhang> sys_bangtin_conhang { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<support_cauhoi> support_cauhoi { get; set; }
-        public virtual shop_sanphamStatus shop_sanphamStatus { get; set; }
-        public virtual shop_thuonghieu shop_thuonghieu { get; set; }
         public virtual shop_sanphamCategories shop_sanphamCategories { get; set; }
+        public virtual shop_sanphamStatus shop_sanphamStatus { get; set; }
         public virtual SoftSupplier SoftSupplier { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<shop_sanphamLogs> shop_sanphamLogs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftAdjustmentStockDetail> SoftAdjustmentStockDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -121,7 +123,6 @@ namespace SoftBBM.Web.Models
         public virtual ICollection<SoftReturnSupplierDetail> SoftReturnSupplierDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftStockInDetail> SoftStockInDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<shop_sanphamLogs> shop_sanphamLogs { get; set; }
+        public virtual shop_thuonghieu shop_thuonghieu { get; set; }
     }
 }
