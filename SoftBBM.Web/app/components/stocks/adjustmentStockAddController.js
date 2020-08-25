@@ -1,9 +1,9 @@
 ﻿(function (app) {
     app.controller('adjustmentStockAddController', adjustmentStockAddController);
 
-    adjustmentStockAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state'];
+    adjustmentStockAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$uibModal'];
 
-    function adjustmentStockAddController(apiService, $window, $scope, notificationService, $state) {
+    function adjustmentStockAddController(apiService, $window, $scope, notificationService, $state, $uibModal) {
         $scope.adjustmentStock = {
             CreatedDate: new Date(),
             Status: true
@@ -28,6 +28,7 @@
         $scope.removeBookDetail = removeBookDetail
         $scope.init = init;
         $scope.addAjustmentStock = addAjustmentStock;
+        $scope.openAddStockFilterModal = openAddStockFilterModal;
         function loadSuppliers() {
             $scope.loading = true;
             var config = {
@@ -96,11 +97,21 @@
                 $scope.bookDetails.push(val);
             }
         }
-        function addFilter(val, key) {
-            var newFilter = {
-                key: key,
-                value: val.Id,
-                name: val.Name
+        function addFilter(val, key, type) {
+            if (key == 2) {
+                var newFilter = {
+                    key: key,
+                    value: val,
+                    name: type + ' ' + val,
+                    aliasName: type
+                }
+            }
+            else {
+                var newFilter = {
+                    key: key,
+                    value: val.Id,
+                    name: val.Name
+                }
             }
             switch (key) {
                 case 0:
@@ -108,6 +119,12 @@
                     break;
                 case 1:
                     newFilter.alias = 'Trạng thái';
+                    break;
+                case 2:
+                    newFilter.alias = 'Tồn kho';
+                    break;
+                case 3:
+                    newFilter.alias = 'Nhóm sp';
                     break;
             }
             if ($scope.filters.length > 0) {
@@ -149,6 +166,22 @@
                     });
             }
         }
+        function openAddStockFilterModal() {
+            var modalInstance = $uibModal.open({
+                templateUrl: '/app/components/stocks/adjustmentStockAddStockFilterModal.html' + BuildVersion,
+                controller: 'adjustmentStockAddStockFilterController',
+                scope: $scope,
+                size: 'sm',
+                backdrop: 'static',
+                keyboard: false
+            });
+            modalInstance.result.then(function (data) {
+                addFilter(data.value, 2, data.type);
+            }, function () {
+
+            });
+        }
+
         function init() {
             if (localStorage.getItem("userId")) {
                 $scope.adjustmentStock.CreatedBy = JSON.parse(localStorage.getItem("userId"));
@@ -379,7 +412,7 @@
 //        }
 //        function openAddStockFilterModal() {
 //            var modalInstance = $uibModal.open({
-//                templateUrl: '/app/components/stocks/adjustmentStockAddStockFilterModal.html',
+//                templateUrl: '/app/components/stocks/adjustmentStockAddStockFilterModal.html' + BuildVersion,
 //                controller: 'adjustmentStockAddStockFilterController',
 //                scope: $scope,
 //                size: 'sm',

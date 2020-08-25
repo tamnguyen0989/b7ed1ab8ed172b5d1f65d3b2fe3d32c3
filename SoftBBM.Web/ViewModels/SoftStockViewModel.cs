@@ -176,6 +176,8 @@ namespace SoftBBM.Web.ViewModels
         public List<SoftSupplierViewModel> selectedSupplierFilters { get; set; }
         public List<ShopSanPhamStatusViewModel> selectedProductStatusFilters { get; set; }
         public List<SoftSupplierVatStatuViewModel> selectedVatStatusFilters { get; set; }
+        public List<ShopSanPhamHideStatusViewModel> selectedHideStatusFilter { get; set; }
+
         public Nullable<int> selectedStockFilter { get; set; }
         public Nullable<int> selectedStockFilterValue { get; set; }
         public Nullable<int> selectedStockTotalFilter { get; set; }

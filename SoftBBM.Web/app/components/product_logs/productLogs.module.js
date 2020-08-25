@@ -5,7 +5,7 @@
         $stateProvider.state('product_logs', {
             url: '/product_logs',
             parent: 'base',
-            templateUrl: '/app/components/product_logs/productLogListView.html',
+            templateUrl: '/app/components/product_logs/productLogListView.html' + BuildVersion,
             controller: 'productLogListController'
         })
     }

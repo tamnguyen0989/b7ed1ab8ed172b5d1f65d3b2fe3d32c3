@@ -27,6 +27,7 @@
         $scope.editNewCustomerPhone = editNewCustomerPhone;
         $scope.updateNewCustomerPhone = updateNewCustomerPhone;
         $scope.cancelUpdateNewCustomerPhone = cancelUpdateNewCustomerPhone;
+        $scope.IsNullOrEmpty = IsNullOrEmpty;
 
         var config = {
             params: {
@@ -89,6 +90,25 @@
         function loadOrderDetails() {
             apiService.get('/api/order/detail', config, function (result) {
                 $scope.order = result.data;
+                $.each($scope.order.donhang_ct, function (ctIndex, ctItem) {
+                    ctItem.variation_name = '';
+                    if (!IsNullOrEmpty($scope.order.OrderIdShopeeApi))
+                        if ($scope.order.OrderIdShopeeApi.length > 0) {
+                            var productTmp = JSON.parse(ctItem.Description);
+                            ctItem.variation_name = productTmp.variation_name;
+                        }
+                    if (!(ctItem.IdPro > 0)) {
+                        var productTmp = JSON.parse(ctItem.Description);
+                        ctItem.shop_bienthe = {
+                            masp: '',
+                            tensp: '',
+                        };
+                        ctItem.shop_bienthe.masp = productTmp.item_sku;
+                        ctItem.shop_bienthe.tensp = productTmp.item_name;
+
+                    }
+                });
+
                 $scope.statusPrint = $sce.trustAsHtml($scope.order.StatusPrint);
                 if ($scope.order.Status == 3 || $scope.order.Status == 4 || $scope.order.Status == 6)
                     $scope.isUpdated = true;
@@ -294,11 +314,14 @@
                 }, function (error) {
                     notificationService.displayError(error.data);
                 });
-            }   
+            }
         }
         function cancelUpdateNewCustomerPhone() {
             $scope.updating = false;
             $scope.newCustomerPhone = '';
+        }
+        function IsNullOrEmpty(value) {
+            return isNullOrEmpty(value);
         }
 
         init();

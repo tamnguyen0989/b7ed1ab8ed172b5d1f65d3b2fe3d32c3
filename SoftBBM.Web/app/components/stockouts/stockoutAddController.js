@@ -290,7 +290,7 @@
         }
         function getSoldProductsByDate() {
             var modalInstance = $uibModal.open({
-                templateUrl: '/app/components/stockouts/soldProductsByDateModal.html',
+                templateUrl: '/app/components/stockouts/soldProductsByDateModal.html' + BuildVersion,
                 controller: 'soldProductsByDateController',
                 scope: $scope
             });

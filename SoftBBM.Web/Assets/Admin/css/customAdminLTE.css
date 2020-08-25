@@ -456,3 +456,12 @@ li > a > p {
 .padding_left_20px {
     padding-left: 20px
 }
+.tvk_branch{
+    color:darkblue
+}
+.kho_chinh_branch{
+    color:darkred
+}
+.modal-body {
+    overflow-y: scroll !important;
+}

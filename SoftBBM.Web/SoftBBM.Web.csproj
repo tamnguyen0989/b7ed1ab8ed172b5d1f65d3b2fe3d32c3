@@ -265,6 +265,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\Common.cs" />
     <Compile Include="Common\StringHelper.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="DAL\Infrastructure\DbFactory.cs" />
@@ -317,6 +318,8 @@
     <Compile Include="DAL\Repositories\SoftChannelRepository.cs" />
     <Compile Include="DAL\Repositories\SoftSupplierRepository.cs" />
     <Compile Include="DAL\Repositories\SoftSupplierVatStatusRepository.cs" />
+    <Compile Include="DAL\Repositories\SystemLogRepository.cs" />
+    <Compile Include="Enum\Branch.cs" />
     <Compile Include="Enum\Channel.cs" />
     <Compile Include="Enum\DeliveryTime.cs" />
     <Compile Include="Enum\PaymentMethod.cs" />
@@ -560,6 +563,9 @@
     <Compile Include="Models\support_textlink.cs">
       <DependentUpon>SoftBBM.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SystemLog.cs">
+      <DependentUpon>SoftBBM.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sys_account_admin.cs">
       <DependentUpon>SoftBBM.tt</DependentUpon>
     </Compile>
@@ -612,8 +618,11 @@
     <Compile Include="ViewModels\ProductCodeGenViewModel.cs" />
     <Compile Include="ViewModels\ResponseBBM.cs" />
     <Compile Include="ViewModels\ResultImportViewModel.cs" />
+    <Compile Include="ViewModels\ShopeeHookInpVM.cs" />
+    <Compile Include="ViewModels\ShopeeOrder.cs" />
     <Compile Include="ViewModels\ShopeeViewModel.cs" />
     <Compile Include="ViewModels\ShopImageViewModel.cs" />
+    <Compile Include="ViewModels\ShopSanPhamHideStatusViewModel.cs" />
     <Compile Include="ViewModels\ShopSanPhamLogViewModel.cs" />
     <Compile Include="ViewModels\ShopSanPhamViewModel.cs" />
     <Compile Include="ViewModels\ShopSanPhamCategoryViewModel.cs" />
@@ -868,12 +877,19 @@
     <Content Include="Assets\Admin\img\credit\visa.png" />
     <Content Include="Assets\Admin\img\default-50x50.gif" />
     <Content Include="Assets\Admin\img\fast_delivery.jpg" />
+    <Content Include="Assets\Admin\img\GHN_Logo_Print.png" />
+    <Content Include="Assets\Admin\img\GHTK_Logo_Print.png" />
     <Content Include="Assets\Admin\img\icons.png" />
+    <Content Include="Assets\Admin\img\NinjaVan_Logo_Print.jpg" />
     <Content Include="Assets\Admin\img\no-img.jpg" />
+    <Content Include="Assets\Admin\img\NowShip_Logo_Print.jpg" />
     <Content Include="Assets\Admin\img\photo1.png" />
     <Content Include="Assets\Admin\img\photo2.png" />
     <Content Include="Assets\Admin\img\photo3.jpg" />
     <Content Include="Assets\Admin\img\photo4.jpg" />
+    <Content Include="Assets\Admin\img\ShopeeExpress_Logo_Print.png" />
+    <Content Include="Assets\Admin\img\ShopeeIcon.jpg" />
+    <Content Include="Assets\Admin\img\Shopee_Logo_Print.jpg" />
     <Content Include="Assets\Admin\img\user1-128x128.jpg" />
     <Content Include="Assets\Admin\img\user2-160x160.jpg" />
     <Content Include="Assets\Admin\img\user3-128x128.jpg" />
@@ -883,6 +899,7 @@
     <Content Include="Assets\Admin\img\user7-128x128.jpg" />
     <Content Include="Assets\Admin\img\user8-128x128.jpg" />
     <Content Include="Assets\Admin\img\userbbm.jpg" />
+    <Content Include="Assets\Admin\img\VNP_Logo_Print.png" />
     <Content Include="Assets\Admin\js\app.js" />
     <Content Include="Assets\Admin\js\app.min.js" />
     <Content Include="Assets\Admin\js\demo.js" />
@@ -896,7 +913,6 @@
     <Content Include="Assets\Admin\libs\angular-chart.js\dist\angular-chart.min.css" />
     <Content Include="Assets\Admin\libs\angular-chart.js\dist\angular-chart.min.js" />
     <Content Include="Assets\Admin\libs\angular-chart.js\gulpfile.js" />
-    <Content Include="Assets\Admin\libs\angular-file-saver\.gitignore" />
     <Content Include="Assets\Admin\libs\angular-file-saver\dist\angular-file-saver.bundle.js" />
     <Content Include="Assets\Admin\libs\angular-file-saver\dist\angular-file-saver.bundle.min.js" />
     <Content Include="Assets\Admin\libs\angular-file-saver\dist\angular-file-saver.js" />
@@ -922,8 +938,6 @@
     <Content Include="Assets\Admin\libs\angular-file-saver\test\angular-file-saver-bundle.spec.js" />
     <Content Include="Assets\Admin\libs\angular-file-saver\test\blob-bundle.spec.js" />
     <Content Include="Assets\Admin\libs\angular-file-saver\test\file-saver-bundle.spec.js" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\.gitattributes" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\.gitignore" />
     <Content Include="Assets\Admin\libs\angular-local-storage\demo\demo-app.js" />
     <Content Include="Assets\Admin\libs\angular-local-storage\demo\demo-style.css" />
     <Content Include="Assets\Admin\libs\angular-local-storage\demo\demo.html" />
@@ -972,7 +986,6 @@
     <Content Include="Assets\Admin\libs\angular\angular.js" />
     <Content Include="Assets\Admin\libs\angular\angular.min.js" />
     <Content Include="Assets\Admin\libs\angular\index.js" />
-    <Content Include="Assets\Admin\libs\bootbox\.gitignore" />
     <Content Include="Assets\Admin\libs\bootbox\bootbox.js" />
     <Content Include="Assets\Admin\libs\bootstrap\dist\css\bootstrap-theme.css" />
     <Content Include="Assets\Admin\libs\bootstrap\dist\css\bootstrap-theme.min.css" />
@@ -1006,7 +1019,6 @@
     <Content Include="Assets\Admin\libs\checklist-model\checklist-model.js" />
     <Content Include="Assets\Admin\libs\checklist-model\LICENSE.txt" />
     <Content Include="Assets\Admin\libs\fastclick\lib\fastclick.js" />
-    <Content Include="Assets\Admin\libs\jquery-ui\.gitignore" />
     <Content Include="Assets\Admin\libs\jquery-ui\AUTHORS.txt" />
     <Content Include="Assets\Admin\libs\jquery-ui\jquery-ui.js" />
     <Content Include="Assets\Admin\libs\jquery-ui\jquery-ui.min.js" />
@@ -1814,6 +1826,7 @@
     <Content Include="Assets\Admin\libs\jquery\src\var\support.js" />
     <Content Include="Assets\Admin\libs\jquery\src\var\toString.js" />
     <Content Include="Assets\Admin\libs\jquery\src\wrap.js" />
+    <Content Include="Assets\Admin\libs\JsBarcode.all.min.js" />
     <Content Include="Assets\Admin\libs\moment.js" />
     <Content Include="Assets\Admin\libs\ngBootbox\dist\ngBootbox.js" />
     <Content Include="Assets\Admin\libs\ngBootbox\dist\ngBootbox.min.js" />
@@ -1828,6 +1841,7 @@
     <Content Include="Assets\Admin\libs\ngBootbox\gulpfile.js" />
     <Content Include="Assets\Admin\libs\ngBootbox\ngBootbox.js" />
     <Content Include="Assets\Admin\libs\print.min.js" />
+    <Content Include="Assets\Admin\libs\qrcode.js" />
     <Content Include="Assets\Admin\libs\slimScroll\examples\allow-page-scroll.html" />
     <Content Include="Assets\Admin\libs\slimScroll\examples\chaining.html" />
     <Content Include="Assets\Admin\libs\slimScroll\examples\disable-fade-out.html" />
@@ -1853,6 +1867,7 @@
     <Content Include="Assets\Admin\libs\toastr\toastr.min.css" />
     <Content Include="Assets\Admin\libs\toastr\toastr.min.js" />
     <Content Include="Assets\Admin\libs\ui-bootstrap-tpls-2.5.0.min.js" />
+    <Content Include="Assets\Client\libs\common.js" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -1874,6 +1889,97 @@
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <Content Include="app\shared\modules\softbbm.common.js" />
+    <Content Include="app\shared\directives\customPager.directive.js" />
+    <EntityDeploy Include="Models\SoftBBM.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SoftBBM.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\SoftBBM.edmx.diagram">
+      <DependentUpon>SoftBBM.edmx</DependentUpon>
+    </Content>
+    <Content Include="app\shared\directives\csDateToIso.directive.js" />
+    <Content Include="app\shared\directives\customPagerSmall.directive.js" />
+    <None Include=".bin\bower.cmd" />
+    <None Include=".bin\git.cmd" />
+    <None Include=".bin\node.cmd" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\.bower.json" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\angular-chart.less" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\bower.json" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\CONTRIBUTING.md" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\dist\angular-chart.js.tar.gz" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\dist\angular-chart.min.css.map" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\dist\angular-chart.min.js.map" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\Dockerfile" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\ISSUE_TEMPLATE.md" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\LICENSE" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\package.json" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\PULL_REQUEST_TEMPLATE.md" />
+    <Content Include="Assets\Admin\libs\angular-chart.js\README.md" />
+    <Content Include="Assets\Admin\libs\angular-file-saver\.babelrc" />
+    <Content Include="Assets\Admin\libs\angular-file-saver\.eslintrc" />
+    <Content Include="Assets\Admin\libs\angular-file-saver\.gitignore" />
+    <Content Include="Assets\Admin\libs\angular-file-saver\.travis.yml" />
+    <Content Include="Assets\Admin\libs\angular-file-saver\bower.json" />
+    <Content Include="Assets\Admin\libs\angular-file-saver\docs\params.json" />
+    <Content Include="Assets\Admin\libs\angular-file-saver\license.md" />
+    <Content Include="Assets\Admin\libs\angular-file-saver\package.json" />
+    <Content Include="Assets\Admin\libs\angular-file-saver\readme.md" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\.bower.json" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\.bowerrc" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\.editorconfig" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\.gitattributes" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\.gitignore" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\.travis.yml" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\bower.json" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\CHANGELOG.md" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\dist\angular-local-storage.min.js.map" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\LICENSE" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\package.json" />
+    <Content Include="Assets\Admin\libs\angular-local-storage\README.md" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\.bower.json" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\artifacts.json" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\bower.json" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\CHANGELOG.md" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\CONTRIBUTING.md" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\DOCS.md" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\downstream_projects.json" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\ISSUE_TEMPLATE.md" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\LICENSE" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\README.md" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\release\angular-ui-router.js.map" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\release\angular-ui-router.min.js.map" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\release\resolveService.js.map" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\release\resolveService.min.js.map" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\release\stateEvents.js.map" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\release\stateEvents.min.js.map" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\release\ui-router-angularjs.js.map" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\release\ui-router-angularjs.min.js.map" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\tslint.json" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\typedoc.json" />
+    <Content Include="Assets\Admin\libs\angular-ui-router\yarn.lock" />
+    <Content Include="Assets\Admin\libs\angularjs-datepicker\.bower.json" />
+    <Content Include="Assets\Admin\libs\angularjs-datepicker\bower.json" />
+    <Content Include="Assets\Admin\libs\angularjs-datepicker\dist\angular-datepicker.sourcemap.map" />
+    <Content Include="Assets\Admin\libs\angularjs-datepicker\package.json" />
+    <Content Include="Assets\Admin\libs\angularjs-datepicker\README.md" />
+    <Content Include="Assets\Admin\libs\angularjs-datepicker\themes\README.md" />
+    <Content Include="Assets\Admin\libs\angular\.bower.json" />
+    <Content Include="Assets\Admin\libs\angular\angular.min.js.gzip" />
+    <Content Include="Assets\Admin\libs\angular\angular.min.js.map" />
+    <Content Include="Assets\Admin\libs\angular\bower.json" />
+    <Content Include="Assets\Admin\libs\angular\LICENSE.md" />
+    <Content Include="Assets\Admin\libs\angular\package.json" />
+    <Content Include="Assets\Admin\libs\angular\README.md" />
+    <Content Include="Assets\Admin\libs\bootbox\.bower.json" />
+    <Content Include="Assets\Admin\libs\bootbox\.gitignore" />
+    <Content Include="Assets\Admin\libs\bootbox\.jshintrc" />
+    <Content Include="Assets\Admin\libs\bootbox\.npmignore" />
+    <Content Include="Assets\Admin\libs\bootbox\.travis.yml" />
+    <Content Include="Assets\Admin\libs\bootbox\bower.json" />
+    <Content Include="Assets\Admin\libs\bootbox\CONTRIBUTING.md" />
+    <Content Include="Assets\Admin\libs\bootbox\LICENSE.md" />
+    <Content Include="Assets\Admin\libs\bootbox\package.json" />
+    <Content Include="Assets\Admin\libs\bootbox\README.md" />
     <Content Include="Assets\Admin\libs\bootstrap\.bower.json" />
     <Content Include="Assets\Admin\libs\bootstrap\bower.json" />
     <Content Include="Assets\Admin\libs\bootstrap\CHANGELOG.md" />
@@ -1977,7 +2083,17 @@
     <Content Include="Assets\Admin\libs\bootstrap\nuget\MyGet.ps1" />
     <Content Include="Assets\Admin\libs\bootstrap\package.json" />
     <Content Include="Assets\Admin\libs\bootstrap\README.md" />
+    <Content Include="Assets\Admin\libs\Chart.js\.bower.json" />
+    <Content Include="Assets\Admin\libs\Chart.js\bower.json" />
+    <Content Include="Assets\Admin\libs\checklist-model\.bower.json" />
+    <Content Include="Assets\Admin\libs\checklist-model\bower.json" />
+    <Content Include="Assets\Admin\libs\checklist-model\readme.md" />
+    <Content Include="Assets\Admin\libs\fastclick\.bower.json" />
+    <Content Include="Assets\Admin\libs\fastclick\bower.json" />
+    <Content Include="Assets\Admin\libs\fastclick\LICENSE" />
+    <Content Include="Assets\Admin\libs\fastclick\README.md" />
     <Content Include="Assets\Admin\libs\jquery-ui\.bower.json" />
+    <Content Include="Assets\Admin\libs\jquery-ui\.gitignore" />
     <Content Include="Assets\Admin\libs\jquery-ui\bower.json" />
     <Content Include="Assets\Admin\libs\jquery-ui\component.json" />
     <Content Include="Assets\Admin\libs\jquery-ui\composer.json" />
@@ -1991,20 +2107,15 @@
     <Content Include="Assets\Admin\libs\jquery\external\sizzle\dist\sizzle.min.map" />
     <Content Include="Assets\Admin\libs\jquery\README.md" />
     <Content Include="Assets\Admin\libs\jquery\src\.jshintrc" />
-    <Content Include="Assets\Admin\libs\bootbox\.bower.json" />
-    <Content Include="Assets\Admin\libs\bootbox\.jshintrc" />
-    <Content Include="Assets\Admin\libs\bootbox\.npmignore" />
-    <Content Include="Assets\Admin\libs\bootbox\.travis.yml" />
-    <Content Include="Assets\Admin\libs\bootbox\bower.json" />
-    <Content Include="Assets\Admin\libs\bootbox\CONTRIBUTING.md" />
-    <Content Include="Assets\Admin\libs\bootbox\LICENSE.md" />
-    <Content Include="Assets\Admin\libs\bootbox\package.json" />
-    <Content Include="Assets\Admin\libs\bootbox\README.md" />
     <Content Include="Assets\Admin\libs\ngBootbox\.bower.json" />
     <Content Include="Assets\Admin\libs\ngBootbox\bower.json" />
     <Content Include="Assets\Admin\libs\ngBootbox\package.json" />
     <Content Include="Assets\Admin\libs\ngBootbox\README.md" />
     <Content Include="Assets\Admin\libs\ngBootbox\tsd.json" />
+    <Content Include="Assets\Admin\libs\slimScroll\.bower.json" />
+    <Content Include="Assets\Admin\libs\slimScroll\bower.json" />
+    <Content Include="Assets\Admin\libs\slimScroll\package.json" />
+    <Content Include="Assets\Admin\libs\slimScroll\README.md" />
     <Content Include="Assets\Admin\libs\toastr\.bower.json" />
     <Content Include="Assets\Admin\libs\toastr\bower.json" />
     <Content Include="Assets\Admin\libs\toastr\LICENSE" />
@@ -2012,94 +2123,6 @@
     <Content Include="Assets\Admin\libs\toastr\toastr.js.map" />
     <Content Include="Assets\Admin\libs\toastr\toastr.less" />
     <Content Include="Assets\Admin\libs\toastr\toastr.scss" />
-    <Content Include="app\shared\directives\customPager.directive.js" />
-    <Content Include="Assets\Admin\libs\fastclick\.bower.json" />
-    <Content Include="Assets\Admin\libs\fastclick\bower.json" />
-    <Content Include="Assets\Admin\libs\fastclick\LICENSE" />
-    <Content Include="Assets\Admin\libs\fastclick\README.md" />
-    <Content Include="Assets\Admin\libs\slimScroll\.bower.json" />
-    <Content Include="Assets\Admin\libs\slimScroll\bower.json" />
-    <Content Include="Assets\Admin\libs\slimScroll\package.json" />
-    <Content Include="Assets\Admin\libs\slimScroll\README.md" />
-    <Content Include="Assets\Admin\libs\angularjs-datepicker\.bower.json" />
-    <Content Include="Assets\Admin\libs\angularjs-datepicker\bower.json" />
-    <Content Include="Assets\Admin\libs\angularjs-datepicker\dist\angular-datepicker.sourcemap.map" />
-    <Content Include="Assets\Admin\libs\angularjs-datepicker\package.json" />
-    <Content Include="Assets\Admin\libs\angularjs-datepicker\README.md" />
-    <Content Include="Assets\Admin\libs\angularjs-datepicker\themes\README.md" />
-    <EntityDeploy Include="Models\SoftBBM.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SoftBBM.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\SoftBBM.edmx.diagram">
-      <DependentUpon>SoftBBM.edmx</DependentUpon>
-    </Content>
-    <Content Include="Assets\Admin\libs\checklist-model\.bower.json" />
-    <Content Include="Assets\Admin\libs\checklist-model\bower.json" />
-    <Content Include="Assets\Admin\libs\checklist-model\readme.md" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\.bower.json" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\.bowerrc" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\.editorconfig" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\.travis.yml" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\bower.json" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\CHANGELOG.md" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\dist\angular-local-storage.min.js.map" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\LICENSE" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\package.json" />
-    <Content Include="Assets\Admin\libs\angular-local-storage\README.md" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\.bower.json" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\artifacts.json" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\bower.json" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\CHANGELOG.md" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\CONTRIBUTING.md" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\DOCS.md" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\downstream_projects.json" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\ISSUE_TEMPLATE.md" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\LICENSE" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\README.md" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\release\angular-ui-router.js.map" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\release\angular-ui-router.min.js.map" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\release\resolveService.js.map" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\release\resolveService.min.js.map" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\release\stateEvents.js.map" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\release\stateEvents.min.js.map" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\release\ui-router-angularjs.js.map" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\release\ui-router-angularjs.min.js.map" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\tslint.json" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\typedoc.json" />
-    <Content Include="Assets\Admin\libs\angular-ui-router\yarn.lock" />
-    <Content Include="Assets\Admin\libs\angular\.bower.json" />
-    <Content Include="Assets\Admin\libs\angular\angular.min.js.gzip" />
-    <Content Include="Assets\Admin\libs\angular\angular.min.js.map" />
-    <Content Include="Assets\Admin\libs\angular\bower.json" />
-    <Content Include="Assets\Admin\libs\angular\LICENSE.md" />
-    <Content Include="Assets\Admin\libs\angular\package.json" />
-    <Content Include="Assets\Admin\libs\angular\README.md" />
-    <Content Include="app\shared\directives\csDateToIso.directive.js" />
-    <Content Include="app\shared\directives\customPagerSmall.directive.js" />
-    <Content Include="Assets\Admin\libs\angular-file-saver\.babelrc" />
-    <Content Include="Assets\Admin\libs\angular-file-saver\.eslintrc" />
-    <Content Include="Assets\Admin\libs\angular-file-saver\.travis.yml" />
-    <Content Include="Assets\Admin\libs\angular-file-saver\bower.json" />
-    <Content Include="Assets\Admin\libs\angular-file-saver\docs\params.json" />
-    <Content Include="Assets\Admin\libs\angular-file-saver\license.md" />
-    <Content Include="Assets\Admin\libs\angular-file-saver\package.json" />
-    <Content Include="Assets\Admin\libs\angular-file-saver\readme.md" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\.bower.json" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\angular-chart.less" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\bower.json" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\CONTRIBUTING.md" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\dist\angular-chart.js.tar.gz" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\dist\angular-chart.min.css.map" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\dist\angular-chart.min.js.map" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\Dockerfile" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\ISSUE_TEMPLATE.md" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\LICENSE" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\package.json" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\PULL_REQUEST_TEMPLATE.md" />
-    <Content Include="Assets\Admin\libs\angular-chart.js\README.md" />
-    <Content Include="Assets\Admin\libs\Chart.js\.bower.json" />
-    <Content Include="Assets\Admin\libs\Chart.js\bower.json" />
     <None Include="Properties\PublishProfiles\SoftBBM.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -2128,8 +2151,6 @@
     <Content Include="Views\Admin\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Admin\libs\checklist-model\test\" />
-    <Folder Include="Assets\Client\" />
     <Folder Include="Services\" />
     <Folder Include="Views\Shared\" />
   </ItemGroup>
@@ -2143,11 +2164,6 @@
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Assets\Admin\libs\ngBootbox\typings\angularjs\angular.d.ts" />
-    <TypeScriptCompile Include="Assets\Admin\libs\ngBootbox\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="Assets\Admin\libs\ngBootbox\typings\tsd.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

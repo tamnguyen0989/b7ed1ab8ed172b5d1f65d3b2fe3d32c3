@@ -25,7 +25,8 @@ namespace SoftBBM.Web.Mapping
             Mapper.CreateMap<SoftChannelProductPrice, SoftChannelProductPriceViewModel>();
             Mapper.CreateMap<shop_sanpham, SoftStockInProductViewModel>()
                 .ForMember(d => d.PriceNew, map => map.MapFrom(s => s.PriceBase));
-            Mapper.CreateMap<shop_sanpham, SoftOrderDetailViewModel>();
+            Mapper.CreateMap<shop_sanpham, SoftOrderDetailViewModel>()
+                .ForMember(d => d.image, map => map.MapFrom(s => "https://babymart.vn/Images/hinhdulieu/thumbnail/" + s.shop_image.FirstOrDefault().url));
             Mapper.CreateMap<SoftStockIn, SoftStockInViewModel>()
                 .ForMember(d => d.SupplierName, map => map.MapFrom(s => s.SoftSupplier.Name))
                 .ForMember(d => d.Category, map => map.MapFrom(s => s.SoftStockInCategory.Name))
@@ -71,6 +72,7 @@ namespace SoftBBM.Web.Mapping
             Mapper.CreateMap<donhang_ct, donhangctViewModel>()
                 .ForMember(d => d.masp, map => map.MapFrom(s => s.shop_bienthe.shop_sanpham.masp));
             Mapper.CreateMap<shop_bienthe, shopbientheViewModel>()
+                .ForMember(d => d.image, map => map.MapFrom(s => "https://babymart.vn/Images/hinhdulieu/thumbnail/" + s.shop_sanpham.shop_image.FirstOrDefault().url))
                 .ForMember(d => d.masp, map => map.MapFrom(s => s.shop_sanpham.masp))
                 .ForMember(d => d.tensp, map => map.MapFrom(s => s.shop_sanpham.tensp));
             Mapper.CreateMap<SoftBranchProductStock, SoftStockTotalAllViewModel>()
@@ -156,13 +158,13 @@ namespace SoftBBM.Web.Mapping
                 .ForMember(d => d.Image, map => map.MapFrom(s => "https://babymart.vn/Images/hinhdulieu/thumbnail/" + s.shop_sanpham.shop_image.FirstOrDefault().url))
                 .ForMember(d => d.tensp, map => map.MapFrom(s => s.shop_sanpham.tensp));
             Mapper.CreateMap<SoftBranchProductStock, ExportPriceViewModel>()
-                .ForMember(d => d.id, map => map.MapFrom(s => s.shop_sanpham.id))
-                .ForMember(d => d.Code, map => map.MapFrom(s => s.shop_sanpham.masp))
-                .ForMember(d => d.PriceAvg, map => map.MapFrom(s => s.shop_sanpham.PriceAvg))
-                .ForMember(d => d.PriceBase, map => map.MapFrom(s => s.shop_sanpham.PriceBase))
-                .ForMember(d => d.PriceBaseOld, map => map.MapFrom(s => s.shop_sanpham.PriceBaseOld))
-                .ForMember(d => d.PriceWholesale, map => map.MapFrom(s => s.shop_sanpham.PriceWholesale))
-                .ForMember(d => d.Name, map => map.MapFrom(s => s.shop_sanpham.tensp));
+                .ForMember(d => d.id, map => map.MapFrom(s => s.shop_sanpham == null ? 0 : s.shop_sanpham.id))
+                .ForMember(d => d.Code, map => map.MapFrom(s => s.shop_sanpham == null ? "" : s.shop_sanpham.masp))
+                .ForMember(d => d.PriceAvg, map => map.MapFrom(s => s.shop_sanpham == null ? 0 : (s.shop_sanpham.PriceAvg == null ? 0 : s.shop_sanpham.PriceAvg.Value)))
+                .ForMember(d => d.PriceBase, map => map.MapFrom(s => s.shop_sanpham == null ? 0 : (s.shop_sanpham.PriceBase == null ? 0 : s.shop_sanpham.PriceBase.Value)))
+                .ForMember(d => d.PriceBaseOld, map => map.MapFrom(s => s.shop_sanpham == null ? 0 : (s.shop_sanpham.PriceBaseOld == null ? 0 : s.shop_sanpham.PriceBaseOld.Value)))
+                .ForMember(d => d.PriceWholesale, map => map.MapFrom(s => s.shop_sanpham == null ? 0 : (s.shop_sanpham.PriceWholesale == null ? 0 : s.shop_sanpham.PriceWholesale.Value)))
+                .ForMember(d => d.Name, map => map.MapFrom(s => s.shop_sanpham == null ? "" : s.shop_sanpham.tensp));
             Mapper.CreateMap<donhang, donhangExcel>()
                 .ForMember(d => d.StatusName, map => map.MapFrom(s => s.donhangStatu.Name));
             Mapper.CreateMap<donhangExcel, donhangExcelNoId>();

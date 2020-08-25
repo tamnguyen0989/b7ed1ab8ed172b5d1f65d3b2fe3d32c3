@@ -5,12 +5,12 @@
         $stateProvider.state('return_suppliers', {
             url: '/return_suppliers',
             parent: 'base',
-            templateUrl: '/app/components/return_suppliers/returnSupplierListView.html',
+            templateUrl: '/app/components/return_suppliers/returnSupplierListView.html' + BuildVersion,
             controller: 'returnSupplierListController'
         }).state('add_return_supplier', {
             url: '/add_return_supplier',
             parent: 'base',
-            templateUrl: '/app/components/return_suppliers/returnSupplierAddView.html',
+            templateUrl: '/app/components/return_suppliers/returnSupplierAddView.html' + BuildVersion,
             controller: 'returnSupplierAddController'
         })
     }

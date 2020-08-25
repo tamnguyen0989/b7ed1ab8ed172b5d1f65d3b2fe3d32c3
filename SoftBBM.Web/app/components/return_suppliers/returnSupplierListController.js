@@ -76,7 +76,7 @@
         function bookDetail(selectedBook) {
             $scope.selectedBook = selectedBook;
             $uibModal.open({
-                templateUrl: '/app/components/return_suppliers/returnSupplierDetailModal.html',
+                templateUrl: '/app/components/return_suppliers/returnSupplierDetailModal.html' + BuildVersion,
                 controller: 'returnSupplierDetailController',
                 scope: $scope,
                 windowClass: 'app-modal-window-medium'

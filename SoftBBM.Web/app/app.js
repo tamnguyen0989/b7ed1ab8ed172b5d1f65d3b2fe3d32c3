@@ -26,17 +26,17 @@
     function config($stateProvider, $urlRouterProvider) {
         $stateProvider.state('base', {
             url: '',
-            templateUrl: '/app/shared/views/baseView.html',
+            templateUrl: '/app/shared/views/baseView.html' + BuildVersion,
             controller: 'baseController',
             abstract: true
         }).state('home', {
             url: '/home',
             parent: 'base',
-            templateUrl: '/app/components/home/homeView.html',
+            templateUrl: '/app/components/home/homeView.html' + BuildVersion,
             controller: 'homeController'
         }).state('login', {
             url: '/login',
-            templateUrl: '/app/components/login/loginView.html',
+            templateUrl: '/app/components/login/loginView.html' + BuildVersion,
             controller: 'loginController'
         });
         $urlRouterProvider.otherwise('/login');

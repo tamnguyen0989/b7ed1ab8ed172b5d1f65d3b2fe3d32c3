@@ -79,7 +79,7 @@
         function bookDetail(selectedBook) {
             $scope.selectedBook = selectedBook;
             $uibModal.open({
-                templateUrl: '/app/components/stocks/adjustmentStockDetailModal.html',
+                templateUrl: '/app/components/stocks/adjustmentStockDetailModal.html' + BuildVersion,
                 controller: 'adjustmentStockDetailController',
                 scope: $scope,
                 windowClass: 'app-modal-window-medium'

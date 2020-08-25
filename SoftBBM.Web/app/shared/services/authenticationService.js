@@ -83,6 +83,10 @@
             return deferred.promise;
         }
 
+        this.getAccessToken = function () {
+            return _accessToken;
+        }
+
         this.init();
     }
     ]);

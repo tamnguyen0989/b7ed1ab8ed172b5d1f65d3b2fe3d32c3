@@ -80,7 +80,6 @@ namespace SoftBBM.Web.Models
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public virtual DbSet<ApplicationRole> ApplicationRoles { get; set; }
         public virtual DbSet<ApplicationRoleCategory> ApplicationRoleCategories { get; set; }
-        public virtual DbSet<donhang> donhangs { get; set; }
         public virtual DbSet<khachhang> khachhangs { get; set; }
         public virtual DbSet<shop_sanphamCategories> shop_sanphamCategories { get; set; }
         public virtual DbSet<SoftAdjustmentStockDetail> SoftAdjustmentStockDetails { get; set; }
@@ -96,18 +95,20 @@ namespace SoftBBM.Web.Models
         public virtual DbSet<SoftReturnSupplierDetail> SoftReturnSupplierDetails { get; set; }
         public virtual DbSet<SoftReturnSupplier> SoftReturnSuppliers { get; set; }
         public virtual DbSet<SoftStockInCategory> SoftStockInCategories { get; set; }
-        public virtual DbSet<SoftStockInDetail> SoftStockInDetails { get; set; }
-        public virtual DbSet<SoftStockIn> SoftStockIns { get; set; }
         public virtual DbSet<SoftStockInStatu> SoftStockInStatus { get; set; }
         public virtual DbSet<SoftSupplier> SoftSuppliers { get; set; }
         public virtual DbSet<SoftSupplierVatStatu> SoftSupplierVatStatus { get; set; }
-        public virtual DbSet<donhang_ct> donhang_ct { get; set; }
         public virtual DbSet<SoftStockInPaymentMethod> SoftStockInPaymentMethods { get; set; }
         public virtual DbSet<SoftStockInPaymentType> SoftStockInPaymentTypes { get; set; }
         public virtual DbSet<SoftStockInPaymentStatus> SoftStockInPaymentStatuses { get; set; }
         public virtual DbSet<shop_sanphamLogs> shop_sanphamLogs { get; set; }
         public virtual DbSet<shop_sanpham> shop_sanpham { get; set; }
         public virtual DbSet<SoftPointUpdateLog> SoftPointUpdateLogs { get; set; }
+        public virtual DbSet<donhang_ct> donhang_ct { get; set; }
+        public virtual DbSet<SoftStockInDetail> SoftStockInDetails { get; set; }
+        public virtual DbSet<SoftStockIn> SoftStockIns { get; set; }
+        public virtual DbSet<donhang> donhangs { get; set; }
+        public virtual DbSet<SystemLog> SystemLogs { get; set; }
     
         public virtual int TinTuc_Phantrang(Nullable<int> currPage, Nullable<int> recodperpage, Nullable<int> pagesize, Nullable<int> cateID, string page)
         {

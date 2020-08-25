@@ -15,6 +15,8 @@ namespace SoftBBM.Web.Enum
         [Display(Name = "Lazada")]
         LZD = 3,
         [Display(Name = "Shopee")]
-        SPE = 4
+        SPE = 4,
+        [Display(Name = "Bán sỉ")]
+        BSI = 7
     }
 }

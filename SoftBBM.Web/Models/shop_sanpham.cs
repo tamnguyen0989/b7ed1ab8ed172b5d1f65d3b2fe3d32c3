@@ -121,8 +121,8 @@ namespace SoftBBM.Web.Models
         public virtual ICollection<SoftOrderDetail> SoftOrderDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftReturnSupplierDetail> SoftReturnSupplierDetails { get; set; }
+        public virtual shop_thuonghieu shop_thuonghieu { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftStockInDetail> SoftStockInDetails { get; set; }
-        public virtual shop_thuonghieu shop_thuonghieu { get; set; }
     }
 }

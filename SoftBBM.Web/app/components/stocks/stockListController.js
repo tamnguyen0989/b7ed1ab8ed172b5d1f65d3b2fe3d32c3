@@ -41,6 +41,7 @@
             selectedStockFilterValue: null,
             selectedStockTotalFilter: null,
             selectedStockTotalFilterValue: null,
+            selectedHideStatusFilter: [],
         }
         $scope.filters.sortBy = '';
         $scope.productCodeSort = false;
@@ -57,6 +58,10 @@
         $scope.enabledPopover = [];
         $scope.selectedStockPopover = null;
         $scope.showPriceChannelDiscount = true;
+        $scope.hideStatuses = [
+            { Id: 0, Name: "Hiện SP", },
+            { Id: 1, Name: "Ẩn SP", }
+        ];
 
         $scope.init = init;
         $scope.search = search;
@@ -100,6 +105,7 @@
         $scope.openChannelPricesModal = openChannelPricesModal;
         $scope.exportPriceWholesale = exportPriceWholesale;
         $scope.syncToShopee = syncToShopee;
+        $scope.hideProduct = hideProduct;
 
         function search(page) {
             page = page || 0;
@@ -141,14 +147,15 @@
                 selectedStockFilterValue: null,
                 selectedStockTotalFilter: null,
                 selectedStockTotalFilterValue: null,
-                stringFilter: null
+                stringFilter: null,
+                selectedHideStatusFilter: [],
             }
             search();
         }
         function openDetailModal(stock) {
             $scope.editedChannel = stock;
             $modal.open({
-                templateUrl: '/app/components/stocks/stockDetailModal.html',
+                templateUrl: '/app/components/stocks/stockDetailModal.html' + BuildVersion,
                 controller: 'stockDetailController',
                 scope: $scope
             }).result.finally(function ($scope) {
@@ -199,7 +206,7 @@
         function openChannelPrices(stock) {
             $scope.selectedStock = stock;
             $uibModal.open({
-                templateUrl: '/app/components/stocks/stockChannelPricesModal.html',
+                templateUrl: '/app/components/stocks/stockChannelPricesModal.html' + BuildVersion,
                 controller: 'stockChannelPricesController',
                 scope: $scope,
                 backdrop: 'static',
@@ -213,7 +220,7 @@
             closeChannelPricePopover();
             $scope.selectedStock = stock;
             $uibModal.open({
-                templateUrl: '/app/components/stocks/stockTotalAllModal.html?v=01',
+                templateUrl: '/app/components/stocks/stockTotalAllModal.html' + BuildVersion,
                 controller: 'stockTotalAllController',
                 scope: $scope,
                 windowClass: 'app-modal-window-small'
@@ -241,7 +248,7 @@
         function exportPriceWholesale() {
             apiService.get('api/stock/authenexport', null, function (result) {
                 $uibModal.open({
-                    templateUrl: '/app/components/stocks/exportPriceWholesaleModal.html',
+                    templateUrl: '/app/components/stocks/exportPriceWholesaleModal.html' + BuildVersion,
                     controller: 'exportPriceWholesaleController',
                     scope: $scope,
                     backdrop: 'static',
@@ -263,7 +270,7 @@
         }
         function exportProductsExcel() {
             $uibModal.open({
-                templateUrl: '/app/components/stocks/processModal.html',
+                templateUrl: '/app/components/stocks/processModal.html' + BuildVersion,
                 controller: 'processModalController',
                 scope: $scope,
                 backdrop: 'static',
@@ -291,7 +298,7 @@
         function importProductsExcel() {
             if ($scope.files.length > 0) {
                 $uibModal.open({
-                    templateUrl: '/app/components/stocks/processImportModal.html',
+                    templateUrl: '/app/components/stocks/processImportModal.html' + BuildVersion,
                     controller: 'exportPriceWholesaleController',
                     scope: $scope,
                     backdrop: 'static',
@@ -312,7 +319,7 @@
         }
         function openProductAddModal() {
             $uibModal.open({
-                templateUrl: '/app/components/stocks/productAddModal.html',
+                templateUrl: '/app/components/stocks/productAddModal.html' + BuildVersion,
                 controller: 'productAddController',
                 scope: $scope,
                 size: 'lg',
@@ -344,7 +351,11 @@
         function loadVatStatuses() {
             apiService.get('api/supplier/getallvatstatus', null,
                 function (result) {
-                    $scope.vatStatuses = result.data;
+                    $scope.vatStatuses = [];
+                    var invisible = { Id: -1, Name: 'Ẩn SP', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
+                    var visible = { Id: -2, Name: 'Hiện SP', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
+                    $scope.vatStatuses.push(invisible, visible);
+                    $scope.vatStatuses = $scope.vatStatuses.concat(result.data);
                 }, function (error) {
                     notificationService.displayError(error.data);
                 });
@@ -474,7 +485,7 @@
             closeChannelPricePopover();
             $scope.selectedStock = stock;
             $uibModal.open({
-                templateUrl: '/app/components/stocks/stockEditProductModal.html',
+                templateUrl: '/app/components/stocks/stockEditProductModal.html' + BuildVersion,
                 controller: 'stockEditProductController',
                 scope: $scope,
                 size: 'lg',
@@ -489,7 +500,7 @@
                 id: stock.shop_sanpham.id
             };
             $uibModal.open({
-                templateUrl: '/app/components/stocks/stockChannelPricesModal.html',
+                templateUrl: '/app/components/stocks/stockChannelPricesModal.html' + BuildVersion,
                 controller: 'stockChannelPricesController',
                 scope: $scope,
                 backdrop: 'static',
@@ -506,6 +517,22 @@
                 search($scope.page);
             }, function (response) {
                 notificationService.displayError(response.data);
+            });
+        }
+        function hideProduct(productID, status) {
+            var config = {
+                params: {
+                    productID: productID
+                }
+            }
+            apiService.get('/api/product/hide', config, function (result) {
+                if (status == true)
+                    notificationService.displaySuccess('Ẩn sản phẩm thành công!');
+                else
+                    notificationService.displaySuccess('Hiện sản phẩm thành công!');
+            }, function (response) {
+                console.log(response.data);
+                notificationService.displayError('Cập nhật thất bại!');
             });
         }
 

@@ -205,7 +205,7 @@
                         if (result.data.stockoutAble == true) {
                             $ngBootbox.confirm('Bạn có muốn xuất đến kho đang thiếu các sản phẩm này?').then(function () {
                                 $uibModal.open({
-                                    templateUrl: '/app/components/stockins/stockinThenOutModal.html',
+                                    templateUrl: '/app/components/stockins/stockinThenOutModal.html' + BuildVersion,
                                     controller: 'stockinThenOutController',
                                     scope: $scope,
                                     backdrop: 'static',
@@ -236,6 +236,7 @@
                             $state.go('stockins');
                     }, function (error) {
                         notificationService.displayError(error.data);
+                        $scope.adding = false;
                     });
             }
         }
@@ -247,7 +248,7 @@
         }
         function openStockinThenUpdatePrice() {
             $uibModal.open({
-                templateUrl: '/app/components/stockins/stockinThenUpdatePriceModal.html',
+                templateUrl: '/app/components/stockins/stockinThenUpdatePriceModal.html' + BuildVersion,
                 controller: 'stockinThenUpdatePriceController',
                 scope: $scope,
                 backdrop: 'static',

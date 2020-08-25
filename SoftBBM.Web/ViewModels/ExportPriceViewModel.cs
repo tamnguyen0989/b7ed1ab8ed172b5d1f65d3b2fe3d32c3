@@ -15,6 +15,7 @@ namespace SoftBBM.Web.ViewModels
         public int PriceAvg { get; set; }
         public int PriceWholesale { get; set; }
         public int PriceChannel { get; set; }
+        public string Url { get; set; }
     }
 
     public class ExportPriceNoIdViewModel
@@ -26,6 +27,7 @@ namespace SoftBBM.Web.ViewModels
         public int PriceAvg { get; set; }
         public int PriceWholesale { get; set; }
         public int PriceChannel { get; set; }
+        public string Url { get; set; }
     }
 
     public class ExportPriceParamsDetail

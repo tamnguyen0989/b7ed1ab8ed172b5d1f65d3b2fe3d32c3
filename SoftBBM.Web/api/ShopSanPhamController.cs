@@ -100,7 +100,19 @@ namespace SoftBBM.Web.api
             }
             else
             {
-                shopsanpham = _shopSanPhamRepository.GetMulti(x => x.masp.ToLower().Contains(searchText) || x.tensp.ToLower().Contains(searchText)).OrderBy(x => x.tensp).ThenBy(y => y.masp);
+                //using (var dbContext = new SoftBBMDbContext())
+                //{
+                //shopsanpham = dbContext.shop_sanpham.Where(delegate (shop_sanpham x)
+                //{
+                //    if ((StringExtensions.ConvertToUnSignV2(x.tensp).IndexOf(searchText, StringComparison.CurrentCultureIgnoreCase) >= 0) || x.masp.ToLower().Contains(searchText))
+                //        return true;
+                //    else
+                //        return false;
+                //}).OrderBy(x => x.tensp).ThenBy(y => y.masp).ToList();
+                var searchTextUnSign = searchText.ConvertToUnSign();
+
+                    shopsanpham = _shopSanPhamRepository.GetMulti(x => x.masp.ToLower().Contains(searchText) || x.tensp.ToLower().Contains(searchText) || x.spurl.ToLower().Contains(searchTextUnSign)).OrderBy(x => x.tensp).ThenBy(y => y.masp);
+                //}
             }
 
             var shopsanphamVm = Mapper.Map<IEnumerable<shop_sanpham>, IEnumerable<SoftOrderDetailViewModel>>(shopsanpham);
@@ -689,6 +701,34 @@ namespace SoftBBM.Web.api
                 //package.Save();
                 return package.GetAsByteArray();
             }
+        }
+
+        [Route("hide")]
+        [Authorize(Roles = "ProductAdd")]
+        [HttpGet]
+        public HttpResponseMessage Hide(HttpRequestMessage request, int productID)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var existShopSanPham = _shopSanPhamRepository.GetSingleById(productID);
+                if (existShopSanPham != null)
+                {
+                    existShopSanPham.hide = !existShopSanPham.hide;
+                    _shopSanPhamRepository.Update(existShopSanPham);
+                    _unitOfWork.Commit();
+                    response = request.CreateResponse(HttpStatusCode.OK, true);
+                }
+                else
+                    response = request.CreateResponse(HttpStatusCode.BadRequest, "Sản phẩm không tồn tại");
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+
         }
     }
 }

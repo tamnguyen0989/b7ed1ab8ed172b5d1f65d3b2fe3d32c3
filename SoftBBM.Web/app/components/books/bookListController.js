@@ -87,7 +87,7 @@
         function bookDetail(selectedBook) {
             $scope.selectedBook = selectedBook;
             $uibModal.open({
-                templateUrl: '/app/components/books/bookDetailModal.html',
+                templateUrl: '/app/components/books/bookDetailModal.html' + BuildVersion,
                 controller: 'bookDetailController',
                 scope: $scope,
                 windowClass: 'app-modal-window-medium'
@@ -278,7 +278,7 @@
         function exportExcel(item) {
             $scope.selectedBook = item;
             $uibModal.open({
-                templateUrl: '/app/components/books/processBookModal.html',
+                templateUrl: '/app/components/books/processBookModal.html' + BuildVersion,
                 controller: 'processBookModalController',
                 scope: $scope,
                 backdrop: 'static',

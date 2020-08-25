@@ -149,6 +149,9 @@ namespace SoftBBM.Web.api
                 }
                 else
                     item.PriceChannel = item.shop_sanpham.PriceWholesale;
+
+                if (item.shop_sanpham.hide == null)
+                    item.shop_sanpham.hide = true;
             }
 
             PaginationSet<SoftStockViewModel> pagedSet = new PaginationSet<SoftStockViewModel>()
@@ -601,7 +604,7 @@ namespace SoftBBM.Web.api
                                             {
                                                 case 2:
                                                     product.tensp = val.ToString();
-                                                    product.spurl = val.ToString().ConvertToUnSign();
+                                                    //product.spurl = val.ToString().ConvertToUnSign();
                                                     isUpdatedProduct = true;
                                                     break;
                                                 case 3:
@@ -838,7 +841,7 @@ namespace SoftBBM.Web.api
                                     if (workSheet.Cells[i, 2].Value != null)
                                     {
                                         sp.tensp = workSheet.Cells[i, 2].Value.ToString();
-                                        sp.spurl = sp.tensp.ConvertToUnSign();
+                                        //sp.spurl = sp.tensp.ConvertToUnSign();
                                     }
                                     if (workSheet.Cells[i, 4].Value != null)
                                     {
@@ -1307,171 +1310,46 @@ namespace SoftBBM.Web.api
             }
         }
 
-        //public byte[] GetPriceWholesaleSheet(SoftStockSearchFilterViewModel softStockSearchFilterVM)
-        //{
-        //    IEnumerable<SoftBranchProductStock> stocks = null;
-        //    stocks = _softStockRepository.GetAllPagingFilter(softStockSearchFilterVM).ToList();
-        //    IEnumerable<SoftStockViewModelExcel> stocksVM = Mapper.Map<IEnumerable<SoftBranchProductStock>, IEnumerable<SoftStockViewModelExcel>>(stocks);
-        //    foreach (var item in stocksVM)
-        //    {
-        //        item.StockAll = _softStockRepository.GetStockTotalAll(item.Id);
-
-        //        var priceONL = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ChannelId == 2 && x.ProductId == item.Id);
-        //        if (priceONL != null)
-        //        {
-        //            item.ONL = priceONL.Price;
-        //            item.ONLkm = priceONL.PriceDiscount;
-        //            item.ONLstart = priceONL.StartDateDiscount == null ? null : priceONL.StartDateDiscount.Value.ToString("dd-MM-yyyy");
-        //            item.ONLend = priceONL.EndDateDiscount == null ? null : priceONL.EndDateDiscount.Value.ToString("dd-MM-yyyy");
-        //        }
-        //        else
-        //        {
-        //            item.ONL = 0;
-        //            item.ONLkm = 0;
-        //            //var newPrice = new SoftChannelProductPrice();
-        //            //newPrice.ProductId = item.Id;
-        //            //newPrice.Price = 0;
-        //            //newPrice.ChannelId = 2;
-        //            //newPrice.CreatedDate = DateTime.Now;
-        //            //_softChannelProductPriceRepository.Add(newPrice);
-        //        }
-
-        //        var priceCHA = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ChannelId == 1 && x.ProductId == item.Id);
-        //        if (priceCHA != null)
-        //        {
-        //            item.CHA = priceCHA.Price;
-        //            item.CHAkm = priceCHA.PriceDiscount;
-        //            item.CHAstart = priceCHA.StartDateDiscount == null ? null : priceCHA.StartDateDiscount.Value.ToString("dd-MM-yyyy");
-        //            item.CHAend = priceCHA.EndDateDiscount == null ? null : priceCHA.EndDateDiscount.Value.ToString("dd-MM-yyyy");
-        //        }
-        //        else
-        //        {
-        //            item.CHA = 0;
-        //            item.CHAkm = 0;
-        //            //var newPrice = new SoftChannelProductPrice();
-        //            //newPrice.ProductId = item.Id;
-        //            //newPrice.Price = 0;
-        //            //newPrice.ChannelId = 1;
-        //            //newPrice.CreatedDate = DateTime.Now;
-        //            //_softChannelProductPriceRepository.Add(newPrice);
-        //        }
-
-        //        var priceLZD = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ChannelId == 3 && x.ProductId == item.Id);
-        //        if (priceLZD != null)
-        //        {
-        //            item.LZD = priceLZD.Price;
-        //            item.LZDkm = priceLZD.PriceDiscount;
-        //            item.LZDstart = priceLZD.StartDateDiscount == null ? null : priceLZD.StartDateDiscount.Value.ToString("dd-MM-yyyy");
-        //            item.LZDend = priceLZD.EndDateDiscount == null ? null : priceLZD.EndDateDiscount.Value.ToString("dd-MM-yyyy");
-        //        }
-        //        else
-        //        {
-        //            item.LZD = 0;
-        //            item.LZDkm = 0;
-        //            //var newPrice = new SoftChannelProductPrice();
-        //            //newPrice.ProductId = item.Id;
-        //            //newPrice.Price = 0;
-        //            //newPrice.ChannelId = 3;
-        //            //newPrice.CreatedDate = DateTime.Now;
-        //            //_softChannelProductPriceRepository.Add(newPrice);
-        //        }
-
-        //        var priceSPE = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ChannelId == 4 && x.ProductId == item.Id);
-        //        if (priceSPE != null)
-        //        {
-        //            item.SPE = priceSPE.Price;
-        //            item.SPEkm = priceSPE.PriceDiscount;
-        //            item.SPEstart = priceSPE.StartDateDiscount == null ? null : priceLZD.StartDateDiscount.Value.ToString("dd-MM-yyyy");
-        //            item.SPEend = priceSPE.EndDateDiscount == null ? null : priceSPE.EndDateDiscount.Value.ToString("dd-MM-yyyy");
-        //        }
-        //        else
-        //        {
-        //            item.SPE = 0;
-        //            item.SPEkm = 0;
-        //            //var newPrice = new SoftChannelProductPrice();
-        //            //newPrice.ProductId = item.Id;
-        //            //newPrice.Price = 0;
-        //            //newPrice.ChannelId = 4;
-        //            //newPrice.CreatedDate = DateTime.Now;
-        //            //_softChannelProductPriceRepository.Add(newPrice);
-        //        }
-
-        //        //var priceWholesale = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ChannelId == 7 && x.ProductId == item.ProductId);
-        //        //if (priceWholesale != null)
-        //        //    item.PriceWholesale = priceWholesale.Price.Value;
-        //        //else
-        //        //{
-        //        //    item.PriceWholesale = 0;
-        //        //    var newPrice = new SoftChannelProductPrice();
-        //        //    newPrice.ProductId = item.ProductId;
-        //        //    newPrice.Price = 0;
-        //        //    newPrice.ChannelId = 7;
-        //        //    newPrice.CreatedDate = DateTime.Now;
-        //        //    _softChannelProductPriceRepository.Add(newPrice);
-        //        //    _unitOfWork.Commit();
-        //        //}
-        //    }
-        //    _unitOfWork.Commit();
-        //    IEnumerable<SoftStockViewModelExcelNoId> stocksVMNoId = Mapper.Map<IEnumerable<SoftStockViewModelExcel>, IEnumerable<SoftStockViewModelExcelNoId>>(stocksVM);
-        //    using (var package = new ExcelPackage())
-        //    {
-        //        // Tạo author cho file Excel
-        //        package.Workbook.Properties.Author = "SoftBBM";
-        //        // Tạo title cho file Excel
-        //        package.Workbook.Properties.Title = "Export Products";
-        //        // thêm tí comments vào làm màu 
-        //        package.Workbook.Properties.Comments = "This is my generated Comments";
-        //        // Add Sheet vào file Excel
-        //        package.Workbook.Worksheets.Add("Products");
-        //        // Lấy Sheet bạn vừa mới tạo ra để thao tác 
-        //        var worksheet = package.Workbook.Worksheets[1];
-        //        worksheet.Cells["A1"].LoadFromCollection(stocksVMNoId, true, TableStyles.Dark9);
-        //        worksheet.DefaultColWidth = 10;
-        //        worksheet.Cells[2, 6, stocksVM.Count() + 1, 6].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[2, 7, stocksVM.Count() + 1, 7].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[2, 9, stocksVM.Count() + 1, 9].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[2, 10, stocksVM.Count() + 1, 10].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[1, 9, stocksVM.Count() + 1, 12].Style.Fill.PatternType = ExcelFillStyle.Solid;
-        //        worksheet.Cells[1, 9, stocksVM.Count() + 1, 12].Style.Fill.BackgroundColor.SetColor(Color.BurlyWood);
-        //        worksheet.Cells[2, 9, stocksVM.Count() + 1, 13].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[2, 10, stocksVM.Count() + 1, 14].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[1, 13, stocksVM.Count() + 1, 16].Style.Fill.PatternType = ExcelFillStyle.Solid;
-        //        worksheet.Cells[1, 13, stocksVM.Count() + 1, 16].Style.Fill.BackgroundColor.SetColor(Color.Plum);
-        //        worksheet.Cells[2, 9, stocksVM.Count() + 1, 17].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[2, 10, stocksVM.Count() + 1, 18].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[1, 17, stocksVM.Count() + 1, 20].Style.Fill.PatternType = ExcelFillStyle.Solid;
-        //        worksheet.Cells[1, 17, stocksVM.Count() + 1, 20].Style.Fill.BackgroundColor.SetColor(Color.DarkGray);
-        //        worksheet.Cells[2, 9, stocksVM.Count() + 1, 21].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[2, 10, stocksVM.Count() + 1, 12].Style.Numberformat.Format = "#,##0";
-        //        worksheet.Cells[1, 21, stocksVM.Count() + 1, 24].Style.Fill.PatternType = ExcelFillStyle.Solid;
-        //        worksheet.Cells[1, 21, stocksVM.Count() + 1, 24].Style.Fill.BackgroundColor.SetColor
-        //            (Color.DarkKhaki);
-
-        //        var branch = _softBranchRepository.GetSingleById(softStockSearchFilterVM.branchId);
-        //        if (branch != null)
-        //        {
-        //            worksheet.Cells["D1"].Value = "Stock" + branch.Code;
-        //        }
-        //        //package.Save();
-        //        return package.GetAsByteArray();
-        //    }
-        //}
-
         public byte[] GetPriceWholesaleSheet(SoftStockSearchFilterViewModel softStockSearchFilterVM)
         {
             var channelId = 2;
-            IEnumerable<ExportPriceNoIdViewModel> exportPricesExcel = null;
+            List<ExportPriceNoIdViewModel> exportPricesExcel = new List<ExportPriceNoIdViewModel>();
 
             var stocks = _softStockRepository.GetAllPagingFilter(softStockSearchFilterVM).ToList();
-            IEnumerable<ExportPriceViewModel> stocksVM = Mapper.Map<IEnumerable<SoftBranchProductStock>, IEnumerable<ExportPriceViewModel>>(stocks);
+            //IEnumerable<ExportPriceViewModel> stocksVM = Mapper.Map<IEnumerable<SoftBranchProductStock>, IEnumerable<ExportPriceViewModel>>(stocks);
 
-            foreach (var item in stocksVM)
+            List<ExportPriceViewModel> stocksVM = new List<ExportPriceViewModel>();
+            if (stocks.Count > 0)
             {
-                var price = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == item.id && x.ChannelId == channelId);
-                item.PriceChannel = price.Price == null ? 0 : price.Price.Value;
+                foreach (var item in stocks)
+                {
+                    if (item.shop_sanpham != null)
+                    {
+                        var itemStock = new ExportPriceNoIdViewModel();
+                        itemStock.Code = item.shop_sanpham.masp;
+                        itemStock.Name = item.shop_sanpham.tensp;
+                        itemStock.PriceOld = item.shop_sanpham.PriceBaseOld.HasValue ? item.shop_sanpham.PriceBaseOld.Value : 0;
+                        itemStock.PriceBase = item.shop_sanpham.PriceBase.HasValue ? item.shop_sanpham.PriceBase.Value : 0;
+                        itemStock.PriceAvg = item.shop_sanpham.PriceAvg.HasValue ? item.shop_sanpham.PriceAvg.Value : 0;
+                        itemStock.PriceWholesale = item.shop_sanpham.PriceWholesale.HasValue ? item.shop_sanpham.PriceWholesale.Value : 0;
+                        var price = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == item.shop_sanpham.id && x.ChannelId == channelId);
+                        itemStock.PriceChannel = price == null ? 0 : price.Price.Value;
+                        itemStock.Url = !string.IsNullOrEmpty(item.shop_sanpham.spurl) ? "https://babymart.vn/tin-tuc/" + item.shop_sanpham.spurl + ".html" : "";
+                        exportPricesExcel.Add(itemStock);
+                    }
+
+                }
+                exportPricesExcel = exportPricesExcel.OrderBy(x => x.Code).ToList();
             }
-            exportPricesExcel = Mapper.Map<IEnumerable<ExportPriceViewModel>, IEnumerable<ExportPriceNoIdViewModel>>(stocksVM);
-            exportPricesExcel = exportPricesExcel.OrderBy(x => x.Code);
+
+
+            //foreach (var item in stocksVM)
+            //{
+            //    var price = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == item.id && x.ChannelId == channelId);
+            //    item.PriceChannel = price.Price == null ? 0 : price.Price.Value;
+            //}
+            //exportPricesExcel = Mapper.Map<IEnumerable<ExportPriceViewModel>, IEnumerable<ExportPriceNoIdViewModel>>(stocksVM);
+
             var len = exportPricesExcel.Count();
             using (var package = new ExcelPackage())
             {

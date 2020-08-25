@@ -17,9 +17,9 @@ namespace SoftBBM.Web.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public SoftChannel()
         {
-            this.donhangs = new HashSet<donhang>();
             this.SoftChannelProductPrices = new HashSet<SoftChannelProductPrice>();
             this.SoftOrders = new HashSet<SoftOrder>();
+            this.donhangs = new HashSet<donhang>();
         }
     
         public int Id { get; set; }
@@ -34,10 +34,10 @@ namespace SoftBBM.Web.Models
         public Nullable<bool> Enabled { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<donhang> donhangs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftChannelProductPrice> SoftChannelProductPrices { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftOrder> SoftOrders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<donhang> donhangs { get; set; }
     }
 }

@@ -20,7 +20,7 @@
         function importProductsExcel() {        
             if ($scope.files.length > 0) {
                 var modalInstance = $uibModal.open({
-                    templateUrl: '/app/components/imports/productProcessImportModal.html',
+                    templateUrl: '/app/components/imports/productProcessImportModal.html' + BuildVersion,
                     controller: 'productProcessImportController',
                     scope: $scope,
                     backdrop: 'static',
@@ -48,7 +48,7 @@
                 $scope.successMessageChannelPrice = '';
                 $scope.errorMessageChannelPrice = '';
                 var modalInstance = $uibModal.open({
-                    templateUrl: '/app/components/imports/channelPriceProcessImportModal.html',
+                    templateUrl: '/app/components/imports/channelPriceProcessImportModal.html' + BuildVersion,
                     controller: 'channelPriceProcessImportController',
                     scope: $scope,
                     backdrop: 'static',

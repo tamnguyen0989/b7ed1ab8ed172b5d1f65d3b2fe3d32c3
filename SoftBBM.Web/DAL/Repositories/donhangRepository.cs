@@ -40,14 +40,14 @@ namespace SoftBBM.Web.DAL.Repositories
                 bool rootExist = false;
                 DateTime init = new DateTime();
                 IQueryable<donhang> donhangsfilter = null;
-                if (!string.IsNullOrEmpty(orderFilterVM.filter) || orderFilterVM.selectedOrderStatusFilters.Count > 0 || orderFilterVM.selectedSellerFilters.Count > 0 || orderFilterVM.selectedShipperFilters.Count > 0 || (orderFilterVM.startDateFilter > init && orderFilterVM.endDateFilter > init))
+                if (!string.IsNullOrEmpty(orderFilterVM.filter) || orderFilterVM.selectedOrderStatusFilters.Count > 0 || orderFilterVM.selectedSellerFilters.Count > 0 || orderFilterVM.selectedShipperFilters.Count > 0 || (orderFilterVM.startDateFilter > init && orderFilterVM.endDateFilter > init) || orderFilterVM.selectedEcommerceShipperFilters.Count > 0 || orderFilterVM.selectedPaymentFilters.Count > 0)
                 {
                     if (!string.IsNullOrEmpty(orderFilterVM.filter))
                     {
                         if (rootExist == false)
-                            donhangs = query.Where(c => c.khachhang.hoten.ToLower().Contains(orderFilterVM.filter) || c.id.ToString() == orderFilterVM.filter || c.khachhang.dienthoai.Contains(orderFilterVM.filter) || c.khachhang.hoten.Contains(orderFilterVM.filter) || c.khachhang.duong.Contains(orderFilterVM.filter) || c.ghichu.Contains(orderFilterVM.filter));
+                            donhangs = query.Where(c => c.khachhang.hoten.ToLower().Contains(orderFilterVM.filter) || c.id.ToString() == orderFilterVM.filter || c.khachhang.dienthoai.Contains(orderFilterVM.filter) || c.khachhang.hoten.Contains(orderFilterVM.filter) || c.khachhang.duong.Contains(orderFilterVM.filter) || c.ghichu.Contains(orderFilterVM.filter) || c.OrderIdShopeeApi.Contains(orderFilterVM.filter) || c.TrackingNo.Contains(orderFilterVM.filter) || c.ShipperNameShopeeApi.Contains(orderFilterVM.filter));
                         else
-                            donhangs = donhangs.Where(c => c.khachhang.hoten.ToLower().Contains(orderFilterVM.filter) || c.id.ToString() == orderFilterVM.filter || c.khachhang.dienthoai.Contains(orderFilterVM.filter) || c.khachhang.hoten.Contains(orderFilterVM.filter) || c.khachhang.duong.Contains(orderFilterVM.filter) || c.ghichu.Contains(orderFilterVM.filter));
+                            donhangs = donhangs.Where(c => c.khachhang.hoten.ToLower().Contains(orderFilterVM.filter) || c.id.ToString() == orderFilterVM.filter || c.khachhang.dienthoai.Contains(orderFilterVM.filter) || c.khachhang.hoten.Contains(orderFilterVM.filter) || c.khachhang.duong.Contains(orderFilterVM.filter) || c.ghichu.Contains(orderFilterVM.filter) || c.OrderIdShopeeApi.Contains(orderFilterVM.filter) || c.TrackingNo.Contains(orderFilterVM.filter) || c.ShipperNameShopeeApi.Contains(orderFilterVM.filter));
                         if (rootExist == false) rootExist = true;
 
                     }
@@ -116,6 +116,42 @@ namespace SoftBBM.Web.DAL.Repositories
                             donhangstmp = donhangs.Where(x => x.CreatedDate >= orderFilterVM.startDateFilter && x.CreatedDate <= orderFilterVM.endDateFilter);
                         donhangs = donhangstmp;
                         if (rootExist == false) rootExist = true;
+                    }
+                    if (orderFilterVM.selectedEcommerceShipperFilters.Count > 0)
+                    {
+                        foreach (var item in orderFilterVM.selectedEcommerceShipperFilters)
+                        {
+                            IQueryable<donhang> donhangstmp = null;
+                            if (rootExist == false)
+                                donhangstmp = query.Where(x => x.ShipperNameShopeeApi.ToLower() == item.Name.ToLower());
+                            else
+                                donhangstmp = donhangs.Where(x => x.ShipperNameShopeeApi.ToLower() == item.Name.ToLower());
+                            if (donhangsfilter == null)
+                                donhangsfilter = donhangstmp;
+                            else
+                                donhangsfilter = donhangsfilter.Union(donhangstmp);
+                        }
+                        donhangs = donhangsfilter;
+                        if (rootExist == false) rootExist = true;
+                        donhangsfilter = null;
+                    }
+                    if (orderFilterVM.selectedPaymentFilters.Count > 0)
+                    {
+                        foreach (var item in orderFilterVM.selectedPaymentFilters)
+                        {
+                            IQueryable<donhang> donhangstmp = null;
+                            if (rootExist == false)
+                                donhangstmp = query.Where(x => x.pttt == item.Id);
+                            else
+                                donhangstmp = donhangs.Where(x => x.pttt == item.Id);
+                            if (donhangsfilter == null)
+                                donhangsfilter = donhangstmp;
+                            else
+                                donhangsfilter = donhangsfilter.Union(donhangstmp);
+                        }
+                        donhangs = donhangsfilter;
+                        if (rootExist == false) rootExist = true;
+                        donhangsfilter = null;
                     }
                 }
                 else

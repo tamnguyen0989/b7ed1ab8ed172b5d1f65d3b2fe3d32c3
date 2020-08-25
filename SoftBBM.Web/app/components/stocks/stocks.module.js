@@ -5,22 +5,22 @@
         $stateProvider.state('stocks', {
             url: '/stocks',
             parent: 'base',
-            templateUrl: '/app/components/stocks/stockListView.html',
+            templateUrl: '/app/components/stocks/stockListView.html' + BuildVersion,
             controller: 'stockListController'
         }).state('add_product', {
             url: '/add_product',
             parent: 'base',
-            templateUrl: '/app/components/stocks/productAddView.html',
+            templateUrl: '/app/components/stocks/productAddView.html' + BuildVersion,
             controller: 'productAddController'
         }).state('add_adjustment_stock', {
             url: '/add_adjustment_stock',
             parent: 'base',
-            templateUrl: '/app/components/stocks/adjustmentStockAddView.html',
+            templateUrl: '/app/components/stocks/adjustmentStockAddView.html' + BuildVersion,
             controller: 'adjustmentStockAddController'
         }).state('adjustment_stocks', {
             url: '/adjustment_stocks',
             parent: 'base',
-            templateUrl: '/app/components/stocks/adjustmentStockListView.html',
+            templateUrl: '/app/components/stocks/adjustmentStockListView.html' + BuildVersion,
             controller: 'adjustmentStockListController'
         })
         ;

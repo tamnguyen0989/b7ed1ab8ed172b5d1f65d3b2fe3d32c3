@@ -31,7 +31,7 @@
                 id: $scope.updatedProducts[index].id
             };
             $uibModal.open({
-                templateUrl: '/app/components/stocks/stockChannelPricesModal.html',
+                templateUrl: '/app/components/stocks/stockChannelPricesModal.html' + BuildVersion,
                 controller: 'stockChannelPricesController',
                 scope: $scope,
                 backdrop: 'static',

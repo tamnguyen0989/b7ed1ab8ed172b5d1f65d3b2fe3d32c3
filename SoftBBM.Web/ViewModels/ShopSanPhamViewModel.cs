@@ -18,6 +18,7 @@ namespace SoftBBM.Web.ViewModels
         public int userId { get; set; }
         public string Barcode { get; set; }
         public int? CategoryId { get; set; }
+        public bool? hide { get; set; }
 
         public ShopSanPhamStatusViewModel shop_sanphamStatus { get; set; }
         public SoftSupplierViewModel SoftSupplier { get; set; }

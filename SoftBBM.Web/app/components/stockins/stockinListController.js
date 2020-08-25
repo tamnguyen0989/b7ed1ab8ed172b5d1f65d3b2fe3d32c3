@@ -73,6 +73,7 @@
         $scope.updatePaymentPopover = updatePaymentPopover;
         $scope.updateSelectedPaymentMethod = updateSelectedPaymentMethod;
         $scope.clearStamp = clearStamp;
+        $scope.authenExport = authenExport;
 
         function search(page) {
             page = page || 0;
@@ -125,7 +126,7 @@
         function bookDetail(selectedBook) {
             $scope.selectedBook = selectedBook;
             var modalInstance = $uibModal.open({
-                templateUrl: '/app/components/stockins/stockinDetailModal.html',
+                templateUrl: '/app/components/stockins/stockinDetailModal.html' + BuildVersion,
                 controller: 'stockinDetailController',
                 scope: $scope,
                 windowClass: 'app-modal-window-medium'
@@ -300,7 +301,7 @@
             $ngBootbox.confirm('Bạn có chắc chắn muốn nhập kho đơn ' + val.Id + ' ?').then(function () {
                 if (val.CategoryId == '00') {
                     $uibModal.open({
-                        templateUrl: '/app/components/stockins/stockinPaymentModal.html',
+                        templateUrl: '/app/components/stockins/stockinPaymentModal.html' + BuildVersion,
                         controller: 'stockinPaymentController',
                         scope: $scope,
                         backdrop: 'static',
@@ -314,57 +315,6 @@
                             }
                         }
                         apiService.get('api/stockin/addexist', config,
-                                function (result) {
-                                    $scope.adding = false;
-                                    notificationService.displaySuccess('Đơn đã được nhập kho thành công.');
-                                    $scope.bookDetails = result.data.SoftStockInDetails;
-                                    if (result.data.stockoutAble == true) {
-                                        $ngBootbox.confirm('Bạn có muốn xuất đến kho đang thiếu các sản phẩm này?').then(function () {
-
-                                            $uibModal.open({
-                                                templateUrl: '/app/components/stockins/stockinThenOutModal.html',
-                                                controller: 'stockinThenOutController',
-                                                scope: $scope,
-                                                backdrop: 'static',
-                                                keyboard: false
-                                            }).result.finally(function () {
-                                                if (result.data.updatedPrice == true) {
-                                                    openStockinThenUpdatePrice();
-                                                }
-                                                else
-                                                    search($scope.page);
-                                            });
-                                        }, function () {
-                                            if (result.data.updatedPrice == true) {
-                                                openStockinThenUpdatePrice();
-                                            }
-                                            else
-                                                search($scope.page);
-                                        });
-                                    }
-                                    else if (result.data.updatedPrice == true) {
-                                        if (result.data.updatedPrice == true) {
-                                            openStockinThenUpdatePrice();
-                                        }
-                                        else
-                                            search($scope.page);
-                                    }
-                                    else
-                                        search($scope.page);
-                                }, function (error) {
-                                    notificationService.displayError(error.data);
-                                });
-                    });
-                }
-                else {
-                    $scope.selectedStockin = null;
-                    var config = {
-                        params: {
-                            stockinId: val.Id,
-                            userId: $scope.userId
-                        }
-                    }
-                    apiService.get('api/stockin/addexist', config,
                             function (result) {
                                 $scope.adding = false;
                                 notificationService.displaySuccess('Đơn đã được nhập kho thành công.');
@@ -373,7 +323,7 @@
                                     $ngBootbox.confirm('Bạn có muốn xuất đến kho đang thiếu các sản phẩm này?').then(function () {
 
                                         $uibModal.open({
-                                            templateUrl: '/app/components/stockins/stockinThenOutModal.html',
+                                            templateUrl: '/app/components/stockins/stockinThenOutModal.html' + BuildVersion,
                                             controller: 'stockinThenOutController',
                                             scope: $scope,
                                             backdrop: 'static',
@@ -405,8 +355,59 @@
                             }, function (error) {
                                 notificationService.displayError(error.data);
                             });
+                    });
                 }
-            }, function() {
+                else {
+                    $scope.selectedStockin = null;
+                    var config = {
+                        params: {
+                            stockinId: val.Id,
+                            userId: $scope.userId
+                        }
+                    }
+                    apiService.get('api/stockin/addexist', config,
+                        function (result) {
+                            $scope.adding = false;
+                            notificationService.displaySuccess('Đơn đã được nhập kho thành công.');
+                            $scope.bookDetails = result.data.SoftStockInDetails;
+                            if (result.data.stockoutAble == true) {
+                                $ngBootbox.confirm('Bạn có muốn xuất đến kho đang thiếu các sản phẩm này?').then(function () {
+
+                                    $uibModal.open({
+                                        templateUrl: '/app/components/stockins/stockinThenOutModal.html' + BuildVersion,
+                                        controller: 'stockinThenOutController',
+                                        scope: $scope,
+                                        backdrop: 'static',
+                                        keyboard: false
+                                    }).result.finally(function () {
+                                        if (result.data.updatedPrice == true) {
+                                            openStockinThenUpdatePrice();
+                                        }
+                                        else
+                                            search($scope.page);
+                                    });
+                                }, function () {
+                                    if (result.data.updatedPrice == true) {
+                                        openStockinThenUpdatePrice();
+                                    }
+                                    else
+                                        search($scope.page);
+                                });
+                            }
+                            else if (result.data.updatedPrice == true) {
+                                if (result.data.updatedPrice == true) {
+                                    openStockinThenUpdatePrice();
+                                }
+                                else
+                                    search($scope.page);
+                            }
+                            else
+                                search($scope.page);
+                        }, function (error) {
+                            notificationService.displayError(error.data);
+                        });
+                }
+            }, function () {
                 $scope.adding = false;
             });
         }
@@ -506,9 +507,9 @@
                     popupWinindow.window.focus();
                     popupWinindow.document.open();
                     popupWinindow.document.write('<!DOCTYPE html><html><head>'
-                                        + '<link rel="stylesheet" type="text/css" href="/Assets/admin/libs/bootstrap/dist/css/bootstrap.min.css" />'
-                                        + '</head><body onload="window.print(); window.close();"><div>'
-                                        + innerContents + '</div></html>');
+                        + '<link rel="stylesheet" type="text/css" href="/Assets/admin/libs/bootstrap/dist/css/bootstrap.min.css" />'
+                        + '</head><body onload="window.print(); window.close();"><div>'
+                        + innerContents + '</div></html>');
                     popupWinindow.document.close();
                 }, 500);
                 search();
@@ -518,7 +519,7 @@
         }
         function openStockinThenUpdatePrice() {
             $uibModal.open({
-                templateUrl: '/app/components/stockins/stockinThenUpdatePriceModal.html',
+                templateUrl: '/app/components/stockins/stockinThenUpdatePriceModal.html' + BuildVersion,
                 controller: 'stockinThenUpdatePriceController',
                 scope: $scope,
                 backdrop: 'static',
@@ -582,6 +583,53 @@
         function clearStamp() {
             $scope.arrayPrint = [];
             sessionStorage.removeItem('arrayPrint');
+        }
+        function authenExport() {
+            apiService.get('api/order/authenexport', null, function (result) {
+                confirmStockinsExcel();
+            }, function (error) {
+                notificationService.displayError(error.data);
+            });
+        }
+        function confirmStockinsExcel() {
+            if ($scope.filters.selectedStockinCategoryFilters.length == 0
+                && $scope.filters.selectedSupplierFilters.length == 0
+                && $scope.filters.selectedBookStatusFilters.length == 0
+                && $scope.filters.selectedPaymentStatusFilters.length == 0
+                && $scope.filters.startDateFilter == null
+                && $scope.filters.endDateFilter == null
+                && $scope.filters.startStockinDateFilter == null
+                && $scope.filters.endStockinDateFilter == null) {
+                if (confirm("Bạn có muốn xuất tất cả đơn nhập kho !")) {
+                    exportStockin();
+                }
+            }
+            else {
+                exportStockin();
+            }
+        }
+        function exportStockin() {
+            $scope.waiting = true;
+            $http({
+                method: 'POST',
+                url: "api/stockin/exportstockinsexcel",
+                data: $scope.filters,
+                responseType: "arraybuffer"
+            }).then(function (result, status, headers, config) {
+                var blob = new Blob([result.data], {
+                    type: 'application/vnd.ms-excel;charset=charset=utf-8'
+                });
+                var d = new Date();
+                var day = d.getDate();
+                if (day.length = 1)
+                    day = "0" + day;
+                var m = d.getMonth() + 1;
+                if (m.length = 1)
+                    m = "0" + m;
+                var daySuf = day + m + d.getFullYear();
+                FileSaver.saveAs(blob, 'NhapKho' + daySuf + '.xlsx');
+                $scope.waiting = false;
+            });
         }
 
         if (((Object.keys($scope.branchSelectedRoot).length === 0 && $scope.branchSelectedRoot.constructor === Object) || $scope.branchSelectedRoot == undefined) && localStorage.getItem("userId") != null) {

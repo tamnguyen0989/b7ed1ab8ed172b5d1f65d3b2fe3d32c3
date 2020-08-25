@@ -262,7 +262,13 @@ namespace SoftBBM.Web.api
                         if (checkZero == 0 || (int)stockTotalAll==0)
                             shopSanPham.PriceAvg = shopSanPham.PriceBase;
                         else
-                            shopSanPham.PriceAvg = (shopSanPham.PriceAvg * (int)stockTotalAll + item.PriceNew * item.Quantity) / ((int)stockTotalAll + item.Quantity);
+                        {
+                            if(shopSanPham.PriceAvg == null)
+                            {
+                                shopSanPham.PriceAvg = 0;
+                            }
+                            shopSanPham.PriceAvg = (int)Math.Ceiling((shopSanPham.PriceAvg.Value * (int)stockTotalAll + item.PriceNew.Value * item.Quantity.Value) / ((int)stockTotalAll + item.Quantity.Value));
+                        }
                         var priceOnl = 0;
                         var priceOnlModel = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == item.id && x.ChannelId == 2);
                         if (priceOnlModel != null)
@@ -395,7 +401,7 @@ namespace SoftBBM.Web.api
                             if (checkZero == 0 || (int)stockTotalAll == 0)
                                 shopSanPham.PriceAvg = shopSanPham.PriceBase;
                             else
-                                shopSanPham.PriceAvg = (shopSanPham.PriceAvg * (int)stockTotalAll + item.PriceNew * item.Quantity) / ((int)stockTotalAll + item.Quantity);
+                                shopSanPham.PriceAvg = (int) Math.Ceiling((shopSanPham.PriceAvg.Value * (int)stockTotalAll + item.PriceNew.Value * item.Quantity.Value) / ((int)stockTotalAll + item.Quantity.Value));
                             var priceOnl = 0;
                             var priceOnlModel = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == item.ProductId && x.ChannelId == 2);
                             if (priceOnlModel != null)
@@ -2190,7 +2196,7 @@ namespace SoftBBM.Web.api
                     {
                         var product = _shopSanPhamRepository.GetSingleById(item.ProductId);
                         var productVM = Mapper.Map<shop_sanpham, ShopSanPhamSearchBookStampViewModel>(product);
-                        productVM.Quantity = item.Quantity.Value;
+                        productVM.Quantity = (int) Math.Ceiling(item.Quantity.Value);
                         shopSanPhamSearchBookStamps.Add(productVM);
                     }
                     response = request.CreateResponse(HttpStatusCode.OK, shopSanPhamSearchBookStamps);
@@ -2520,5 +2526,118 @@ namespace SoftBBM.Web.api
                 return response;
             }
         }
+
+        [Route("authenexport")]
+        [Authorize(Roles = "OrderExport")]
+        [HttpGet]
+        public HttpResponseMessage AuthenExport(HttpRequestMessage request)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                response = request.CreateResponse(HttpStatusCode.OK, true);
+                return response;
+            }
+            catch (Exception ex)
+            {
+
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+
+        }
+        //[Route("exportstockinsexcel")]
+        //[Authorize(Roles = "OrderExport")]
+        //[HttpPost]
+        //public HttpResponseMessage ExportStockinsExcel(HttpRequestMessage request, BookFilterViewModel orderFilterVM)
+        //{
+        //    HttpResponseMessage response = null;
+        //    try
+        //    {
+
+        //        response = request.CreateResponse(HttpStatusCode.OK);
+        //        MediaTypeHeaderValue mediaType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        //        response.Content = new ByteArrayContent(GetExcelSheet(orderFilterVM));
+        //        response.Content.Headers.ContentType = mediaType;
+        //        response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+        //        response.Content.Headers.ContentDisposition.FileName = "NhapKho.xlsx";
+        //        return response;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+        //        return response;
+        //    }
+        //}
+
+        //public byte[] GetExcelSheet(BookFilterViewModel orderFilterVM)
+        //{
+        //    IEnumerable<SoftStockIn> donhangs = null;
+        //    donhangs = _softStockInRepository.GetAllPagingFilter(orderFilterVM).ToList();
+        //    if (donhangs.Count() > 0)
+        //    {
+
+        //    }
+        //    var donhangsVM = Mapper.Map<IEnumerable<SoftStockIn>, IEnumerable<SoftStockInExcel>>(donhangs);
+        //    foreach (var item in donhangsVM)
+        //    {
+        //        string chitiet = "";
+        //        var orderDetails = _donhangctRepository.GetMulti(x => x.Sodh == item.id).ToList();
+        //        var lengthOrderDetails = orderDetails.Count;
+        //        if (lengthOrderDetails > 0)
+        //            for (int i = 0; i < lengthOrderDetails; i++)
+        //            {
+        //                var orderDetail = orderDetails[i];
+        //                var bienthe = _shopbientheRepository.GetSingleByCondition(x => x.id == orderDetail.IdPro);
+        //                if (bienthe != null)
+        //                {
+        //                    var product = _shopSanPhamRepository.GetSingleById(bienthe.idsp.Value);
+        //                    chitiet += string.Format("{0}. {1} | Số lượng: {2}\r\n", i + 1, product.tensp, orderDetail.Soluong);
+        //                }
+        //                else
+        //                {
+        //                    if (!string.IsNullOrEmpty(orderDetail.Description))
+        //                    {
+        //                        var detailJson = JsonConvert.DeserializeObject<ShopeeOrderDetailItem>(orderDetail.Description);
+        //                        chitiet += string.Format("{0}. {1} | Số lượng: {2}\r\n", i + 1, detailJson.item_name, orderDetail.Soluong);
+        //                    }
+        //                }
+        //            }
+        //        item.chitiet = chitiet;
+        //        item.CreatedDateConvert = item.CreatedDate.ToString("dd-MM-yyyy");
+        //    }
+        //    var donhangsVMExcel = Mapper.Map<IEnumerable<donhangExcel>, IEnumerable<donhangExcelNoId>>(donhangsVM);
+        //    using (var package = new ExcelPackage())
+        //    {
+        //        // Tạo author cho file Excel
+        //        package.Workbook.Properties.Author = "SoftBBM";
+        //        // Tạo title cho file Excel
+        //        package.Workbook.Properties.Title = "Export Orders";
+        //        // thêm tí comments vào làm màu 
+        //        package.Workbook.Properties.Comments = "This is my generated Comments";
+        //        // Add Sheet vào file Excel
+        //        package.Workbook.Worksheets.Add("Orders");
+        //        // Lấy Sheet bạn vừa mới tạo ra để thao tác 
+        //        var worksheet = package.Workbook.Worksheets[1];
+        //        worksheet.Cells["A1"].LoadFromCollection(donhangsVMExcel, true, TableStyles.Dark9);
+        //        worksheet.DefaultColWidth = 15;
+        //        worksheet.Column(2).Width = 80;
+        //        worksheet.Column(2).Style.WrapText = true;
+        //        worksheet.Column(1).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+        //        worksheet.Column(2).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+        //        worksheet.Column(3).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+        //        worksheet.Column(4).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+        //        worksheet.Column(5).Style.VerticalAlignment = ExcelVerticalAlignment.Top;
+        //        worksheet.Cells[2, 3, donhangsVMExcel.Count() + 1, 3].Style.Numberformat.Format = "#,##0";
+
+        //        worksheet.Cells["A1"].Value = "Ngày tạo";
+        //        worksheet.Cells["B1"].Value = "SP bán";
+        //        worksheet.Cells["C1"].Value = "Tổng tiền";
+        //        worksheet.Cells["D1"].Value = "Ghi chú";
+        //        worksheet.Cells["E1"].Value = "Tình trạng";
+        //        //package.Save();
+        //        return package.GetAsByteArray();
+        //    }
+        //}
     }
 }

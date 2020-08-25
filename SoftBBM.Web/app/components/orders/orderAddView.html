@@ -45,6 +45,7 @@
                                     <tr>
                                         <th>STT</th>
                                         <th>Mã</th>
+                                        <th>Hình</th>
                                         <th>Tên</th>
                                         <th>Giá</th>
                                         <th>Số lượng</th>
@@ -54,35 +55,37 @@
                                     <tr ng-repeat="item in detailOrders">
                                         <td>{{$index+1}}</td>
                                         <td>{{item.masp}}</td>
+                                        <td><img style="height: 50px" ng-src="{{item.image || 'Assets/Admin/img/no-img.jpg' }}" /></td>
                                         <td>{{item.tensp}} <span style="color:blue" ng-show="item.freeship==true"> - Miễn phí vc</span></td>
-                                        <td>
-                                            <input required type="text" format="number"  ng-model="item.Price" ng-change="updateDistrict()" class="width90px" style="padding-right:5px;text-align:right">
+                                        <td style="text-align:right">
+                                            <input required type="text" format="number" ng-model="item.Price" ng-change="updateDistrict()" class="width90px" style="padding-right:5px;text-align:right">
                                             <br />
                                             <label ng-show="item.PriceBeforeDiscount>0" class="fontweight600" style="text-decoration:line-through">{{item.PriceBeforeDiscount}}</label>
-                                            <label ng-show="item.NotDiscountMember==true && useDiscountMember == 1" class="text-red">không giảm thành viên</label>
+                                            <label ng-show="(item.NotDiscountMember==true || item.CategoryId == 9 || item.Category == 18) && useDiscountMember == 1" class="text-red">không giảm thành viên</label>
                                         </td>
-                                        <td><input class="text-center width80px" type="number" ng-model="item.Quantity" ng-change="updateDistrict()" style="padding-left:5px;text-align:left"/></td>
+                                        <td style="text-align:right">
+                                            <input class="text-center width80px" type="number" ng-model="item.Quantity" ng-change="updateDistrict()" style="padding-left:5px;text-align:right" />
+                                        </td>
                                         <td class="text-right">{{item.Price * item.Quantity | currency:'':0}}</td>
                                         <td><button type="button" class="btn btn-danger" ng-click="removeFromList($index)"><i class="fa fa-trash" aria-hidden="true"></i></button></td>
                                     </tr>
 
                                     <tr>
                                         <td colspan="7" class="alignleft">
-                                            <input 
-                                                   placeholder="Nhập mã, tên sản phẩm" 
-                                                   ng-disabled="!selectedChannel" 
-                                                   type="text" 
+                                            <input placeholder="Nhập mã, tên sản phẩm"
+                                                   ng-disabled="!selectedChannel"
+                                                   type="text"
                                                    ng-model="searchText"
-                                                   ng-model-options="{debounce: 1000}" 
+                                                   ng-model-options="{debounce: 1000}"
                                                    style="width:40% !important;padding-left:5px">
-                                            <!--ng-change="searchProduct()"--> 
+                                            <!--ng-change="searchProduct()"-->
                                             <input name="searchType" value="masp" ng-model="searchType" type="radio" />&nbsp;Mã SP&nbsp;
                                             <input name="searchType" value="all" ng-model="searchType" type="radio" />&nbsp;Tất cả
                                             <span ng-if="searching"><i class="fa fa-fw fa-refresh fa-spin"></i> <label class="label label-primary">Đang tìm...</label></span>
                                             <div ng-show="searchedProducts.length>0" class="scrollable-menu">
                                                 <ul class="list-group">
                                                     <li style="background:whitesmoke" class="list-group-item" ng-repeat="result in searchedProducts">
-                                                        <a class="current_cursor_add_order" ng-click="addToList(result)">{{result.masp}} - {{result.tensp}}</a>
+                                                        <a class="current_cursor_add_order" ng-click="addToList(result)"><img style="height: 40px" ng-src="{{result.image || 'Assets/Admin/img/no-img.jpg' }}" /> {{result.masp}} - {{result.tensp}}</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -148,8 +151,8 @@
                                                             name="district"
                                                             class="width95"
                                                             ng-change="updateDistrict()">
-                                                            <!--ng-required="validSelectedDistrict()"-->
-                                                            
+                                                        <!--ng-required="validSelectedDistrict()"-->
+
                                                         <option value=''>--Chọn Quận/Huyện--</option>
                                                     </select>
                                                 </div>
@@ -192,8 +195,9 @@
                                                 <div class="box-body">
                                                     <div ng-show="selectedCity.id==1 && HCMType==3 " class="form-group" style="margin-bottom:10px">
                                                         <label class="col-xs-4 cus-control-label">
-                                                        <span ng-show="frmOrderAdd.typeShipHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:<br />{{kg}} kg</label>
-                                                        
+                                                            <span ng-show="frmOrderAdd.typeShipHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:<br />{{kg}} kg
+                                                        </label>
+
                                                         <div class="col-xs-8">
                                                             <ul style="list-style-type: none;margin-left:-20px">
                                                                 <!--<li>
@@ -257,12 +261,11 @@
                                                                     </i>
                                                                 </li>
                                                             </ul>
-                                                            <input 
-                                                                   ng-model="selectedTypeShipHCM" 
-                                                                   name="typeShipHCMTmp" type="text" 
+                                                            <input ng-model="selectedTypeShipHCM"
+                                                                   name="typeShipHCMTmp" type="text"
                                                                    hidden />
-                                                                   <!--ng-required="validSelectedTypeShipHCM()"--> 
-                                                                   
+                                                            <!--ng-required="validSelectedTypeShipHCM()"-->
+
                                                         </div>
                                                     </div>
                                                     <div ng-show="selectedCity.id!=1 && selectedDistrict.id>0 " class="form-group" style="margin-bottom:10px">
@@ -385,24 +388,22 @@
                                                                     <input type="text" style="margin-left:15px;width:90%;padding-left:5px" ng-model="coachInfo" />
                                                                 </li>
                                                             </ul>
-                                                            <input 
-                                                                   ng-model="selectedTypeShipOutHCM"
-                                                                   name="typeShipOutHCMTmp" 
-                                                                   type="text" 
-                                                                   hidden  />
-                                                                   <!--ng-required="validSelectedTypeShipOutHCM()"-->
+                                                            <input ng-model="selectedTypeShipOutHCM"
+                                                                   name="typeShipOutHCMTmp"
+                                                                   type="text"
+                                                                   hidden />
+                                                            <!--ng-required="validSelectedTypeShipOutHCM()"-->
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="col-xs-4 cus-control-label"><span ng-show="frmOrderAdd.paymentCity.$error.required" class="has-error">*</span>PT thanh toán:</label>
                                                         <div class="col-xs-8">
-                                                            <select 
-                                                                    ng-options="option.name for option in paymentCity track by option.value"
+                                                            <select ng-options="option.name for option in paymentCity track by option.value"
                                                                     ng-model="selectedPayment"
                                                                     ng-change="updatePayment()"
                                                                     name="paymentCity"
                                                                     class="width95">
-                                                                    <!--ng-required="validSelectedPayment()"-->
+                                                                <!--ng-required="validSelectedPayment()"-->
                                                                 <option disabled value="">--Chọn PT thanh toán--</option>
                                                             </select>
                                                             <!--<select ng-show="selectedTypeShipOutHCM==5"
@@ -426,8 +427,8 @@
                                                                     ng-change="updateDeliveryTime()"
                                                                     name="deliveryTimeSubUrban"
                                                                     class="width95">
-                                                                    <!--ng-required="validDeliveryTimeSubUrban()"-->
-                                                                    
+                                                                <!--ng-required="validDeliveryTimeSubUrban()"-->
+
                                                                 <option value="">--Chọn thời gian--</option>
                                                             </select>
                                                             <select ng-show="checkSubUrban()==false && checkFastDelivery()==false"
@@ -436,8 +437,8 @@
                                                                     ng-change="updateDeliveryTime()"
                                                                     name="deliveryTime"
                                                                     class="width95">
-                                                                    <!--ng-required="validDeliveryTime()"-->
-                                                                    
+                                                                <!--ng-required="validDeliveryTime()"-->
+
                                                                 <option value="">--Chọn thời gian--</option>
                                                             </select>
                                                             <select ng-show="checkSubUrban()==false && checkFastDelivery()==true"
@@ -445,7 +446,6 @@
                                                                     ng-model="selectedDeliveryTime"
                                                                     ng-change="updateDeliveryTime()"
                                                                     name="deliveryTimeFast"
-                                                                   
                                                                     class="width95">
                                                                 <!--ng-required="validDeliveryTimeFast()"-->
                                                                 <option value="">--Chọn thời gian--</option>
@@ -505,10 +505,9 @@
                                                         <label class="cus-control-label marginleft20px" ng-show="frmOrderAdd.$invalid" style="font-style:italic;font-weight:500;font-size:12px;color:red">(*) Trường bắt buộc chọn</label>
                                                     </div>-->
                                                     <div class="form-group" ng-show="historyOrder">
-                                                        <label 
-                                                               class="cus-control-label marginleft20px"
+                                                        <label class="cus-control-label marginleft20px"
                                                                style="font-style:italic;font-weight:500;font-size:12px;color:red;text-align:left"
-                                                               ng-bind-html ="historyOrder">
+                                                               ng-bind-html="historyOrder">
                                                         </label>
                                                     </div>
                                                 </div>
@@ -572,6 +571,19 @@
                                                     <h3 class="box-title">Thanh toán</h3>
                                                 </div>
                                                 <div class="box-body">
+                                                    <div class="form-group" ng-show="selectedChannel.Id==1">
+                                                        <label class="col-xs-5 cus-control-label">PT thanh toán:</label>
+                                                        <div class="col-xs-7">
+                                                            <select ng-options="option.name for option in paymentCity track by option.value"
+                                                                    ng-model="selectedPayment"
+                                                                    ng-change="updatePayment()"
+                                                                    name="paymentCity"
+                                                                    class="width95">
+                                                                <!--ng-required="validSelectedPayment()"-->
+                                                                <option disabled value="">--Chọn PT thanh toán--</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                     <div class="form-group">
                                                         <label class="col-xs-5 cus-control-label">Thanh toán:</label>
                                                         <div class="col-xs-7">
@@ -599,7 +611,7 @@
                                                     <div class="form-group">
                                                         <label class="col-xs-5 cus-control-label">Khách đưa:</label>
                                                         <div class="col-xs-7">
-                                                            <input type="text" format="number" class="width95" ng-model="paid" stp/>
+                                                            <input type="text" format="number" class="width95" ng-model="paid" stp />
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -629,7 +641,7 @@
                                     @media print {
                                         .ng-hide {
                                             visibility: collapse !important;
-                                            display:none;
+                                            display: none;
                                         }
                                     }
 
@@ -675,7 +687,7 @@
                                             <td style="padding:1px">{{item.Soluong}}</td>
                                             <td style="padding:1px">
                                                 <span ng-hide="item.Dongiakm == 0" style="font-size:10px;text-decoration:line-through">{{item.Dongiakm | currency:'':0}}<br /></span>
-                                                {{item.Dongia | currency:'':0}}   
+                                                {{item.Dongia | currency:'':0}}
                                             </td>
                                             <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}</td>
                                         </tr>
@@ -760,7 +772,8 @@
                                                 <span ng-hide="item.Dongiakm == 0" style="font-size:10px;text-decoration:line-through">{{item.Dongiakm | currency:'':0}}<br /></span>
                                                 {{item.Dongia | currency:'':0}}
                                             </td>
-                                            <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}
+                                            <td style="padding:1px">
+                                                {{item.Soluong * item.Dongia | currency:'':0}}
                                             </td>
                                         </tr>
                                         <tr>
@@ -788,7 +801,7 @@
                                         Xin cảm ơn Quý Khách và hẹn gặp lại.
                                     </div>
                                     <div ng-hide="!orderReturn.tenptgh && (orderReturn.pttt!=1 || orderReturn.pttt!=3)" class="text-right" style="margin-top:5px">
-                                        {{orderReturn.tenptgh}} - Thu hộ - {{orderReturn.tongtien | currency:'':0}}
+                                        {{orderReturn.tenptgh}} - <span ng-show="orderReturn.pttt == 2 || orderReturn.pttt == 4">không</span> thu hộ - {{orderReturn.tongtien | currency:'':0}}
                                     </div>
                                 </div>
 

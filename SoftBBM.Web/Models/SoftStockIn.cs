@@ -34,7 +34,6 @@ namespace SoftBBM.Web.Models
         public string StatusId { get; set; }
         public Nullable<int> FromBranchId { get; set; }
         public Nullable<int> ToBranchId { get; set; }
-        public Nullable<int> TotalQuantity { get; set; }
         public string FromBranchStatusId { get; set; }
         public string ToBranchStatusId { get; set; }
         public string SupplierStatusId { get; set; }
@@ -45,6 +44,7 @@ namespace SoftBBM.Web.Models
         public Nullable<System.DateTime> PaidDate { get; set; }
         public Nullable<int> PaymentStatusId { get; set; }
         public string FromSuppliers { get; set; }
+        public Nullable<double> TotalQuantity { get; set; }
     
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ApplicationUser ApplicationUser1 { get; set; }
@@ -56,13 +56,13 @@ namespace SoftBBM.Web.Models
         public virtual SoftStockInCategory SoftStockInCategory { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftStockInDetail> SoftStockInDetails { get; set; }
+        public virtual SoftStockInPaymentMethod SoftStockInPaymentMethod { get; set; }
+        public virtual SoftStockInPaymentStatus SoftStockInPaymentStatus { get; set; }
+        public virtual SoftStockInPaymentType SoftStockInPaymentType { get; set; }
         public virtual SoftStockInStatu SoftStockInStatu { get; set; }
         public virtual SoftStockInStatu SoftStockInStatu1 { get; set; }
         public virtual SoftStockInStatu SoftStockInStatu2 { get; set; }
         public virtual SoftStockInStatu SoftStockInStatu3 { get; set; }
         public virtual SoftSupplier SoftSupplier { get; set; }
-        public virtual SoftStockInPaymentMethod SoftStockInPaymentMethod { get; set; }
-        public virtual SoftStockInPaymentType SoftStockInPaymentType { get; set; }
-        public virtual SoftStockInPaymentStatus SoftStockInPaymentStatus { get; set; }
     }
 }

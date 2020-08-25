@@ -22,12 +22,12 @@
                                 <div class="input-group margin">
                                     <div class="input-group-btn">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Bộ lọc <span class="fa fa-caret-down"></span></button>
-                                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                        <ul class="dropdown-menu current_cursor" role="menu" aria-labelledby="dLabel">
                                             <li class="dropdown-submenu">
                                                 <a tabindex="-1">Nhà cung cấp</a>
                                                 <ul class="dropdown-menu overflow_y">
-                                                    <li ng-repeat="itemSupplier in suppliers">
-                                                        <a ng-click="addFilter(itemSupplier,0)" tabindex="-1">{{itemSupplier.Name}}</a>
+                                                    <li ng-repeat="itemSupplier in suppliers" class="current_cursor">
+                                                        <a ng-click="addFilter(itemSupplier,0,'')" tabindex="-1">{{itemSupplier.Name}}</a>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -35,12 +35,12 @@
                                                 <a tabindex="-1">Tình trạng</a>
                                                 <ul class="dropdown-menu overflow_y">
                                                     <li ng-repeat="itemProductStatus in productStatus">
-                                                        <a ng-click="addFilter(itemProductStatus,1)" tabindex="-1">{{itemProductStatus.Name}}</a>
+                                                        <a ng-click="addFilter(itemProductStatus,1,'')" tabindex="-1">{{itemProductStatus.Name}}</a>
                                                     </li>
                                                 </ul>
                                             </li>
                                             <li>
-                                                <a tabindex="-1">Tồn kho</a>
+                                                <a tabindex="-1" ng-click="openAddStockFilterModal()">Tồn kho</a>
                                             </li>
                                         </ul>
                                     </div><!-- /btn-group -->
@@ -78,13 +78,6 @@
                                     <td>{{item.StockTotalAll}}</td>
                                 </tr>
                             </table>
-                            <div ng-if="loading">
-                                <div class="col-xs-4"></div>
-                                <div class="col-xs-4">
-                                    <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
-                                </div>
-                                <div class="col-xs-4"></div>
-                            </div>
                         </div>
                         <div ng-show="searchedProducts.length>0" class="row col-xs-12 infopaging">Từ {{(page*pageSizeNumber)+1}} đến {{((page+1)*pageSizeNumber)}} của {{totalCount}} sp</div>
                         <div ng-show="searchedProducts.length>0" class="row">
@@ -101,9 +94,16 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-xs-8" style="text-align:right">
+                            <div class="col-xs-8 current_cursor" style="text-align:right">
                                 <custom-pager-small page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager-small>
                             </div>
+                        </div>
+                        <div class="row" ng-if="loading">
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-4">
+                                <i class="fa fa-refresh fa-4x fa-spin"></i> <label class="label label-primary">Đang tải...</label>
+                            </div>
+                            <div class="col-xs-4"></div>
                         </div>
                     </div>
                 </div>
@@ -151,7 +151,6 @@
         </div>
     </div>
 </section><!-- /.content -->
-
 <!--<section class="content-header">
     <h1>
         Thêm mới phiếu điều chỉnh tồn kho
@@ -333,4 +332,3 @@
         </div>
     </div>
 </section>-->
-

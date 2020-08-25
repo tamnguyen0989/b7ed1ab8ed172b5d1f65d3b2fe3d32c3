@@ -22,8 +22,14 @@ namespace SoftBBM.Web.DAL.Repositories
 
         public IQueryable<shop_sanphamLogs> GetAllPaging(int page, int pageSize, out int totalRow, ProductLogFilterViewModel productLogFilterVM)
         {
-            var query = from d in DbContext.shop_sanphamLogs
+            IQueryable<shop_sanphamLogs> query = null;
+
+            if (productLogFilterVM.branchId > 0)
+                query = from d in DbContext.shop_sanphamLogs
                         where d.BranchId == productLogFilterVM.branchId
+                        select d;
+            else
+                query = from d in DbContext.shop_sanphamLogs
                         select d;
 
             IQueryable<shop_sanphamLogs> shop_sanphamLogss = null;

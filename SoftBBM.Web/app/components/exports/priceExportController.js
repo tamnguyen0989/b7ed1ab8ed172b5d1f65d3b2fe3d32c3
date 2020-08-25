@@ -157,7 +157,7 @@
         function exportPriceExcel() {
             if ($scope.bookDetails.length > 0) {
                 $uibModal.open({
-                    templateUrl: '/app/components/exports/priceExportProcessModal.html',
+                    templateUrl: '/app/components/exports/priceExportProcessModal.html' + BuildVersion,
                     controller: 'priceExportProcessController',
                     scope: $scope,
                     backdrop: 'static',

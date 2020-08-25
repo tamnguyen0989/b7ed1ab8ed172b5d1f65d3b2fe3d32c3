@@ -1,7 +1,7 @@
 ﻿(function (app) {
     app.controller('orderAddController', orderAddController);
 
-    orderAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$timeout', '$uibModal', '$sce','$http','$q'];
+    orderAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$timeout', '$uibModal', '$sce', '$http', '$q'];
 
     function orderAddController(apiService, $window, $scope, notificationService, $state, $rootScope, $timeout, $uibModal, $sce, $http, $q) {
         $scope.order = {
@@ -31,8 +31,10 @@
         $scope.datru_diem = 0;//phí giảm cho thành viên
         $scope.searchType = 'masp';
         $scope.paymentCity = [
+            { name: 'Tiền mặt', value: 1 },
+            { name: 'Quẹt thẻ', value: 7 },
             { name: 'Chuyển khoản', value: 2 },
-            { name: 'Tiền mặt', value: 1 }
+            { name: 'QRCode VNPAY', value: 6 },
         ]
         $scope.paymentHCMDefault = {
             name: 'Tiền mặt',
@@ -43,7 +45,7 @@
             value: 1
         };
         $scope.paymentFUTA = [
-            { name: 'Chuyển khoản', value: 2 }
+            { name: 'Chuyển khoản', value: 2 },
         ]
         $scope.deliveryTime = [
             { name: '08h – 17h giờ hành chánh', value: 1 },
@@ -62,7 +64,8 @@
             { name: '08h – 17h giờ hành chánh', value: 1 },
             { name: 'Ngày chủ nhật', value: 3 }
         ];
-        $scope.selectedPayment = null;
+        //$scope.selectedPayment = null;
+        $scope.selectedPayment = $scope.paymentHCMDefault;
         $scope.selectedDeliveryTime = null;
         $scope.feeShip = 0;
         $scope.HCMType = 0;
@@ -154,7 +157,14 @@
                 //    result.data.splice(1, result.data.length - 1);
                 //else if ($scope.branchSelectedRoot.Id == 2)
                 //    result.data.splice(0, 1);
-                $scope.channels = result.data;
+                var channels = result.data;
+                var shopeeIndex = 0;
+                $.each(channels, function (index, value) {
+                    if (value.Code == 'SPE')
+                        shopeeIndex = index;
+                });
+                channels.splice(shopeeIndex, 1)
+                $scope.channels = channels;
                 //$scope.selectedChannel = $scope.channels[0];
 
                 $scope.loading = false;
@@ -240,11 +250,13 @@
             }
             $scope.order.ChannelId = $scope.selectedChannel.Id;
             $scope.order.BranchId = $scope.branchSelectedRoot.Id;
-            $scope.customer.dienthoai = $scope.searchPhone;
-            $scope.customer.idtp = $scope.selectedCity.id;
-            if ($scope.selectedDistrict)
+            if (!isNullOrEmpty($scope.customer)) {
+                $scope.customer.dienthoai = $scope.searchPhone;
+                $scope.customer.idtp = $scope.selectedCity.id;
+            }
+            if ($scope.selectedDistrict && !isNullOrEmpty($scope.customer))
                 $scope.customer.idquan = $scope.selectedDistrict.id;
-            if ($scope.selectedShipper)
+            if ($scope.selectedShipper && !isNullOrEmpty($scope.customer))
                 $scope.order.ShipperId = $scope.selectedShipper.Id;
             $scope.order.Status = 3;
             $scope.order.ghichu = $scope.ghichu;
@@ -271,8 +283,10 @@
             if ($scope.selectedDeliveryTime)
                 $scope.order.idgiogiao = $scope.selectedDeliveryTime.value;
             $scope.order.OrderDetails = $scope.detailOrders;
-            $scope.order.Customer = $scope.customer;
-            $scope.order.Customer.diem = sumPoint();
+            if (!isNullOrEmpty($scope.customer)) {
+                $scope.order.Customer = $scope.customer;
+                $scope.order.Customer.diem = sumPoint();
+            }            
             var currentDate = $scope.currentDate;
             $scope.order.Code = $scope.branchSelectedRoot.Code + ('0' + (currentDate.getDate())).slice(-2) + ('0' + (currentDate.getMonth() + 1)).slice(-2) + String(currentDate.getFullYear()).slice(-2) + $scope.selectedChannel.Code;
 
@@ -298,9 +312,9 @@
                             popupWinindow.window.focus();
                             popupWinindow.document.open();
                             popupWinindow.document.write('<!DOCTYPE html><html><head>'
-                                                + '<link rel="stylesheet" type="text/css" href="/Assets/admin/libs/bootstrap/dist/css/bootstrap.min.css" />'
-                                                + '</head><body onload="window.print(); window.close();"><div>'
-                                                + innerContents + '</div></html>');
+                                + '<link rel="stylesheet" type="text/css" href="/Assets/admin/libs/bootstrap/dist/css/bootstrap.min.css" />'
+                                + '</head><body onload="window.print(); window.close();"><div>'
+                                + innerContents + '</div></html>');
                             popupWinindow.document.close();
                         }, 500);
                     resetOrder();
@@ -370,9 +384,9 @@
                             popupWinindow.window.focus();
                             popupWinindow.document.open();
                             popupWinindow.document.write('<!DOCTYPE html><html><head>'
-                                                + '<link rel="stylesheet" type="text/css" href="/Assets/admin/libs/bootstrap/dist/css/bootstrap.min.css" />'
-                                                + '</head><body onload="window.print(); window.close();"><div>'
-                                                + innerContents + '</div></html>');
+                                + '<link rel="stylesheet" type="text/css" href="/Assets/admin/libs/bootstrap/dist/css/bootstrap.min.css" />'
+                                + '</head><body onload="window.print(); window.close();"><div>'
+                                + innerContents + '</div></html>');
                             popupWinindow.document.close();
                         }, 500);
                     $scope.addingOrder = false;
@@ -396,7 +410,7 @@
             $scope.selectedProduct = item;
             if ((!item.kg && (!item.chieucao && !item.chieudai && !item.chieurong)) && $scope.selectedChannel.Id != 1) {
                 var modalInstance = $uibModal.open({
-                    templateUrl: '/app/components/orders/productKgUpdateModal.html',
+                    templateUrl: '/app/components/orders/productKgUpdateModal.html' + BuildVersion,
                     controller: 'productKgUpdateController',
                     scope: $scope,
                     backdrop: 'static',
@@ -481,7 +495,7 @@
             var totalDis = 0;
             if ($scope.useDiscountMember == 1) {
                 $.each($scope.detailOrders, function (index, item) {
-                    if (item.NotDiscountMember == true || item.PriceBeforeDiscount > 0) {
+                    if (item.NotDiscountMember == true || item.PriceBeforeDiscount > 0 || item.CategoryId == 9 || item.CategoryId == 18) {
                         total += item.Price * item.Quantity;
                     }
                     else {
@@ -557,6 +571,7 @@
             resetAfterSelectDistrict();
         }
         function resetAfterSelectDistrict() {
+            //$scope.selectedPayment = null;
             $scope.selectedPayment = null;
             $scope.selectedDeliveryTime = null;
             $scope.selectedShipper = null;
@@ -592,9 +607,10 @@
             if ($rootScope.channel) {
                 $scope.selectedChannel = $rootScope.channel;
                 $scope.customer = $rootScope.customer;
-                $scope.searchPhone = $scope.customer.dienthoai;
+                if (!isNullOrEmpty($scope.customer))
+                    $scope.searchPhone = $scope.customer.dienthoai;
                 $scope.historyOrder = $sce.trustAsHtml($rootScope.historyOrder);
-                
+
                 //$q.all([usersPromise]).then(function (result) {
                 //    debugger
                 //    if ($rootScope.shipperId > 0)
@@ -603,7 +619,7 @@
                 //            $scope.selectedShipper = value;
                 //            return false;
                 //        }
-                            
+
                 //    });
                 //});
 
@@ -627,6 +643,10 @@
                 $scope.selectedChannel = $scope.selectedChannel;
                 localStorage.setItem("selectedChannel", JSON.stringify($scope.selectedChannel));
                 resetOrder();
+                if ($scope.selectedChannel.Id == 1)
+                    $scope.selectedPayment = $scope.paymentHCMDefault;
+                else
+                    $scope.selectedPayment = null;
             }
         }
         function updateDiscountMoney() {
@@ -726,7 +746,10 @@
             $scope.discount = 0;
         }
         function sumPoint() {
-            return $scope.customer.diem + Math.floor($scope.diemsp / 1000) - Math.floor($scope.discount / 1000) - $scope.giamthanhvien;
+            var diem = 0;
+            if (!isNullOrEmpty($scope.customer))
+                diem = $scope.customer.diem;
+            return diem + Math.floor($scope.diemsp / 1000) - Math.floor($scope.discount / 1000) - $scope.giamthanhvien;
         }
         function checkFastDelivery() {
             var result = false;
@@ -789,6 +812,7 @@
                         });
                         if (dem > 1)
                             isTwoProductCart = true;
+                        isTwoProductCart = false;
 
                         //check GHTK, rules
                         $scope.passGHTKRules = true;
@@ -797,7 +821,9 @@
                         var maxChieuRong = $scope.detailOrders[0].chieurong;
                         var maxChieuCao = $scope.detailOrders[0].chieucao;
                         $.each($scope.detailOrders, function (index, value) {
-                            if (value.chieudai == null && value.chieucao == null && value.chieurong == null) {
+                            if ((value.chieudai == null || value.chieudai == 0)
+                                && (value.chieucao == null || value.chieucao == 0)
+                                && (value.chieurong == null || value.chieurong == 0)) {
                                 $scope.passGHTKRules = false;
                                 $scope.passVNEPRules = false;
                                 return false;
@@ -967,7 +993,7 @@
                     });
                     if (dem > 1)
                         isTwoProductCart = true;
-
+                    isTwoProductCart = false;
                     //check GHTK, rules
                     $scope.passGHTKRules = true;
                     $scope.passVNEPRules = true;
@@ -1812,6 +1838,7 @@
                 })
                 $scope.selectedShipper = vnpShipper;
             }
+            //$scope.selectedPayment = null;
             $scope.selectedPayment = null;
         }
         function updatePayment() {

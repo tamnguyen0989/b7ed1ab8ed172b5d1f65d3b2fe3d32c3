@@ -19,6 +19,7 @@
         //if (localStorage.getItem("userId")) {
         //    $scope.userId = JSON.parse(localStorage.getItem("userId"));
         //}
+
         $scope.logOut = logOut;
         $scope.search = search;
         $scope.hideNotification = hideNotification;

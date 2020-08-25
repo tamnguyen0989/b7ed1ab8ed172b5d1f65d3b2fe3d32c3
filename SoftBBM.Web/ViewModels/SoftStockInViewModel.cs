@@ -18,7 +18,7 @@ namespace SoftBBM.Web.ViewModels
         public int UpdatedBy { get; set; }
         public string StatusId { get; set; }
         public string CategoryId { get; set; }
-        public Nullable<int> TotalQuantity { get; set; }
+        public Nullable<float> TotalQuantity { get; set; }
         public Nullable<int> FromBranchId { get; set; }
         public Nullable<int> ToBranchId { get; set; }
         public string FromBranch { get; set; }
@@ -61,7 +61,7 @@ namespace SoftBBM.Web.ViewModels
         public Nullable<int> PriceBaseOld { get; set; }
         public Nullable<int> PriceAvg { get; set; }
         public Nullable<int> PriceRef { get; set; }
-        public Nullable<int> Quantity { get; set; }
+        public Nullable<float> Quantity { get; set; }
         public string SupplierName { get; set; }
         public double StockTotal { get; set; }
 
@@ -200,5 +200,23 @@ namespace SoftBBM.Web.ViewModels
         public int stockinId { get; set; }
         public string description { get; set; }
         public int userId { get; set; }
+    }
+    public class SoftStockInExcel
+    {
+        public long id { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string CreatedDateConvert { get; set; }
+        public string chitiet { get; set; }
+        public Nullable<long> tongtien { get; set; }
+        public string ghichu { get; set; }
+        public string StatusName { get; set; }
+    }
+    public class SoftStockInExcelNoId
+    {
+        public string CreatedDateConvert { get; set; }
+        public string chitiet { get; set; }
+        public Nullable<long> tongtien { get; set; }
+        public string ghichu { get; set; }
+        public string StatusName { get; set; }
     }
 }

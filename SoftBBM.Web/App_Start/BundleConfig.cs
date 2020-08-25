@@ -38,7 +38,10 @@ namespace SoftBBM.Web
                       "~/app/shared/services/loginService.js",
                       "~/app/shared/filters/statusVNPayFilter.js",
                       "~/app/shared/directives/barcodeGenerator.js",
-                      "~/app/shared/directives/fileUpload.directive.js"
+                      "~/app/shared/directives/fileUpload.directive.js",
+                      "~/Assets/Client/libs/common.js",
+                      "~/Assets/Admin/libs/JsBarcode.all.min.js",
+                      "~/Assets/Admin/libs/qrcode.js"
                       ));
 
             bundles.Add(new ScriptBundle("~/bundles/module").Include(

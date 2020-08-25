@@ -5,12 +5,12 @@
         $stateProvider.state('customers', {
             url: '/customers',
             parent: 'base',
-            templateUrl: '/app/components/customers/customerListView.html',
+            templateUrl: '/app/components/customers/customerListView.html' + BuildVersion,
             controller: 'customerListController'
         }).state('add_customer', {
             url: '/add_customer',
             parent: 'base',
-            templateUrl: '/app/components/customers/customerAddView.html',
+            templateUrl: '/app/components/customers/customerAddView.html' + BuildVersion,
             controller: 'customerAddController'
         });
     }

@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'E:\SoftBBM\SoftBBM.Web\Models\SoftBBM.edmx'. 
+﻿// T4 code generation is enabled for model 'D:\BBM\SoftBBM\SoftBBM.Web\Models\SoftBBM.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

@@ -4,6 +4,7 @@ using SoftBBM.Web.Infrastructure.Extensions;
 using SoftBBM.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,49 +33,67 @@ namespace SoftBBM.Web.Infrastructure.Core
         {
             //try
             //{
-                var tokens = request.Headers.GetValues("Authorization").FirstOrDefault();
-                if (tokens != null)
-                {
-                    //var tokensTmp = tokens.Split(' ');
-                    byte[] data = Convert.FromBase64String(tokens);
-                    string decodedString = Encoding.UTF8.GetString(data);
-                    string[] tokensValues = decodedString.Split(':');
+            var bypassConfigs = ConfigurationSettings.AppSettings.Get("byPassToken").ToString().Split(',');
+            var bypassUrl = request.RequestUri.AbsoluteUri;
 
-                    ApplicationUser ObjUser = new CredentialChecker().CheckCredential(tokensValues[0],tokensValues[1].Base64Encode());
-                    if (ObjUser != null)
+            //using (var ctx = new SoftBBMDbContext())
+            //{
+            //    var contentLog = new SoftPointUpdateLog("url: " + bypassUrls);
+            //    contentLog.Description += contentLog;
+            //    ctx.SoftPointUpdateLogs.Add(contentLog);
+            //    ctx.SaveChanges();
+            //}
+
+            foreach (var item in bypassConfigs)
+            {
+                if (bypassUrl.Contains(item + "/hook"))//check có phải là api hook của bypass config
+                {
+
+                    return base.SendAsync(request, cancellationToken);
+                }
+            }
+            var tokens = request.Headers.GetValues("Authorization").FirstOrDefault();
+            if (tokens != null)
+            {
+                //var tokensTmp = tokens.Split(' ');
+                byte[] data = Convert.FromBase64String(tokens);
+                string decodedString = Encoding.UTF8.GetString(data);
+                string[] tokensValues = decodedString.Split(':');
+                ApplicationUser ObjUser = new CredentialChecker().CheckCredential(tokensValues[0], tokensValues[1].Base64Encode());
+                if (ObjUser != null)
+                {
+                    string[] roles;
+                    using (var ctx = new SoftBBMDbContext())
                     {
-                        string[] roles;
-                        using (var ctx = new SoftBBMDbContext())
-                        {
-                            var query = from ur in ctx.ApplicationUserRoles
-                                        join r in ctx.ApplicationRoles
-                                        on ur.RoleId equals r.Id
-                                        where ur.UserId == ObjUser.Id
-                                        select r.Name;
-                            roles = query.ToArray();
-                        }
-                        IPrincipal principal = new GenericPrincipal(new GenericIdentity(ObjUser.UserName), roles);
-                        Thread.CurrentPrincipal = principal;
-                        HttpContext.Current.User = principal;
+                        var query = from ur in ctx.ApplicationUserRoles
+                                    join r in ctx.ApplicationRoles
+                                    on ur.RoleId equals r.Id
+                                    where ur.UserId == ObjUser.Id
+                                    select r.Name;
+                        roles = query.ToArray();
                     }
-                    else
-                    {
-                        //The user is unauthorize and return 401 status  
-                        var response = new HttpResponseMessage(HttpStatusCode.BadRequest);
-                        var tsc = new TaskCompletionSource<HttpResponseMessage>();
-                        tsc.SetResult(response);
-                        return tsc.Task;
-                    }
+                    IPrincipal principal = new GenericPrincipal(new GenericIdentity(ObjUser.UserName), roles);
+                    Thread.CurrentPrincipal = principal;
+                    HttpContext.Current.User = principal;
                 }
                 else
                 {
-                    //Bad Request request because Authentication header is set but value is null  
-                    var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                    //The user is unauthorize and return 401 status  
+                    var response = new HttpResponseMessage(HttpStatusCode.BadRequest);
                     var tsc = new TaskCompletionSource<HttpResponseMessage>();
                     tsc.SetResult(response);
                     return tsc.Task;
                 }
-                return base.SendAsync(request, cancellationToken);
+            }
+            else
+            {
+                //Bad Request request because Authentication header is set but value is null  
+                var response = new HttpResponseMessage(HttpStatusCode.Forbidden);
+                var tsc = new TaskCompletionSource<HttpResponseMessage>();
+                tsc.SetResult(response);
+                return tsc.Task;
+            }
+            return base.SendAsync(request, cancellationToken);
             //}
             //catch
             //{

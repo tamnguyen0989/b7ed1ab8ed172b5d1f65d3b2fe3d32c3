@@ -13,6 +13,7 @@ namespace SoftBBM.Web.ViewModels
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public Nullable<int> BranchId { get; set; }
         public int StockTotal { get; set; }
         public int StockTotalAll { get; set; }
         public string CreatedDateConvert { get; set; }

@@ -29,6 +29,12 @@ namespace SoftBBM.Web.Infrastructure.Extensions
                 case (int)PaymentMethod.BankCardOnDelivery:
                     result = "Bằng thẻ ngân hàng khi nhận hàng";
                     break;
+                case (int)PaymentMethod.QRCode:
+                    result = "QRCode";
+                    break;
+                case (int)PaymentMethod.QuetThe:
+                    result = "Quẹt thẻ";
+                    break;
             }
             return result;
         }
@@ -114,6 +120,13 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             result = Math.Ceiling(result / 100);
             result = result * 100;
             return (int)result;
+        }
+        public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+        {
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+            return dtDateTime;
         }
     }
 }

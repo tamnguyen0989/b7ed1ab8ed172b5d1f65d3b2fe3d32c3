@@ -5,7 +5,7 @@
         $stateProvider.state('imports', {
             url: '/imports',
             parent: 'base',
-            templateUrl: '/app/components/imports/importView.html',
+            templateUrl: '/app/components/imports/importView.html' + BuildVersion,
             controller: 'importController'
         })
         ;

@@ -22,6 +22,7 @@
                             <a class="btn btn-success" ui-sref="add_stockin" style="width:60px" title="Thêm mới" target="_blank"><i class="fa fa-plus"></i></a>
                             <button type="button" class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
                             <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
+                            <button class="btn" title="Xuất DS đơn nhập kho" style="background-color:yellowgreen;color:white;width:60px" type="button" ng-click="authenExport()"><i class="fa fa-fw fa-cloud-download"></i></button>
                             <div class="pull-right totalcount">
                                 <span>
                                     Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
@@ -57,21 +58,21 @@
                     </div>
                 </div>
                 <!--<div class="col-xs-2" style="padding-right:5px;padding-left:0px">
-                    <div class="box box-solid box-primary" style="margin-bottom:0px">
-                        <div class="box-header">
-                            <h3 class="box-title">Từ kho</h3>
-                        </div>
-                        <div class="box-body" style="padding-bottom:5px">
-                            <select style="width:100%;border:0px;padding-left:0px"
-                                    ng-change="updateFilter()" ng-options="option.Name for option in branchFilters track by option.Id"
-                                    ng-model="filters.selectedBranchFilters"
-                                    name="branchFilter"
-                                    class="form-control"
-                                    size="5"
-                                    multiple></select>
-                        </div> /.box-body 
+                <div class="box box-solid box-primary" style="margin-bottom:0px">
+                    <div class="box-header">
+                        <h3 class="box-title">Từ kho</h3>
                     </div>
-                </div>-->
+                    <div class="box-body" style="padding-bottom:5px">
+                        <select style="width:100%;border:0px;padding-left:0px"
+                                ng-change="updateFilter()" ng-options="option.Name for option in branchFilters track by option.Id"
+                                ng-model="filters.selectedBranchFilters"
+                                name="branchFilter"
+                                class="form-control"
+                                size="5"
+                                multiple></select>
+                    </div> /.box-body
+                </div>
+            </div>-->
                 <div class="col-xs-2" style="padding-right:5px;padding-left:0px">
                     <div class="box box-solid box-primary" style="margin-bottom:0px">
                         <div class="box-header">
@@ -200,7 +201,7 @@
                                 <th>Ghi chú</th>
                                 <th>Tình trạng <br />đơn</th>
                                 <th>Tình trạng <br />TT</th>
-                                
+
                                 <!--<th>Tình trạng <br />xuất kho</th>-->
                                 <td style="width:10%">
                                     <button ng-click="clearStamp()" class="btn btn-danger" style="background-color:indianred"><i class="fa fa-remove "></i> Xoá DS In Tem</button>
@@ -235,12 +236,12 @@
                                     </span>
                                     <br />{{item.PaidDateConvert}}
                                 </td>
-                                
+
                                 <!--<td>
-                                    <span>
-                                        {{item.FromBranchStatus}}
-                                    </span>
-                                </td>-->
+                                <span>
+                                    {{item.FromBranchStatus}}
+                                </span>
+                            </td>-->
                                 <td style="width:13%">
                                     <button style="margin-top:3px" ng-disabled="adding" ng-hide="item.ToBranchStatusId=='07' || item.ToBranchStatusId=='02'" ng-click="addBook(item)" title="Nhập kho" class="btn btn-sm btn-success"><i class="fa fa-download"></i></button>
                                     <button style="margin-top:3px" ng-disabled="adding" ng-click="bookDetail(item)" title="Chi tiết" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>
@@ -325,6 +326,7 @@
                             </tr>
                             <tr>
                                 <td colspan="3" class="text-right">Tổng số lượng</td>
+                                y
                                 <td colspan="2">{{totalQuantity | currency:'':0}} <span style="font-size:11px"></span></td>
                             </tr>
                             <tr>
@@ -338,6 +340,9 @@
             </div>
 
         </div><!-- /.box-body -->
+        <div ng-if="waiting" class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
     </div><!-- /.box -->
 
     <script type="text/ng-template" id="myPopoverTemplate.html">

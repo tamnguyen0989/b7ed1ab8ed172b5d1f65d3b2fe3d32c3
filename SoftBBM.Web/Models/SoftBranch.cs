@@ -18,17 +18,17 @@ namespace SoftBBM.Web.Models
         public SoftBranch()
         {
             this.ApplicationUserSoftBranches = new HashSet<ApplicationUserSoftBranch>();
-            this.donhangs = new HashSet<donhang>();
             this.SoftAdjustmentStocks = new HashSet<SoftAdjustmentStock>();
             this.SoftBranchProductStocks = new HashSet<SoftBranchProductStock>();
             this.SoftNotifications = new HashSet<SoftNotification>();
             this.SoftNotifications1 = new HashSet<SoftNotification>();
             this.SoftOrders = new HashSet<SoftOrder>();
             this.SoftReturnSuppliers = new HashSet<SoftReturnSupplier>();
+            this.shop_sanphamLogs = new HashSet<shop_sanphamLogs>();
             this.SoftStockIns = new HashSet<SoftStockIn>();
             this.SoftStockIns1 = new HashSet<SoftStockIn>();
             this.SoftStockIns2 = new HashSet<SoftStockIn>();
-            this.shop_sanphamLogs = new HashSet<shop_sanphamLogs>();
+            this.donhangs = new HashSet<donhang>();
         }
     
         public int Id { get; set; }
@@ -43,8 +43,6 @@ namespace SoftBBM.Web.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ApplicationUserSoftBranch> ApplicationUserSoftBranches { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<donhang> donhangs { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftAdjustmentStock> SoftAdjustmentStocks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftBranchProductStock> SoftBranchProductStocks { get; set; }
@@ -57,12 +55,14 @@ namespace SoftBBM.Web.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftReturnSupplier> SoftReturnSuppliers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<shop_sanphamLogs> shop_sanphamLogs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftStockIn> SoftStockIns { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftStockIn> SoftStockIns1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftStockIn> SoftStockIns2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<shop_sanphamLogs> shop_sanphamLogs { get; set; }
+        public virtual ICollection<donhang> donhangs { get; set; }
     }
 }

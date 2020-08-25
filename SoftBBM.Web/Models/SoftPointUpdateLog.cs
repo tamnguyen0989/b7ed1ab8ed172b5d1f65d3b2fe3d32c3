@@ -24,8 +24,9 @@ namespace SoftBBM.Web.Models
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
         public Nullable<bool> Status { get; set; }
+        public string Description { get; set; }
     
-        public virtual donhang donhang { get; set; }
         public virtual khachhang khachhang { get; set; }
+        public virtual donhang donhang { get; set; }
     }
 }

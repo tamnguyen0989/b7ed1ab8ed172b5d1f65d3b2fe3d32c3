@@ -5,7 +5,7 @@
         $stateProvider.state('export_price', {
             url: '/export_price',
             parent: 'base',
-            templateUrl: '/app/components/exports/priceExportView.html',
+            templateUrl: '/app/components/exports/priceExportView.html' + BuildVersion,
             controller: 'priceExportController'
         })
         ;

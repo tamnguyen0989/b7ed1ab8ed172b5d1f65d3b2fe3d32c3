@@ -67,6 +67,20 @@ namespace SoftBBM.Web.DAL.Repositories
                         }
                         products = products.Where(x => x.StatusId == convert);
                         break;
+                    case 2:
+                        switch (item.aliasName)
+                        {
+                            case ">":
+                                products = products.Where(x => x.SoftBranchProductStocks.Where(y => y.BranchId == model.branchId).FirstOrDefault().StockTotal > item.value);
+                                break;
+                            case "<":
+                                products = products.Where(x => x.SoftBranchProductStocks.Where(y => y.BranchId == model.branchId).FirstOrDefault().StockTotal < item.value);
+                                break;
+                            case "=":
+                                products = products.Where(x => x.SoftBranchProductStocks.Where(y => y.BranchId == model.branchId).FirstOrDefault().StockTotal == item.value);
+                                break;
+                        }
+                        break;
                 }
             }
 
@@ -148,7 +162,7 @@ namespace SoftBBM.Web.DAL.Repositories
 
         public shop_sanpham GetMaxCodeProduct(int catecoryId)
         {
-            var query = DbContext.shop_sanpham.Where(x=>x.CategoryId==catecoryId).OrderByDescending(x => x.CodeSuffix).FirstOrDefault();
+            var query = DbContext.shop_sanpham.Where(x => x.CategoryId == catecoryId).OrderByDescending(x => x.CodeSuffix).FirstOrDefault();
             return query;
         }
     }

@@ -17,6 +17,10 @@ namespace SoftBBM.Web.Enum
         [Display(Name = "Thanh toán trực tuyến")]
         OnlinePayment = 4,
         [Display(Name = "Bằng thẻ ngân hàng khi nhận hàng")]
-        BankCardOnDelivery = 5
+        BankCardOnDelivery = 5,
+        [Display(Name = "QRCode")]
+        QRCode = 6,
+        [Display(Name = "Quẹt thẻ")]
+        QuetThe = 7
     }
 }

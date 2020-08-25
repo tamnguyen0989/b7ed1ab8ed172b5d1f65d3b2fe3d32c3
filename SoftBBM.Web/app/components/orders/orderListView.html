@@ -1,4 +1,14 @@
-﻿  <!-- Content Header (Page header) -->
+﻿<style>
+    .ng-leave {
+        display: none !important;
+    }
+
+    .ng-hide.ng-hide-animate {
+        display: none !important;
+    }
+</style>
+
+<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
         Danh sách đơn hàng
@@ -19,10 +29,12 @@
                         <div class="row">
                             <input type="text" ng-model="filterOrders" class="form-control" placeholder="Từ khoá...">
                             <button class="btn btn-default" type="submit" style="width:60px" title="Tìm kiếm"><i class="fa fa-search"></i></button>
-                            <a class="btn btn-success" ui-sref="add_order" style="width:60px" title="Thêm mới" target="_blank"><i class="fa fa-plus"></i></a>
+                            <a class="btn btn-success" ui-sref="add_order" style="width:60px" title="Thêm mới" ng-show="selectedChannel.Id!=4" target="_blank"><i class="fa fa-plus"></i></a>
                             <button type="button" class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
                             <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
                             <button class="btn" title="Xuất DS đơn hàng" style="background-color:yellowgreen;color:white;width:60px" type="button" ng-click="authenExport()"><i class="fa fa-fw fa-cloud-download"></i></button>
+                            <button class="btn btn-info" ng-show="selectedChannel.Id==4" title="Đồng bộ mã vận đơn từ Shopee" style="width:60px" type="button" ng-click="syncTrackingNoShopee()"><i class="fa fa-fw fa-indent"></i></button>
+                            <button type="button" class="btn btn-info" ng-click="loadExtension()" title="hỗ trợ" style="width:60px"><i class="fa fa-fw fa-bell-o"></i></button>
                             <div class="pull-right totalcount">
                                 <span>
                                     Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
@@ -58,11 +70,11 @@
                 <div class="col col-xs-4"></div>
             </div>
             <div class="row col-xs-12 margintop5px">
-                <div ng-show="animate">
-                    <div class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                <div ng-show="showFilter">
+                    <div class="col-xs-2" style="padding-right:5px;padding-left:0px">
                         <div class="box box-solid box-primary" style="margin-bottom:10px">
                             <div class="box-header">
-                                <h3 class="box-title">Tình trạng</h3>
+                                <h3 class="box-title">Tình trạng</h3><i style="float:right" class="fa fa-fw fa-gear"></i>
                             </div><!-- /.box-header -->
                             <div class="box-body" style="padding-bottom:5px">
                                 <select style="width:100%;border:0px;padding-left:0px"
@@ -75,10 +87,26 @@
                             </div><!-- /.box-body -->
                         </div>
                     </div>
-                    <div class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
                         <div class="box box-solid box-primary" style="margin-bottom:10px">
                             <div class="box-header">
-                                <h3 class="box-title">Người bán</h3>
+                                <h3 class="box-title">Nhà vc</h3><i style="float:right" class="fa fa-fw fa-truck"></i>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding-bottom:5px">
+                                <select style="width:100%;border:0px;padding-left:0px"
+                                        ng-change="updateFilter()" ng-options="option.Name for option in ecommerceShippers track by option.Name"
+                                        ng-model="filters.selectedEcommerceShipperFilters"
+                                        name="shipperFilter"
+                                        class="form-control"
+                                        size="5"
+                                        multiple></select>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div>
+                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
+                        <div class="box box-solid box-primary" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h3 class="box-title">Người bán</h3><i style="float:right" class="fa fa-fw fa-dollar "></i>
                             </div><!-- /.box-header -->
                             <div class="box-body" style="padding-bottom:5px">
                                 <select style="width:100%;border:0px;padding-left:0px"
@@ -91,10 +119,10 @@
                             </div><!-- /.box-body -->
                         </div>
                     </div>
-                    <div class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
                         <div class="box box-solid box-primary" style="margin-bottom:10px">
                             <div class="box-header">
-                                <h3 class="box-title">Người giao</h3>
+                                <h3 class="box-title">Người giao</h3><i style="float:right" class="fa fa-fw fa-motorcycle "></i>
                             </div><!-- /.box-header -->
                             <div class="box-body" style="padding-bottom:5px">
                                 <select style="width:100%;border:0px;padding-left:0px"
@@ -107,10 +135,26 @@
                             </div><!-- /.box-body -->
                         </div>
                     </div>
-                    <div class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
                         <div class="box box-solid box-primary" style="margin-bottom:10px">
                             <div class="box-header">
-                                <h3 class="box-title">Thời gian</h3>
+                                <h3 class="box-title">Phương thức TT</h3><i style="float:right" class="fa fa-fw fa-credit-card"></i>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding-bottom:5px">
+                                <select style="width:100%;border:0px;padding-left:0px"
+                                        ng-change="updateFilter()" ng-options="option.Name for option in paymentFilters track by option.Id"
+                                        ng-model="filters.selectedPaymentFilters"
+                                        name="PaymentFilter"
+                                        class="form-control"
+                                        size="5"
+                                        multiple></select>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div>
+                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
+                        <div class="box box-solid box-primary" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h3 class="box-title">Thời gian</h3><i style="float:right" class="fa fa-fw fa-clock-o"></i>
                             </div><!-- /.box-header -->
                             <div class="box-body" style="padding-bottom:5px;height:122px">
                                 <div class="row" style="margin-bottom:5px">
@@ -141,252 +185,219 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="responsivetable">
-                        <table class="table table-bordered table-striped table-hover text-left table_data" style="margin-bottom:10px">
-                            <tr style="background-color:white">
-                                <td colspan="7" style="text-align:left;">
-                                    <div class="input-group" ng-show="selectedOrders.length>0">
-                                        <span class="label_bulk">Có {{selectedOrders.length}} đơn hàng được chọn</span>
-                                        <div class="input-group-btn">
-                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color:#3c8dbc;color:white">Cập nhật <span class="fa fa-caret-down"></span></button>
-                                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                                <li class="dropdown-submenu">
-                                                    <a tabindex="-1">Tình trạng ĐH</a>
-                                                    <ul class="dropdown-menu overflow_y">
-                                                        <li ng-repeat="itemOrderStatus in orderStatusFilters">
-                                                            <a ng-click="updateStatusOrders(itemOrderStatus)" tabindex="-1">{{itemOrderStatus.Name}}</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li class="dropdown-submenu">
-                                                    <a tabindex="-1">NV giao hàng</a>
-                                                    <ul class="dropdown-menu overflow_y">
-                                                        <li ng-repeat="itemShipper in userFilters">
-                                                            <a ng-click="updateShipper(itemShipper)" tabindex="-1">{{itemShipper.UserName}}</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                            </ul>
-                                            <button ng-click="getDetailOrdersToPrint()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
-                                            <button ng-click="resetSelectedOrders()" type="button" class="btn btn-default" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Bỏ chọn</button>
-                                        </div><!-- /btn-group -->
-                                    </div>
-                                </td>
-                                <td ng-hide="selectedChannel.Id==1"></td>
-                                <td ng-hide="selectedChannel.Id==1"></td>
-                                <th colspan="5" style="text-align:right;">Tổng tiền ds:&emsp; <span style="color:red">{{totalMoney | currency:'':0}} đ</span></th>
-                            </tr>
-                            <tr></tr>
-                            <tr>
-                                <th class="no-padding">
-                                    <input name="all" type="checkbox" ng-click="selectAll()" />
-                                </th>
-                                <th>Mã</th>
-                                <!--<th ng-show="selectedChannel.Id==2">Code</th>-->
-                                <!--<th ng-hide="selectedChannel">Loại đơn</th>-->
-                                <th>Khách hàng</th>
-                                <th ng-click="sortBy('CreatedDate')">Ngày tạo <i class="fa fa-fw fa-sort"></i></th>
-                                <th ng-click="sortBy('tongtien')">Tổng tiền <i class="fa fa-fw fa-sort"></i></th>
-                                <th ng-hide="selectedChannel.Id==1">TPhố/T</th>
-                                <th ng-hide="selectedChannel.Id==1">Quận/H</th>
-                                <th ng-hide="selectedChannel.Id==1">NV giao hàng</th>
-                                <th ng-show="selectedChannel.Id==1">NV bán hàng</th>
-                                <th>Ghi chú</th>
-                                <th class="padding_1px">Tình trạng</th>
-                                <th style="padding:0px !important">Đã in</th>
-                                <th></th>
-                            </tr>
-                            <tr ng-form name="data{{$index}}" ng-repeat="item in orders">
-                                <td class="no-padding">
-                                    <input type="checkbox" ng-model="item.checked" ng-click="selectOrder(item)" />
-                                </td>
-                                <td><span ng-class="{'has-error':item.idgiogiao==5}">{{item.id}}</span></td>
-                                <!--<td ng-show="selectedChannel.Id==2">
-                                    <span ng-show="!item.Code">Website</span>
-                                    {{item.Code}}
-                                </td>-->
-                                <!--<td ng-hide="selectedChannel">
-                                    {{item.Channel}} <span ng-show="item.ChannelId==2 && item.Code">- CHA</span><span ng-show="item.ChannelId==2 && !item.Code">- WS</span>
-                                </td>-->
-                                <td>{{item.CustomerName}}</td>
-                                <td>{{item.CreatedDateConvert}}</td>
-                                <td style="text-align:right">{{item.tongtien | currency:'':0}}</td>
-                                <td ng-hide="selectedChannel.Id==1">
-                                    {{item.City}}
-                                </td>
-                                <td ng-hide="selectedChannel.Id==1">
-                                    {{item.District}}
-                                </td>
-                                <td ng-hide="selectedChannel.Id==1">
-                                    {{item.ShipperUserName}}
-                                </td>
-                                <td ng-show="selectedChannel.Id==1">
-                                    {{item.CreatedUserName}}
-                                </td>
-                                <td>{{item.ghichu}}</td>
-                                <td class="padding_1px">
-                                    <span ng-class="item.StatusCss">
-                                        {{item.StatusName}}
-                                    </span>
-                                </td>
-                                <td style="padding:0px !important">
-                                    <span ng-show="item.StatusPrint"><i class="fa fa-fw fa-check"></i></span>
-                                </td>
-                                <td>
-                                    <button ng-click="orderDetail(item)" title="Chi tiết" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>
-                                    <button type="button" ng-hide="item.StatusId==3 || item.StatusId==4 || item.StatusId==6" ng-click="editOrder(item)" title="Chỉnh sửa" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></button>
-                                    <button ng-click="getDetailOrderToPrint(item)" title="In đơn" class="btn btn-sm btn-warning"><i class="fa fa-print"></i></button>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="row" style="display:none">
-                <div id="printDiv">
-                    <style>
-                        @media print {
-                            .ng-hide {
-                                display: none !important;
-                            }
-                        }
+                <div ng-show="showExtension">
+                    <div class="col-xs-4" ng-show="selectedChannel.Id==10">
+                        <div class="box box-solid box-primary" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h3 class="box-title">Mã đơn hoàn tất <span ng-show="totalOrder > 0">:&emsp;{{totalOrder}}</span></h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding:5px">
+                                <div>
+                                    <textarea rows="4" ng-model="tikiCompletedOrderIds" class="form-control"></textarea>
+                                </div>
+                                <div style="margin-top:5px;text-align:right">
+                                    <div ng-show="validOrderCount > 0">Đã cập nhật:&emsp;<span style="color:red">{{validOrderCount}}</span></div>
+                                    <button type="button" class="btn btn-info" ng-click="clearCompletedTikiOrders()">
+                                        Clear
+                                    </button>
+                                    <button type="button" class="btn btn-success" ng-click="updateCompletedTikiOrders()">
+                                        Cập nhật
+                                    </button>
+                                </div>
 
-                        ul li {
-                            list-style: none;
-                        }
-
-                        #content {
-                            font-size: 12px;
-                        }
-
-                            #content td, th {
-                                padding: 5px !important;
-                            }
-                    </style>
-                    <div id="content">
-                        <h5 class="text-center" style="font-weight: 700;margin-top:0px;margin-bottom:0px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h5>
-                        <p class="text-center" style="margin-top:0px;margin-bottom:3px">(028) 7309.3479 – 0918.644643</p>
-                        <h4 class="text-center" style="margin-top:0px;margin-bottom:3px">HÓA ĐƠN BÁN HÀNG</h4>
-                        <!--<div class="row"  style="margin-top:0px">
-                            <div class="col col-xs-2 text-right" style="padding-right:5px">Ngày :</div>
-                            <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
-                        </div>-->
-                        <div class="row">
-                            <div class="col col-xs-2 text-right" style="padding-right:5px">Số :</div>
-                            <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.Code}}-{{orderReturn.id}} | Ngày : {{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col col-xs-2 text-right" style="padding-right:5px">Tên :</div>
-                            <div class="col col-xs-10 text-left" style="padding-left:5px"><span style="font-style:italic">{{orderReturn.khachhang.hoten}}</span> - {{orderReturn.khachhang.dienthoai}}</div>
-                        </div>
-                        <div class="row" ng-hide="orderReturn.ChannelId==1">
-                            <div class="col col-xs-2 text-right" style="padding-right:5px">ĐC :</div>
-                            <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.khachhang.duong}} - {{orderReturn.tenquan}} - {{orderReturn.tentp}}</div>
-                        </div>
-                        <div class="row" ng-hide="!orderReturn.tenpttt && !orderReturn.tenptgh">
-                            <div class="col col-xs-2 text-right" style="padding-right:5px">TT :</div>
-                            <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.tenpttt}}<span ng-hide="!orderReturn.giogiao"> | TG: {{orderReturn.giogiao}}</span><span ng-hide="!orderReturn.tenptgh"> | GH: {{orderReturn.tenptgh}}</span></div>
-                        </div>
-                        <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:0px;margin-top:3px">
-                            <tr>
-                                <th class="text-center" style="padding:1px"></th>
-                                <th ng-hide="orderReturn.ChannelId==1" class="text-center" style="padding:1px">Mã</th>
-                                <th class="text-center">Tên sản phẩm</th>
-                                <th class="text-center" style="padding:1px">SL</th>
-                                <th class="text-center" style="padding:1px">Giá</th>
-                                <th class="text-center" style="padding:1px">T.Tiền</th>
-                            </tr>
-                            <tr ng-repeat="item in orderReturn.donhang_ct">
-                                <td style="padding:1px">{{$index+1}}</td>
-                                <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
-                                <td>{{item.shop_bienthe.tensp}}</td>
-                                <td style="padding:1px">{{item.Soluong}}</td>
-                                <td style="padding:1px">
-                                    <span ng-hide="item.Dongiakm == 0" style="font-size:10px;text-decoration:line-through">{{item.Dongiakm | currency:'':0}}<br /></span>
-                                    {{item.Dongia | currency:'':0}}
-                                </td>
-                                <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}</td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="text-right">Tổng thành tiền</td>
-                                <td colspan="2">{{totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
-                            </tr>
-                            <tr ng-hide="(orderReturn.ship + orderReturn.phithuho) ==0">
-                                <td colspan="4" class="text-right">Phí</td>
-                                <td colspan="2">{{orderReturn.ship + orderReturn.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
-                            </tr>
-                            <tr ng-hide="orderReturn.datru_diem==0">
-                                <td colspan="4" class="text-right">Giảm</td>
-                                <td colspan="2">{{orderReturn.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
-                            </tr>
-                            <tr>
-                                <td class="text-right" style="font-weight:700" colspan="4">Thanh toán</td>
-                                <td colspan="2">{{orderReturn.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
-                            </tr>
-                            <tr ng-hide="!orderReturn.ghichu && !orderReturn.chitietgiogiao">
-                                <td colspan="2">Lưu ý</td>
-                                <td colspan="4">{{orderReturn.ghichu}} - {{orderReturn.chitietgiogiao}}</td>
-                            </tr>
-                        </table>
-                        <div class="text-right" style="margin-top:5px">
-                            Xin cảm ơn Quý Khách và hẹn gặp lại.
-                        </div>
-                        <div ng-hide="!orderReturn.tenptgh && (orderReturn.pttt!=1 || orderReturn.pttt!=3)" class="text-right" style="margin-top:5px">
-                            {{orderReturn.tenptgh}} - Thu hộ - {{orderReturn.tongtien | currency:'':0}} đ
+                            </div><!-- /.box-body -->
                         </div>
                     </div>
-
+                    <div class="col-xs-4" ng-show="selectedChannel.Id==10 && !IsNullOrEmpty(inValidOrders)">
+                        <div class="box box-solid box-default" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h3 class="box-title">Mã đơn không tồn tại</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding:5px">
+                                <div>
+                                    <textarea rows="4" ng-model="inValidOrders" class="form-control"></textarea>
+                                </div>
+                                <div style="margin-top:5px;text-align:right">
+                                    <div ng-show="inValidOrdersCount > 0">Số lượng:&emsp;<span style="color:red">{{inValidOrdersCount}}</span></div>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div>
+                    <div class="col-xs-4" ng-show="selectedChannel.Id==10 && !IsNullOrEmpty(cancelOrders)">
+                        <div class="box box-solid box-danger" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h3 class="box-title">Mã đơn đã hủy</h3>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding:5px">
+                                <div>
+                                    <textarea rows="4" ng-model="cancelOrders" class="form-control"></textarea>
+                                </div>
+                                <div style="margin-top:5px;text-align:right">
+                                    <div ng-show="cancelOrdersCount > 0">Số lượng:&emsp;<span style="color:red">{{cancelOrdersCount}}</span></div>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row" style="display:none">
-                <div id="printDivAll">
-                    <style>
-                        @media print {
-                            .ng-hide {
-                                display: none !important;
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="responsivetable">
+                            <table class="table table-bordered table-striped table-hover text-left table_data" style="margin-bottom:10px">
+                                <tr style="background-color:white">
+                                    <td colspan="7" style="text-align:left;">
+                                        <div class="input-group" ng-show="selectedOrders.length>0">
+                                            <span class="label_bulk">Có {{selectedOrders.length}} đơn hàng được chọn</span>
+                                            <div class="input-group-btn">
+                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color:#3c8dbc;color:white">Cập nhật <span class="fa fa-caret-down"></span></button>
+                                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                                    <li class="dropdown-submenu">
+                                                        <a tabindex="-1">Tình trạng ĐH</a>
+                                                        <ul class="dropdown-menu overflow_y">
+                                                            <li ng-repeat="itemOrderStatus in orderStatusFilters">
+                                                                <a ng-click="updateStatusOrders(itemOrderStatus)" tabindex="-1">{{itemOrderStatus.Name}}</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                    <li class="dropdown-submenu">
+                                                        <a tabindex="-1">NV giao hàng</a>
+                                                        <ul class="dropdown-menu overflow_y">
+                                                            <li ng-repeat="itemShipper in userFilters">
+                                                                <a ng-click="updateShipper(itemShipper)" tabindex="-1">{{itemShipper.UserName}}</a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                                <button ng-show="selectedChannel.Id!=4" ng-click="getDetailOrdersToPrint()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
+                                                <button ng-show="selectedChannel.Id==4" ng-click="printShopeeAll()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
+                                                <button ng-click="resetSelectedOrders()" type="button" class="btn btn-default" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Bỏ chọn</button>
+                                                <button ng-show="selectedChannel.Id==4" ng-click="confirmShopeeOrders()" type="button" class="btn btn-success" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Xác nhận {{selectedOrders.length}} đơn</button>
+                                            </div><!-- /btn-group -->
+                                        </div>
+                                    </td>
+                                    <td ng-hide="selectedChannel.Id==1"></td>
+                                    <td ng-hide="selectedChannel.Id==1"></td>
+                                    <th colspan="5" style="text-align:right;">Tổng tiền ds:&emsp; <span style="color:red">{{totalMoney | currency:'':0}} đ</span></th>
+                                </tr>
+                                <tr></tr>
+                                <tr>
+                                    <th class="no-padding">
+                                        <input name="all" ng-model="allCheckVal" type="checkbox" ng-click="selectAll()" />
+                                    </th>
+                                    <th>Mã</th>
+                                    <!--<th ng-show="selectedChannel.Id==2">Code</th>-->
+                                    <!--<th ng-hide="selectedChannel">Loại đơn</th>-->
+                                    <th>Khách hàng</th>
+                                    <th ng-click="sortBy('CreatedDate')">Ngày tạo <i class="fa fa-fw fa-sort"></i></th>
+                                    <th ng-click="sortBy('tongtien')">Tổng tiền <i class="fa fa-fw fa-sort"></i></th>
+                                    <th ng-hide="selectedChannel.Id==1">TPhố/T</th>
+                                    <th ng-hide="selectedChannel.Id==1">Quận/H</th>
+                                    <th ng-hide="selectedChannel.Id==1">Shipper</th>
+                                    <th ng-show="selectedChannel.Id==1">Seller</th>
+                                    <th>Ghi chú</th>
+                                    <th class="padding_1px">Tình trạng</th>
+                                    <th ng-show="selectedChannel.Id==4">MVĐơn</th>
+                                    <th style="padding:0px !important">Đã in</th>
+                                    <th></th>
+                                </tr>
+                                <tr ng-form name="data{{$index}}" ng-repeat="item in orders">
+                                    <td class="no-padding">
+                                        <input type="checkbox" ng-model="item.checked" ng-click="selectOrder(item)" />
+                                    </td>
+                                    <td><span ng-class="{'has-error':item.idgiogiao==5}">{{item.id}}</span>&emsp;<img ng-show="item.IsShopeeApi == true" src="Assets/Admin/img/ShopeeIcon.jpg" style="height:12%" /><br /><span style="font-size:11px">{{item.OrderIdShopeeApi}}</span></td>
+                                    <!--<td ng-show="selectedChannel.Id==2">
+                                        <span ng-show="!item.Code">Website</span>
+                                        {{item.Code}}
+                                    </td>-->
+                                    <!--<td ng-hide="selectedChannel">
+                                        {{item.Channel}} <span ng-show="item.ChannelId==2 && item.Code">- CHA</span><span ng-show="item.ChannelId==2 && !item.Code">- WS</span>
+                                    </td>-->
+                                    <td>{{item.CustomerName}}</td>
+                                    <td>{{item.CreatedDateConvert}}</td>
+                                    <td style="text-align:right">{{item.tongtien | currency:'':0}}</td>
+                                    <td ng-hide="selectedChannel.Id==1">
+                                        {{item.City}}
+                                    </td>
+                                    <td ng-hide="selectedChannel.Id==1">
+                                        {{item.District}}
+                                    </td>
+                                    <td ng-hide="selectedChannel.Id==1">
+                                        {{item.ShipperUserName}}{{item.ShipperNameShopeeApi}}
+                                    </td>
+                                    <td ng-show="selectedChannel.Id==1">
+                                        {{item.CreatedUserName}}
+                                    </td>
+                                    <td>{{item.ghichu}}</td>
+                                    <td class="padding_1px">
+                                        <span ng-class="item.StatusCss">
+                                            {{item.StatusName}}
+                                        </span>
+                                    </td>
+                                    <td ng-show="selectedChannel.Id==4">
+                                        {{item.TrackingNo}}
+                                    </td>
+                                    <td style="padding:0px !important">
+                                        <span ng-show="item.StatusPrint"><i class="fa fa-fw fa-check"></i></span>
+                                    </td>
+                                    <td>
+                                        <button ng-click="orderDetail(item)" title="Chi tiết" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>
+                                        <button type="button" ng-hide="item.StatusId==3 || item.StatusId==4 || item.StatusId==6 || item.StatusId==7" ng-click="editOrder(item)" title="Chỉnh sửa" class="btn btn-sm btn-info"><i class="fa fa-pencil"></i></button>
+                                        <button ng-click="getDetailOrderToPrint(item)" title="In đơn" class="btn btn-sm btn-warning" ng-hide="item.IsShopeeApi == true"><i class="fa fa-print"></i></button>
+                                        <button ng-show="IsNullOrEmpty(item.TrackingNo) && (item.StatusId == 1 || item.StatusId == 8) && selectedChannel.Id==4" ng-click="orderConfirmShopee(item)" title="Xác nhận đơn" class="btn btn-sm btn-success"><i class="fa fa-calendar-check-o" aria-hidden="true"></i></button>
+                                        <button ng-click="ShopeePrint(item)" title="In đơn Shopee" class="btn btn-sm btn-warning" ng-show="!IsNullOrEmpty(item.TrackingNo) && item.IsShopeeApi == true"><i class="fa fa-print"></i></button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div id="printDiv">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
                             }
-                        }
 
-                        .pagebreak {
-                            page-break-before: always;
-                        }
-
-                        ul li {
-                            list-style: none;
-                        }
-
-                        #content {
-                            font-size: 12px;
-                        }
-
-                            #content td, th {
-                                padding: 5px !important;
+                            ul li {
+                                list-style: none;
                             }
-                    </style>
-                    <div id="content">
-                        <div ng-repeat="order in ordersReturn">
+
+                            #content {
+                                font-size: 12px;
+                            }
+
+                                #content td, th {
+                                    padding: 5px !important;
+                                }
+                        </style>
+                        <div id="content">
                             <h5 class="text-center" style="font-weight: 700;margin-top:0px;margin-bottom:0px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h5>
-                            <p class="text-center" style="margin-top:0px;margin-bottom:3px">(028) 7309.3479 – 0918.644643</p>
+                            <p class="text-center" style="margin-top:0px;margin-bottom:3px">
+                                (028) 7309.3479 – 0918.644643
+                            </p>
                             <h4 class="text-center" style="margin-top:0px;margin-bottom:3px">HÓA ĐƠN BÁN HÀNG</h4>
+                            <!--<div class="row"  style="margin-top:0px">
+                                <div class="col col-xs-2 text-right" style="padding-right:5px">Ngày :</div>
+                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                            </div>-->
                             <div class="row">
-                                <div class="col col-xs-2 text-right" style="padding-right:5px">Số :</div>
-                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.Code}}-{{order.id}} | Ngày : {{order.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                                <div class="col col-xs-2 text-right" style="padding-right:5px">
+                                    Số :
+                                </div>
+                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.Code}}-{{orderReturn.id}} | Ngày : {{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
                             </div>
                             <div class="row">
                                 <div class="col col-xs-2 text-right" style="padding-right:5px">Tên :</div>
-                                <div class="col col-xs-10 text-left" style="padding-left:5px"><span style="font-style:italic">{{order.khachhang.hoten}}</span> - {{order.khachhang.dienthoai}}</div>
+                                <div class="col col-xs-10 text-left" style="padding-left:5px"><span style="font-style:italic">{{orderReturn.khachhang.hoten}}</span> - {{orderReturn.khachhang.dienthoai}}</div>
                             </div>
-                            <div class="row" ng-hide="ordersReturn.ChannelId==1">
+                            <div class="row" ng-hide="orderReturn.ChannelId==1">
                                 <div class="col col-xs-2 text-right" style="padding-right:5px">ĐC :</div>
-                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.khachhang.duong}} - {{order.tenquan}} - {{order.tentp}}</div>
-
+                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.khachhang.duong}} - {{orderReturn.tenquan}} - {{orderReturn.tentp}}</div>
                             </div>
-                            <div class="row" ng-hide="!order.tenpttt && !order.tenptgh">
+                            <div class="row" ng-hide="!orderReturn.tenpttt && !orderReturn.tenptgh">
                                 <div class="col col-xs-2 text-right" style="padding-right:5px">TT :</div>
-                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.tenpttt}}<span ng-hide="!order.giogiao"> | TG: {{order.giogiao}}</span><span ng-hide="!order.tenptgh"> | GH: {{order.tenptgh}}</span></div>
+                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.tenpttt}}<span ng-hide="!orderReturn.giogiao"> | TG: {{orderReturn.giogiao}}</span><span ng-hide="!orderReturn.tenptgh"> | GH: {{orderReturn.tenptgh}}</span></div>
                             </div>
                             <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:0px;margin-top:3px">
                                 <tr>
@@ -397,7 +408,7 @@
                                     <th class="text-center" style="padding:1px">Giá</th>
                                     <th class="text-center" style="padding:1px">T.Tiền</th>
                                 </tr>
-                                <tr ng-repeat="item in order.donhang_ct">
+                                <tr ng-repeat="item in orderReturn.donhang_ct">
                                     <td style="padding:1px">{{$index+1}}</td>
                                     <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
                                     <td>{{item.shop_bienthe.tensp}}</td>
@@ -410,42 +421,1849 @@
                                 </tr>
                                 <tr>
                                     <td colspan="4" class="text-right">Tổng thành tiền</td>
-                                    <td colspan="2">{{order.totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    <td colspan="2">{{totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                 </tr>
-                                <tr ng-hide="(order.ship + order.phithuho) ==0">
+                                <tr ng-hide="(orderReturn.ship + orderReturn.phithuho) ==0">
                                     <td colspan="4" class="text-right">Phí</td>
-                                    <td colspan="2">{{order.ship + order.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    <td colspan="2">{{orderReturn.ship + orderReturn.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                 </tr>
-                                <tr ng-hide="order.datru_diem==0">
+                                <tr ng-hide="orderReturn.datru_diem==0">
                                     <td colspan="4" class="text-right">Giảm</td>
-                                    <td colspan="2">{{order.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    <td colspan="2">{{orderReturn.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                 </tr>
                                 <tr>
                                     <td class="text-right" style="font-weight:700" colspan="4">Thanh toán</td>
-                                    <td colspan="2">{{order.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    <td colspan="2">{{orderReturn.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                 </tr>
-                                <tr ng-hide="!order.ghichu && !order.chitietgiogiao">
+                                <tr ng-hide="!orderReturn.ghichu && !orderReturn.chitietgiogiao">
                                     <td colspan="2">Lưu ý</td>
-                                    <td colspan="4">{{order.ghichu}} - {{order.chitietgiogiao}}</td>
+                                    <td colspan="4">{{orderReturn.ghichu}} - {{orderReturn.chitietgiogiao}}</td>
                                 </tr>
                             </table>
                             <div class="text-right" style="margin-top:5px">
                                 Xin cảm ơn Quý Khách và hẹn gặp lại.
                             </div>
-                            <div ng-hide="!order.tenptgh && (order.pttt!=1 || order.pttt!=3)" class="text-right" style="margin-top:5px">
-                                {{order.tenptgh}} - Thu hộ - {{order.tongtien | currency:'':0}} đ
+                            <div ng-hide="!orderReturn.tenptgh && (orderReturn.pttt!=1 || orderReturn.pttt!=3)" class="text-right" style="margin-top:5px">
+                                {{orderReturn.tenptgh}} - <span ng-show="orderReturn.pttt == 2 || orderReturn.pttt == 4 || orderReturn.pttt == 6">không</span> thu hộ <span ng-show="orderReturn.pttt != 2 && orderReturn.pttt != 4 && orderReturn.pttt != 6">- {{orderReturn.tongtien | currency:'':0}} đ</span>.
                             </div>
-                            <div class="pagebreak"> </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div id="printDivAll">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
+
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            #content {
+                                font-size: 12px;
+                            }
+
+                                #content td, th {
+                                    padding: 5px !important;
+                                }
+                        </style>
+                        <div id="content">
+                            <div ng-repeat="order in ordersReturn">
+                                <h5 class="text-center" style="font-weight: 700;margin-top:0px;margin-bottom:0px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h5>
+                                <p class="text-center" style="margin-top:0px;margin-bottom:3px">(028) 7309.3479 – 0918.644643</p>
+                                <h4 class="text-center" style="margin-top:0px;margin-bottom:3px">HÓA ĐƠN BÁN HÀNG</h4>
+                                <div class="row">
+                                    <div class="col col-xs-2 text-right" style="padding-right:5px">Số :</div>
+                                    <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.Code}}-{{order.id}} | Ngày : {{order.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-xs-2 text-right" style="padding-right:5px">Tên :</div>
+                                    <div class="col col-xs-10 text-left" style="padding-left:5px"><span style="font-style:italic">{{order.khachhang.hoten}}</span> - {{order.khachhang.dienthoai}}</div>
+                                </div>
+                                <div class="row" ng-hide="ordersReturn.ChannelId==1">
+                                    <div class="col col-xs-2 text-right" style="padding-right:5px">ĐC :</div>
+                                    <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.khachhang.duong}} - {{order.tenquan}} - {{order.tentp}}</div>
+
+                                </div>
+                                <div class="row" ng-hide="!order.tenpttt && !order.tenptgh">
+                                    <div class="col col-xs-2 text-right" style="padding-right:5px">TT :</div>
+                                    <div class="col col-xs-10 text-left" style="padding-left:5px">{{order.tenpttt}}<span ng-hide="!order.giogiao"> | TG: {{order.giogiao}}</span><span ng-hide="!order.tenptgh"> | GH: {{order.tenptgh}}</span></div>
+                                </div>
+                                <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:0px;margin-top:3px">
+                                    <tr>
+                                        <th class="text-center" style="padding:1px"></th>
+                                        <th ng-hide="orderReturn.ChannelId==1" class="text-center" style="padding:1px">Mã</th>
+                                        <th class="text-center">Tên sản phẩm</th>
+                                        <th class="text-center" style="padding:1px">SL</th>
+                                        <th class="text-center" style="padding:1px">Giá</th>
+                                        <th class="text-center" style="padding:1px">T.Tiền</th>
+                                    </tr>
+                                    <tr ng-repeat="item in order.donhang_ct">
+                                        <td style="padding:1px">{{$index+1}}</td>
+                                        <td ng-hide="orderReturn.ChannelId==1" style="padding:1px">{{item.masp}}</td>
+                                        <td>{{item.shop_bienthe.tensp}}</td>
+                                        <td style="padding:1px">{{item.Soluong}}</td>
+                                        <td style="padding:1px">
+                                            <span ng-hide="item.Dongiakm == 0" style="font-size:10px;text-decoration:line-through">{{item.Dongiakm | currency:'':0}}<br /></span>
+                                            {{item.Dongia | currency:'':0}}
+                                        </td>
+                                        <td style="padding:1px">{{item.Soluong * item.Dongia | currency:'':0}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4" class="text-right">Tổng thành tiền</td>
+                                        <td colspan="2">{{order.totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    </tr>
+                                    <tr ng-hide="(order.ship + order.phithuho) ==0">
+                                        <td colspan="4" class="text-right">Phí</td>
+                                        <td colspan="2">{{order.ship + order.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    </tr>
+                                    <tr ng-hide="order.datru_diem==0">
+                                        <td colspan="4" class="text-right">Giảm</td>
+                                        <td colspan="2">{{order.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right" style="font-weight:700" colspan="4">Thanh toán</td>
+                                        <td colspan="2">{{order.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    </tr>
+                                    <tr ng-hide="!order.ghichu && !order.chitietgiogiao">
+                                        <td colspan="2">Lưu ý</td>
+                                        <td colspan="4">{{order.ghichu}} - {{order.chitietgiogiao}}</td>
+                                    </tr>
+                                </table>
+                                <div class="text-right" style="margin-top:5px">
+                                    Xin cảm ơn Quý Khách và hẹn gặp lại.
+                                </div>
+                                <div ng-hide="!order.tenptgh && (order.pttt!=1 || order.pttt!=3)" class="text-right" style="margin-top:5px">
+                                    {{order.tenptgh}} - <span ng-show="order.pttt == 2 || order.pttt == 4 || order.pttt == 6">không</span> thu hộ <span ng-show="order.pttt != 2 && order.pttt != 4 && order.pttt != 6">- {{order.tongtien | currency:'':0}} đ</span>.
+                                </div>
+                                <div class="pagebreak"> </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div id="printDivGHN">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
+
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            #contentGHN {
+                                font-size: 9px;
+                            }
+
+                                #contentGHN td, th {
+                                    padding: 0px !important;
+                                }
+                        </style>
+                        <div id="contentGHN">
+                            <table width="100%">
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="40%">
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                    <img src="/Assets/Admin/img/GHN_Logo_Print.png" style="height:70%" /><br />
+                                                    {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                </td>
+                                                <td width="60%">
+                                                    <svg id="TrackingNoBarcode"></svg><br />
+                                                    Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
+                                                    Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="50%">
+                                                    <b>Từ</b><br />
+                                                    Babymart.vn<br />
+                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                </td>
+                                                <td width="50%">
+                                                    <b>
+                                                        Đến<br />
+                                                        {{selectedOrder.BuyerName}}<br />
+                                                        {{selectedOrder.AddressBuyer}}
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                <td width="50%"><b>SĐT:</b> {{selectedOrder.PhoneBuyer}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="30%" style="border-right:1px dashed black;border-bottom:1px dashed black;vertical-align:middle;text-align:center;font-size:10px">
+                                                    <p style="height:100px;"><b>{{selectedOrder.RecipientSortCode}}</b></p>
+                                                </td>
+                                                <td width="70%" rowspan="2" style="vertical-align:text-top;text-align:left;">
+                                                    <b>Nội dung hàng (Tổng SL sản phẩm: {{selectedOrder.TotalQuantity}})</b><br />
+                                                    <p style="height:140px;overflow:hidden">
+                                                        <span ng-repeat="detail in selectedOrder.OrderDetails" style="font-size:8px">
+                                                            {{$index + 1}}. {{detail.item_name}} ({{detail.item_sku}})<span ng-hide="!(detail.variation_name.length > 0)">, {{detail.variation_name}}</span>, SL: {{detail.variation_quantity_purchased}}
+                                                            <br />
+                                                        </span>
+                                                    </p>
+                                                    <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                    <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                    <span ng-hide="IsNullOrEmpty(selectedOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{selectedOrder.ghichu}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr style="vertical-align:text-top;text-align:center">
+                                                <td width="30%" style="padding:5px !important">
+                                                    <div style="height:60px"><b>Tuyến giao</b></div>
+                                                    <div style="height:25px;border:solid 1px black"></div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:3px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="45%">
+                                                    Tiền thu Người nhận:
+                                                    <span style="margin-left:15px;font-weight:800;font-size:15px">{{selectedOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                    Chỉ dẫn giao hàng<br />
+                                                    - Không đồng kiểm;<br />
+                                                    - Chuyển hoàn sau 3 lần phát;<br />
+                                                    - Lưu kho tối đa 5 ngày<br />
+                                                </td>
+                                                <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                    <div style="height:100px">
+                                                        <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                            Khối lượng tối đa:{{selectedOrder.MaxWeight}} &emsp;g
+                                                        </div>
+                                                        <div style="height:90%;padding:5px;">
+                                                            <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div id="printDivGHTK">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
 
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            #contentGHTK {
+                                font-size: 9px;
+                            }
+
+                                #contentGHTK td, th {
+                                    padding: 0px !important;
+                                }
+                        </style>
+                        <div id="contentGHTK">
+                            <table width="100%">
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="45%">
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                    <img src="/Assets/Admin/img/GHTK_Logo_Print.png" style="height:70%" />&nbsp;<br />
+                                                    {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                </td>
+                                                <td width="55%">
+                                                    <svg id="TrackingNoBarcode"></svg><br />
+                                                    Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
+                                                    Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="text-align:center">
+                                                    <span style="font-size:15px"><b>{{selectedOrder.RecipientSortCode}}</b></span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="50%">
+                                                    <b>Từ</b><br />
+                                                    Babymart.vn<br />
+                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                </td>
+                                                <td width="50%">
+                                                    <b>
+                                                        Đến<br />
+                                                        {{selectedOrder.BuyerName}}<br />
+                                                        {{selectedOrder.AddressBuyer}}
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                <td width="50%"><b>SĐT:</b> {{selectedOrder.PhoneBuyer}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                    <b>Nội dung hàng (Tổng SL sản phẩm: {{selectedOrder.TotalQuantity}})</b><br />
+                                                    <p style="height:140px;overflow:hidden">
+                                                        <span ng-repeat="detail in selectedOrder.OrderDetails" style="font-size:8px">
+                                                            {{$index + 1}}. {{detail.item_name}} ({{detail.item_sku}})<span ng-hide="!(detail.variation_name.length > 0)">, {{detail.variation_name}}</span>, SL: {{detail.variation_quantity_purchased}}
+                                                            <br />
+                                                        </span>
+                                                    </p>
+                                                    <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                    <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                    <span ng-hide="IsNullOrEmpty(selectedOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{selectedOrder.ghichu}}</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:3px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="45%">
+                                                    Tiền thu Người nhận:
+                                                    <span style="margin-left:15px;font-weight:800;font-size:15px">{{selectedOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                    Chỉ dẫn giao hàng<br />
+                                                    - Không đồng kiểm;<br />
+                                                    - Chuyển hoàn sau 3 lần phát;<br />
+                                                    - Lưu kho tối đa 5 ngày<br />
+                                                </td>
+                                                <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                    <div style="height:130px">
+                                                        <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                            Khối lượng tối đa:{{selectedOrder.MaxWeight}} &emsp;g
+                                                        </div>
+                                                        <div style="height:80%;padding:5px;">
+                                                            <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 text-center">
-                    <custom-pager page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager>
+                <div class="row" style="display:none">
+                    <div id="printDivVNP">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
+
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            .traditional-vertical-writing {
+                                writing-mode: vertical-rl;
+                                transform: rotate(180deg)
+                            }
+
+                            #contentVNP {
+                                font-size: 9px;
+                            }
+
+                                #contentVNP td, th {
+                                    padding: 0px !important;
+                                }
+                        </style>
+                        <div id="contentVNP">
+                            <table width="100%">
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="40%">
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                    <img src="/Assets/Admin/img/VNP_Logo_Print.png" style="height:30%" /><br />
+                                                    {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                </td>
+                                                <td width="60%">
+                                                    <svg id="TrackingNoBarcode"></svg><br />
+                                                    Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
+                                                    Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
+
+                                                </td>
+                                            </tr>
+                                            <!--<tr>
+                                                <td colspan="2" style="text-align:center">
+                                                    <span style="font-size:15px"><b>{{selectedOrder.RecipientSortCode}}</b></span>
+                                                </td>
+                                            </tr>-->
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="50%">
+                                                    <b>Từ</b><br />
+                                                    Babymart.vn<br />
+                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                </td>
+                                                <td width="50%">
+                                                    <b>
+                                                        Đến<br />
+                                                        {{selectedOrder.BuyerName}}<br />
+                                                        {{selectedOrder.AddressBuyer}}
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                <td width="50%"><b>SĐT:</b> {{selectedOrder.PhoneBuyer}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                    <b>Nội dung hàng (Tổng SL sản phẩm: {{selectedOrder.TotalQuantity}})</b>
+                                                    <svg id="RecipientSortCode"></svg>{{selectedOrder.RecipientSortCode}}
+                                                    <br />
+                                                    <p style="height:110px;overflow:hidden">
+                                                        <span ng-repeat="detail in selectedOrder.OrderDetails" style="font-size:8px">
+                                                            {{$index + 1}}. {{detail.item_name}} ({{detail.item_sku}})<span ng-hide="!(detail.variation_name.length > 0)">, {{detail.variation_name}}</span>, SL: {{detail.variation_quantity_purchased}}
+                                                            <br />
+                                                        </span>
+                                                    </p>
+                                                    <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                    <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                    <span ng-hide="IsNullOrEmpty(selectedOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{selectedOrder.ghichu}}</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:3px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="45%">
+                                                    Tiền thu Người nhận:<br />
+                                                    <span style="margin-left:15px;font-weight:800;font-size:15px">{{selectedOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                    Chỉ dẫn giao hàng<br />
+                                                    - Không đồng kiểm;<br />
+                                                    - Chuyển hoàn sau 3 lần phát;<br />
+                                                    - Lưu kho tối đa 5 ngày<br />
+                                                </td>
+                                                <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                    <div style="height:130px">
+                                                        <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                            Khối lượng tối đa:{{selectedOrder.MaxWeight}} &emsp;g
+                                                        </div>
+                                                        <div style="height:80%;padding:5px;">
+                                                            <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div><!-- /.box-body -->
-    </div><!-- /.box -->
+                <div class="row" style="display:none">
+                    <div id="printDivSPE">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
+
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            #contentSPE {
+                                font-size: 9px;
+                            }
+
+                                #contentSPE td, th {
+                                    padding: 0px !important;
+                                }
+                        </style>
+                        <div id="contentSPE">
+                            <table width="100%">
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="40%">
+                                                    <img src="/Assets/Admin/img/ShopeeExpress_Logo_Print.png" style="height:70%" /><br />
+                                                    <span style="font-size:18px">{{selectedOrder.RecipientSortCode}}</span><br />
+                                                    {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                </td>
+                                                <td width="60%">
+                                                    <svg id="TrackingNoBarcode"></svg><br />
+                                                    Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
+                                                    Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="50%">
+                                                    <b>Từ</b><br />
+                                                    Babymart.vn<br />
+                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                </td>
+                                                <td width="50%">
+                                                    <b>
+                                                        Đến<br />
+                                                        {{selectedOrder.BuyerName}}<br />
+                                                        {{selectedOrder.AddressBuyer}}
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                <td width="50%"><b>SĐT:</b> {{selectedOrder.PhoneBuyer}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="70%" rowspan="2" style="vertical-align:text-top;text-align:left;">
+                                                    <b>Nội dung hàng (Tổng SL sản phẩm: {{selectedOrder.TotalQuantity}})</b><br />
+                                                    <p style="height:240px;overflow:hidden">
+                                                        <span ng-repeat="detail in selectedOrder.OrderDetails" style="font-size:8px">
+                                                            {{$index + 1}}. {{detail.item_name}} ({{detail.item_sku}})<span ng-hide="!(detail.variation_name.length > 0)">, {{detail.variation_name}}</span>, SL: {{detail.variation_quantity_purchased}}
+                                                            <br />
+                                                        </span>
+                                                    </p>
+                                                    <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                    <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                    <span ng-hide="IsNullOrEmpty(selectedOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{selectedOrder.ghichu}}</span>
+                                                </td>
+                                                <td width="30%" style="border-left:1px dashed black;border-bottom:1px dashed black;vertical-align:middle;text-align:center;font-size:10px">
+                                                    <p style="height:100px;">
+                                                        <span id="placeHolder"></span><br />
+                                                        <span style="font-size:13px">{{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}</span>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr style="vertical-align:text-top;text-align:center">
+                                                <td width="30%" style="padding:5px !important;font-size:16px">
+                                                    <span style="line-height:85px;vertical-align:middle">{{selectedOrder.SenderSortCode}}</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:3px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="50%">
+                                                    Khối lượng tối đa:{{selectedOrder.MaxWeight}} &emsp;g
+                                                </td>
+                                                <td width="50%" style="vertical-align:text-top;text-align:center">
+                                                    <span style="margin-left:15px;font-weight:600;font-size:15px">{{selectedOrder.TotalAmount | currency:'':0}}&emsp;VND</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div id="printDivNowShip">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
+
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            #contentNowShip {
+                                font-size: 9px;
+                            }
+
+                                #contentNowShip td, th {
+                                    padding: 0px !important;
+                                }
+                        </style>
+                        <div id="contentNowShip">
+                            <table width="100%">
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="45%">
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                    <img src="/Assets/Admin/img/NowShip_Logo_Print.jpg" style="height:70%" />&nbsp;<br />
+                                                    {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                </td>
+                                                <td width="55%">
+                                                    <svg id="TrackingNoBarcode"></svg><br />
+                                                    Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
+                                                    Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="50%">
+                                                    <b>Từ</b><br />
+                                                    Babymart.vn<br />
+                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                </td>
+                                                <td width="50%">
+                                                    <b>
+                                                        Đến<br />
+                                                        {{selectedOrder.BuyerName}}<br />
+                                                        {{selectedOrder.AddressBuyer}}
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                <td width="50%"><b>SĐT:</b> {{selectedOrder.PhoneBuyer}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                    <b>Nội dung hàng (Tổng SL sản phẩm: {{selectedOrder.TotalQuantity}})</b><br />
+                                                    <p style="height:120px;overflow:hidden">
+                                                        <span ng-repeat="detail in selectedOrder.OrderDetails" style="font-size:8px">
+                                                            {{$index + 1}}. {{detail.item_name}} ({{detail.item_sku}})<span ng-hide="!(detail.variation_name.length > 0)">, {{detail.variation_name}}</span>, SL: {{detail.variation_quantity_purchased}}
+                                                            <br />
+                                                        </span>
+                                                    </p>
+                                                    <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                    <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                    <span ng-hide="IsNullOrEmpty(selectedOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{selectedOrder.ghichu}}</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:3px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="45%">
+                                                    Tiền thu Người nhận:
+                                                    <span style="margin-left:15px;font-weight:800;font-size:15px">{{selectedOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                    Chỉ dẫn giao hàng<br />
+                                                    - Không đồng kiểm;
+                                                </td>
+                                                <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                    <div style="height:130px">
+                                                        <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                            Khối lượng tối đa:{{selectedOrder.MaxWeight}} &emsp;g
+                                                        </div>
+                                                        <div style="height:80%;padding:5px;">
+                                                            <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div id="printDivNinja">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
+
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            #contentNinja {
+                                font-size: 9px;
+                            }
+
+                                #contentNinja td, th {
+                                    padding: 0px !important;
+                                }
+                        </style>
+                        <div id="contentNinja">
+                            <table width="100%">
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="45%">
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                    <img src="/Assets/Admin/img/NinjaVan_Logo_Print.jpg" style="height:85%" />&nbsp;<br />
+                                                    {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                </td>
+                                                <td width="55%">
+                                                    <svg id="TrackingNoBarcode"></svg><br />
+                                                    Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
+                                                    Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
+
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="50%">
+                                                    <b>Từ</b><br />
+                                                    Babymart.vn<br />
+                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                </td>
+                                                <td width="50%">
+                                                    <b>
+                                                        Đến<br />
+                                                        {{selectedOrder.BuyerName}}<br />
+                                                        {{selectedOrder.AddressBuyer}}
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                <td width="50%"><b>SĐT:</b> {{selectedOrder.PhoneBuyer}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                    <b>Nội dung hàng (Tổng SL sản phẩm: {{selectedOrder.TotalQuantity}})</b><br />
+                                                    <p style="height:150px;overflow:hidden">
+                                                        <span ng-repeat="detail in selectedOrder.OrderDetails" style="font-size:8px">
+                                                            {{$index + 1}}. {{detail.item_name}} ({{detail.item_sku}})<span ng-hide="!(detail.variation_name.length > 0)">, {{detail.variation_name}}</span>, SL: {{detail.variation_quantity_purchased}}
+                                                            <br />
+                                                        </span>
+                                                    </p>
+                                                    <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                    <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                    <span ng-hide="IsNullOrEmpty(selectedOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{selectedOrder.ghichu}}</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:3px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="45%">
+                                                    Tiền thu Người nhận:
+                                                    <span style="margin-left:15px;font-weight:800;font-size:15px">{{selectedOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                    Chỉ dẫn giao hàng<br />
+                                                    - Không đồng kiểm;<br />
+                                                    - Chuyển hoàn sau 3 lần phát;<br />
+                                                    - Lưu kho tối đa 5 ngày<br />
+                                                </td>
+                                                <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                    <div style="height:130px">
+                                                        <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                            Khối lượng tối đa:{{selectedOrder.MaxWeight}} &emsp;g
+                                                        </div>
+                                                        <div style="height:80%;padding:5px;">
+                                                            <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div id="printDivBESTExpress">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
+
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            #contentBESTExpress {
+                                font-size: 9px;
+                            }
+
+                                #contentBESTExpress td, th {
+                                    padding: 0px !important;
+                                }
+                        </style>
+                        <div id="contentBESTExpress">
+                            <table width="100%">
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="45%">
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                    <img src="/Assets/Admin/img/BESTExpress_Logo_Print.png" style="height:50%" />&nbsp;<br />
+                                                    {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                </td>
+                                                <td width="55%">
+                                                    <svg id="TrackingNoBarcode"></svg>
+                                                    Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
+                                                    Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center;font-size:18px" colspan="2">
+                                                    <b>{{selectedOrder.RecipientSortCode}}</b>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="50%">
+                                                    <b>Từ</b><br />
+                                                    Babymart.vn<br />
+                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                </td>
+                                                <td width="50%">
+                                                    <b>
+                                                        Đến<br />
+                                                        {{selectedOrder.BuyerName}}<br />
+                                                        {{selectedOrder.AddressBuyer}}
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                <td width="50%"><b>SĐT:</b> {{selectedOrder.PhoneBuyer}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                    <b>Nội dung hàng (Tổng SL sản phẩm: {{selectedOrder.TotalQuantity}})</b><br />
+                                                    <p style="height:120px;overflow:hidden">
+                                                        <span ng-repeat="detail in selectedOrder.OrderDetails" style="font-size:8px">
+                                                            {{$index + 1}}. {{detail.item_name}} ({{detail.item_sku}})<span ng-hide="!(detail.variation_name.length > 0)">, {{detail.variation_name}}</span>, SL: {{detail.variation_quantity_purchased}}
+                                                            <br />
+                                                        </span>
+                                                    </p>
+                                                    <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                    <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                    <span ng-hide="IsNullOrEmpty(selectedOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{selectedOrder.ghichu}}</span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:3px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="45%" style="vertical-align:text-top;">
+                                                    Tiền thu Người nhận:
+                                                    <p style="margin-left:15px;font-weight:800;font-size:15px">{{selectedOrder.TotalAmount | currency:'':0}}&emsp;VND</p>
+                                                    Chỉ dẫn giao hàng<br />
+                                                    - Không đồng kiểm;<br />
+                                                    - Chuyển hoàn sau 3 lần phát;<br />
+                                                    - Lưu kho tối đa 5 ngày<br />
+                                                </td>
+                                                <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                    <div style="height:130px">
+                                                        <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                            Khối lượng tối đa:{{selectedOrder.MaxWeight}} &emsp;g
+                                                        </div>
+                                                        <div style="height:80%;padding:5px;">
+                                                            <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="display:none">
+                    <div id="printDivShopeeAll">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
+
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            #contentShopeeAll {
+                                font-size: 9px;
+                            }
+
+                                #contentShopeeAll td, th {
+                                    padding: 0px !important;
+                                }
+                        </style>
+                        <div id="contentShopeeAll">
+                            <div ng-hide="!(GHNOrders.length > 0)">
+                                <div ng-repeat="GHNOrder in GHNOrders">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="40%">
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                            <img src="/Assets/Admin/img/GHN_Logo_Print.png" style="height:70%" /><br />
+                                                            {{GHNOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                        </td>
+                                                        <td width="60%">
+                                                            <svg id="TrackingNoBarcodeGHN{{$index}}"></svg><br />
+                                                            Mã vận đơn: <b>{{GHNOrder.TrackingNo}}</b><br />
+                                                            Mã đơn hàng: <b>{{GHNOrder.OrderIdShopeeApi}}</b><br />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="50%">
+                                                            <b>Từ</b><br />
+                                                            Babymart.vn<br />
+                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                        </td>
+                                                        <td width="50%">
+                                                            <b>
+                                                                Đến<br />
+                                                                {{GHNOrder.BuyerName}}<br />
+                                                                {{GHNOrder.AddressBuyer}}
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                        <td width="50%"><b>SĐT:</b> {{GHNOrder.PhoneBuyer}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="30%" style="border-right:1px dashed black;border-bottom:1px dashed black;vertical-align:middle;text-align:center;font-size:10px">
+                                                            <p style="height:100px;"><b>{{GHNOrder.RecipientSortCode}}</b></p>
+                                                        </td>
+                                                        <td width="70%" rowspan="2" style="vertical-align:text-top;text-align:left;">
+                                                            <b>Nội dung hàng (Tổng SL sản phẩm: {{GHNOrder.TotalQuantity}})</b><br />
+                                                            <p style="height:140px;overflow:hidden">
+                                                                <span ng-repeat="detailGHNOrder in GHNOrder.OrderDetails" style="font-size:8px">
+                                                                    {{$index + 1}}. {{detailGHNOrder.item_name}} ({{detailGHNOrder.item_sku}})<span ng-hide="!(detailGHNOrder.variation_name.length > 0)">, {{detailGHNOrder.variation_name}}</span>, SL: {{detailGHNOrder.variation_quantity_purchased}}
+                                                                    <br />
+                                                                </span>
+                                                            </p>
+                                                            <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                            <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                            <span ng-hide="IsNullOrEmpty(GHNOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{GHNOrder.ghichu}}</span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="vertical-align:text-top;text-align:center">
+                                                        <td width="30%" style="padding:5px !important">
+                                                            <div style="height:60px"><b>Tuyến giao</b></div>
+                                                            <div style="height:25px;border:solid 1px black"></div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="45%">
+                                                            Tiền thu Người nhận:
+                                                            <span style="margin-left:15px;font-weight:800;font-size:15px">{{GHNOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                            Chỉ dẫn giao hàng<br />
+                                                            - Không đồng kiểm;<br />
+                                                            - Chuyển hoàn sau 3 lần phát;<br />
+                                                            - Lưu kho tối đa 5 ngày<br />
+                                                        </td>
+                                                        <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                            <div style="height:100px">
+                                                                <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                                    Khối lượng tối đa:{{GHNOrder.MaxWeight}} &emsp;g
+                                                                </div>
+                                                                <div style="height:90%;padding:5px;">
+                                                                    <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                        <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                        <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="pagebreak"> </div>
+                                </div>
+                            </div>
+                            <div ng-hide="!(GHTKOrders.length > 0)">
+                                <div ng-repeat="GHTKOrder in GHTKOrders">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="45%">
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                            <img src="/Assets/Admin/img/GHTK_Logo_Print.png" style="height:70%" />&nbsp;<br />
+                                                            {{GHTKOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                        </td>
+                                                        <td width="55%">
+                                                            <svg id="TrackingNoBarcodeGHTK{{$index}}"></svg><br />
+                                                            Mã vận đơn: <b>{{GHTKOrder.TrackingNo}}</b><br />
+                                                            Mã đơn hàng: <b>{{GHTKOrder.OrderIdShopeeApi}}</b><br />
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" style="text-align:center">
+                                                            <span style="font-size:15px"><b>{{GHTKOrder.RecipientSortCode}}</b></span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="50%">
+                                                            <b>Từ</b><br />
+                                                            Babymart.vn<br />
+                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                        </td>
+                                                        <td width="50%">
+                                                            <b>
+                                                                Đến<br />
+                                                                {{GHTKOrder.BuyerName}}<br />
+                                                                {{GHTKOrder.AddressBuyer}}
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                        <td width="50%"><b>SĐT:</b> {{GHTKOrder.PhoneBuyer}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                            <b>Nội dung hàng (Tổng SL sản phẩm: {{GHTKOrder.TotalQuantity}})</b><br />
+                                                            <p style="height:140px;overflow:hidden">
+                                                                <span ng-repeat="detailGHTKOrder in GHTKOrder.OrderDetails" style="font-size:8px">
+                                                                    {{$index + 1}}. {{detailGHTKOrder.item_name}} ({{detailGHTKOrder.item_sku}})<span ng-hide="!(detailGHTKOrder.variation_name.length > 0)">, {{detailGHTKOrder.variation_name}}</span>, SL: {{detailGHTKOrder.variation_quantity_purchased}}
+                                                                    <br />
+                                                                </span>
+                                                            </p>
+                                                            <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                            <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                            <span ng-hide="IsNullOrEmpty(GHTKOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{GHTKOrder.ghichu}}</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="45%">
+                                                            Tiền thu Người nhận:
+                                                            <span style="margin-left:15px;font-weight:800;font-size:15px">{{GHTKOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                            Chỉ dẫn giao hàng<br />
+                                                            - Không đồng kiểm;<br />
+                                                            - Chuyển hoàn sau 3 lần phát;<br />
+                                                            - Lưu kho tối đa 5 ngày<br />
+                                                        </td>
+                                                        <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                            <div style="height:130px">
+                                                                <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                                    Khối lượng tối đa:{{GHTKOrder.MaxWeight}} &emsp;g
+                                                                </div>
+                                                                <div style="height:80%;padding:5px;">
+                                                                    <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                        <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                        <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="pagebreak"> </div>
+                                </div>
+                            </div>
+                            <div ng-hide="!(VNPOrders.length > 0)">
+                                <div ng-repeat="VNPOrder in VNPOrders">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="40%">
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                            <img src="/Assets/Admin/img/VNP_Logo_Print.png" style="height:30%" /><br />
+                                                            {{VNPOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                        </td>
+                                                        <td width="60%">
+                                                            <svg id="TrackingNoBarcodeVNP{{$index}}"></svg><br />
+                                                            Mã vận đơn: <b>{{VNPOrder.TrackingNo}}</b><br />
+                                                            Mã đơn hàng: <b>{{VNPOrder.OrderIdShopeeApi}}</b><br />
+
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="50%">
+                                                            <b>Từ</b><br />
+                                                            Babymart.vn<br />
+                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                        </td>
+                                                        <td width="50%">
+                                                            <b>
+                                                                Đến<br />
+                                                                {{VNPOrder.BuyerName}}<br />
+                                                                {{VNPOrder.AddressBuyer}}
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                        <td width="50%"><b>SĐT:</b> {{VNPOrder.PhoneBuyer}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                            <b>Nội dung hàng (Tổng SL sản phẩm: {{VNPOrder.TotalQuantity}})</b>
+                                                            <svg id="RecipientSortCodeVNP{{$index}}"></svg>{{VNPOrder.RecipientSortCode}}
+                                                            <br />
+                                                            <p style="height:130px;overflow:hidden">
+                                                                <span ng-repeat="detailVNPOrder in VNPOrder.OrderDetails" style="font-size:8px">
+                                                                    {{$index + 1}}. {{detailVNPOrder.item_name}} ({{detailVNPOrder.item_sku}})<span ng-hide="!(detailVNPOrder.variation_name.length > 0)">, {{detailVNPOrder.variation_name}}</span>, SL: {{detailVNPOrder.variation_quantity_purchased}}
+                                                                    <br />
+                                                                </span>
+                                                            </p>
+                                                            <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                            <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                            <span ng-hide="IsNullOrEmpty(VNPOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{VNPOrder.ghichu}}</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="45%">
+                                                            Tiền thu Người nhận:<br />
+                                                            <span style="margin-left:15px;font-weight:800;font-size:15px">{{VNPOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                            Chỉ dẫn giao hàng<br />
+                                                            - Không đồng kiểm;<br />
+                                                            - Chuyển hoàn sau 3 lần phát;<br />
+                                                            - Lưu kho tối đa 5 ngày<br />
+                                                        </td>
+                                                        <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                            <div style="height:130px">
+                                                                <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                                    Khối lượng tối đa:{{VNPOrder.MaxWeight}} &emsp;g
+                                                                </div>
+                                                                <div style="height:80%;padding:5px;">
+                                                                    <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                        <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                        <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="pagebreak"> </div>
+                                </div>
+                            </div>
+                            <div ng-hide="!(SPEOrders.length > 0)">
+                                <div ng-repeat="SPEOrder in SPEOrders">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="40%">
+                                                            <img src="/Assets/Admin/img/ShopeeExpress_Logo_Print.png" style="height:70%" /><br />
+                                                            <span style="font-size:18px">{{SPEOrder.RecipientSortCode}}</span><br />
+                                                            {{SPEOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                        </td>
+                                                        <td width="60%">
+                                                            <svg id="TrackingNoBarcodeSPE{{$index}}"></svg><br />
+                                                            Mã vận đơn: <b>{{SPEOrder.TrackingNo}}</b><br />
+                                                            Mã đơn hàng: <b>{{SPEOrder.OrderIdShopeeApi}}</b><br />
+
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="50%">
+                                                            <b>Từ</b><br />
+                                                            Babymart.vn<br />
+                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                        </td>
+                                                        <td width="50%">
+                                                            <b>
+                                                                Đến<br />
+                                                                {{SPEOrder.BuyerName}}<br />
+                                                                {{SPEOrder.AddressBuyer}}
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                        <td width="50%"><b>SĐT:</b> {{SPEOrder.PhoneBuyer}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="70%" rowspan="2" style="vertical-align:text-top;text-align:left;">
+                                                            <b>Nội dung hàng (Tổng SL sản phẩm: {{SPEOrder.TotalQuantity}})</b><br />
+                                                            <p style="height:240px;overflow:hidden">
+                                                                <span ng-repeat="detailSPEOrder in SPEOrder.OrderDetails" style="font-size:8px">
+                                                                    {{$index + 1}}. {{detailSPEOrder.item_name}} ({{detailSPEOrder.item_sku}})<span ng-hide="!(detailSPEOrder.variation_name.length > 0)">, {{detailSPEOrder.variation_name}}</span>, SL: {{detailSPEOrder.variation_quantity_purchased}}
+                                                                    <br />
+                                                                </span>
+                                                            </p>
+                                                            <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                            <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                            <span ng-hide="IsNullOrEmpty(SPEOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{SPEOrder.ghichu}}</span>
+                                                        </td>
+                                                        <td width="30%" style="border-left:1px dashed black;border-bottom:1px dashed black;vertical-align:middle;text-align:center;font-size:10px">
+                                                            <p style="height:100px;">
+                                                                <span id="qrCodeSPE{{$index}}"></span><br />
+                                                                <span style="font-size:13px">{{SPEOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}</span>
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="vertical-align:text-top;text-align:center">
+                                                        <td width="30%" style="padding:5px !important;font-size:16px">
+                                                            <span style="line-height:85px;vertical-align:middle">{{SPEOrder.SenderSortCode}}</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="50%">
+                                                            Khối lượng tối đa:{{SPEOrder.MaxWeight}} &emsp;g
+                                                        </td>
+                                                        <td width="50%" style="vertical-align:text-top;text-align:center">
+                                                            <span style="margin-left:15px;font-weight:600;font-size:15px">{{SPEOrder.TotalAmount | currency:'':0}}&emsp;VND</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="pagebreak"> </div>
+                                </div>
+
+                            </div>
+                            <div ng-hide="!(NinjaVanOrders.length > 0)">
+                                <div ng-repeat="NinjaVanOrder in NinjaVanOrders">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="45%">
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                            <img src="/Assets/Admin/img/NinjaVan_Logo_Print.jpg" style="height:85%" />&nbsp;<br />
+                                                            {{NinjaVanOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                        </td>
+                                                        <td width="55%">
+                                                            <svg id="TrackingNoBarcodeNinjaVan{{$index}}"></svg><br />
+                                                            Mã vận đơn: <b>{{NinjaVanOrder.TrackingNo}}</b><br />
+                                                            Mã đơn hàng: <b>{{NinjaVanOrder.OrderIdShopeeApi}}</b><br />
+
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="50%">
+                                                            <b>Từ</b><br />
+                                                            Babymart.vn<br />
+                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                        </td>
+                                                        <td width="50%">
+                                                            <b>
+                                                                Đến<br />
+                                                                {{NinjaVanOrder.BuyerName}}<br />
+                                                                {{NinjaVanOrder.AddressBuyer}}
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                        <td width="50%"><b>SĐT:</b> {{NinjaVanOrder.PhoneBuyer}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                            <b>Nội dung hàng (Tổng SL sản phẩm: {{NinjaVanOrder.TotalQuantity}})</b><br />
+                                                            <p style="height:150px;overflow:hidden">
+                                                                <span ng-repeat="detailNinjaVanOrder in NinjaVanOrder.OrderDetails" style="font-size:8px">
+                                                                    {{$index + 1}}. {{detailNinjaVanOrder.item_name}} ({{detailNinjaVanOrder.item_sku}})<span ng-hide="!(detailNinjaVanOrder.variation_name.length > 0)">, {{detailNinjaVanOrder.variation_name}}</span>, SL: {{detailNinjaVanOrder.variation_quantity_purchased}}
+                                                                    <br />
+                                                                </span>
+                                                            </p>
+                                                            <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                            <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                            <span ng-hide="IsNullOrEmpty(NinjaVanOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{NinjaVanOrder.ghichu}}</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="45%">
+                                                            Tiền thu Người nhận:
+                                                            <span style="margin-left:15px;font-weight:800;font-size:15px">{{NinjaVanOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                            Chỉ dẫn giao hàng<br />
+                                                            - Không đồng kiểm;<br />
+                                                            - Chuyển hoàn sau 3 lần phát;<br />
+                                                            - Lưu kho tối đa 5 ngày<br />
+                                                        </td>
+                                                        <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                            <div style="height:130px">
+                                                                <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                                    Khối lượng tối đa:{{NinjaVanOrder.MaxWeight}} &emsp;g
+                                                                </div>
+                                                                <div style="height:80%;padding:5px;">
+                                                                    <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                        <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                        <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="pagebreak"> </div>
+                                </div>
+                            </div>
+                            <div ng-hide="!(NowShipOrders.length > 0)">
+                                <div ng-repeat="NowShipOrder in NowShipOrders">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="45%">
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                            <img src="/Assets/Admin/img/NowShip_Logo_Print.jpg" style="height:70%" />&nbsp;<br />
+                                                            {{NowShipOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                        </td>
+                                                        <td width="55%">
+                                                            <svg id="TrackingNoBarcodeNowShip{{$index}}"></svg><br />
+                                                            Mã vận đơn: <b>{{NowShipOrder.TrackingNo}}</b><br />
+                                                            Mã đơn hàng: <b>{{NowShipOrder.OrderIdShopeeApi}}</b><br />
+
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="50%">
+                                                            <b>Từ</b><br />
+                                                            Babymart.vn<br />
+                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                        </td>
+                                                        <td width="50%">
+                                                            <b>
+                                                                Đến<br />
+                                                                {{NowShipOrder.BuyerName}}<br />
+                                                                {{NowShipOrder.AddressBuyer}}
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                        <td width="50%"><b>SĐT:</b> {{NowShipOrder.PhoneBuyer}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                            <b>Nội dung hàng (Tổng SL sản phẩm: {{NowShipOrder.TotalQuantity}})</b><br />
+                                                            <p style="height:120px;overflow:hidden">
+                                                                <span ng-repeat="detailNowShipOrder in NowShipOrder.OrderDetails" style="font-size:8px">
+                                                                    {{$index + 1}}. {{detailNowShipOrder.item_name}} ({{detailNowShipOrder.item_sku}})<span ng-hide="!(detailNowShipOrder.variation_name.length > 0)">, {{detailNowShipOrder.variation_name}}</span>, SL: {{detailNowShipOrder.variation_quantity_purchased}}
+                                                                    <br />
+                                                                </span>
+                                                            </p>
+                                                            <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                            <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                            <span ng-hide="IsNullOrEmpty(NowShipOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{NowShipOrder.ghichu}}</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="45%">
+                                                            Tiền thu Người nhận:
+                                                            <span style="margin-left:15px;font-weight:800;font-size:15px">{{NowShipOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                            Chỉ dẫn giao hàng<br />
+                                                            - Không đồng kiểm;
+                                                        </td>
+                                                        <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                            <div style="height:130px">
+                                                                <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                                    Khối lượng tối đa:{{NowShipOrder.MaxWeight}} &emsp;g
+                                                                </div>
+                                                                <div style="height:80%;padding:5px;">
+                                                                    <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                        <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                        <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="pagebreak"> </div>
+                                </div>
+                            </div>
+                            <div ng-hide="!(BESTExpressOrders.length > 0)">
+                                <div ng-repeat="BESTExpressOrder in BESTExpressOrders">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="45%">
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
+                                                            <img src="/Assets/Admin/img/BESTExpress_Logo_Print.png" style="height:50%" />&nbsp;<br />
+                                                            {{BESTExpressOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                        </td>
+                                                        <td width="55%">
+                                                            <svg id="TrackingNoBarcodeBESTExpressOrders{{$index}}"></svg><br />
+                                                            Mã vận đơn: <b>{{BESTExpressOrder.TrackingNo}}</b><br />
+                                                            Mã đơn hàng: <b>{{BESTExpressOrder.OrderIdShopeeApi}}</b><br />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="text-align:center;font-size:18px" colspan="2">
+                                                            <b>{{BESTExpressOrder.RecipientSortCode}}</b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="50%">
+                                                            <b>Từ</b><br />
+                                                            Babymart.vn<br />
+                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                        </td>
+                                                        <td width="50%">
+                                                            <b>
+                                                                Đến<br />
+                                                                {{BESTExpressOrder.BuyerName}}
+                                                                {{BESTExpressOrder.AddressBuyer}}
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                        <td width="50%"><b>SĐT:</b> {{BESTExpressOrder.PhoneBuyer}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="100%" style="vertical-align:text-top;text-align:left">
+                                                            <b>Nội dung hàng (Tổng SL sản phẩm: {{BESTExpressOrder.TotalQuantity}})</b><br />
+                                                            <p style="height:120px;overflow:hidden">
+                                                                <span ng-repeat="detailBESTExpressOrder in BESTExpressOrder.OrderDetails" style="font-size:8px">
+                                                                    {{$index + 1}}. {{detailBESTExpressOrder.item_name}} ({{detailBESTExpressOrder.item_sku}})<span ng-hide="!(detailBESTExpressOrder.variation_name.length > 0)">, {{detailBESTExpressOrder.variation_name}}</span>, SL: {{detailBESTExpressOrder.variation_quantity_purchased}}
+                                                                    <br />
+                                                                </span>
+                                                            </p>
+                                                            <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                            <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                            <span ng-hide="IsNullOrEmpty(BESTExpressOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{BESTExpressOrder.ghichu}}</span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="45%" style="vertical-align:text-top;">
+                                                            Tiền thu Người nhận:
+                                                            <span style="margin-left:15px;font-weight:800;font-size:15px">{{BESTExpressOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                            Chỉ dẫn giao hàng<br />
+                                                            - Không đồng kiểm;<br />
+                                                            - Chuyển hoàn sau 3 lần phát;<br />
+                                                            - Lưu kho tối đa 5 ngày<br />
+                                                        </td>
+                                                        <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                            <div style="height:130px">
+                                                                <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                                    Khối lượng tối đa:{{BESTExpressOrder.MaxWeight}} &emsp;g
+                                                                </div>
+                                                                <div style="height:80%;padding:5px;">
+                                                                    <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                        <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                        <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="pagebreak"> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 text-center current_cursor">
+                        <custom-pager page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager>
+                    </div>
+                </div>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+        <div ng-if="waiting" class="overlay">
+            <i class="fa fa-refresh fa-spin"></i>
+        </div>
+    </div>
 </section><!-- /.content -->

@@ -114,7 +114,7 @@
         function bookDetail(selectedBook) {
             $scope.selectedBook = selectedBook;
             $uibModal.open({
-                templateUrl: '/app/components/stockouts/stockoutDetailModal.html',
+                templateUrl: '/app/components/stockouts/stockoutDetailModal.html' + BuildVersion,
                 controller: 'stockoutDetailController',
                 scope: $scope,
                 windowClass: 'app-modal-window-medium'

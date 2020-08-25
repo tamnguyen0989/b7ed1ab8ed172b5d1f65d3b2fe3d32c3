@@ -31,8 +31,8 @@ namespace SoftBBM.Web.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<cart> carts { get; set; }
+        public virtual shop_sanpham shop_sanpham { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<donhang_ct> donhang_ct { get; set; }
-        public virtual shop_sanpham shop_sanpham { get; set; }
     }
 }

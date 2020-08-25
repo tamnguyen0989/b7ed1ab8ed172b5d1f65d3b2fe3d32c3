@@ -100,6 +100,8 @@ namespace SoftBBM.Web.ViewModels
         public List<donhangStatusViewModel> selectedOrderStatusFilters { get; set; }
         public List<ApplicationUserViewModel> selectedSellerFilters { get; set; }
         public List<ApplicationUserViewModel> selectedShipperFilters { get; set; }
+        public List<EcommerceShipperViewModel> selectedEcommerceShipperFilters { get; set; }
+        public List<donhangStatusViewModel> selectedPaymentFilters { get; set; }
         public int branchId { get; set; }
         public int? channelId { get; set; }
         public int? page { get; set; }
@@ -113,6 +115,13 @@ namespace SoftBBM.Web.ViewModels
     {
         public IEnumerable<donhangListViewModel> Orders { get; set; }
         public int UserId { get; set; }
+        public string UserName { get; set; }
+    }
+    public class StatusOrdersViewModelV2
+    {
+        public List<string> Orders { get; set; }
+        public int UserId { get; set; }
+        public string UserName { get; set; }
     }
     public class ShipperOrdersViewModel
     {
@@ -124,5 +133,14 @@ namespace SoftBBM.Web.ViewModels
     {
         public List<int> orderIds { get; set; }
         public string username { get; set; }
+    }
+    public class UpdateCompletedTikiOrderInputVM
+    {
+        public List<string> orderIds { get; set; }
+        public int UserId { get; set; }
+    }
+    public class EcommerceShipperViewModel
+    {
+        public string Name { get; set; }
     }
 }

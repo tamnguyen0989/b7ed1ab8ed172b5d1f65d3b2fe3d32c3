@@ -5,12 +5,12 @@
         $stateProvider.state('orders', {
             url: '/orders',
             parent:'base',
-            templateUrl: '/app/components/orders/orderListView.html',
+            templateUrl: '/app/components/orders/orderListView.html' + BuildVersion,
             controller: 'orderListController'
         }).state('add_order', {
             url: '/add_order',
             parent: 'base',
-            templateUrl: '/app/components/orders/orderAddView.html',
+            templateUrl: '/app/components/orders/orderAddView.html' + BuildVersion,
             controller: 'orderAddController'
         });
     }

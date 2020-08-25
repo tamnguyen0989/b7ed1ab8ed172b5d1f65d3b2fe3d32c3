@@ -5,7 +5,7 @@
         $stateProvider.state('add_stamp', {
             url: '/add_stamp',
             parent: 'base',
-            templateUrl: '/app/components/stamps/stampAddView.html',
+            templateUrl: '/app/components/stamps/stampAddView.html' + BuildVersion,
             controller: 'stampAddController'
         })
         ;

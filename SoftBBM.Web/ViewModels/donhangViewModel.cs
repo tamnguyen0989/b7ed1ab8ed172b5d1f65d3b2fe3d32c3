@@ -30,6 +30,12 @@ namespace SoftBBM.Web.ViewModels
         public string Code { get; set; }
         public int ShipperId { get; set; }
         public string StatusPrint { get; set; }
+        public Nullable<bool> IsShopeeApi { get; set; }
+        public string OrderIdShopeeApi { get; set; }
+        public string ShipperNameShopeeApi { get; set; }
+        public string TrackingNo { get; set; }
+
+
         public Nullable<int> idgiogiao { get; set; }
         public Nullable<int> BranchId { get; set; }
     }
@@ -81,6 +87,10 @@ namespace SoftBBM.Web.ViewModels
         public string DiscountCode { get; set; }
         public string StatusPrint { get; set; }
         public string chitietgiogiao { get; set; }
+        public Nullable<bool> IsShopeeApi { get; set; }
+        public string OrderIdShopeeApi { get; set; }
+        public string ShipperNameShopeeApi { get; set; }
+        public string TrackingNo { get; set; }
 
         public SoftChannelViewModel SoftChannel { get; set; }
         public donhangStatusViewModel donhangStatu { get; set; }
@@ -99,6 +109,7 @@ namespace SoftBBM.Web.ViewModels
         public Nullable<int> Dongia { get; set; }
         public Nullable<int> Dongiakm { get; set; }
         public string masp;
+        public string Description { get; set; }
 
         public shopbientheViewModel shop_bienthe { get; set; }
     }
@@ -113,6 +124,7 @@ namespace SoftBBM.Web.ViewModels
         public bool isdelete { get; set; }
         public string tensp { get; set; }
         public string masp { get; set; }
+        public string image { get; set; }
     }
     public class donhangUpdateViewModel
     {
@@ -121,6 +133,7 @@ namespace SoftBBM.Web.ViewModels
         public string ghichu { get; set; }
         public int ShipperId { get; set; }
         public int UserId { get; set; }
+        public string OrderIdShopeeApi { get; set; }
     }
     public class donhangAfterEditViewModel
     {
@@ -153,5 +166,10 @@ namespace SoftBBM.Web.ViewModels
         public int Id { get; set; }
         public string Phone { get; set; }
         public int UserId { get; set; }
+    }
+    public class donhangIdShopeeId
+    {
+        public long id { get; set; }
+        public string OrderIdShopeeApi { get; set; }
     }
 }

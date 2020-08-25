@@ -91,7 +91,7 @@
         function bookDetail(selectedBook) {
             $scope.selectedBook = selectedBook;
             $uibModal.open({
-                templateUrl: '/app/components/books/branchbookDetailModal.html',
+                templateUrl: '/app/components/books/branchbookDetailModal.html' + BuildVersion,
                 controller: 'branchbookDetailController',
                 scope: $scope,
                 windowClass: 'app-modal-window-medium'

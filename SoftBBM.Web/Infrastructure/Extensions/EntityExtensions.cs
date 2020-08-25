@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using SoftBBM.Web.Enum;
 
 namespace SoftBBM.Web.Infrastructure.Extensions
 {
@@ -190,11 +191,49 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             donhang.idgiogiao = orderVM.idgiogiao;
             donhang.tenptgh = orderVM.tenptgh;
         }
+        public static void UpdatedonhangFromShopee(this donhang donhang, int? makh, long? total_amount, string ghichu,string shipperName,int? status,string orderIdShopeeApi)
+        {
+            donhang.makh = makh;
+            donhang.CreatedDate = DateTime.Now;
+            donhang.CreatedBy = 0;
+            donhang.tongtien = total_amount;
+            donhang.ShipperNameShopeeApi = shipperName;
+            donhang.ghichu = ghichu;
+            donhang.Status = status;
+            donhang.IsShopeeApi = true;
+            donhang.OrderIdShopeeApi = orderIdShopeeApi;
+            donhang.ChannelId = (int) ChannelEnum.SPE;
+            donhang.BranchId = (int)BranchEnum.KHO_CHINH;
+        }
+        public static void UpdatedonhangLackFromShopee(this donhang donhang, int? makh, long? total_amount, string ghichu, string shipperName, int? status, string orderIdShopeeApi, DateTime createdDate, DateTime? updatedDate)
+        {
+            donhang.makh = makh;
+            donhang.CreatedDate = createdDate;
+            donhang.CreatedBy = 0;
+            donhang.tongtien = total_amount;
+            donhang.ShipperNameShopeeApi = shipperName;
+            donhang.ghichu = ghichu;
+            donhang.Status = status;
+            donhang.IsShopeeApi = true;
+            donhang.OrderIdShopeeApi = orderIdShopeeApi;
+            donhang.ChannelId = (int)ChannelEnum.SPE;
+            donhang.BranchId = (int)BranchEnum.KHO_CHINH;
+            donhang.UpdatedDate = updatedDate;
+        }
         public static void Updatedonhangct(this donhang_ct donhang_ct, OrderDetailViewModel orderDetailVM)
         {
             donhang_ct.IdPro = orderDetailVM.id;
             donhang_ct.Soluong = orderDetailVM.Quantity.Value;
             donhang_ct.Dongia = orderDetailVM.Price;
+        }
+        public static void UpdatedonhangctFromShopee(this donhang_ct donhang_ct, long soDh,long? idPro,long soLuong,int? donGia, int? donGiaKM,string description)
+        {
+            donhang_ct.Sodh = soDh;
+            donhang_ct.IdPro = idPro;
+            donhang_ct.Soluong = soLuong;
+            donhang_ct.Dongia = donGia;
+            donhang_ct.Dongiakm = donGiaKM;
+            donhang_ct.Description = description;
         }
         public static void Updatekhachhang(this khachhang khachhang, khachhangViewModel khachhangVM, string action = "add")
         {
@@ -234,6 +273,39 @@ namespace SoftBBM.Web.Infrastructure.Extensions
         {
             model.ProductId = vM.id;
             model.Quantity = vM.Quantity;
+        }
+        public static void UpdatekhachhangV2(this khachhang khachhang, string full_address, string phone, string name, int? idtp, int? idquan)
+        {
+            khachhang.duong = full_address;
+            khachhang.dienthoai = phone;
+            khachhang.hoten = name;
+            khachhang.tendn = phone;
+            khachhang.matkhau = "YmFieW1hcnQudm4=";
+            khachhang.email = phone + "@gmail.com";
+            khachhang.idtp = idtp;
+            khachhang.idquan = idquan;
+            khachhang.CreatedDate = DateTime.Now;
+            khachhang.CreatedBy = 0;
+            khachhang.diem = "0";
+        }
+        public static void UpdateShopSanPhamLog(this shop_sanphamLogs shopSanPhamLog,int? productId,string description,double? quantity,int? createdBy,int? branchId,double stockTotal)
+        {
+            shopSanPhamLog.ProductId = productId;
+            shopSanPhamLog.Description = description;
+            shopSanPhamLog.Quantity = quantity;
+            shopSanPhamLog.CreatedBy = createdBy;
+            shopSanPhamLog.CreatedDate = DateTime.Now;
+            shopSanPhamLog.BranchId = branchId;
+            shopSanPhamLog.StockTotal = stockTotal;
+        }
+        public static void InitSystemLog(this SystemLog systemLog, int? keyId = null,string value="", string appName = "", string description = "",int? type=null, string typeName = "")
+        {
+            systemLog.KeyId = keyId;
+            systemLog.Value = value;
+            systemLog.AppName = appName;
+            systemLog.Description = description;
+            systemLog.Type = type;
+            systemLog.TypeName = typeName;
         }
     }
 }

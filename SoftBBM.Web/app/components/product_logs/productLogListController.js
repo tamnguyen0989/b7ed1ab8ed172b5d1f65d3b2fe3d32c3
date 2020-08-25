@@ -24,6 +24,13 @@
         };
         $scope.isDelete = false;
         $scope.isSearch = false;
+        $scope.branches = [];
+        $scope.selectedBranch = null;
+        $scope.dynamicPopover = {
+            content: 'Hello, World!',
+            templateUrl: 'myPopoverTemplate.html',
+            title: 'Title'
+        };
 
         $scope.search = search;
         $scope.refeshPage = refeshPage;
@@ -36,6 +43,8 @@
         $scope.resetTimeFilter = resetTimeFilter;
         $scope.resetTimeDeleteFilter = resetTimeDeleteFilter;
         $scope.deleteLog = deleteLog;
+        $scope.loadBranches = loadBranches;
+        $scope.branchesCommon = branchesCommon;
 
         function search(page) {
             page = page || 0;
@@ -47,7 +56,10 @@
             $scope.filters.endDateDeleteFilter = $scope.endDateDeleteFilter;
             $scope.filters.startDateFilter = $scope.startDateFilter;
             $scope.filters.endDateFilter = $scope.endDateFilter;
-            $scope.filters.branchId = $scope.branchSelectedRoot.Id;
+            var selectedBranch = 0;
+            if (!isNullOrEmpty($scope.selectedBranch))
+                selectedBranch = $scope.selectedBranch.Id;
+            $scope.filters.branchId = selectedBranch;
             apiService.post('/api/productlog/search/', $scope.filters, function (result) {
                 $scope.productLogs = result.data.Items;
                 $scope.page = result.data.Page;
@@ -93,6 +105,7 @@
             if (localStorage.getItem("userId")) {
                 $scope.userId = JSON.parse(localStorage.getItem("userId"));
             }
+            loadBranches();
         }
         function openStartDateDeleteFilter($event) {
             $event.preventDefault();
@@ -134,7 +147,7 @@
             else
                 $ngBootbox.confirm('Bạn có chắc chắn muốn xoá?').then(function () {
                     $uibModal.open({
-                        templateUrl: '/app/components/product_logs/deleteLogModal.html',
+                        templateUrl: '/app/components/product_logs/deleteLogModal.html' + BuildVersion,
                         controller: 'deleteLogController',
                         scope: $scope,
                         backdrop: 'static',
@@ -145,13 +158,22 @@
                     });
                 });
         }
-
-        if (((Object.keys($scope.branchSelectedRoot).length === 0 && $scope.branchSelectedRoot.constructor === Object) || $scope.branchSelectedRoot == undefined) && localStorage.getItem("userId") != null) {
-            notificationService.displayError("Hãy chọn kho");
-            $state.go('home');
+        function loadBranches() {
+            $scope.loading = true;
+            apiService.get('/api/branch/getall', null, function (result) {
+                $scope.branches = result.data;
+                $scope.loading = false;
+            }, function (error) {
+                notificationService.displayError(error);
+            });
         }
+
+        //if (((Object.keys($scope.branchSelectedRoot).length === 0 && $scope.branchSelectedRoot.constructor === Object) || $scope.branchSelectedRoot == undefined) && localStorage.getItem("userId") != null) {
+        //    notificationService.displayError("Hãy chọn kho");
+        //    $state.go('home');
+        //}
         $window.document.title = "Lịch sử sản phẩm";
-        $scope.search();
         init();
+        $scope.search();
     }
 })(angular.module('softbbm.product_logs'));
