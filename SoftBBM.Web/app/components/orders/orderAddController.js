@@ -331,8 +331,10 @@
             }
             $scope.order.ChannelId = $scope.selectedChannel.Id;
             $scope.order.BranchId = $scope.branchSelectedRoot.Id;
-            $scope.customer.dienthoai = $scope.searchPhone;
-            $scope.customer.idtp = $scope.selectedCity.id;
+            if (!isNullOrEmpty($scope.customer)) {
+                $scope.customer.dienthoai = $scope.searchPhone;
+                $scope.customer.idtp = $scope.selectedCity.id;
+            }
             if ($scope.selectedDistrict)
                 $scope.customer.idquan = $scope.selectedDistrict.id;
             if ($scope.selectedShipper)
@@ -366,7 +368,9 @@
             if ($scope.selectedDeliveryTime)
                 $scope.order.idgiogiao = $scope.selectedDeliveryTime.value;
             $scope.order.OrderDetails = $scope.detailOrders;
-            $scope.order.Customer = $scope.customer;
+            if (!isNullOrEmpty($scope.customer)) {
+                $scope.order.Customer = $scope.customer;
+            }  
             var currentDate = $scope.currentDate;
             $scope.order.Code = $scope.branchSelectedRoot.Code + ('0' + (currentDate.getDate())).slice(-2) + ('0' + (currentDate.getMonth() + 1)).slice(-2) + String(currentDate.getFullYear()).slice(-2) + $scope.selectedChannel.Code;
             apiService.post('api/order/save/', $scope.order,
