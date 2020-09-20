@@ -96,7 +96,8 @@ namespace SoftBBM.Web.api
                     var datePrint = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
                     donhang.StatusPrint += "<li>" + user.UserName + " đã in (" + datePrint + ")</li>";
                 }
-                if (orderVM.Customer.dienthoai != null)
+                if (orderVM.Customer == null) donhang.makh = 0;
+                else if (orderVM.Customer.dienthoai != null)
                 {
                     var khachhang = _khachhangRepository.GetSingleByCondition(x => x.dienthoai == orderVM.Customer.dienthoai);
                     if (khachhang != null)
@@ -2257,6 +2258,26 @@ namespace SoftBBM.Web.api
             }
         }
 
+        [HttpGet]
+        [Route("shopeegetlackorderswithday")]
+        //[Authorize(Roles = "OrderUpdate")]
+        public HttpResponseMessage ShopeeGetLackOrdersWithDay(HttpRequestMessage request, int quantity)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                //Kiểm tra đơn sót
+                GetLackOrdersWithDay(5);
+
+                return request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message + " | " + ex.StackTrace);
+                return response;
+            }
+        }
+
         public void GetLackOrders()
         {
             var result = new List<Object>();
@@ -2266,6 +2287,37 @@ namespace SoftBBM.Web.api
                 if (shopeeOrderLastDay.orders.Count > 0)
                 {
                     var orderDB = _shopeeRepository.GetOrdersListLastDayDB();
+                    foreach (var orderSPE in shopeeOrderLastDay.orders)
+                    {
+                        if (!orderDB.Any(x => x.OrderIdShopeeApi == orderSPE.ordersn))
+                        {
+                            DateTime? updateDate = null;
+                            if (orderSPE.update_time > 0)
+                                updateDate = UtilExtensions.UnixTimeStampToDateTime(orderSPE.update_time);
+                            _shopeeRepository.AddOrderLack(orderSPE.ordersn, orderSPE.order_status, updateDate);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var contentLog = new SoftPointUpdateLog();
+                contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
+                contentLog.CreatedDate = DateTime.Now;
+                _softPointUpdateLogRepository.Add(contentLog);
+                _unitOfWork.Commit();
+            }
+        }
+
+        public void GetLackOrdersWithDay(int quantity)
+        {
+            var result = new List<Object>();
+            try
+            {
+                var shopeeOrderLastDay = _shopeeRepository.GetOrdersListLastWithDay(quantity);
+                if (shopeeOrderLastDay.orders.Count > 0)
+                {
+                    var orderDB = _shopeeRepository.GetOrdersListLastWithDayDB(quantity);
                     foreach (var orderSPE in shopeeOrderLastDay.orders)
                     {
                         if (!orderDB.Any(x => x.OrderIdShopeeApi == orderSPE.ordersn))

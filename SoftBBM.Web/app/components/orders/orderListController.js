@@ -123,6 +123,7 @@
         $scope.updateCompletedTikiOrders = updateCompletedTikiOrders;
         $scope.clearCompletedTikiOrders = clearCompletedTikiOrders;
         $scope.printShopeeAll = printShopeeAll;
+        $scope.getLackOrdersWithDay = getLackOrdersWithDay;
         //$scope.selectedOrder = {
         //    TrackingNo: ''
         //};
@@ -1030,6 +1031,21 @@
                 }
             });
         }
+        function getLackOrdersWithDay() {
+            var config = {
+                params: {
+                    quantity: 5
+                }
+            }
+            apiService.get('/api/order/shopeegetlackorderswithday', params, function (result) {
+                notificationService.displaySuccess('Cập nhật đơn hàng sót' + quantity + 'ngày trước thành công!');
+                        search($scope.page);
+                        $scope.waiting = false;
+                    }, function (error) {
+                        notificationService.displayError(error);
+                    });
+        }
+
         var printBarcode = function (elementId, value) {
             JsBarcode(elementId, value, {
                 height: 40,

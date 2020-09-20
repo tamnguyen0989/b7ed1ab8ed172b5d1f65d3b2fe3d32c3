@@ -29,7 +29,9 @@ namespace SoftBBM.Web.DAL.Repositories
         void confirmOrderNoDelay(string ordersn, string pickup_time_id);
         ShopeeOrderLogistics GetOrderLogistics(string ordersn);
         ShopeeGetOrdersList GetOrdersListLastDay();
+        ShopeeGetOrdersList GetOrdersListLastWithDay(int quantity);
         List<donhangIdShopeeId> GetOrdersListLastDayDB();
+        List<donhangIdShopeeId> GetOrdersListLastWithDayDB(int quantity);
         void AddOrderLack(string ordersn, string statusOrder, DateTime? updatedDate);
 
     }
@@ -138,6 +140,12 @@ namespace SoftBBM.Web.DAL.Repositories
         public int getTimestampLastDay()
         {
             var unixTimestamp = (Int32)(DateTime.UtcNow.AddDays(-1).Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            return unixTimestamp;
+        }
+
+        public int getTimestampLastWithDay(int quantity)
+        {
+            var unixTimestamp = (Int32)(DateTime.UtcNow.AddDays(-quantity).Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             return unixTimestamp;
         }
 
@@ -381,9 +389,46 @@ namespace SoftBBM.Web.DAL.Repositories
             return result;
         }
 
+        public ShopeeGetOrdersList GetOrdersListLastWithDay(int quantity)
+        {
+            var timestamp = getTimestamp();
+            var fromDate = getTimestampLastWithDay(quantity);
+            var result = new ShopeeGetOrdersList();
+            var url = "https://partner.shopeemobile.com/api/v1/orders/basics";
+            string dataJson = "{'create_time_from':" + fromDate + "," +
+                              "'create_time_to':" + timestamp + "," +
+                              "'partner_id':" + _apiPartnerId + "," +
+                              "'shopid':" + _apiId + "," +
+                              "'timestamp':" + timestamp + "}";
+            dataJson = dataJson.Replace("'", "\"");
+            string data = postRequest(url, dataJson);
+
+            if (!string.IsNullOrEmpty(data))
+            {
+                var ordersList = JsonConvert.DeserializeObject<ShopeeGetOrdersList>(data);
+                if (ordersList == null)
+                    return result;
+                if (ordersList.orders.Count > 0)
+                {
+                    result = ordersList;
+                }
+            }
+            return result;
+        }
+
         public List<donhangIdShopeeId> GetOrdersListLastDayDB()
         {
             var lastDay = DateTime.Now.AddDays(-2);
+            return DbContext.donhangs.Where(x => x.CreatedDate >= lastDay && x.CreatedDate <= DateTime.Now && x.ChannelId == 4).Select(x => new donhangIdShopeeId()
+            {
+                id = x.id,
+                OrderIdShopeeApi = x.OrderIdShopeeApi
+            }).ToList();
+        }
+
+        public List<donhangIdShopeeId> GetOrdersListLastWithDayDB(int quantity)
+        {
+            var lastDay = DateTime.Now.AddDays(-quantity);
             return DbContext.donhangs.Where(x => x.CreatedDate >= lastDay && x.CreatedDate <= DateTime.Now && x.ChannelId == 4).Select(x => new donhangIdShopeeId()
             {
                 id = x.id,

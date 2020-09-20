@@ -158,4 +158,69 @@ namespace SoftBBM.Web.ViewModels
         public string masp { get; set; }
         public int len { get; set; }
     }
+    public class ShopSanPhamNoRef
+    {
+        public int id { get; set; }
+        public Nullable<int> StoreId { get; set; }
+        public string masp { get; set; }
+        public Nullable<int> maloai { get; set; }
+        public Nullable<int> mahieu { get; set; }
+        public Nullable<int> plantype { get; set; }
+        public string tensp { get; set; }
+        public string tensp_us { get; set; }
+        public Nullable<int> typeshowhome { get; set; }
+        public string thongtin { get; set; }
+        public string thongtin_us { get; set; }
+        public string spurl { get; set; }
+        public string spurl_us { get; set; }
+        public string sptitle { get; set; }
+        public string sptitle_us { get; set; }
+        public string spdescription { get; set; }
+        public string spdescription_us { get; set; }
+        public string spkeywords_us { get; set; }
+        public string spkeywords { get; set; }
+        public Nullable<bool> hide { get; set; }
+        public string chitiet { get; set; }
+        public string chitiet_us { get; set; }
+        public Nullable<int> douutien { get; set; }
+        public Nullable<bool> ischeckout { get; set; }
+        public Nullable<bool> ischecksaleoff { get; set; }
+        public Nullable<bool> ischeckgift { get; set; }
+        public string gift { get; set; }
+        public Nullable<int> countsale { get; set; }
+        public Nullable<System.DateTime> timeend { get; set; }
+        public Nullable<double> kg { get; set; }
+        public Nullable<double> chieudai { get; set; }
+        public Nullable<double> chieurong { get; set; }
+        public Nullable<double> chieucao { get; set; }
+        public Nullable<double> chieudaisd { get; set; }
+        public Nullable<double> chieurongsd { get; set; }
+        public Nullable<double> chieucaosd { get; set; }
+        public Nullable<bool> showkg { get; set; }
+        public Nullable<bool> showcm { get; set; }
+        public Nullable<bool> showhome { get; set; }
+        public Nullable<bool> showbanner { get; set; }
+        public Nullable<bool> showsptangkemvaomuckm { get; set; }
+        public string Barcode { get; set; }
+        public Nullable<bool> StopSale { get; set; }
+        public Nullable<int> PriceBase { get; set; }
+        public Nullable<int> PriceBaseOld { get; set; }
+        public Nullable<int> PriceAvg { get; set; }
+        public Nullable<int> PriceWholesale { get; set; }
+        public Nullable<int> PriceRef { get; set; }
+        public Nullable<bool> freeship { get; set; }
+        public Nullable<int> SupplierId { get; set; }
+        public string StatusId { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public Nullable<System.DateTime> UpdatedDate { get; set; }
+        public Nullable<int> UpdatedBy { get; set; }
+        public Nullable<bool> Status { get; set; }
+        public Nullable<bool> NotDiscountMember { get; set; }
+        public Nullable<int> CategoryId { get; set; }
+        public Nullable<int> FromCreate { get; set; }
+        public Nullable<int> ShopeeId { get; set; }
+        public Nullable<int> CodeSuffix { get; set; }
+    }
+
 }

@@ -31,9 +31,10 @@ namespace SoftBBM.Web.api
         IdonhangRepository _donhangRepository;
         IdonhangctRepository _donhangctRepository;
         IshopbientheRepository _shopbientheRepository;
+        ISystemLogRepository _systemLogRepository;
         IUnitOfWork _unitOfWork;
 
-        public ShopSanPhamController(ISoftStockRepository softStockRepository, IShopSanPhamRepository shopSanPhamRepository, IUnitOfWork unitOfWork, ISoftChannelProductPriceRepository softChannelProductPriceRepository, IShopSanPhamStatusRepository shopSanPhamStatusRepository, ISoftChannelRepository softChannelRepository, ISoftBranchRepository softBranchRepository, IdonhangRepository donhangRepository, IdonhangctRepository donhangctRepository, IshopbientheRepository shopbientheRepository)
+        public ShopSanPhamController(ISoftStockRepository softStockRepository, IShopSanPhamRepository shopSanPhamRepository, IUnitOfWork unitOfWork, ISoftChannelProductPriceRepository softChannelProductPriceRepository, IShopSanPhamStatusRepository shopSanPhamStatusRepository, ISoftChannelRepository softChannelRepository, ISoftBranchRepository softBranchRepository, IdonhangRepository donhangRepository, IdonhangctRepository donhangctRepository, IshopbientheRepository shopbientheRepository, ISystemLogRepository systemLogRepository)
         {
             _shopSanPhamRepository = shopSanPhamRepository;
             _softChannelProductPriceRepository = softChannelProductPriceRepository;
@@ -44,6 +45,7 @@ namespace SoftBBM.Web.api
             _donhangRepository = donhangRepository;
             _donhangctRepository = donhangctRepository;
             _shopbientheRepository = shopbientheRepository;
+            _systemLogRepository = systemLogRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -111,7 +113,7 @@ namespace SoftBBM.Web.api
                 //}).OrderBy(x => x.tensp).ThenBy(y => y.masp).ToList();
                 var searchTextUnSign = searchText.ConvertToUnSign();
 
-                    shopsanpham = _shopSanPhamRepository.GetMulti(x => x.masp.ToLower().Contains(searchText) || x.tensp.ToLower().Contains(searchText) || x.spurl.ToLower().Contains(searchTextUnSign)).OrderBy(x => x.tensp).ThenBy(y => y.masp);
+                shopsanpham = _shopSanPhamRepository.GetMulti(x => x.masp.ToLower().Contains(searchText) || x.tensp.ToLower().Contains(searchText) || x.spurl.ToLower().Contains(searchTextUnSign)).OrderBy(x => x.tensp).ThenBy(y => y.masp);
                 //}
             }
 
@@ -192,11 +194,28 @@ namespace SoftBBM.Web.api
             int currentPageSize = viewModel.pageSize;
             int currentBranchId = viewModel.branchId;
             IEnumerable<shop_sanpham> products = null;
+            //List<ShopSanPhamSearchBookViewModel> productsVM = new List<ShopSanPhamSearchBookViewModel>();
             int totalproducts = new int();
 
             products = _shopSanPhamRepository.GetAllPaging(currentPage, currentPageSize, out totalproducts, currentBranchId, viewModel).ToList();
-
             IEnumerable<ShopSanPhamSearchBookViewModel> productsVM = Mapper.Map<IEnumerable<shop_sanpham>, IEnumerable<ShopSanPhamSearchBookViewModel>>(products);
+            //foreach (var item in products)
+            //{
+            //    var parsePro = new ShopSanPhamSearchBookViewModel();
+            //    parsePro.id = item.id;
+            //    parsePro.Image = item.shop_image != null ? "https://babymart.vn/Images/hinhdulieu/thumbnail/" + item.shop_image.FirstOrDefault().url : "";
+            //    parsePro.masp = item.masp;
+            //    parsePro.PriceAvg = item.PriceAvg;
+            //    parsePro.PriceBase = item.PriceBase;
+            //    parsePro.PriceNew = item.PriceBase;
+            //    parsePro.PriceRef = item.PriceRef;
+            //    parsePro.PriceWholesale = item.PriceWholesale;
+            //    parsePro.SupplierId = item.SupplierId != null ? item.SupplierId.Value : 0;
+            //    parsePro.SupplierName = item.SoftSupplier != null ? item.SoftSupplier.Name : "";
+            //    parsePro.tensp = item.tensp;
+            //    productsVM.Add(parsePro);
+            //}
+
             var endDate = DateTime.Now;
             var startDate = endDate.AddDays(-30);
             startDate = UtilExtensions.ConvertStartDate(startDate);

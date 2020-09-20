@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
 using OfficeOpenXml;
 using OfficeOpenXml.Table;
 using SoftBBM.Web.Common;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 //filter = StringHelper.ToUnsignString(filter.Trim().ToLower());
@@ -57,9 +59,10 @@ namespace SoftBBM.Web.api
         ISoftStockInPaymentStatusRepository _softStockInPaymentStatusRepository;
         ISoftStockInPaymentMethodRepository _softStockInPaymentMethodRepository;
         ISoftChannelProductPriceRepository _softChannelProductPriceRepository;
+        ISystemLogRepository _systemLogRepository;
         IUnitOfWork _unitOfWork;
 
-        public SoftStockInController(ISoftStockInRepository softStockInRepository, ISoftStockInDetailRepository softStockInDetailRepository, IUnitOfWork unitOfWork, IShopSanPhamRepository shopSanPhamRepository, ISoftStockRepository softStockRepository, ISoftStockInStatusRepository softStockInStatusRepository, ISoftNotificationRepository softNotificationRepository, ISoftBranchRepository softBranchRepository, IdonhangRepository donhangRepository, IshopbientheRepository shopbientheRepository, ISoftSupplierRepository softSupplierRepository, ISoftStockInCategoryRepository softStockInCategoryRepository, IApplicationUserRepository applicationUserRepository, IShopSanPhamLogRepository shopSanPhamLogRepository, IdonhangctRepository donhangctRepository, ISoftStockInPaymentStatusRepository softStockInPaymentStatusRepository, ISoftStockInPaymentMethodRepository softStockInPaymentMethodRepository, ISoftChannelProductPriceRepository softChannelProductPriceRepository)
+        public SoftStockInController(ISoftStockInRepository softStockInRepository, ISoftStockInDetailRepository softStockInDetailRepository, IUnitOfWork unitOfWork, IShopSanPhamRepository shopSanPhamRepository, ISoftStockRepository softStockRepository, ISoftStockInStatusRepository softStockInStatusRepository, ISoftNotificationRepository softNotificationRepository, ISoftBranchRepository softBranchRepository, IdonhangRepository donhangRepository, IshopbientheRepository shopbientheRepository, ISoftSupplierRepository softSupplierRepository, ISoftStockInCategoryRepository softStockInCategoryRepository, IApplicationUserRepository applicationUserRepository, IShopSanPhamLogRepository shopSanPhamLogRepository, IdonhangctRepository donhangctRepository, ISoftStockInPaymentStatusRepository softStockInPaymentStatusRepository, ISoftStockInPaymentMethodRepository softStockInPaymentMethodRepository, ISoftChannelProductPriceRepository softChannelProductPriceRepository, ISystemLogRepository systemLogRepository)
         {
             _softStockInRepository = softStockInRepository;
             _softStockRepository = softStockRepository;
@@ -78,6 +81,7 @@ namespace SoftBBM.Web.api
             _softStockInPaymentStatusRepository = softStockInPaymentStatusRepository;
             _softStockInPaymentMethodRepository = softStockInPaymentMethodRepository;
             _softChannelProductPriceRepository = softChannelProductPriceRepository;
+            _systemLogRepository = systemLogRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -253,17 +257,19 @@ namespace SoftBBM.Web.api
                     var stockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
                     if (shopSanPham != null)
                     {
+                        var beforeLog = Mapper.Map<shop_sanpham,ShopSanPhamNoRef>(shopSanPham);
+
                         shopSanPham.PriceBaseOld = shopSanPham.PriceBase;
                         shopSanPham.PriceBase = item.PriceNew;
                         shopSanPham.PriceRef = item.PriceRef;
                         shopSanPham.UpdatedDate = DateTime.Now;
                         shopSanPham.UpdatedBy = softStockInVm.CreatedBy;
                         var checkZero = ((int)stockTotalAll + item.Quantity);
-                        if (checkZero == 0 || (int)stockTotalAll==0)
+                        if (checkZero == 0 || (int)stockTotalAll == 0)
                             shopSanPham.PriceAvg = shopSanPham.PriceBase;
                         else
                         {
-                            if(shopSanPham.PriceAvg == null)
+                            if (shopSanPham.PriceAvg == null)
                             {
                                 shopSanPham.PriceAvg = 0;
                             }
@@ -277,6 +283,20 @@ namespace SoftBBM.Web.api
                         shopSanPham.PriceWholesale = UtilExtensions.GetPriceWholesaleByPriceAvgOnl(shopSanPham.PriceAvg, priceOnl);
                         //set UpdateBy
                         _shopSanPhamRepository.Update(shopSanPham);
+
+                        var afterLog = Mapper.Map<shop_sanpham, ShopSanPhamNoRef>(shopSanPham);
+
+                        var log = new SystemLog();
+                        log.InitSystemLog(shopSanPham.id, "", "AddStockIn", "", 1, "StockIn",
+                            JsonConvert.SerializeObject(beforeLog, Formatting.Indented, new JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            }),
+                            JsonConvert.SerializeObject(afterLog, Formatting.Indented, new JsonSerializerSettings
+                            {
+                                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                            }));
+                        _systemLogRepository.Add(log);
                     }
                     else
                     {
@@ -401,7 +421,7 @@ namespace SoftBBM.Web.api
                             if (checkZero == 0 || (int)stockTotalAll == 0)
                                 shopSanPham.PriceAvg = shopSanPham.PriceBase;
                             else
-                                shopSanPham.PriceAvg = (int) Math.Ceiling((shopSanPham.PriceAvg.Value * (int)stockTotalAll + item.PriceNew.Value * item.Quantity.Value) / ((int)stockTotalAll + item.Quantity.Value));
+                                shopSanPham.PriceAvg = (int)Math.Ceiling((shopSanPham.PriceAvg.Value * (int)stockTotalAll + item.PriceNew.Value * item.Quantity.Value) / ((int)stockTotalAll + item.Quantity.Value));
                             var priceOnl = 0;
                             var priceOnlModel = _softChannelProductPriceRepository.GetSingleByCondition(x => x.ProductId == item.ProductId && x.ChannelId == 2);
                             if (priceOnlModel != null)
@@ -2196,7 +2216,7 @@ namespace SoftBBM.Web.api
                     {
                         var product = _shopSanPhamRepository.GetSingleById(item.ProductId);
                         var productVM = Mapper.Map<shop_sanpham, ShopSanPhamSearchBookStampViewModel>(product);
-                        productVM.Quantity = (int) Math.Ceiling(item.Quantity.Value);
+                        productVM.Quantity = (int)Math.Ceiling(item.Quantity.Value);
                         shopSanPhamSearchBookStamps.Add(productVM);
                     }
                     response = request.CreateResponse(HttpStatusCode.OK, shopSanPhamSearchBookStamps);
@@ -2509,7 +2529,7 @@ namespace SoftBBM.Web.api
             HttpResponseMessage response = null;
             try
             {
-                
+
                 var oldStockout = _softStockInRepository.GetSingleById(input.stockinId);
                 oldStockout.Description = input.description;
                 oldStockout.UpdatedDate = DateTime.Now;

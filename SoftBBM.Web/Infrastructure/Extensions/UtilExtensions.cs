@@ -1,4 +1,5 @@
-﻿using SoftBBM.Web.Enum;
+﻿using SoftBBM.Web.DAL.Repositories;
+using SoftBBM.Web.Enum;
 using SoftBBM.Web.Models;
 using System;
 using System.Collections.Generic;

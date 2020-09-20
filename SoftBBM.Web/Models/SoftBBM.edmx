@@ -1154,17 +1154,19 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="KeyId" Type="int" />
           <Property Name="Value" Type="nvarchar(max)" />
           <Property Name="AppName" Type="nvarchar" MaxLength="256" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Type" Type="int" />
-          <Property Name="TypeName" Type="nvarchar" MaxLength="256" />
+          <Property Name="TypeName" Type="nvarchar(max)" />
           <Property Name="CreatedDate" Type="datetime" />
-          <Property Name="CreatedBy" Type="nvarchar" MaxLength="256" />
+          <Property Name="CreatedBy" Type="int" />
           <Property Name="UpdatedDate" Type="datetime" />
-          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="256" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="Before" Type="nvarchar(max)" />
+          <Property Name="After" Type="nvarchar(max)" />
         </EntityType>
         <Association Name="dh_ctDH">
           <End Role="donhang" Type="Self.donhang" Multiplicity="1" />
@@ -6204,17 +6206,19 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="KeyId" Type="Int32" />
           <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AppName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="Int32" />
-          <Property Name="TypeName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="TypeName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="Int32" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="Before" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="After" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -7468,6 +7472,8 @@
           <EntitySetMapping Name="SystemLogs">
             <EntityTypeMapping TypeName="SoftBBMModels.SystemLog">
               <MappingFragment StoreEntitySet="SystemLog">
+                <ScalarProperty Name="After" ColumnName="After" />
+                <ScalarProperty Name="Before" ColumnName="Before" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />

@@ -13,7 +13,7 @@ namespace SoftBBM.Web.Mapping
         public static void Configure()
         {
             Mapper.CreateMap<SoftSupplier, SoftSupplierViewModel>()
-                .ForMember(d => d.Vat, map => map.MapFrom(s => s.SoftSupplierVatStatu.Name));
+                .ForMember(d => d.Vat, map => map.MapFrom(s => s.SoftSupplierVatStatu != null ? s.SoftSupplierVatStatu.Name : ""));
             Mapper.CreateMap<SoftBranch, SoftBranchViewModel>();
             Mapper.CreateMap<SoftChannel, SoftChannelViewModel>();
             Mapper.CreateMap<SoftBranchProductStock, SoftStockViewModel>()
@@ -55,16 +55,16 @@ namespace SoftBBM.Web.Mapping
             Mapper.CreateMap<donhang_chuyenphat_tp, donhangchuyenphattpViewModel>();
             Mapper.CreateMap<donhang_chuyenphat_tinh, donhangchuyenphattinhViewModel>();
             Mapper.CreateMap<donhang, donhangListViewModel>()
-                .ForMember(d => d.Channel, map => map.MapFrom(s => s.SoftChannel.Name))
-                .ForMember(d => d.CustomerName, map => map.MapFrom(s => s.khachhang.hoten))
-                .ForMember(d => d.ShipperName, map => map.MapFrom(s => s.ApplicationUser.FullName))
-                .ForMember(d => d.ShipperUserName, map => map.MapFrom(s => s.ApplicationUser.UserName))
-                .ForMember(d => d.ShipperId, map => map.MapFrom(s => s.ApplicationUser.Id))
-                .ForMember(d => d.CreatedName, map => map.MapFrom(s => s.ApplicationUser1.FullName))
-                .ForMember(d => d.CreatedUserName, map => map.MapFrom(s => s.ApplicationUser1.UserName))
-                .ForMember(d => d.StatusId, map => map.MapFrom(s => s.donhangStatu.Id))
-                .ForMember(d => d.StatusCss, map => map.MapFrom(s => s.donhangStatu.CssClass))
-                .ForMember(d => d.StatusName, map => map.MapFrom(s => s.donhangStatu.Name));
+                .ForMember(d => d.Channel, map => map.MapFrom(s => s.SoftChannel != null ? s.SoftChannel.Name : ""))
+                .ForMember(d => d.CustomerName, map => map.MapFrom(s => s.khachhang != null ? s.khachhang.hoten : ""))
+                .ForMember(d => d.ShipperName, map => map.MapFrom(s => s.ApplicationUser != null ? s.ApplicationUser.FullName : ""))
+                .ForMember(d => d.ShipperUserName, map => map.MapFrom(s => s.ApplicationUser != null ? s.ApplicationUser.UserName : ""))
+                .ForMember(d => d.ShipperId, map => map.MapFrom(s => s.ApplicationUser != null ? s.ApplicationUser.Id : 0))
+                .ForMember(d => d.CreatedName, map => map.MapFrom(s => s.ApplicationUser1 != null ? s.ApplicationUser1.FullName : ""))
+                .ForMember(d => d.CreatedUserName, map => map.MapFrom(s => s.ApplicationUser1 != null ? s.ApplicationUser1.UserName : ""))
+                .ForMember(d => d.StatusId, map => map.MapFrom(s => s.donhangStatu != null ? s.donhangStatu.Id : 0))
+                .ForMember(d => d.StatusCss, map => map.MapFrom(s => s.donhangStatu != null ? s.donhangStatu.CssClass : ""))
+                .ForMember(d => d.StatusName, map => map.MapFrom(s => s.donhangStatu != null ? s.donhangStatu.Name : ""));
 
             Mapper.CreateMap<donhangStatu, donhangStatusViewModel>();
             Mapper.CreateMap<donhang, donhangDetailViewModel>();
@@ -81,8 +81,8 @@ namespace SoftBBM.Web.Mapping
                 .ForMember(d => d.PriceNew, map => map.ResolveUsing<PriceResolver>().FromMember(x => x.PriceBase))
                 .ForMember(d => d.PriceBase, map => map.ResolveUsing<PriceResolver>().FromMember(x => x.PriceBase))
                 .ForMember(d => d.PriceRef, map => map.ResolveUsing<PriceResolver>().FromMember(x => x.PriceRef))
-                .ForMember(d => d.Image, map => map.MapFrom(s => "https://babymart.vn/Images/hinhdulieu/thumbnail/" + s.shop_image.FirstOrDefault().url))
-                .ForMember(d => d.SupplierName, map => map.MapFrom(s => s.SoftSupplier.Name));
+                .ForMember(d => d.Image, map => map.MapFrom(s => s.shop_image.Count > 0 ? "https://babymart.vn/Images/hinhdulieu/thumbnail/" + s.shop_image.FirstOrDefault().url : ""))
+                .ForMember(d => d.SupplierName, map => map.MapFrom(s => s.SoftSupplier != null ? s.SoftSupplier.Name : ""));
             Mapper.CreateMap<shop_sanpham, ShopSanPhamSoldByDateViewModel>()
                 .ForMember(d => d.PriceNew, map => map.ResolveUsing<PriceResolver>().FromMember(x => x.PriceBase))
                 .ForMember(d => d.PriceBase, map => map.ResolveUsing<PriceResolver>().FromMember(x => x.PriceBase))
@@ -91,20 +91,20 @@ namespace SoftBBM.Web.Mapping
                 .ForMember(d => d.SupplierName, map => map.MapFrom(s => s.SoftSupplier.Name));
             Mapper.CreateMap<SoftStockIn, SoftStockInSearchViewModel>()
                 .ForMember(d => d.SoftStockInPaymentMethod, map => map.MapFrom(s => s.SoftStockInPaymentMethod))
-                .ForMember(d => d.CreatedByName, map => map.MapFrom(s => s.ApplicationUser.UserName))
-                .ForMember(d => d.Category, map => map.MapFrom(s => s.SoftStockInCategory.Name))
-                .ForMember(d => d.StatusName, map => map.MapFrom(s => s.SoftStockInStatu.Name))
-                .ForMember(d => d.StatusCss, map => map.MapFrom(s => s.SoftStockInStatu.CssClass))
-                .ForMember(d => d.FromBranch, map => map.MapFrom(s => s.SoftBranch1.Name))
-                .ForMember(d => d.ToBranch, map => map.MapFrom(s => s.SoftBranch2.Name))
-                .ForMember(d => d.FromBranchStatus, map => map.MapFrom(s => s.SoftStockInStatu1.Name))
-                .ForMember(d => d.FromBranchStatusCss, map => map.MapFrom(s => s.SoftStockInStatu1.CssClass))
-                .ForMember(d => d.ToBranchStatus, map => map.MapFrom(s => s.SoftStockInStatu2.Name))
-                .ForMember(d => d.ToBranchStatusCss, map => map.MapFrom(s => s.SoftStockInStatu2.CssClass))
-                .ForMember(d => d.SupplierStatus, map => map.MapFrom(s => s.SoftStockInStatu3.Name))
-                .ForMember(d => d.SupplierStatusCss, map => map.MapFrom(s => s.SoftStockInStatu3.CssClass))
-                .ForMember(d => d.PaymentStatus, map => map.MapFrom(s => s.SoftStockInPaymentStatus.Name))
-                .ForMember(d => d.SupplierName, map => map.MapFrom(s => s.SoftSupplier.Name));
+                .ForMember(d => d.CreatedByName, map => map.MapFrom(s => s.ApplicationUser != null ? s.ApplicationUser.UserName : ""))
+                .ForMember(d => d.Category, map => map.MapFrom(s => s.SoftStockInCategory != null ? s.SoftStockInCategory.Name : ""))
+                .ForMember(d => d.StatusName, map => map.MapFrom(s => s.SoftStockInStatu != null ? s.SoftStockInStatu.Name : ""))
+                .ForMember(d => d.StatusCss, map => map.MapFrom(s => s.SoftStockInStatu != null ? s.SoftStockInStatu.CssClass : ""))
+                .ForMember(d => d.FromBranch, map => map.MapFrom(s => s.SoftBranch1 != null ? s.SoftBranch1.Name : ""))
+                .ForMember(d => d.ToBranch, map => map.MapFrom(s => s.SoftBranch2 != null ? s.SoftBranch2.Name : ""))
+                .ForMember(d => d.FromBranchStatus, map => map.MapFrom(s => s.SoftStockInStatu1 != null ? s.SoftStockInStatu1.Name : ""))
+                .ForMember(d => d.FromBranchStatusCss, map => map.MapFrom(s => s.SoftStockInStatu1 != null ? s.SoftStockInStatu1.CssClass : ""))
+                .ForMember(d => d.ToBranchStatus, map => map.MapFrom(s => s.SoftStockInStatu2 != null ? s.SoftStockInStatu2.Name : ""))
+                .ForMember(d => d.ToBranchStatusCss, map => map.MapFrom(s => s.SoftStockInStatu2 != null ? s.SoftStockInStatu2.CssClass : ""))
+                .ForMember(d => d.SupplierStatus, map => map.MapFrom(s => s.SoftStockInStatu3 != null ? s.SoftStockInStatu3.Name : ""))
+                .ForMember(d => d.SupplierStatusCss, map => map.MapFrom(s => s.SoftStockInStatu3 != null ? s.SoftStockInStatu3.CssClass : ""))
+                .ForMember(d => d.PaymentStatus, map => map.MapFrom(s => s.SoftStockInPaymentStatus != null ? s.SoftStockInPaymentStatus.Name : ""))
+                .ForMember(d => d.SupplierName, map => map.MapFrom(s => s.SoftSupplier != null ? s.SoftSupplier.Name : ""));
             Mapper.CreateMap<SoftBranchProductStock, SoftBranchProductStockViewModel>();
             Mapper.CreateMap<SoftAdjustmentStock, SoftAdjustmentStockViewModel>();
             Mapper.CreateMap<SoftAdjustmentStockDetail, SoftAdjustmentStockDetailViewModel>();
@@ -114,14 +114,14 @@ namespace SoftBBM.Web.Mapping
             Mapper.CreateMap<donhang_chuyenphat_vung, donhangchuyenphatvungViewModel>();
             Mapper.CreateMap<donhang_chuyenphat_danhsachdiachifuta, donhangchuyenphatdiachifutaViewModel>();
             Mapper.CreateMap<SoftBranchProductStock, SoftStockViewModelExcel>()
-                .ForMember(d => d.Id, map => map.MapFrom(s => s.shop_sanpham.id))
-                .ForMember(d => d.Name, map => map.MapFrom(s => s.shop_sanpham.tensp))
-                .ForMember(d => d.Supplier, map => map.MapFrom(s => s.shop_sanpham.SoftSupplier.Name))
-                .ForMember(d => d.Stock, map => map.MapFrom(s => s.StockTotal))
-                .ForMember(d => d.PriceOld, map => map.MapFrom(s => s.shop_sanpham.PriceBaseOld))
-                .ForMember(d => d.PriceNew, map => map.MapFrom(s => s.shop_sanpham.PriceBase))
+                .ForMember(d => d.Id, map => map.MapFrom(s => s.shop_sanpham.id != null ? s.shop_sanpham.id : 0))
+                .ForMember(d => d.Name, map => map.MapFrom(s => s.shop_sanpham != null ? s.shop_sanpham.tensp : ""))
+                .ForMember(d => d.Supplier, map => map.MapFrom(s => s.shop_sanpham.SoftSupplier != null ? s.shop_sanpham.SoftSupplier.Name : ""))
+                .ForMember(d => d.Stock, map => map.MapFrom(s => s.StockTotal != null ? s.StockTotal : 0))
+                .ForMember(d => d.PriceOld, map => map.MapFrom(s => s.shop_sanpham != null ? s.shop_sanpham.PriceBaseOld : 0))
+                .ForMember(d => d.PriceNew, map => map.MapFrom(s => s.shop_sanpham != null ? s.shop_sanpham.PriceBase : 0))
                 .ForMember(d => d.Url, map => map.ResolveUsing<UrlResolver>().FromMember(x => x.shop_sanpham.spurl))
-                .ForMember(d => d.Code, map => map.MapFrom(s => s.shop_sanpham.masp));
+                .ForMember(d => d.Code, map => map.MapFrom(s => s.shop_sanpham != null ? s.shop_sanpham.masp : ""));
             Mapper.CreateMap<SoftStockViewModelExcel, SoftStockViewModelExcelNoId>();
             Mapper.CreateMap<SoftBranch, SoftBranchImportSampleViewModel>();
             Mapper.CreateMap<SoftSupplierVatStatu, SoftSupplierVatStatuViewModel>();
@@ -168,6 +168,7 @@ namespace SoftBBM.Web.Mapping
             Mapper.CreateMap<donhang, donhangExcel>()
                 .ForMember(d => d.StatusName, map => map.MapFrom(s => s.donhangStatu.Name));
             Mapper.CreateMap<donhangExcel, donhangExcelNoId>();
+            Mapper.CreateMap<shop_sanpham, ShopSanPhamNoRef>();
         }
 
         public class PriceResolver : ValueResolver<int?, int>

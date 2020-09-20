@@ -298,7 +298,7 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             shopSanPhamLog.BranchId = branchId;
             shopSanPhamLog.StockTotal = stockTotal;
         }
-        public static void InitSystemLog(this SystemLog systemLog, int? keyId = null,string value="", string appName = "", string description = "",int? type=null, string typeName = "")
+        public static void InitSystemLog(this SystemLog systemLog, int? keyId = null,string value="", string appName = "", string description = "",int? type=null, string typeName = "", string before = "", string after = "")
         {
             systemLog.KeyId = keyId;
             systemLog.Value = value;
@@ -306,6 +306,8 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             systemLog.Description = description;
             systemLog.Type = type;
             systemLog.TypeName = typeName;
+            systemLog.Before = before;
+            systemLog.After = after;
         }
     }
 }
