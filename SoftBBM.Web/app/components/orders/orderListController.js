@@ -16,7 +16,7 @@
             selectedSellerFilters: [],
             selectedShipperFilters: [],
             selectedEcommerceShipperFilters: [],
-            selectedPaymentFilters:[]
+            selectedPaymentFilters: []
         }
         $scope.filters.sortBy = '';
         $scope.sorttongtien = false;
@@ -78,8 +78,8 @@
                 Id: 5,
                 Name: 'Bằng thẻ ngân hàng khi nhận hàng'
             },
-            
-            
+
+
         ];
         $scope.GHTKOrders = [];
         $scope.GHNOrders = [];
@@ -123,7 +123,8 @@
         $scope.updateCompletedTikiOrders = updateCompletedTikiOrders;
         $scope.clearCompletedTikiOrders = clearCompletedTikiOrders;
         $scope.printShopeeAll = printShopeeAll;
-        $scope.getLackOrdersWithDay = getLackOrdersWithDay;
+        $scope.getLackShopeeOrdersWithDay = getLackShopeeOrdersWithDay;
+        $scope.updateStatusShopeeOrdersWithDay = updateStatusShopeeOrdersWithDay;
         //$scope.selectedOrder = {
         //    TrackingNo: ''
         //};
@@ -1031,19 +1032,37 @@
                 }
             });
         }
-        function getLackOrdersWithDay() {
+        function getLackShopeeOrdersWithDay() {
+            $scope.waiting = true;
             var config = {
                 params: {
                     quantity: 5
                 }
             }
-            apiService.get('/api/order/shopeegetlackorderswithday', params, function (result) {
-                notificationService.displaySuccess('Cập nhật đơn hàng sót' + quantity + 'ngày trước thành công!');
-                        search($scope.page);
-                        $scope.waiting = false;
-                    }, function (error) {
-                        notificationService.displayError(error);
-                    });
+            apiService.get('/api/order/shopeegetlackorderswithday', config, function (result) {
+                notificationService.displaySuccess('Cập nhật đơn hàng sót ' + config.params.quantity + ' ngày trước thành công!');
+                search($scope.page);
+                $scope.waiting = false;
+            }, function (error) {
+                notificationService.displayError(error);
+                $scope.waiting = false;
+            });
+        }
+        function updateStatusShopeeOrdersWithDay() {
+            $scope.waiting = true;
+            var config = {
+                params: {
+                    quantity: 5
+                }
+            }
+            apiService.get('/api/order/shopeeupdatestatusorderswithday', config, function (result) {
+                notificationService.displaySuccess('Cập nhật tình  trạng đơn hàng từ ' + config.params.quantity + ' ngày trước thành công!');
+                search($scope.page);
+                $scope.waiting = false;
+            }, function (error) {
+                notificationService.displayError(error);
+                $scope.waiting = false;
+            });
         }
 
         var printBarcode = function (elementId, value) {

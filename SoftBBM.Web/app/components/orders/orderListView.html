@@ -34,7 +34,8 @@
                             <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
                             <button class="btn" title="Xuất DS đơn hàng" style="background-color:yellowgreen;color:white;width:60px" type="button" ng-click="authenExport()"><i class="fa fa-fw fa-cloud-download"></i></button>
                             <button class="btn btn-info" ng-show="selectedChannel.Id==4" title="Đồng bộ mã vận đơn từ Shopee" style="width:60px" type="button" ng-click="syncTrackingNoShopee()"><i class="fa fa-fw fa-indent"></i></button>
-                            <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật đơn hàng sót 5 ngày trước" style="width:60px" type="button" ng-click="getLackOrdersWithDay()"><i class="fa fa-fw fa-balance-scale"></i></button>
+                            <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật đơn hàng sót 5 ngày trước" style="width:60px" type="button" ng-click="getLackShopeeOrdersWithDay()"><i class="fa fa-fw fa-balance-scale"></i></button>
+                            <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật tình trạng đơn hàng từ 5 ngày trước" style="width:60px" type="button" ng-click="updateStatusShopeeOrdersWithDay()"><i class="fa fa-fw fa-database"></i></button>
                             <button type="button" class="btn btn-info" ng-click="loadExtension()" title="hỗ trợ" style="width:60px"><i class="fa fa-fw fa-bell-o"></i></button>
                             <div class="pull-right totalcount">
                                 <span>

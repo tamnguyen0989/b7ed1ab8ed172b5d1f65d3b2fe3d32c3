@@ -21,6 +21,7 @@ using System.Drawing;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Threading;
+using SoftBBM.Web.Common;
 
 namespace SoftBBM.Web.api
 {
@@ -2278,6 +2279,25 @@ namespace SoftBBM.Web.api
             }
         }
 
+        [HttpGet]
+        [Route("shopeeupdatestatusorderswithday")]
+        //[Authorize(Roles = "OrderUpdate")]
+        public HttpResponseMessage ShopeeUpdateStatusOrdersWithDay(HttpRequestMessage request, int quantity)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                UpdateStatusShopeeOrders(quantity);
+
+                return request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message + " | " + ex.StackTrace);
+                return response;
+            }
+        }
+
         public void GetLackOrders()
         {
             var result = new List<Object>();
@@ -2337,6 +2357,97 @@ namespace SoftBBM.Web.api
                 contentLog.CreatedDate = DateTime.Now;
                 _softPointUpdateLogRepository.Add(contentLog);
                 _unitOfWork.Commit();
+            }
+        }
+
+        public void UpdateStatusShopeeOrders(int quantity)
+        {
+            var result = new List<Object>();
+            try
+            {
+                var orderDBs = _shopeeRepository.GetOrdersListLastWithDayDB(quantity);
+                if (orderDBs.Count > 0)
+                {
+                    foreach (var orderDB in orderDBs)
+                    {
+                        if (!string.IsNullOrEmpty(orderDB.OrderIdShopeeApi))
+                        {
+                            var orderSPE = _shopeeRepository.getOrder(orderDB.OrderIdShopeeApi);
+                            var order = _donhangRepository.GetSingleByCondition(x => x.id == orderDB.id);
+                            if (order != null)
+                            {
+                                switch (orderSPE.order_status)
+                                {
+                                    case CommonClass.COMPLETED:
+                                        order.Status = (int)StatusOrder.Done;
+                                        break;
+                                    case CommonClass.SHIPPED:
+                                        order.Status = (int)StatusOrder.Shipping;
+                                        break;
+                                    case CommonClass.TO_CONFIRM_RECEIVE:
+                                        order.Status = (int)StatusOrder.Shipped;
+                                        break;
+                                    case CommonClass.READY_TO_SHIP:
+                                        order.Status = (int)StatusOrder.ReadyToShip;
+                                        break;
+                                    case CommonClass.CANCELLED:
+                                        if (order.Status != (int)StatusOrder.Cancel)
+                                        {
+                                            order.Status = (int)StatusOrder.Cancel;
+                                            RollBackOrder(orderDB.OrderIdShopeeApi);
+                                        }
+                                        break;
+                                }
+                                order.UpdatedBy = 0;
+                                order.UpdatedDate = DateTime.Now;
+                                _donhangRepository.Update(order);
+                                _unitOfWork.Commit();
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var contentLog = new SoftPointUpdateLog();
+                contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
+                contentLog.CreatedDate = DateTime.Now;
+                _softPointUpdateLogRepository.Add(contentLog);
+                _unitOfWork.Commit();
+            }
+        }
+
+        //Cùng logic vs ShopeeController Hook Cancel Order
+        public void RollBackOrder(string orderShopeeId)
+        {
+            var order = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi.Trim() == orderShopeeId.Trim());
+            if (order != null)
+            {
+                foreach (var item in order.donhang_ct)
+                {
+                    var bienthe = _shopbientheRepository.GetSingleByCondition(x => x.id == item.IdPro);
+                    var stockCurrent = _softStockRepository.GetSingleByCondition(x => x.BranchId == (int)BranchEnum.KHO_CHINH && x.ProductId == bienthe.idsp);
+                    if (stockCurrent == null)
+                    {
+                        var newStockCurrent = new SoftBranchProductStock();
+                        newStockCurrent.BranchId = (int)BranchEnum.KHO_CHINH;
+                        newStockCurrent.ProductId = bienthe.idsp;
+                        newStockCurrent.StockTotal = 0;
+                        newStockCurrent.CreatedDate = DateTime.Now;
+                        newStockCurrent.CreatedBy = 0;
+                        stockCurrent = _softStockRepository.Add(newStockCurrent);
+                        _unitOfWork.Commit();
+                    }
+                    stockCurrent.StockTotal += item.Soluong;
+                    _softStockRepository.Update(stockCurrent);
+
+                    shop_sanphamLogs productLog = new shop_sanphamLogs();
+                    productLog.UpdateShopSanPhamLog(bienthe.idsp, "Cập nhật huỷ đơn hàng Api Shopee, mã đơn Api Shopee: " + order.OrderIdShopeeApi + ", mã đơn: " + order.id, item.Soluong, 0, (int)BranchEnum.KHO_CHINH, stockCurrent.StockTotal.Value);
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                    _shopSanPhamLogRepository.Add(productLog);
+
+                }
             }
         }
     }

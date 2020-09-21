@@ -15,6 +15,7 @@ namespace SoftBBM.Web.ViewModels
         public string total_amount { get; set; }
         public string message_to_seller { get; set; }
         public string tracking_no { get; set; }
+        public string order_status { get; set; }
         public double create_time { get; set; }
         public bool cod { get; set; }
     }

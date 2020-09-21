@@ -49,6 +49,7 @@ namespace SoftBBM.Web.DAL.Repositories
         IdonhangctRepository _donhangctRepository;
         ISoftStockRepository _softStockRepository;
         IShopSanPhamLogRepository _shopSanPhamLogRepository;
+        ISystemLogRepository _systemLogRepository;
 
         int _apiId;
         public string _apiPassowrd;
@@ -57,7 +58,7 @@ namespace SoftBBM.Web.DAL.Repositories
         long _addressId = 0;
 
 
-        public ShopeeRepository(IUnitOfWork unitOfWork, ISoftChannelRepository softChannelRepository, ISoftPointUpdateLogRepository softPointUpdateLogRepository, IDbFactory dbFactory, IkhachhangRepository khachhangRepository, IdonhangchuyenphattpRepository donhangchuyenphattpRepository, IdonhangchuyenphattinhRepository donhangchuyenphattinhRepository, IdonhangRepository donhangRepository, IShopSanPhamRepository shopSanPhamRepository, IshopbientheRepository shopbientheRepository, IdonhangctRepository donhangctRepository, ISoftStockRepository softStockRepository, IShopSanPhamLogRepository shopSanPhamLogRepository) : base(dbFactory)
+        public ShopeeRepository(IUnitOfWork unitOfWork, ISoftChannelRepository softChannelRepository, ISoftPointUpdateLogRepository softPointUpdateLogRepository, IDbFactory dbFactory, IkhachhangRepository khachhangRepository, IdonhangchuyenphattpRepository donhangchuyenphattpRepository, IdonhangchuyenphattinhRepository donhangchuyenphattinhRepository, IdonhangRepository donhangRepository, IShopSanPhamRepository shopSanPhamRepository, IshopbientheRepository shopbientheRepository, IdonhangctRepository donhangctRepository, ISoftStockRepository softStockRepository, IShopSanPhamLogRepository shopSanPhamLogRepository, ISystemLogRepository systemLogRepository) : base(dbFactory)
         {
             _softChannelRepository = softChannelRepository;
             _softPointUpdateLogRepository = softPointUpdateLogRepository;
@@ -70,6 +71,7 @@ namespace SoftBBM.Web.DAL.Repositories
             _donhangctRepository = donhangctRepository;
             _softStockRepository = softStockRepository;
             _shopSanPhamLogRepository = shopSanPhamLogRepository;
+            _systemLogRepository = systemLogRepository;
 
             _unitOfWork = unitOfWork;
 
@@ -186,6 +188,14 @@ namespace SoftBBM.Web.DAL.Repositories
                 streamWriter.Flush();
                 streamWriter.Close();
             }
+
+            //var log = new SystemLog();
+            //log.InitSystemLog(null, JsonConvert.SerializeObject(httpWebRequest, Formatting.Indented, new JsonSerializerSettings
+            //{
+            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            //}), "postRequest","",null,"Shopee");
+            //_systemLogRepository.Add(log);
+
             var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Encoding.Default, true))
             {
