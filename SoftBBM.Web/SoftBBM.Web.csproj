@@ -619,6 +619,7 @@
     <Compile Include="ViewModels\ResponseBBM.cs" />
     <Compile Include="ViewModels\ResultImportViewModel.cs" />
     <Compile Include="ViewModels\ShopeeHookInpVM.cs" />
+    <Compile Include="ViewModels\ShopeeItem.cs" />
     <Compile Include="ViewModels\ShopeeOrder.cs" />
     <Compile Include="ViewModels\ShopeeViewModel.cs" />
     <Compile Include="ViewModels\ShopImageViewModel.cs" />
@@ -833,6 +834,9 @@
     <Content Include="Assets\Admin\css\AdminLTE.min.css" />
     <Content Include="Assets\Admin\css\barcode.css" />
     <Content Include="Assets\Admin\css\customAdminLTE.css" />
+    <Content Include="Assets\Admin\css\kendo.common.min.css" />
+    <Content Include="Assets\Admin\css\kendo.default.min.css" />
+    <Content Include="Assets\Admin\css\kendo.default.mobile.min.css" />
     <Content Include="Assets\Admin\css\print.min.css" />
     <Content Include="Assets\Admin\css\printConfig.css" />
     <Content Include="Assets\Admin\css\skins\skin-black-light.css" />
@@ -1019,6 +1023,7 @@
     <Content Include="Assets\Admin\libs\checklist-model\checklist-model.js" />
     <Content Include="Assets\Admin\libs\checklist-model\LICENSE.txt" />
     <Content Include="Assets\Admin\libs\fastclick\lib\fastclick.js" />
+    <Content Include="Assets\Admin\libs\jquery-3.4.0.min.js" />
     <Content Include="Assets\Admin\libs\jquery-ui\AUTHORS.txt" />
     <Content Include="Assets\Admin\libs\jquery-ui\jquery-ui.js" />
     <Content Include="Assets\Admin\libs\jquery-ui\jquery-ui.min.js" />
@@ -1827,6 +1832,9 @@
     <Content Include="Assets\Admin\libs\jquery\src\var\toString.js" />
     <Content Include="Assets\Admin\libs\jquery\src\wrap.js" />
     <Content Include="Assets\Admin\libs\JsBarcode.all.min.js" />
+    <Content Include="Assets\Admin\libs\kendo.all.min.js" />
+    <Content Include="Assets\Admin\libs\kendo.core.min.js" />
+    <Content Include="Assets\Admin\libs\kendo.multiselect.min.js" />
     <Content Include="Assets\Admin\libs\moment.js" />
     <Content Include="Assets\Admin\libs\ngBootbox\dist\ngBootbox.js" />
     <Content Include="Assets\Admin\libs\ngBootbox\dist\ngBootbox.min.js" />
@@ -2123,6 +2131,8 @@
     <Content Include="Assets\Admin\libs\toastr\toastr.js.map" />
     <Content Include="Assets\Admin\libs\toastr\toastr.less" />
     <Content Include="Assets\Admin\libs\toastr\toastr.scss" />
+    <Content Include="Assets\Admin\css\images\kendoui.woff" />
+    <Content Include="Assets\Admin\css\fonts\glyphs\WebComponentsIcons.ttf" />
     <None Include="Properties\PublishProfiles\SoftBBM.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

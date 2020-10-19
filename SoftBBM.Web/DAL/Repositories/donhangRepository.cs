@@ -40,7 +40,7 @@ namespace SoftBBM.Web.DAL.Repositories
                 bool rootExist = false;
                 DateTime init = new DateTime();
                 IQueryable<donhang> donhangsfilter = null;
-                if (!string.IsNullOrEmpty(orderFilterVM.filter) || orderFilterVM.selectedOrderStatusFilters.Count > 0 || orderFilterVM.selectedSellerFilters.Count > 0 || orderFilterVM.selectedShipperFilters.Count > 0 || (orderFilterVM.startDateFilter > init && orderFilterVM.endDateFilter > init) || orderFilterVM.selectedEcommerceShipperFilters.Count > 0 || orderFilterVM.selectedPaymentFilters.Count > 0)
+                if (!string.IsNullOrEmpty(orderFilterVM.filter) || orderFilterVM.selectedOrderStatusFilters.Count > 0 || orderFilterVM.selectedSellerFilters.Count > 0 || orderFilterVM.selectedShipperFilters.Count > 0 || (orderFilterVM.startDateFilter > init && orderFilterVM.endDateFilter > init) || orderFilterVM.selectedEcommerceShipperFilters.Count > 0 || orderFilterVM.selectedPaymentFilters.Count > 0 || orderFilterVM.selectedUltilFilters.Count > 0)
                 {
                     if (!string.IsNullOrEmpty(orderFilterVM.filter))
                     {
@@ -57,9 +57,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<donhang> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.Status == item.Id);
+                                donhangstmp = query.Where(x => x.Status == item);
                             else
-                                donhangstmp = donhangs.Where(x => x.Status == item.Id);
+                                donhangstmp = donhangs.Where(x => x.Status == item);
                             if (donhangsfilter == null)
                                 donhangsfilter = donhangstmp;
                             else
@@ -75,9 +75,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<donhang> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.CreatedBy == item.Id);
+                                donhangstmp = query.Where(x => x.CreatedBy == item);
                             else
-                                donhangstmp = donhangs.Where(x => x.CreatedBy == item.Id);
+                                donhangstmp = donhangs.Where(x => x.CreatedBy == item);
                             if (donhangsfilter == null)
                                 donhangsfilter = donhangstmp;
                             else
@@ -93,9 +93,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<donhang> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.ShipperId == item.Id);
+                                donhangstmp = query.Where(x => x.ShipperId == item);
                             else
-                                donhangstmp = donhangs.Where(x => x.ShipperId == item.Id);
+                                donhangstmp = donhangs.Where(x => x.ShipperId == item);
                             if (donhangsfilter == null)
                                 donhangsfilter = donhangstmp;
                             else
@@ -123,9 +123,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<donhang> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.ShipperNameShopeeApi.ToLower() == item.Name.ToLower());
+                                donhangstmp = query.Where(x => x.ShipperNameShopeeApi.ToLower() == item.ToLower());
                             else
-                                donhangstmp = donhangs.Where(x => x.ShipperNameShopeeApi.ToLower() == item.Name.ToLower());
+                                donhangstmp = donhangs.Where(x => x.ShipperNameShopeeApi.ToLower() == item.ToLower());
                             if (donhangsfilter == null)
                                 donhangsfilter = donhangstmp;
                             else
@@ -141,9 +141,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<donhang> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.pttt == item.Id);
+                                donhangstmp = query.Where(x => x.pttt == item);
                             else
-                                donhangstmp = donhangs.Where(x => x.pttt == item.Id);
+                                donhangstmp = donhangs.Where(x => x.pttt == item);
                             if (donhangsfilter == null)
                                 donhangsfilter = donhangstmp;
                             else
@@ -152,6 +152,36 @@ namespace SoftBBM.Web.DAL.Repositories
                         donhangs = donhangsfilter;
                         if (rootExist == false) rootExist = true;
                         donhangsfilter = null;
+                    }
+                    if (orderFilterVM.selectedUltilFilters.Count > 0)
+                    {
+                        foreach (var selectedUltilFilter in orderFilterVM.selectedUltilFilters)
+                        {
+                            switch (selectedUltilFilter)
+                            {
+                                case "NoTrackingNumber":
+                                    if (rootExist == false)
+                                        donhangs = query.Where(x => string.IsNullOrEmpty(x.TrackingNo));
+                                    else
+                                        donhangs = donhangs.Where(x => string.IsNullOrEmpty(x.TrackingNo));
+                                    if (rootExist == false) rootExist = true;
+                                    break;
+                                case "NoPrinting":
+                                    if (rootExist == false)
+                                        donhangs = query.Where(x => string.IsNullOrEmpty(x.StatusPrint));
+                                    else
+                                        donhangs = donhangs.Where(x => string.IsNullOrEmpty(x.StatusPrint));
+                                    if (rootExist == false) rootExist = true;
+                                    break;
+                                case "HaveTrackingNumber":
+                                    if (rootExist == false)
+                                        donhangs = query.Where(x => !string.IsNullOrEmpty(x.TrackingNo));
+                                    else
+                                        donhangs = donhangs.Where(x => !string.IsNullOrEmpty(x.TrackingNo));
+                                    if (rootExist == false) rootExist = true;
+                                    break;
+                            }
+                        }
                     }
                 }
                 else
@@ -216,9 +246,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<donhang> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.Status == item.Id);
+                                donhangstmp = query.Where(x => x.Status == item);
                             else
-                                donhangstmp = donhangs.Where(x => x.Status == item.Id);
+                                donhangstmp = donhangs.Where(x => x.Status == item);
                             if (donhangsfilter == null)
                                 donhangsfilter = donhangstmp;
                             else
@@ -234,9 +264,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<donhang> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.CreatedBy == item.Id);
+                                donhangstmp = query.Where(x => x.CreatedBy == item);
                             else
-                                donhangstmp = donhangs.Where(x => x.CreatedBy == item.Id);
+                                donhangstmp = donhangs.Where(x => x.CreatedBy == item);
                             if (donhangsfilter == null)
                                 donhangsfilter = donhangstmp;
                             else
@@ -252,9 +282,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<donhang> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.ShipperId == item.Id);
+                                donhangstmp = query.Where(x => x.ShipperId == item);
                             else
-                                donhangstmp = donhangs.Where(x => x.ShipperId == item.Id);
+                                donhangstmp = donhangs.Where(x => x.ShipperId == item);
                             if (donhangsfilter == null)
                                 donhangsfilter = donhangstmp;
                             else

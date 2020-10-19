@@ -97,11 +97,18 @@ namespace SoftBBM.Web.ViewModels
     }
     public class OrderFilterViewModel
     {
-        public List<donhangStatusViewModel> selectedOrderStatusFilters { get; set; }
-        public List<ApplicationUserViewModel> selectedSellerFilters { get; set; }
-        public List<ApplicationUserViewModel> selectedShipperFilters { get; set; }
-        public List<EcommerceShipperViewModel> selectedEcommerceShipperFilters { get; set; }
-        public List<donhangStatusViewModel> selectedPaymentFilters { get; set; }
+        //public List<donhangStatusViewModel> selectedOrderStatusFilters { get; set; }
+        //public List<ApplicationUserViewModel> selectedSellerFilters { get; set; }
+        //public List<ApplicationUserViewModel> selectedShipperFilters { get; set; }
+        //public List<EcommerceShipperViewModel> selectedEcommerceShipperFilters { get; set; }
+        //public List<donhangStatusViewModel> selectedPaymentFilters { get; set; }
+
+        public List<int> selectedOrderStatusFilters { get; set; }
+        public List<string> selectedEcommerceShipperFilters { get; set; }
+        public List<int> selectedSellerFilters { get; set; }
+        public List<int> selectedShipperFilters { get; set; }
+        public List<int> selectedPaymentFilters { get; set; }
+        public List<string> selectedUltilFilters { get; set; }
         public int branchId { get; set; }
         public int? channelId { get; set; }
         public int? page { get; set; }

@@ -29,7 +29,7 @@ namespace SoftBBM.Web.api
         public HttpResponseMessage GetAll(HttpRequestMessage request)
         {
             HttpResponseMessage response = null;
-            var donhangStatuses = _donhangStatusRepository.GetAll();
+            var donhangStatuses = _donhangStatusRepository.GetAll().OrderBy(x=>x.Priority);
             var responseData = Mapper.Map<IEnumerable<donhangStatu>, IEnumerable<donhangStatusViewModel>>(donhangStatuses);
             response = request.CreateResponse(HttpStatusCode.OK, responseData);
             return response;

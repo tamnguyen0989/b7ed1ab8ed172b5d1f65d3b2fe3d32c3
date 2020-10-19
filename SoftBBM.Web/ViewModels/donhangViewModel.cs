@@ -34,6 +34,8 @@ namespace SoftBBM.Web.ViewModels
         public string OrderIdShopeeApi { get; set; }
         public string ShipperNameShopeeApi { get; set; }
         public string TrackingNo { get; set; }
+        public string tenpttt { get; set; }
+        public Nullable<int> pttt { get; set; }
 
 
         public Nullable<int> idgiogiao { get; set; }
@@ -171,5 +173,10 @@ namespace SoftBBM.Web.ViewModels
     {
         public long id { get; set; }
         public string OrderIdShopeeApi { get; set; }
+    }
+    public class donhangUltil
+    {
+        public string id { get; set; }
+        public string name { get; set; }
     }
 }

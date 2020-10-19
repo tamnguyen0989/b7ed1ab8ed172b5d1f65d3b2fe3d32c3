@@ -76,7 +76,6 @@ namespace SoftBBM.Web.Models
         public virtual DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
         public virtual DbSet<ApplicationUserSoftBranch> ApplicationUserSoftBranches { get; set; }
         public virtual DbSet<ApplicationGroup> ApplicationGroups { get; set; }
-        public virtual DbSet<donhangStatu> donhangStatus { get; set; }
         public virtual DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public virtual DbSet<ApplicationRole> ApplicationRoles { get; set; }
         public virtual DbSet<ApplicationRoleCategory> ApplicationRoleCategories { get; set; }
@@ -109,6 +108,7 @@ namespace SoftBBM.Web.Models
         public virtual DbSet<SoftStockIn> SoftStockIns { get; set; }
         public virtual DbSet<donhang> donhangs { get; set; }
         public virtual DbSet<SystemLog> SystemLogs { get; set; }
+        public virtual DbSet<donhangStatu> donhangStatus { get; set; }
     
         public virtual int TinTuc_Phantrang(Nullable<int> currPage, Nullable<int> recodperpage, Nullable<int> pagesize, Nullable<int> cateID, string page)
         {

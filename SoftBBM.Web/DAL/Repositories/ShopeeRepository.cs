@@ -33,6 +33,7 @@ namespace SoftBBM.Web.DAL.Repositories
         List<donhangIdShopeeId> GetOrdersListLastDayDB();
         List<donhangIdShopeeId> GetOrdersListLastWithDayDB(int quantity);
         void AddOrderLack(string ordersn, string statusOrder, DateTime? updatedDate);
+        ShopeeItem GetItemDetail(long itemId);
 
     }
     public class ShopeeRepository : RepositoryBase<donhang>, IShopeeRepository
@@ -513,7 +514,12 @@ namespace SoftBBM.Web.DAL.Repositories
 
                 foreach (var item in orderShopee.items)
                 {
-                    var product = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim() == item.item_sku.Trim());
+                    var sku = "";
+                    if (!string.IsNullOrEmpty(item.item_sku))
+                        sku = item.item_sku.Trim();
+                    else
+                        sku = item.variation_sku.Trim();
+                    var product = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim() == sku);
                     long? productId = null;
                     if (product != null)
                     {
@@ -569,6 +575,29 @@ namespace SoftBBM.Web.DAL.Repositories
 
                 }
             }
+        }
+
+        public ShopeeItem GetItemDetail(long itemId)
+        {
+            var timestamp = getTimestamp();
+            var result = "";
+            var url = "https://partner.shopeemobile.com/api/v1/item/get";
+            string dataJson = "{'item_id':" + itemId + "," +
+                              "'partner_id':" + _apiPartnerId + "," +
+                              "'shopid':" + _apiId + "," +
+                              "'timestamp':" + timestamp + "}";
+            dataJson = dataJson.Replace("'", "\"");
+            string data = postRequest(url, dataJson);
+
+            if (!string.IsNullOrEmpty(data))
+            {
+                var getItemDetail = JsonConvert.DeserializeObject<GetItemDetail>(data);
+                if (getItemDetail.item != null)
+                {
+                    return getItemDetail.item;
+                }
+            }
+            return null;
         }
     }
 }

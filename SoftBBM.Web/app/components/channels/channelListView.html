@@ -47,7 +47,7 @@
                                 <th>Id</th>
                                 <th>Tên</th>
                                 <th>Mô tả</th>
-                                <th>Enable Api</th>
+                                <th>Enable kênh</th>
                                 <th width="10%">Thao tác</th>
                             </tr>
                             <tr ng-repeat="item in channels">
@@ -63,7 +63,8 @@
                                     <span>{{item.Description}}</span>
                                 </td>
                                 <td>
-                                    <span ng-show="item.Enabled"><i class="fa fa-check"></i></span>
+                                    <span ng-show="item.Status"><i class="fa fa-check"></i></span>
+                                    <span ng-show="!item.Status"><i class="fa fa-close"></i></span>
                                 </td>
                                 <td width="10%">
                                     <button title="Chỉnh sửa" class="btn btn-sm btn-info" ui-sref="edit_channel({id:item.Id})"><i class="fa fa-pencil"></i></button>

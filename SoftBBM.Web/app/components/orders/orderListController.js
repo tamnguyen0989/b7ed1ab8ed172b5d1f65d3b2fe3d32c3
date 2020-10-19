@@ -16,7 +16,8 @@
             selectedSellerFilters: [],
             selectedShipperFilters: [],
             selectedEcommerceShipperFilters: [],
-            selectedPaymentFilters: []
+            selectedPaymentFilters: [],
+            selectedUltilFilters: []
         }
         $scope.filters.sortBy = '';
         $scope.sorttongtien = false;
@@ -89,6 +90,56 @@
         $scope.NinjaVanOrders = [];
         $scope.NowShipOrders = [];
         $scope.BESTExpressOrders = [];
+        //$scope.ultilFilters = [
+        //    { id: 'NoTrackingNumber', name: 'Không có mã vận đơn' },
+        //    { id: 'NoPrinting', name: 'Chưa in' }
+        //]
+        var ultilFilters = [
+            { id: 'NoTrackingNumber', name: 'Không có mã vận đơn' },
+            { id: 'NoPrinting', name: 'Chưa in' },
+            { id: 'HaveTrackingNumber', name: 'Có mã vận đơn' }
+        ]
+        $scope.ultilFilterOptions = {
+            dataSource: ultilFilters,
+            placeholder: "Chọn",
+            dataTextField: "name",
+            dataValueField: "id",
+            valuePrimitive: true,
+            filter: "contains",
+            change: function (e) {
+                updateFilter();
+            }
+        };
+        $scope.ecommerceShipperOptions = {
+            dataSource: $scope.ecommerceShippers,
+            placeholder: "Chọn",
+            dataTextField: "Name",
+            dataValueField: "Name",
+            valuePrimitive: true,
+            filter: "contains",
+            change: function (e) {
+                updateFilter();
+            }
+        };
+        $scope.paymentOptions = {
+            dataSource: $scope.paymentFilters,
+            placeholder: "Chọn",
+            dataTextField: "Name",
+            dataValueField: "Id",
+            valuePrimitive: true,
+            filter: "contains",
+            change: function (e) {
+                updateFilter();
+            }
+        };
+        $scope.setupToogleDataVal = false;
+        $scope.showStatusFilter = true;
+        $scope.showEcommerceShipperFilter = true;
+        $scope.showSellerFilter = false;
+        $scope.showShipperFilter = false;
+        $scope.showTimeFilter = true;
+        $scope.showPaymentFilter = true;
+        $scope.showUltilFilter = true;
 
         $scope.search = search;
         $scope.refeshPage = refeshPage;
@@ -125,6 +176,10 @@
         $scope.printShopeeAll = printShopeeAll;
         $scope.getLackShopeeOrdersWithDay = getLackShopeeOrdersWithDay;
         $scope.updateStatusShopeeOrdersWithDay = updateStatusShopeeOrdersWithDay;
+        $scope.testAPI = testAPI;
+        $scope.updateStockOfProductsNoSkuInOrders = updateStockOfProductsNoSkuInOrders
+        $scope.setupToogleData = setupToogleData;
+        $scope.updateStatusShopeeIncompleteOrders = updateStatusShopeeIncompleteOrders;
         //$scope.selectedOrder = {
         //    TrackingNo: ''
         //};
@@ -176,6 +231,7 @@
             $scope.filters.selectedShipperFilters = [];
             $scope.filters.selectedEcommerceShipperFilters = [];
             $scope.filters.selectedPaymentFilters = [];
+            $scope.filters.selectedUltilFilters = [];
             $scope.filters.sortBy = '';
             $scope.filters.startDateFilter = null;
             $scope.filters.endDateFilter = null;
@@ -230,6 +286,19 @@
             $scope.loading = true;
             apiService.get('/api/orderstatus/getall', null, function (result) {
                 $scope.orderStatusFilters = result.data;
+                var orderStatuses = result.data
+                $scope.orderStatusOptions = {
+                    dataSource: orderStatuses,
+                    placeholder: "Chọn",
+                    dataTextField: "Name",
+                    dataValueField: "Id",
+                    valuePrimitive: true,
+                    filter: "contains",
+                    change: function (e) {
+                        updateFilter();
+                    }
+                };
+
                 $scope.loading = false;
             }, function (error) {
                 notificationService.displayError(error);
@@ -239,6 +308,31 @@
             $scope.loading = true;
             apiService.get('api/applicationuser/getall', null, function (result) {
                 $scope.userFilters = result.data;
+                var sellers = result.data
+                $scope.sellerOptions = {
+                    dataSource: sellers,
+                    placeholder: "Chọn",
+                    dataTextField: "UserName",
+                    dataValueField: "Id",
+                    valuePrimitive: true,
+                    filter: "contains",
+                    change: function (e) {
+                        updateFilter();
+                    }
+                };
+
+                var shippers = result.data
+                $scope.shipperOptions = {
+                    dataSource: shippers,
+                    placeholder: "Chọn",
+                    dataTextField: "UserName",
+                    dataValueField: "Id",
+                    valuePrimitive: true,
+                    filter: "contains",
+                    change: function (e) {
+                        updateFilter();
+                    }
+                };
                 $scope.loading = false;
             }, function (error) {
                 notificationService.displayError(error);
@@ -511,6 +605,7 @@
                 && ($scope.filters.selectedShipperFilters.length == 0)
                 && ($scope.filters.selectedEcommerceShipperFilters.length == 0)
                 && ($scope.filters.selectedPaymentFilters.length == 0)
+                && ($scope.filters.selectedUltilFilters.length == 0)
                 && $scope.filters.startDateFilter == null
                 && $scope.filters.endDateFilter == null) {
                 if (confirm("Bạn có muốn xuất tất cả đơn hàng !")) {
@@ -647,15 +742,17 @@
                     }, 0);
                 $scope.selectedOrder.TotalQuantity = totalQuantity;
                 $scope.selectedOrder.TotalAmount = result.data.TotalAmount;
-                var maxWeight = 0;
-                if ($scope.selectedOrder.OrderDetails.length > 0)
-                    maxWeight = result.data.OrderDetails.reduce((weight, currentDetail) => {
-                        return weight + currentDetail.weight * currentDetail.variation_quantity_purchased;
-                    }, 0);
-                $scope.selectedOrder.MaxWeight = Math.floor(maxWeight * 1000);
+                //var maxWeight = 0;
+                //if ($scope.selectedOrder.OrderDetails.length > 0)
+                //    maxWeight = result.data.OrderDetails.reduce((weight, currentDetail) => {
+                //        return weight + currentDetail.weight * currentDetail.variation_quantity_purchased;
+                //    }, 0);
+                $scope.selectedOrder.MaxWeight = result.data.MaxWeight;
                 $scope.waiting = false;
                 var trackingNo = angular.copy($scope.selectedOrder.TrackingNo);
                 var recipientSortCode = angular.copy($scope.selectedOrder.RecipientSortCode);
+                if (IsNullOrEmpty(recipientSortCode))
+                    recipientSortCode = 0;
                 setTimeout(function () {
                     var idElement = 'printDivGHN';
                     JsBarcode("#TrackingNoBarcode", trackingNo, {
@@ -980,7 +1077,10 @@
                         if ($scope.VNPOrders.length > 0)
                             $.each($scope.VNPOrders, function (index, value) {
                                 printBarcode("#TrackingNoBarcodeVNP" + index, value.TrackingNo)
-                                JsBarcode("#RecipientSortCodeVNP" + index, value.RecipientSortCode, {
+                                recipientSortCode = value.RecipientSortCode;
+                                if (IsNullOrEmpty(recipientSortCode))
+                                    recipientSortCode = 0;
+                                JsBarcode("#RecipientSortCodeVNP" + index, recipientSortCode, {
                                     height: 15,
                                     width: 1.6,
                                     displayValue: false,
@@ -1064,6 +1164,41 @@
                 $scope.waiting = false;
             });
         }
+        function testAPI() {
+            $scope.waiting = true;
+            apiService.get('/api/shopee/testapi', null, function (result) {
+                //notificationService.displaySuccess('Cập nhật tình  trạng đơn hàng từ ' + config.params.quantity + ' ngày trước thành công!');
+                //search($scope.page);
+                $scope.waiting = false;
+            }, function (error) {
+                notificationService.displayError(error);
+                $scope.waiting = false;
+            });
+        }
+        function updateStockOfProductsNoSkuInOrders() {
+            $scope.waiting = true;
+            apiService.get('/api/shopee/updatestockofproductsnoskuinorders', null, function (result) {
+                $scope.waiting = false;
+            }, function (error) {
+                notificationService.displayError(error);
+                $scope.waiting = false;
+            });
+        }
+        function setupToogleData() {
+            $scope.setupToogleDataVal = !$scope.setupToogleDataVal;
+        }
+        function updateStatusShopeeIncompleteOrders() {
+            $scope.waiting = true;
+            apiService.get('/api/order/updatestatusshopeeincompleteorders', null, function (result) {
+                notificationService.displaySuccess('Cập nhật tình  trạng đơn hàng chưa hoàn tất thành công!');
+                //search($scope.page);
+                $scope.waiting = false;
+            }, function (error) {
+                notificationService.displayError(error);
+                $scope.waiting = false;
+            });
+        }
+
 
         var printBarcode = function (elementId, value) {
             JsBarcode(elementId, value, {

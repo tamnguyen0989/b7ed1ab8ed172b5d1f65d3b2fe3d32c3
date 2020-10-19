@@ -1234,8 +1234,27 @@ namespace SoftBBM.Web.api
             HttpResponseMessage response = null;
             try
             {
-                var product = _shopSanPhamRepository.GetSingleById(productId);
+                string[] includes = { "SoftChannelProductPrices" };
+                var product = _shopSanPhamRepository.GetSingleByCondition(x => x.id == productId, includes);
+                product.SoftChannelProductPrices = product.SoftChannelProductPrices.Where(x => x.SoftChannel.Status == true).ToList();
                 var productVm = Mapper.Map<shop_sanpham, DetailProductOutputViewModel>(product);
+                var channelIdsVm = productVm.SoftChannelProductPrices.Select(x => x.ChannelId).ToList();
+                var channels = _softChannelRepository.GetMulti(x => x.Status == true);
+                foreach (var channel in channels)
+                {
+                    if (!channelIdsVm.Any(x => x == channel.Id))
+                    {
+                        productVm.SoftChannelProductPrices.Add(new SoftChannelProductPriceViewModel()
+                        {
+                            ChannelId = channel.Id,
+                            ProductId = productId,
+                            Price = 0,
+                            PriceDiscount = 0,
+                            CreatedDate = DateTime.Now,
+                            channelName = channel.Name
+                        });
+                    }
+                }
                 productVm.productCode = productVm.productCode.Trim();
                 response = request.CreateResponse(HttpStatusCode.OK, productVm);
             }
@@ -1276,6 +1295,33 @@ namespace SoftBBM.Web.api
                 product.UpdatedBy = detailProductInputVm.userId;
                 product.UpdatedDate = DateTime.Now;
                 _shopSanPhamRepository.Update(product);
+
+                //update channel price
+                if(detailProductInputVm.SoftChannelProductPrices.Count > 0)
+                {
+                    foreach (var channelPrice in detailProductInputVm.SoftChannelProductPrices)
+                    {
+                        if (channelPrice.Id > 0)
+                        {
+                            var softChannelPrice = _softChannelProductPriceRepository.GetSingleById(channelPrice.Id);
+                            softChannelPrice.Price = channelPrice.Price;
+                            softChannelPrice.UpdatedDate = DateTime.Now;
+                            softChannelPrice.UpdatedBy = detailProductInputVm.userId;
+                            _softChannelProductPriceRepository.Update(softChannelPrice);
+                        }
+                        else
+                        {
+                            var softChannelPrice = new SoftChannelProductPrice();
+                            softChannelPrice.ProductId = detailProductInputVm.id;
+                            softChannelPrice.Price = channelPrice.Price;
+                            softChannelPrice.ChannelId = channelPrice.ChannelId;
+                            softChannelPrice.CreatedDate = DateTime.Now;
+                            softChannelPrice.CreatedBy = detailProductInputVm.userId;
+                            _softChannelProductPriceRepository.Add(softChannelPrice);
+                        }   
+                    }
+                }
+
                 _unitOfWork.Commit();
                 response = request.CreateResponse(HttpStatusCode.OK, true);
             }

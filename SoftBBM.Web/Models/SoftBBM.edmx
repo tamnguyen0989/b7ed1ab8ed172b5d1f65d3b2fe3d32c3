@@ -280,6 +280,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="CssClass" Type="varchar" MaxLength="256" />
+          <Property Name="Priority" Type="int" />
         </EntityType>
         <EntityType Name="khachhang">
           <Key>
@@ -827,6 +828,7 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="CssClass" Type="varchar" MaxLength="256" />
+          <Property Name="Priority" Type="int" />
         </EntityType>
         <EntityType Name="SoftPointUpdateLogs">
           <Key>
@@ -4007,7 +4009,6 @@
             <End Role="ApplicationGroup" EntitySet="ApplicationGroups" />
             <End Role="ApplicationUserGroup" EntitySet="ApplicationUserGroups" />
           </AssociationSet>
-          <EntitySet Name="donhangStatus" EntityType="SoftBBMModels.donhangStatu" />
           <EntitySet Name="ApplicationUsers" EntityType="SoftBBMModels.ApplicationUser" />
           <AssociationSet Name="FK_ApplicationUserGroups_ApplicationUsers" Association="SoftBBMModels.FK_ApplicationUserGroups_ApplicationUsers">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
@@ -4359,10 +4360,6 @@
             <End Role="donhang" EntitySet="donhangs" />
             <End Role="donhang_ct" EntitySet="donhang_ct" />
           </AssociationSet>
-          <AssociationSet Name="FK_donhang_donhangStatus" Association="SoftBBMModels.FK_donhang_donhangStatus">
-            <End Role="donhangStatu" EntitySet="donhangStatus" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
           <AssociationSet Name="FK_donhang_SoftBranches" Association="SoftBBMModels.FK_donhang_SoftBranches">
             <End Role="SoftBranch" EntitySet="SoftBranches" />
             <End Role="donhang" EntitySet="donhangs" />
@@ -4384,6 +4381,11 @@
             <End Role="donhang" EntitySet="donhangs" />
           </AssociationSet>
           <EntitySet Name="SystemLogs" EntityType="SoftBBMModels.SystemLog" />
+          <EntitySet Name="donhangStatus" EntityType="SoftBBMModels.donhangStatu" />
+          <AssociationSet Name="FK_donhang_donhangStatus" Association="SoftBBMModels.FK_donhang_donhangStatus">
+            <End Role="donhangStatu" EntitySet="donhangStatus" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="spTB_DangNhap_TruyVanTheoTenDangNhap_Result">
           <Property Type="String" Name="TenDN" Nullable="false" MaxLength="100" />
@@ -4483,16 +4485,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="donhangStatu">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CssClass" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_donhangStatus" FromRole="donhangStatu" ToRole="donhang" />
-        </EntityType>
         <EntityType Name="ApplicationUser">
           <Key>
             <PropertyRef Name="Id" />
@@ -4907,6 +4899,7 @@
           <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="CssClass" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="SoftOrders" Relationship="SoftBBMModels.FK_SoftOrders_SoftOrderStatus" FromRole="SoftOrderStatu" ToRole="SoftOrder" />
+          <Property Name="Priority" Type="Int32" />
         </EntityType>
         <EntityType Name="SoftReturnSupplierDetail">
           <Key>
@@ -6075,12 +6068,12 @@
           <NavigationProperty Name="ApplicationUser1" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers1" FromRole="donhang" ToRole="ApplicationUser" />
           <NavigationProperty Name="ApplicationUser2" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers2" FromRole="donhang" ToRole="ApplicationUser" />
           <NavigationProperty Name="donhang_ct" Relationship="SoftBBMModels.dh_ctDH" FromRole="donhang" ToRole="donhang_ct" />
-          <NavigationProperty Name="donhangStatu" Relationship="SoftBBMModels.FK_donhang_donhangStatus" FromRole="donhang" ToRole="donhangStatu" />
           <NavigationProperty Name="SoftBranch" Relationship="SoftBBMModels.FK_donhang_SoftBranches" FromRole="donhang" ToRole="SoftBranch" />
           <NavigationProperty Name="SoftChannel" Relationship="SoftBBMModels.FK_donhang_SoftChannels" FromRole="donhang" ToRole="SoftChannel" />
           <NavigationProperty Name="khachhang" Relationship="SoftBBMModels.FK_KHHH_DH" FromRole="donhang" ToRole="khachhang" />
           <NavigationProperty Name="SoftPointUpdateLogs" Relationship="SoftBBMModels.FK_SoftPointUpdateLogs_donhang" FromRole="donhang" ToRole="SoftPointUpdateLog" />
           <NavigationProperty Name="khachhang_vanglai" Relationship="SoftBBMModels.fk_vanglai_dh" FromRole="donhang" ToRole="khachhang_vanglai" />
+          <NavigationProperty Name="donhangStatu" Relationship="SoftBBMModels.FK_donhang_donhangStatus" FromRole="donhang" ToRole="donhangStatu" />
         </EntityType>
         <Association Name="FK_donhang_ApplicationUsers">
           <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
@@ -6127,18 +6120,6 @@
             </Principal>
             <Dependent Role="donhang_ct">
               <PropertyRef Name="Sodh" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_donhang_donhangStatus">
-          <End Type="SoftBBMModels.donhangStatu" Role="donhangStatu" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="donhangStatu">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="donhang">
-              <PropertyRef Name="Status" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6220,6 +6201,29 @@
           <Property Name="Before" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="After" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="donhangStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CssClass" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Priority" Type="Int32" />
+          <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_donhangStatus" FromRole="donhangStatu" ToRole="donhang" />
+        </EntityType>
+        <Association Name="FK_donhang_donhangStatus">
+          <End Type="SoftBBMModels.donhangStatu" Role="donhangStatu" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donhangStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="donhang">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -6912,16 +6916,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="donhangStatus">
-            <EntityTypeMapping TypeName="SoftBBMModels.donhangStatu">
-              <MappingFragment StoreEntitySet="donhangStatus">
-                <ScalarProperty Name="CssClass" ColumnName="CssClass" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ApplicationUsers">
             <EntityTypeMapping TypeName="SoftBBMModels.ApplicationUser">
               <MappingFragment StoreEntitySet="ApplicationUsers">
@@ -7144,6 +7138,7 @@
           <EntitySetMapping Name="SoftOrderStatus">
             <EntityTypeMapping TypeName="SoftBBMModels.SoftOrderStatu">
               <MappingFragment StoreEntitySet="SoftOrderStatus">
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
                 <ScalarProperty Name="CssClass" ColumnName="CssClass" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -7484,6 +7479,17 @@
                 <ScalarProperty Name="AppName" ColumnName="AppName" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="KeyId" ColumnName="KeyId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="donhangStatus">
+            <EntityTypeMapping TypeName="SoftBBMModels.donhangStatu">
+              <MappingFragment StoreEntitySet="donhangStatus">
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="CssClass" ColumnName="CssClass" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

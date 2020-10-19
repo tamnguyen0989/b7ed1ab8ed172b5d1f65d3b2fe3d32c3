@@ -251,6 +251,8 @@ namespace SoftBBM.Web.api
         public HttpResponseMessage Add(HttpRequestMessage request, OrderViewModel orderVM)
         {
             HttpResponseMessage response = null;
+            if (!(orderVM.pttt > 0))
+                orderVM.pttt = 1;
             foreach (var item in orderVM.OrderDetails)
             {
                 if (item.Quantity == null)
@@ -386,12 +388,8 @@ namespace SoftBBM.Web.api
 
             if (orderFilterVM.selectedPaymentFilters.Count > 0)
             {
-                if (orderFilterVM.selectedPaymentFilters.Any(x => x.Id == (int)PaymentMethod.Cash))
-                    orderFilterVM.selectedPaymentFilters.Add(new donhangStatusViewModel()
-                    {
-                        Id = 3,
-                        Name = "Thu hộ"
-                    });
+                if (orderFilterVM.selectedPaymentFilters.Any(x => x == (int)PaymentMethod.Cash))
+                    orderFilterVM.selectedPaymentFilters.Add(3);// thu hộ
             }
 
             donhangs = _donhangRepository.GetAllPaging(currentPage, currentPageSize, out totaldonhangs, out totalMoney, orderFilterVM).ToList();
@@ -421,6 +419,8 @@ namespace SoftBBM.Web.api
                 }
                 if (item.CreatedDate != null)
                     item.CreatedDateConvert = UtilExtensions.ConvertDate(item.CreatedDate.Value);
+                if (item.pttt != null)
+                    item.tenpttt = UtilExtensions.ConvertPaymentMethod(item.pttt.Value);
             }
 
             PaginationSet<donhangListViewModel> pagedSet = new PaginationSet<donhangListViewModel>()
@@ -2261,7 +2261,7 @@ namespace SoftBBM.Web.api
 
         [HttpGet]
         [Route("shopeegetlackorderswithday")]
-        //[Authorize(Roles = "OrderUpdate")]
+        [Authorize(Roles = "OrderUpdate")]
         public HttpResponseMessage ShopeeGetLackOrdersWithDay(HttpRequestMessage request, int quantity)
         {
             HttpResponseMessage response = null;
@@ -2281,7 +2281,7 @@ namespace SoftBBM.Web.api
 
         [HttpGet]
         [Route("shopeeupdatestatusorderswithday")]
-        //[Authorize(Roles = "OrderUpdate")]
+        [Authorize(Roles = "OrderUpdate")]
         public HttpResponseMessage ShopeeUpdateStatusOrdersWithDay(HttpRequestMessage request, int quantity)
         {
             HttpResponseMessage response = null;
@@ -2295,6 +2295,28 @@ namespace SoftBBM.Web.api
             {
                 response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message + " | " + ex.StackTrace);
                 return response;
+            }
+        }
+
+        [HttpGet]
+        [Route("updatestatusshopeeincompleteorders")]
+        [Authorize(Roles = "OrderUpdate")]
+        public HttpResponseMessage UpdateStatusShopeeIncompleteOrders(HttpRequestMessage request)
+        {
+            var result = new List<Object>();
+            try
+            {
+                UpdateStatusShopeeIncompleteOrders();
+                return request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                //var contentLog = new SoftPointUpdateLog();
+                //contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
+                //contentLog.CreatedDate = DateTime.Now;
+                //_softPointUpdateLogRepository.Add(contentLog);
+                //_unitOfWork.Commit();
+                return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
         }
 
@@ -2403,7 +2425,7 @@ namespace SoftBBM.Web.api
                                 _donhangRepository.Update(order);
                                 _unitOfWork.Commit();
                             }
-                            
+
                         }
                     }
                 }
@@ -2427,7 +2449,7 @@ namespace SoftBBM.Web.api
                 foreach (var item in order.donhang_ct)
                 {
                     var bienthe = _shopbientheRepository.GetSingleByCondition(x => x.id == item.IdPro);
-                    var stockCurrent = _softStockRepository.GetSingleByCondition(x => x.BranchId == (int)BranchEnum.KHO_CHINH && x.ProductId == bienthe.idsp);
+                    var stockCurrent = _softStockRepository.GetMulti(x => x.BranchId == (int)BranchEnum.KHO_CHINH && x.ProductId == bienthe.idsp).FirstOrDefault();
                     if (stockCurrent == null)
                     {
                         var newStockCurrent = new SoftBranchProductStock();
@@ -2448,6 +2470,67 @@ namespace SoftBBM.Web.api
                     _shopSanPhamLogRepository.Add(productLog);
 
                 }
+            }
+        }
+
+        public void UpdateStatusShopeeIncompleteOrders()
+        {
+            var result = new List<Object>();
+            try
+            {
+                var orderDBs = _donhangRepository.GetMulti(x=>x.Status != (int)StatusOrder.Done 
+                                                                && x.Status != (int) StatusOrder.Cancel
+                                                                && !string.IsNullOrEmpty(x.OrderIdShopeeApi))
+                                                                    .Select(x=> new { id=x.id, OrderIdShopeeApi = x.OrderIdShopeeApi }).ToList();
+                if (orderDBs.Count > 0)
+                {
+                    foreach (var orderDB in orderDBs)
+                    {
+                        if (!string.IsNullOrEmpty(orderDB.OrderIdShopeeApi))
+                        {
+                            var orderSPE = _shopeeRepository.getOrder(orderDB.OrderIdShopeeApi);
+                            var order = _donhangRepository.GetSingleByCondition(x => x.id == orderDB.id);
+                            if (order != null)
+                            {
+                                switch (orderSPE.order_status)
+                                {
+                                    case CommonClass.COMPLETED:
+                                        order.Status = (int)StatusOrder.Done;
+                                        break;
+                                    case CommonClass.SHIPPED:
+                                        order.Status = (int)StatusOrder.Shipping;
+                                        break;
+                                    case CommonClass.TO_CONFIRM_RECEIVE:
+                                        order.Status = (int)StatusOrder.Shipped;
+                                        break;
+                                    case CommonClass.READY_TO_SHIP:
+                                        order.Status = (int)StatusOrder.ReadyToShip;
+                                        break;
+                                    case CommonClass.CANCELLED:
+                                        if (order.Status != (int)StatusOrder.Cancel)
+                                        {
+                                            order.Status = (int)StatusOrder.Cancel;
+                                            RollBackOrder(orderDB.OrderIdShopeeApi);
+                                        }
+                                        break;
+                                }
+                                order.UpdatedBy = 0;
+                                order.UpdatedDate = DateTime.Now;
+                                _donhangRepository.Update(order);
+                                _unitOfWork.Commit();
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var contentLog = new SoftPointUpdateLog();
+                contentLog.Description = "Error (UpdateStatusShopeeIncompleteOrders): " + JsonConvert.SerializeObject(ex);
+                contentLog.CreatedDate = DateTime.Now;
+                _softPointUpdateLogRepository.Add(contentLog);
+                _unitOfWork.Commit();
             }
         }
     }

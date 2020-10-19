@@ -9,6 +9,7 @@
         $scope.loadProduct = loadProduct;
         $scope.update = update
         $scope.back = back;
+        $scope.copyPriceRefToRestPrice = copyPriceRefToRestPrice;
 
         function back() {
             $scope.selectedStock = null;
@@ -53,7 +54,8 @@
                 supplierId: supId,
                 statusId: statusId,
                 userId: $scope.userId,
-                shopeeId: $scope.product.shopeeId
+                shopeeId: $scope.product.shopeeId,
+                softChannelProductPrices: $scope.product.SoftChannelProductPrices
             }
             apiService.post('/api/stock/updatedetailproduct', $scope.modelUpdate, function (result) {
                 notificationService.displaySuccess('Cập nhật thành công !');
@@ -65,6 +67,12 @@
                 notificationService.displayError(error);
             });
         }
+        function copyPriceRefToRestPrice() {
+            $.each($scope.product.SoftChannelProductPrices, function (i, v) {
+                v.Price = $scope.product.priceRef;
+            });
+        }
+
         if (localStorage.getItem("userId")) {
             $scope.userId = JSON.parse(localStorage.getItem("userId"));
         }

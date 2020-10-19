@@ -561,9 +561,15 @@ namespace SoftBBM.Web.DAL.Repositories
         public double GetStockTotalAll(int productId)
         {
             double result = 0;
-            var model = DbContext.SoftBranchProductStocks.Where(x => x.ProductId == productId);
-            if (model.Count() > 0)
-                result = model.Sum(x => x.StockTotal).Value;
+            var models = DbContext.SoftBranchProductStocks.Where(x => x.ProductId == productId).ToList();
+            if (models.Count > 0)
+            {
+                foreach (var item in models)
+                {
+                    if (item.StockTotal > 0)
+                        result += item.StockTotal.Value;
+                }
+            }
             return result;
         }
 

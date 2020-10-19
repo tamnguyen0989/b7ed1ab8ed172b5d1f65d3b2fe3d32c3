@@ -431,6 +431,10 @@ li > a > p {
     width: 100% !important;
 }
 
+.width95_default {
+    width: 95% !important;
+}
+
 .custom_label {
     margin-top: 5px;
 }

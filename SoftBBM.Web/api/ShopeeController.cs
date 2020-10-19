@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -124,7 +125,7 @@ namespace SoftBBM.Web.api
                         //_shopSanPhamLogRepository.Add(newLog);
                         //_unitOfWork.Commit();
 
-                        var orderDB = _donhangRepository.GetSingleByCondition(x=>x.OrderIdShopeeApi == jsonContent.Data.Ordersn);
+                        var orderDB = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == jsonContent.Data.Ordersn);
                         if (orderDB == null)
                         {
                             //thêm mới đơn hàng
@@ -167,7 +168,12 @@ namespace SoftBBM.Web.api
 
                                 foreach (var item in orderShopee.items)
                                 {
-                                    var product = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim() == item.item_sku.Trim());
+                                    var sku = "";
+                                    if (!string.IsNullOrEmpty(item.item_sku))
+                                        sku = item.item_sku.Trim();
+                                    else
+                                        sku = item.variation_sku.Trim();
+                                    var product = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim() == sku);
                                     long? productId = null;
                                     if (product != null)
                                     {
@@ -291,7 +297,7 @@ namespace SoftBBM.Web.api
                             foreach (var item in order.donhang_ct)
                             {
                                 var bienthe = _shopbientheRepository.GetSingleByCondition(x => x.id == item.IdPro);
-                                var stockCurrent = _softStockRepository.GetSingleByCondition(x => x.BranchId == (int)BranchEnum.KHO_CHINH && x.ProductId == bienthe.idsp);
+                                var stockCurrent = _softStockRepository.GetMulti(x => x.BranchId == (int)BranchEnum.KHO_CHINH && x.ProductId == bienthe.idsp).FirstOrDefault();
                                 if (stockCurrent == null)
                                 {
                                     var newStockCurrent = new SoftBranchProductStock();
@@ -557,6 +563,22 @@ namespace SoftBBM.Web.api
                             orderDB.StatusPrint = "<li>" + username + " đã in (" + datePrint + ")</li>";
                             _donhangRepository.Update(orderDB);
                             _unitOfWork.Commit();
+
+                            double maxWeight = 0;
+                            double maxWeightLWH = 0;
+                            double totalWeight = 0;
+                            foreach (var item in order.items)
+                            {
+                                maxWeight = item.weight * item.variation_quantity_purchased;
+                                var product = _shopeeRepository.GetItemDetail(item.item_id);
+                                maxWeightLWH = TotalWeightByLWH(product.package_length, product.package_width, product.package_height) * item.variation_quantity_purchased;
+
+                                if (maxWeight > maxWeightLWH)
+                                    totalWeight += maxWeight;
+                                else
+                                    totalWeight += maxWeightLWH;
+                            }
+
                             return request.CreateResponse(HttpStatusCode.OK, new
                             {
                                 BuyerName = order.recipient_address.name,
@@ -566,7 +588,8 @@ namespace SoftBBM.Web.api
                                 SenderSortCode = logistics.logistics.sender_sort_code.first_sender_sort_code,
                                 OrderDetails = order.items,
                                 TotalAmount = order.cod ? order.total_amount : 0.ToString(),
-                                CreateTime = UtilExtensions.UnixTimeStampToDateTime(order.create_time)
+                                CreateTime = UtilExtensions.UnixTimeStampToDateTime(order.create_time),
+                                MaxWeight = Math.Floor(totalWeight * 1000),
                             });
                         }
                         else
@@ -695,11 +718,20 @@ namespace SoftBBM.Web.api
                         if (logistics != null)
                         {
                             double maxWeight = 0;
+                            double maxWeightLWH = 0;
+                            double totalWeight = 0;
                             var totalQuantity = 0;
                             foreach (var item in order.items)
                             {
-                                maxWeight += item.weight * item.variation_quantity_purchased;
+                                maxWeight = item.weight * item.variation_quantity_purchased;
+                                var product = _shopeeRepository.GetItemDetail(item.item_id);
+                                maxWeightLWH = TotalWeightByLWH(product.package_length, product.package_width, product.package_height) * item.variation_quantity_purchased;
                                 totalQuantity += item.variation_quantity_purchased;
+
+                                if (maxWeight > maxWeightLWH)
+                                    totalWeight += maxWeight;
+                                else
+                                    totalWeight += maxWeightLWH;
                             }
 
                             var orderDB = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == orderVM);
@@ -712,7 +744,7 @@ namespace SoftBBM.Web.api
                                 TrackingNo = orderDB.TrackingNo,
                                 OrderIdShopeeApi = orderDB.OrderIdShopeeApi,
                                 ghichu = orderDB.ghichu,
-                                MaxWeight = Math.Floor(maxWeight * 1000),
+                                MaxWeight = Math.Floor(totalWeight * 1000),
                                 TotalQuantity = totalQuantity,
                                 ShipperName = orderDB.ShipperNameShopeeApi,
                                 BuyerName = order.recipient_address.name,
@@ -775,6 +807,60 @@ namespace SoftBBM.Web.api
                 _unitOfWork.Commit();
                 return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
+        }
+
+        [HttpGet]
+        [Route("testapi")]
+        [Authorize(Roles = "OrderUpdate")]
+        public HttpResponseMessage TestAPI(HttpRequestMessage request)
+        {
+            var result = new List<Object>();
+            try
+            {
+                var orderShopee = _shopeeRepository.getOrder("201010V9XGD3UX");
+                return request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                //var contentLog = new SoftPointUpdateLog();
+                //contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
+                //contentLog.CreatedDate = DateTime.Now;
+                //_softPointUpdateLogRepository.Add(contentLog);
+                //_unitOfWork.Commit();
+                return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("updatestockofproductsnoskuinorders")]
+        [Authorize(Roles = "OrderUpdate")]
+        public HttpResponseMessage UpdateStockOfProductsNoSkuInOrders(HttpRequestMessage request)
+        {
+            var result = new List<Object>();
+            try
+            {
+                var orderShopee = _shopeeRepository.GetItemDetail(314091888);
+                return request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                //var contentLog = new SoftPointUpdateLog();
+                //contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
+                //contentLog.CreatedDate = DateTime.Now;
+                //_softPointUpdateLogRepository.Add(contentLog);
+                //_unitOfWork.Commit();
+                return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        public float TotalWeightByLWH(float length = 0, float width = 0, float height = 0, bool fast = true)
+        {
+            float res = 0;
+            if (fast)
+                res = (length * width * height) / 6000;
+            else
+                res = (length * width * height) / 4000;
+            return res;
         }
     }
 }

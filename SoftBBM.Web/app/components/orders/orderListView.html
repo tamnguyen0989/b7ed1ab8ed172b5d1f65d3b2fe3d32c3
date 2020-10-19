@@ -1,10 +1,26 @@
 ﻿<style>
+    @import url('../../../Assets/Admin/css/kendo.common.min.css');
+    @import url('../../../Assets/Admin/css/kendo.default.min.css');
+    @import url('../../../Assets/Admin/css/kendo.default.mobile.min.css');
+
     .ng-leave {
         display: none !important;
     }
 
     .ng-hide.ng-hide-animate {
         display: none !important;
+    }
+    .box-title{
+        font-size:17px !important;
+    }
+    .box-header {
+        padding:5px !important;
+    }
+    .box.box-solid.box-primary {
+        border: none !important
+    }
+    .box {
+        box-shadow:none !important
     }
 </style>
 
@@ -14,9 +30,32 @@
         Danh sách đơn hàng
     </h1>
     <ol class="breadcrumb">
-        <li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
-        <li class="active">Danh sách đơn hàng</li>
+        <li><a ng-click="setupToogleData()"><i class="fa fa-dashboard"></i> Ẩn/Hiện filter</a></li>
+        <!--<li class="active">Danh sách sản phẩm tại kho</li>-->
     </ol>
+    <div ng-show="setupToogleDataVal" style="margin:15px;background-color:#f4f4f4">
+        <h5>
+            <input ng-model="showStatusFilter" type="checkbox" /> Tình trạng
+        </h5>
+        <h5>
+            <input ng-model="showEcommerceShipperFilter" type="checkbox" /> Nhà vc
+        </h5>
+        <h5>
+            <input ng-model="showSellerFilter" type="checkbox" /> Người bán
+        </h5>
+        <h5>
+            <input ng-model="showShipperFilter" type="checkbox" /> Người giao
+        </h5>
+        <h5>
+            <input ng-model="showTimeFilter" type="checkbox" /> Thời gian
+        </h5>
+        <h5>
+            <input ng-model="showPaymentFilter" type="checkbox" /> Phương thức thanh toán
+        </h5>
+        <h5>
+            <input ng-model="showUltilFilter" type="checkbox" /> Tiện ích
+        </h5>
+    </div>
 </section>
 <!-- Main content -->
 <section class="content">
@@ -34,9 +73,13 @@
                             <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
                             <button class="btn" title="Xuất DS đơn hàng" style="background-color:yellowgreen;color:white;width:60px" type="button" ng-click="authenExport()"><i class="fa fa-fw fa-cloud-download"></i></button>
                             <button class="btn btn-info" ng-show="selectedChannel.Id==4" title="Đồng bộ mã vận đơn từ Shopee" style="width:60px" type="button" ng-click="syncTrackingNoShopee()"><i class="fa fa-fw fa-indent"></i></button>
+                            <button type="button" class="btn btn-info" ng-click="loadExtension()" title="hỗ trợ" style="width:60px"><i class="fa fa-fw fa-bell-o"></i></button>
                             <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật đơn hàng sót 5 ngày trước" style="width:60px" type="button" ng-click="getLackShopeeOrdersWithDay()"><i class="fa fa-fw fa-balance-scale"></i></button>
                             <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật tình trạng đơn hàng từ 5 ngày trước" style="width:60px" type="button" ng-click="updateStatusShopeeOrdersWithDay()"><i class="fa fa-fw fa-database"></i></button>
-                            <button type="button" class="btn btn-info" ng-click="loadExtension()" title="hỗ trợ" style="width:60px"><i class="fa fa-fw fa-bell-o"></i></button>
+                            <button class="btn btn-default" ng-show="userName=='admin'" title="TestAPI" style="width:60px" type="button" ng-click="testAPI()"><i class="fa fa-fw fa-shield"></i></button>
+                            <button class="btn btn-default" ng-show="userName=='admin'" title="Trừ stock những sản phẩm không có sku trong đơn hàng" style="width:60px" type="button" ng-click="updateStockOfProductsNoSkuInOrders()"><i class="fa fa-fw fa-flash"></i></button>
+                            <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật tình trạng đơn hàng chưa hoàn tất" style="width:60px" type="button" ng-click="updateStatusShopeeIncompleteOrders()"><i class="fa fa-fw fa-battery-3"></i></button>
+
                             <div class="pull-right totalcount">
                                 <span>
                                     Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
@@ -73,118 +116,149 @@
             </div>
             <div class="row col-xs-12 margintop5px">
                 <div ng-show="showFilter">
-                    <div class="col-xs-2" style="padding-right:5px;padding-left:0px">
-                        <div class="box box-solid box-primary" style="margin-bottom:10px">
-                            <div class="box-header">
-                                <h3 class="box-title">Tình trạng</h3><i style="float:right" class="fa fa-fw fa-gear"></i>
-                            </div><!-- /.box-header -->
-                            <div class="box-body" style="padding-bottom:5px">
-                                <select style="width:100%;border:0px;padding-left:0px"
-                                        ng-change="updateFilter()" ng-options="option.Name for option in orderStatusFilters track by option.Id"
-                                        ng-model="filters.selectedOrderStatusFilters"
-                                        name="orderStatusFilter"
-                                        class="form-control"
-                                        size="5"
-                                        multiple></select>
-                            </div><!-- /.box-body -->
-                        </div>
-                    </div>
-                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                        <div class="box box-solid box-primary" style="margin-bottom:10px">
-                            <div class="box-header">
-                                <h3 class="box-title">Nhà vc</h3><i style="float:right" class="fa fa-fw fa-truck"></i>
-                            </div><!-- /.box-header -->
-                            <div class="box-body" style="padding-bottom:5px">
-                                <select style="width:100%;border:0px;padding-left:0px"
-                                        ng-change="updateFilter()" ng-options="option.Name for option in ecommerceShippers track by option.Name"
-                                        ng-model="filters.selectedEcommerceShipperFilters"
-                                        name="shipperFilter"
-                                        class="form-control"
-                                        size="5"
-                                        multiple></select>
-                            </div><!-- /.box-body -->
-                        </div>
-                    </div>
-                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                        <div class="box box-solid box-primary" style="margin-bottom:10px">
-                            <div class="box-header">
-                                <h3 class="box-title">Người bán</h3><i style="float:right" class="fa fa-fw fa-dollar "></i>
-                            </div><!-- /.box-header -->
-                            <div class="box-body" style="padding-bottom:5px">
-                                <select style="width:100%;border:0px;padding-left:0px"
-                                        ng-change="updateFilter()" ng-options="option.UserName for option in userFilters track by option.Id"
-                                        ng-model="filters.selectedSellerFilters"
-                                        name="sellerFilter"
-                                        class="form-control"
-                                        size="5"
-                                        multiple></select>
-                            </div><!-- /.box-body -->
-                        </div>
-                    </div>
-                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                        <div class="box box-solid box-primary" style="margin-bottom:10px">
-                            <div class="box-header">
-                                <h3 class="box-title">Người giao</h3><i style="float:right" class="fa fa-fw fa-motorcycle "></i>
-                            </div><!-- /.box-header -->
-                            <div class="box-body" style="padding-bottom:5px">
-                                <select style="width:100%;border:0px;padding-left:0px"
-                                        ng-change="updateFilter()" ng-options="option.UserName for option in userFilters track by option.Id"
-                                        ng-model="filters.selectedShipperFilters"
-                                        name="shipperFilter"
-                                        class="form-control"
-                                        size="5"
-                                        multiple></select>
-                            </div><!-- /.box-body -->
-                        </div>
-                    </div>
-                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                        <div class="box box-solid box-primary" style="margin-bottom:10px">
-                            <div class="box-header">
-                                <h3 class="box-title">Phương thức TT</h3><i style="float:right" class="fa fa-fw fa-credit-card"></i>
-                            </div><!-- /.box-header -->
-                            <div class="box-body" style="padding-bottom:5px">
-                                <select style="width:100%;border:0px;padding-left:0px"
-                                        ng-change="updateFilter()" ng-options="option.Name for option in paymentFilters track by option.Id"
-                                        ng-model="filters.selectedPaymentFilters"
-                                        name="PaymentFilter"
-                                        class="form-control"
-                                        size="5"
-                                        multiple></select>
-                            </div><!-- /.box-body -->
-                        </div>
-                    </div>
-                    <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                        <div class="box box-solid box-primary" style="margin-bottom:10px">
-                            <div class="box-header">
-                                <h3 class="box-title">Thời gian</h3><i style="float:right" class="fa fa-fw fa-clock-o"></i>
-                            </div><!-- /.box-header -->
-                            <div class="box-body" style="padding-bottom:5px;height:122px">
-                                <div class="row" style="margin-bottom:5px">
-                                    <div class="col-xs-3" style="text-align:right">
-                                        <label class="control-label margintop5px">Từ</label>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="startDateFilter" is-open="picker.startDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openStartDateFilter($event)" />
-                                    </div>
+                    <div class="col col-xs-10" style="padding-left:0px;padding-right:0px">
+                        <div ng-show="showStatusFilter" class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                            <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                <div class="box-header">
+                                    <h4 class="box-title">Tình trạng</h4><i style="float:right" class="fa fa-fw fa-gear"></i>
                                 </div>
-                                <div class="row" style="margin-bottom:5px">
-                                    <div class="col-xs-3" style="text-align:right">
-                                        <label class="control-label margintop5px">Đến</label>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="endDateFilter" is-open="picker.endDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openEndDateFilter($event)" />
-                                    </div>
+                                <!--/.box-header-->
+                                <div class="box-body" style="padding-bottom:5px">
+                                    <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                            kendo-multi-select
+                                            k-options="orderStatusOptions"
+                                            k-ng-delay="orderStatusOptions"
+                                            id="orderStatusFilter"
+                                            name="orderStatusFilter"
+                                            k-ng-model="filters.selectedOrderStatusFilters"></select>
                                 </div>
-                                <div class="row" style="margin-top:5px">
-                                    <div class="col-xs-3" style="text-align:right">
-                                        <button type="button" class="btn btn-success" style="padding:2px;margin-left:10px" ng-click="updateFilter()">Lọc</button>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetTimeFilter()">Xoá</button>
-                                    </div>
-                                </div>
-                            </div><!-- /.box-body -->
+                                <!--/.box-body-->
+                            </div>
+
                         </div>
+                        <div ng-show="showEcommerceShipperFilter" class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                            <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                <div class="box-header">
+                                    <h4 class="box-title">Nhà vc</h4><i style="float:right" class="fa fa-fw fa-truck"></i>
+                                </div>
+                                <!--/.box-header-->
+                                <div class="box-body" style="padding-bottom:5px">
+                                    <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                            kendo-multi-select
+                                            k-options="ecommerceShipperOptions"
+                                            k-ng-delay="ecommerceShipperOptions"
+                                            id="ecommerceShipperFilter"
+                                            name="ecommerceShipperFilter"
+                                            k-ng-model="filters.selectedEcommerceShipperFilters"></select>
+                                </div>
+                                <!--/.box-body-->
+                            </div>
+                        </div>
+                        <div ng-show="showSellerFilter" class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                            <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                <div class="box-header">
+                                    <h4 class="box-title">Người bán</h4><i style="float:right" class="fa fa-fw fa-dollar"></i>
+                                </div>
+                                <!--/.box-header-->
+                                <div class="box-body" style="padding-bottom:5px">
+                                    <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                            kendo-multi-select
+                                            k-options="sellerOptions"
+                                            k-ng-delay="sellerOptions"
+                                            id="sellerFilter"
+                                            name="sellerFilter"
+                                            k-ng-model="filters.selectedSellerFilters"></select>
+                                </div>
+                                <!--/.box-body-->
+                            </div>
+                        </div>
+                        <div ng-show="showShipperFilter" class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                            <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                <div class="box-header">
+                                    <h4 class="box-title">Người giao</h4><i style="float:right" class="fa fa-fw fa-motorcycle"></i>
+                                </div>
+                                <!--/.box-header-->
+                                <div class="box-body" style="padding-bottom:5px">
+                                    <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                            kendo-multi-select
+                                            k-options="shipperOptions"
+                                            k-ng-delay="shipperOptions"
+                                            id="shipperFilter"
+                                            name="shipperFilter"
+                                            k-ng-model="filters.selectedShipperFilters"></select>
+                                </div>
+                                <!--/.box-body-->
+                            </div>
+                        </div>
+                        <div ng-show="showPaymentFilter" class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                            <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                <div class="box-header">
+                                    <h4 class="box-title">Phương thức TT</h4><i style="float:right" class="fa fa-fw fa-credit-card"></i>
+                                </div>
+                                <!--/.box-header-->
+                                <div class="box-body" style="padding-bottom:5px">
+                                    <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                            kendo-multi-select
+                                            k-options="paymentOptions"
+                                            k-ng-delay="paymentOptions"
+                                            id="paymentFilter"
+                                            name="paymentFilter"
+                                            k-ng-model="filters.selectedPaymentFilters"></select>
+                                </div>
+                                <!--/.box-body-->
+                            </div>
+                        </div>                       
+                        <div ng-show="showUltilFilter" class="col-xs-3" style="padding-left:0px;padding-right:5px">
+                            <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                <div class="box-header">
+                                    <h4 class="box-title">Tiện ích</h4><i style="float:right" class="fa fa-fw fa-fighter-jet"></i>
+                                </div>
+                                <!--/.box-header-->
+                                <div class="box-body" style="padding-bottom:5px">
+                                    <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                            kendo-multi-select
+                                            k-options="ultilFilterOptions"
+                                            k-ng-delay="ultilFilterOptions"
+                                            id="ultilFilterIds"
+                                            name="ultilFilterIds"
+                                            k-ng-model="filters.selectedUltilFilters"></select>
+                                </div>
+                                <!--/.box-body-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-xs-2" style="padding-left:0px;padding-right:0px">
+                            <div ng-show="showTimeFilter" class="box box-solid box-primary" style="margin-bottom:10px">
+                                <div class="box-header">
+                                    <h4 class="box-title">Thời gian</h4><i style="float:right" class="fa fa-fw fa-clock-o"></i>
+                                </div><!-- /.box-header -->
+                                <div class="box-body" style="padding-bottom:5px;height:122px">
+                                    <div class="row" style="margin-bottom:5px">
+                                        <div class="col-xs-3" style="text-align:right">
+                                            <label class="control-label margintop5px">Từ</label>
+                                        </div>
+                                        <div class="col-xs-9">
+                                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="startDateFilter" is-open="picker.startDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openStartDateFilter($event)" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-bottom:5px">
+                                        <div class="col-xs-3" style="text-align:right">
+                                            <label class="control-label margintop5px">Đến</label>
+                                        </div>
+                                        <div class="col-xs-9">
+                                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="endDateFilter" is-open="picker.endDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openEndDateFilter($event)" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top:5px">
+                                        <div class="col-xs-3" style="text-align:right">
+                                            <button type="button" class="btn btn-success" style="padding:2px;margin-left:10px" ng-click="updateFilter()">Lọc</button>
+                                        </div>
+                                        <div class="col-xs-9">
+                                            <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetTimeFilter()">Xoá</button>
+                                        </div>
+                                    </div>
+                                </div><!-- /.box-body -->
+                            </div>
                     </div>
                 </div>
                 <div ng-show="showExtension">
@@ -298,7 +372,8 @@
                                     <th>Ghi chú</th>
                                     <th class="padding_1px">Tình trạng</th>
                                     <th ng-show="selectedChannel.Id==4">MVĐơn</th>
-                                    <th style="padding:0px !important">Đã in</th>
+                                    <th ng-hide="selectedChannel.Id==1" style="padding:0px !important">Đã in</th>
+                                    <th ng-show="selectedChannel.Id==1" style="padding:0px !important">PTTT</th>
                                     <th></th>
                                 </tr>
                                 <tr ng-form name="data{{$index}}" ng-repeat="item in orders">
@@ -306,6 +381,7 @@
                                         <input type="checkbox" ng-model="item.checked" ng-click="selectOrder(item)" />
                                     </td>
                                     <td><span ng-class="{'has-error':item.idgiogiao==5}">{{item.id}}</span>&emsp;<img ng-show="item.IsShopeeApi == true" src="Assets/Admin/img/ShopeeIcon.jpg" style="height:12%" /><br /><span style="font-size:11px">{{item.OrderIdShopeeApi}}</span></td>
+
                                     <!--<td ng-show="selectedChannel.Id==2">
                                         <span ng-show="!item.Code">Website</span>
                                         {{item.Code}}
@@ -337,8 +413,11 @@
                                     <td ng-show="selectedChannel.Id==4">
                                         {{item.TrackingNo}}
                                     </td>
-                                    <td style="padding:0px !important">
+                                    <td ng-hide="selectedChannel.Id==1" style="padding:0px !important">
                                         <span ng-show="item.StatusPrint"><i class="fa fa-fw fa-check"></i></span>
+                                    </td>
+                                    <td ng-show="selectedChannel.Id==1" style="padding:0px !important">
+                                        {{item.tenpttt}}
                                     </td>
                                     <td>
                                         <button ng-click="orderDetail(item)" title="Chi tiết" class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>

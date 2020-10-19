@@ -30,6 +30,7 @@ namespace SoftBBM.Web.ViewModels
     {
         public long item_id { get; set; }
         public string item_sku { get; set; }
+        public string variation_sku { get; set; }
         public int variation_quantity_purchased { get; set; }
         public string variation_discounted_price { get; set; }
         public string variation_original_price { get; set; }

@@ -11,5 +11,6 @@ namespace SoftBBM.Web.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
         public string CssClass { get; set; }
+        public Nullable<int> Priority { get; set; }
     }
 }

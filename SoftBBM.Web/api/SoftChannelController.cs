@@ -105,6 +105,7 @@ namespace SoftBBM.Web.api
             {
                 var newSoftChannel = new SoftChannel();
                 newSoftChannel.UpdateSoftChannel(SoftChannelViewModel);
+                newSoftChannel.Status = true;
 
                 _softChannelRepository.Add(newSoftChannel);
                 _unitOfWork.Commit();

@@ -20,6 +20,7 @@ namespace SoftBBM.Web.ViewModels
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public string UpdatedBy { get; set; }
         public Nullable<bool> Status { get; set; }
+        public string channelName { get; set; }
 
         public virtual ShopSanPhamViewModel shop_sanpham { get; set; }
         public virtual SoftChannelViewModel SoftChannel { get; set; }

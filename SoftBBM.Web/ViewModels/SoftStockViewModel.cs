@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SoftBBM.Web.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -212,7 +213,8 @@ namespace SoftBBM.Web.ViewModels
         public int priceAvg { get; set; }
         public int priceRef { get; set; }
         public int? shopeeId { get; set; }
-        
+        public ICollection<SoftChannelProductPriceViewModel> SoftChannelProductPrices { get; set; }
+
         public ShopSanPhamCategoryViewModel productCategory { get; set; }
         public SoftSupplierViewModel supplier { get; set; }
         public ShopSanPhamStatusViewModel productStatus { get; set; }
@@ -232,5 +234,8 @@ namespace SoftBBM.Web.ViewModels
         public string statusId { get; set; }
         public int userId { get; set; }
         public int? shopeeId { get; set; }
+
+        public List<SoftChannelProductPriceViewModel> SoftChannelProductPrices { get; set; }
+
     }
 }

@@ -22,7 +22,8 @@ namespace SoftBBM.Web.Mapping
             Mapper.CreateMap<shop_image, ShopImageViewModel>()
                 .ForMember(d => d.url, map => map.MapFrom(s => "https://babymart.vn/Images/hinhdulieu/thumbnail/" + s.url));
             Mapper.CreateMap<shop_sanphamStatus, ShopSanPhamStatusViewModel>();
-            Mapper.CreateMap<SoftChannelProductPrice, SoftChannelProductPriceViewModel>();
+            Mapper.CreateMap<SoftChannelProductPrice, SoftChannelProductPriceViewModel>()
+                .ForMember(d => d.channelName, map => map.MapFrom(s => s.SoftChannel.Name));
             Mapper.CreateMap<shop_sanpham, SoftStockInProductViewModel>()
                 .ForMember(d => d.PriceNew, map => map.MapFrom(s => s.PriceBase));
             Mapper.CreateMap<shop_sanpham, SoftOrderDetailViewModel>()
