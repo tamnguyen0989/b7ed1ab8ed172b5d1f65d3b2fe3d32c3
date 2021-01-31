@@ -180,6 +180,8 @@
         $scope.updateStockOfProductsNoSkuInOrders = updateStockOfProductsNoSkuInOrders
         $scope.setupToogleData = setupToogleData;
         $scope.updateStatusShopeeIncompleteOrders = updateStatusShopeeIncompleteOrders;
+        $scope.updateOrderNullProductId = updateOrderNullProductId;
+        $scope.getTrackingNoShopeeOrders = getTrackingNoShopeeOrders;
         //$scope.selectedOrder = {
         //    TrackingNo: ''
         //};
@@ -735,6 +737,7 @@
                 $scope.selectedOrder.OrderDetails = result.data.OrderDetails;
                 $scope.selectedOrder.CreateTime = result.data.CreateTime;
                 $scope.selectedOrder.SenderSortCode = result.data.SenderSortCode;
+                $scope.selectedOrder.AddressSeller = result.data.AddressSeller;
                 var totalQuantity = 0;
                 if ($scope.selectedOrder.OrderDetails.length > 0)
                     totalQuantity = result.data.OrderDetails.reduce((quantity, currentDetail) => {
@@ -1166,7 +1169,13 @@
         }
         function testAPI() {
             $scope.waiting = true;
-            apiService.get('/api/shopee/testapi', null, function (result) {
+            var config = {
+                params: {
+                    orderParam: '',
+                    productParam: '822611347',
+                }
+            }
+            apiService.get('/api/shopee/testapi', config, function (result) {
                 //notificationService.displaySuccess('Cập nhật tình  trạng đơn hàng từ ' + config.params.quantity + ' ngày trước thành công!');
                 //search($scope.page);
                 $scope.waiting = false;
@@ -1197,8 +1206,34 @@
                 notificationService.displayError(error);
                 $scope.waiting = false;
             });
+        }        
+        function updateOrderNullProductId() {
+            $scope.waiting = true;
+            apiService.get('/api/order/updateordernullproductid', null, function (result) {
+                $scope.waiting = false;
+            }, function (error) {
+                notificationService.displayError(error);
+                $scope.waiting = false;
+            });
         }
-
+        function getTrackingNoShopeeOrders() {
+            $scope.waiting = true;
+            var selectedOrdersId = [];
+            $.each($scope.selectedOrders, function (index, value) {
+                selectedOrdersId.push(value.OrderIdShopeeApi);
+            });
+            apiService.post('api/order/gettrackingnoshopeeorders', selectedOrdersId,
+                function (result) {
+                    if (result.data == true) {
+                        notificationService.displaySuccess('Cập nhật thành công!');
+                        search($scope.page);
+                        $scope.waiting = false;
+                    }
+                }, function (error) {
+                    notificationService.displayError(error.data);
+                    $scope.waiting = false;
+                });
+        }
 
         var printBarcode = function (elementId, value) {
             JsBarcode(elementId, value, {

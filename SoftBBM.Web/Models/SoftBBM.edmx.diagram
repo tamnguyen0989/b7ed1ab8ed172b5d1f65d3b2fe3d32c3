@@ -96,7 +96,6 @@
         <EntityTypeShape EntityType="SoftBBMModels.SoftNotification" Width="1.5" PointX="6" PointY="27.5" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftOrderDetail" Width="1.5" PointX="28.625" PointY="43.75" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftOrder" Width="1.5" PointX="26.375" PointY="50.125" />
-        <EntityTypeShape EntityType="SoftBBMModels.SoftOrderStatu" Width="1.5" PointX="24.125" PointY="51.875" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftReturnSupplierDetail" Width="1.5" PointX="31.625" PointY="36.25" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftReturnSupplier" Width="1.5" PointX="10.5" PointY="29.875" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftStockInCategory" Width="1.5" PointX="11.25" PointY="38.625" />
@@ -126,7 +125,6 @@
         <AssociationConnector Association="SoftBBMModels.FK_SoftChannelProductPrices_SoftChannels" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftOrders_SoftChannels" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftOrderDetails_SoftOrders" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftOrders_SoftOrderStatus" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftReturnSupplierDetails_SoftReturnSuppliers" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftReturnSuppliers_SoftSuppliers" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftSuppliers_SoftSupplierVatStatus" />
@@ -191,6 +189,10 @@
         <EntityTypeShape EntityType="SoftBBMModels.SystemLog" Width="1.5" PointX="17.375" PointY="0.75" />
         <EntityTypeShape EntityType="SoftBBMModels.donhangStatu" Width="1.5" PointX="15.375" PointY="6.875" />
         <AssociationConnector Association="SoftBBMModels.FK_donhang_donhangStatus" />
+        <EntityTypeShape EntityType="SoftBBMModels.SoftOrderStatu" Width="1.5" PointX="17.375" PointY="5.875" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftOrders_SoftOrderStatus" />
+        <EntityTypeShape EntityType="SoftBBMModels.SoftOfflineOrderWindow" Width="1.5" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftOfflineOrderWindow_ApplicationUsers" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

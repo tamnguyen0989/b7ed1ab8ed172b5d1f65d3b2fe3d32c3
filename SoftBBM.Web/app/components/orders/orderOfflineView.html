@@ -1,0 +1,164 @@
+﻿<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1> </h1>
+    <ol class="breadcrumb">
+        <!--<li><a ui-sref="home"><i class="fa fa-dashboard"></i> Trang chủ</a></li>
+        <li><a ui-sref="orders">Đơn hàng</a></li>
+        <li class="active">Đơn hàng hiện tại</li>-->
+    </ol>
+</section>
+<!-- Main content -->
+<section class="content">
+    <div class="col-md-3">
+        <!-- Default box -->
+        <!-- Horizontal Form -->
+        <div class="box box-info">
+            <!-- form start -->
+            <form class="form-horizontal" name="frmQRCode" role="form">
+                <div class="box-body">
+                    <p>Thanh toán dễ dàng bằng</p>
+                    <p>VNPAY QRCode</p>
+                    <img src="https://babymart.vn/Images/hinhdulieu/upload/QRCodeVNPay.jpg" style="width:100%"/>
+                </div><!-- /.box-body -->
+            </form>
+        </div>
+        <!-- /.box -->
+    </div>
+    <div class="col-md-9">
+        <!-- Default box -->
+        <!-- Horizontal Form -->
+        <div class="box box-success">
+            <!-- form start -->
+            <form class="form-horizontal" name="frmInfo" role="form">
+                <div class="box-body">
+                    <!--<h3 class="text-center" style="margin-bottom:20px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h3>-->
+                    <div class="col-md-5">
+                        <div class="form-group nomargin-bottom">
+                            <div class="col-md-4">
+                                <label>Thành tiền</label>
+                            </div>
+                            <div class="col-md-8 text-right">
+                                {{order.thanhtien | currency:'':0}}
+                            </div>
+                        </div>
+                        <div ng-show="!IsNullOrEmpty(order.datru_diem)" class="form-group nomargin-bottom">
+                            <div class="col-md-4">
+                                <label>Giảm 5%:</label>
+                            </div>
+                            <div class="col-md-8 text-right">
+                                {{order.datru_diem | currency:'':0}}
+                            </div>
+                        </div>
+                        <div ng-show="!IsNullOrEmpty(order.giamgia)" class="form-group nomargin-bottom">
+                            <div class="col-md-4">
+                                <label>Giảm giá:</label>
+                            </div>
+                            <div class="col-md-8 text-right">
+                                {{order.giamgia | currency:'':0}}
+                            </div>
+                        </div>
+                        <!--<div ng-show="!IsNullOrEmpty(order.tonggiam)" class="form-group nomargin-bottom">
+                            <div class="col-md-4">
+                                <label>Tổng giảm</label>
+                            </div>
+                            <div class="col-md-8 text-right">
+                                {{order.tonggiam | currency:'':0}}
+                            </div>
+                        </div>-->
+                        <div ng-show="!IsNullOrEmpty(order.phikhac)" class="form-group nomargin-bottom">
+                            <div class="col-md-4">
+                                <label>Phí khác</label>
+                            </div>
+                            <div class="col-md-8 text-right">
+                                {{order.phikhac | currency:'':0}}
+                            </div>
+                        </div>
+                        <div class="form-group nomargin-bottom">
+                            <div class="col-md-4">
+                                <label class="text-red">Tổng</label>
+                            </div>
+                            <div class="col-md-8 text-right text-red">
+                                {{order.tongtienOff | currency:'':0}}
+                            </div>
+                        </div>
+                        <div ng-show="order.khachdua >0" class="form-group nomargin-bottom">
+                            <div class="col-md-4">
+                                <label>Khách đưa</label>
+                            </div>
+                            <div class="col-md-8 text-right">
+                                {{order.khachdua | currency:'':0}}
+                            </div>
+                        </div>
+                        <div ng-show="order.khachdua >0" class="form-group nomargin-bottom">
+                            <div class="col-md-4">
+                                <label>Tiền thừa</label>
+                            </div>
+                            <div class="col-md-8 text-right">
+                                {{order.tienthua | currency:'':0}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div ng-show="!IsNullOrEmpty(order.Customer.dienthoai)" class="form-group nomargin-bottom">
+                            <div class="col-md-3">
+                                <label>Điện thoại</label>
+                            </div>
+                            <div class="col-md-9">
+                                {{order.Customer.dienthoai}}
+                            </div>
+                        </div>
+                        <div ng-show="!IsNullOrEmpty(order.Customer.hoten)" class="form-group nomargin-bottom">
+                            <div class="col-md-3">
+                                <label>Tên</label>
+                            </div>
+                            <div class="col-md-9">
+                                {{order.Customer.hoten}}
+                            </div>
+                        </div>
+                        <div ng-show="!IsNullOrEmpty(order.Customer.duong)" class="form-group nomargin-bottom">
+                            <div class="col-md-3">
+                                <label>Địa chỉ</label>
+                            </div>
+                            <div class="col-md-9">
+                                {{order.Customer.duong}}
+                            </div>
+                        </div>
+                        <div ng-show="!IsNullOrEmpty(order.Customer.diemOff) && !IsNullOrEmpty(order.Customer.dienthoai)" class="form-group nomargin-bottom">
+                            <div class="col-md-3">
+                                <label>Điểm KH</label>
+                            </div>
+                            <div class="col-md-9">
+                                {{order.Customer.diemOff | currency:'':0}}
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:10px">
+                        <tr>
+                            <th>STT</th>
+                            <th>Mã</th>
+                            <th>Tên</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                        <tr ng-repeat="item in order.OrderDetails">
+                            <td>{{$index+1}}</td>
+                            <td>{{item.masp}}</td>
+                            <td>{{item.tensp}}</td>
+                            <td class="text-right">{{item.Price | currency:'':0}}</td>
+                            <td class="text-right">{{item.Quantity | currency:'':0}}</td>
+                            <td class="text-right">{{item.Price * item.Quantity | currency:'':0}}</td>
+                        </tr>
+                    </table>
+                    
+                    <p class="margintop20px">Quý Khách vui lòng đọc số điện thoại để tích điểm mua hàng</p>
+                    <p>Đạt <span style="color:darkorange">1000 điểm</span>, Quý Khách sẽ được <span style="color:darkorange">giảm 5%</span> trên hóa đơn mua hàng kế tiếp (Không áp dụng giảm cho tã, thực phẩm)</p>
+                    <p class="text-center text-bold">Cảm ơn Quý Khách đã tin tưởng và ủng hộ <span style="color:darkgreen">Babymart.vn</span></p>
+                </div><!-- /.box-body -->
+            </form>
+        </div>
+        <!-- /.box -->
+    </div>
+
+
+</section><!-- /.content -->

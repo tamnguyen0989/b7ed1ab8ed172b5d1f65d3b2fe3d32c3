@@ -90,7 +90,6 @@ namespace SoftBBM.Web.Models
         public virtual DbSet<SoftNotification> SoftNotifications { get; set; }
         public virtual DbSet<SoftOrderDetail> SoftOrderDetails { get; set; }
         public virtual DbSet<SoftOrder> SoftOrders { get; set; }
-        public virtual DbSet<SoftOrderStatu> SoftOrderStatus { get; set; }
         public virtual DbSet<SoftReturnSupplierDetail> SoftReturnSupplierDetails { get; set; }
         public virtual DbSet<SoftReturnSupplier> SoftReturnSuppliers { get; set; }
         public virtual DbSet<SoftStockInCategory> SoftStockInCategories { get; set; }
@@ -109,6 +108,8 @@ namespace SoftBBM.Web.Models
         public virtual DbSet<donhang> donhangs { get; set; }
         public virtual DbSet<SystemLog> SystemLogs { get; set; }
         public virtual DbSet<donhangStatu> donhangStatus { get; set; }
+        public virtual DbSet<SoftOrderStatu> SoftOrderStatus { get; set; }
+        public virtual DbSet<SoftOfflineOrderWindow> SoftOfflineOrderWindows { get; set; }
     
         public virtual int TinTuc_Phantrang(Nullable<int> currPage, Nullable<int> recodperpage, Nullable<int> pagesize, Nullable<int> cateID, string page)
         {

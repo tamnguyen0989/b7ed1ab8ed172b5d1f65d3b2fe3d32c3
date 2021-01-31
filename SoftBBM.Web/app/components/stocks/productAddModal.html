@@ -81,33 +81,50 @@
             </div>
         </div>
         <div class="col col-xs-6">
+            <!--<div class="row">
+                <div class="col col-xs-4 text-right">
+                    <label class="custom_label">Giá nhập mới:</label>
+                </div>
+                <div class="col col-xs-8">
+                    <input type="text" class="form-control width100" format="number" ng-model="priceBase" />
+                </div>
+            </div>-->
             <div class="row">
                 <div class="col col-xs-4 text-right">
                     <label class="has-error custom_label" ng-show="frmAddProduct.priceRef.$invalid">*&nbsp;</label><label class="custom_label">Giá tham chiếu:</label>
                 </div>
                 <div class="col col-xs-8">
-                    <input type="text" class="form-control width100" format="number" ng-model="priceRef" name="priceRef" required/>
+                    <input type="text" class="form-control width100" format="number" ng-model="priceRef" name="priceRef" required />
                 </div>
             </div>
-            <div class="row margintop5px">
+            <!--<div class="row margintop5px">
+        <div class="col col-xs-4 text-right">
+            <label class="has-error custom_label" ng-show="frmAddProduct.priceCHA.$invalid">*&nbsp;</label><label class="custom_label">Giá cửa hàng:</label>
+        </div>
+        <div class="col col-xs-8">
+            <input type="text" class="form-control width100" format="number" ng-model="priceCHA" name="priceCHA" required/>
+        </div>
+    </div>
+    <div class="row margintop5px">
+        <div class="col col-xs-4 text-right">
+            <label class="has-error custom_label" ng-show="frmAddProduct.priceONL.$invalid">*&nbsp;</label><label class="custom_label">Giá online:</label>
+        </div>
+        <div class="col col-xs-8">
+            <input type="text" class="form-control width100" format="number" ng-model="priceONL" name="priceONL" required/>
+        </div>
+    </div>-->
+            <div ng-repeat="price in product.SoftChannelProductPrices" class="row margintop5px">
                 <div class="col col-xs-4 text-right">
-                    <label class="has-error custom_label" ng-show="frmAddProduct.priceCHA.$invalid">*&nbsp;</label><label class="custom_label">Giá cửa hàng:</label>
+                    <label class="custom_label">{{price.channelName}}:</label>
                 </div>
                 <div class="col col-xs-8">
-                    <input type="text" class="form-control width100" format="number" ng-model="priceCHA" name="priceCHA" required/>
-                </div>
-            </div>
-            <div class="row margintop5px">
-                <div class="col col-xs-4 text-right">
-                    <label class="has-error custom_label" ng-show="frmAddProduct.priceONL.$invalid">*&nbsp;</label><label class="custom_label">Giá online:</label>
-                </div>
-                <div class="col col-xs-8">
-                    <input type="text" class="form-control width100" format="number" ng-model="priceONL" name="priceONL" required/>
+                    <input type="text" class="form-control width100" format="number" ng-model="price.Price" />
                 </div>
             </div>
             <div class="row margintop20px text-center">
-                <button ng-click="addProduct()" ng-disabled="frmAddProduct.$invalid" class="btn btn-success">Hoàn thành</button>
                 <button ng-click="backButton()" title="Trở về" class="btn btn-default" type="button">Trở về</button>
+                <button type="button" class="btn btn-warning" ng-click="copyPriceRefToRestPrice()">Copy giá tham chiếu</button>
+                <button ng-click="addProduct()" ng-disabled="frmAddProduct.$invalid" class="btn btn-success">Hoàn thành</button>
             </div>
             <div class="row margintop20px">
                 <label class="cus-control-label marginleft20px" ng-show="frmAddProduct.$invalid" style="font-style:italic;font-weight:500;font-size:12px;color:red">(*) Trường bắt buộc nhập</label>

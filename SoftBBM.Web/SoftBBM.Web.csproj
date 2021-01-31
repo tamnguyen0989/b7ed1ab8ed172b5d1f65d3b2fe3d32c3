@@ -291,6 +291,7 @@
     <Compile Include="DAL\Repositories\donhangRepository.cs" />
     <Compile Include="DAL\Repositories\donhangStatusRepository.cs" />
     <Compile Include="DAL\Repositories\ShopeeRepository.cs" />
+    <Compile Include="DAL\Repositories\SoftOfflineOrderRepository.cs" />
     <Compile Include="DAL\Repositories\SoftPointUpdateLogRepository.cs" />
     <Compile Include="DAL\Repositories\SoftStockInPaymentMethodRepository.cs" />
     <Compile Include="DAL\Repositories\SoftStockInPaymentStatusRepository.cs" />
@@ -501,6 +502,9 @@
       <DependentUpon>SoftBBM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SoftNotification.cs">
+      <DependentUpon>SoftBBM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SoftOfflineOrderWindow.cs">
       <DependentUpon>SoftBBM.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SoftOrder.cs">
@@ -721,7 +725,9 @@
     <Content Include="app\components\imports\productProcessImportController.js" />
     <Content Include="app\components\login\loginController.js" />
     <Content Include="app\components\login\loginView.html" />
+    <Content Include="app\components\orders\orderOfflineAddController.js" />
     <Content Include="app\components\orders\orderAddController.js" />
+    <Content Include="app\components\orders\orderOfflineAddView.html" />
     <Content Include="app\components\orders\orderAddView.html" />
     <Content Include="app\components\orders\orderDetailController.js" />
     <Content Include="app\components\orders\orderDetailModal.html" />
@@ -729,6 +735,8 @@
     <Content Include="app\components\orders\orderEditView.html" />
     <Content Include="app\components\orders\orderListController.js" />
     <Content Include="app\components\orders\orderListView.html" />
+    <Content Include="app\components\orders\orderOfflineView.html" />
+    <Content Include="app\components\orders\orderOfflineViewController.js" />
     <Content Include="app\components\orders\orders.module.js" />
     <Content Include="app\components\orders\orderExportProcessModal.html" />
     <Content Include="app\components\orders\orderExportProcessController.js" />

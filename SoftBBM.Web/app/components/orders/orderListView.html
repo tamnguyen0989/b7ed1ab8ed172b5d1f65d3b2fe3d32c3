@@ -10,17 +10,21 @@
     .ng-hide.ng-hide-animate {
         display: none !important;
     }
-    .box-title{
-        font-size:17px !important;
+
+    .box-title {
+        font-size: 17px !important;
     }
+
     .box-header {
-        padding:5px !important;
+        padding: 5px !important;
     }
+
     .box.box-solid.box-primary {
         border: none !important
     }
+
     .box {
-        box-shadow:none !important
+        box-shadow: none !important
     }
 </style>
 
@@ -79,6 +83,7 @@
                             <button class="btn btn-default" ng-show="userName=='admin'" title="TestAPI" style="width:60px" type="button" ng-click="testAPI()"><i class="fa fa-fw fa-shield"></i></button>
                             <button class="btn btn-default" ng-show="userName=='admin'" title="Trừ stock những sản phẩm không có sku trong đơn hàng" style="width:60px" type="button" ng-click="updateStockOfProductsNoSkuInOrders()"><i class="fa fa-fw fa-flash"></i></button>
                             <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật tình trạng đơn hàng chưa hoàn tất" style="width:60px" type="button" ng-click="updateStatusShopeeIncompleteOrders()"><i class="fa fa-fw fa-battery-3"></i></button>
+                            <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật tình trạng đơn hàng chưa hoàn tất" style="width:60px" type="button" ng-click="updateOrderNullProductId()"><i class="fa fa-fw fa-plug"></i></button>
 
                             <div class="pull-right totalcount">
                                 <span>
@@ -207,7 +212,7 @@
                                 </div>
                                 <!--/.box-body-->
                             </div>
-                        </div>                       
+                        </div>
                         <div ng-show="showUltilFilter" class="col-xs-3" style="padding-left:0px;padding-right:5px">
                             <div class="box box-solid box-primary" style="margin-bottom:10px">
                                 <div class="box-header">
@@ -228,37 +233,37 @@
                         </div>
                     </div>
                     <div class="col col-xs-2" style="padding-left:0px;padding-right:0px">
-                            <div ng-show="showTimeFilter" class="box box-solid box-primary" style="margin-bottom:10px">
-                                <div class="box-header">
-                                    <h4 class="box-title">Thời gian</h4><i style="float:right" class="fa fa-fw fa-clock-o"></i>
-                                </div><!-- /.box-header -->
-                                <div class="box-body" style="padding-bottom:5px;height:122px">
-                                    <div class="row" style="margin-bottom:5px">
-                                        <div class="col-xs-3" style="text-align:right">
-                                            <label class="control-label margintop5px">Từ</label>
-                                        </div>
-                                        <div class="col-xs-9">
-                                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="startDateFilter" is-open="picker.startDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openStartDateFilter($event)" />
-                                        </div>
+                        <div ng-show="showTimeFilter" class="box box-solid box-primary" style="margin-bottom:10px">
+                            <div class="box-header">
+                                <h4 class="box-title">Thời gian</h4><i style="float:right" class="fa fa-fw fa-clock-o"></i>
+                            </div><!-- /.box-header -->
+                            <div class="box-body" style="padding-bottom:5px;height:122px">
+                                <div class="row" style="margin-bottom:5px">
+                                    <div class="col-xs-3" style="text-align:right">
+                                        <label class="control-label margintop5px">Từ</label>
                                     </div>
-                                    <div class="row" style="margin-bottom:5px">
-                                        <div class="col-xs-3" style="text-align:right">
-                                            <label class="control-label margintop5px">Đến</label>
-                                        </div>
-                                        <div class="col-xs-9">
-                                            <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="endDateFilter" is-open="picker.endDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openEndDateFilter($event)" />
-                                        </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="startDateFilter" is-open="picker.startDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openStartDateFilter($event)" />
                                     </div>
-                                    <div class="row" style="margin-top:5px">
-                                        <div class="col-xs-3" style="text-align:right">
-                                            <button type="button" class="btn btn-success" style="padding:2px;margin-left:10px" ng-click="updateFilter()">Lọc</button>
-                                        </div>
-                                        <div class="col-xs-9">
-                                            <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetTimeFilter()">Xoá</button>
-                                        </div>
+                                </div>
+                                <div class="row" style="margin-bottom:5px">
+                                    <div class="col-xs-3" style="text-align:right">
+                                        <label class="control-label margintop5px">Đến</label>
                                     </div>
-                                </div><!-- /.box-body -->
-                            </div>
+                                    <div class="col-xs-9">
+                                        <input type="text" class="form-control" uib-datepicker-popup="dd/MM/yyyy" ng-model="endDateFilter" is-open="picker.endDateFilter" datepicker-options="dateOptions" readonly clear-text="Xoá" current-text="Hôm nay" close-text="Đóng" ng-click="openEndDateFilter($event)" />
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:5px">
+                                    <div class="col-xs-3" style="text-align:right">
+                                        <button type="button" class="btn btn-success" style="padding:2px;margin-left:10px" ng-click="updateFilter()">Lọc</button>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetTimeFilter()">Xoá</button>
+                                    </div>
+                                </div>
+                            </div><!-- /.box-body -->
+                        </div>
                     </div>
                 </div>
                 <div ng-show="showExtension">
@@ -347,6 +352,7 @@
                                                 <button ng-show="selectedChannel.Id==4" ng-click="printShopeeAll()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
                                                 <button ng-click="resetSelectedOrders()" type="button" class="btn btn-default" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Bỏ chọn</button>
                                                 <button ng-show="selectedChannel.Id==4" ng-click="confirmShopeeOrders()" type="button" class="btn btn-success" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Xác nhận {{selectedOrders.length}} đơn</button>
+                                                <!--<button ng-show="selectedChannel.Id==4" ng-click="getTrackingNoShopeeOrders()" type="button" class="btn btn-info" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Cập nhật {{selectedOrders.length}} mã vận đơn</button>-->
                                             </div><!-- /btn-group -->
                                         </div>
                                     </td>
@@ -502,19 +508,23 @@
                                 </tr>
                                 <tr>
                                     <td colspan="4" class="text-right">Tổng thành tiền</td>
-                                    <td colspan="2">{{totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    <td colspan="2" class="text-right">{{totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                 </tr>
                                 <tr ng-hide="(orderReturn.ship + orderReturn.phithuho) ==0">
                                     <td colspan="4" class="text-right">Phí</td>
-                                    <td colspan="2">{{orderReturn.ship + orderReturn.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    <td colspan="2" class="text-right">{{orderReturn.ship + orderReturn.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                 </tr>
                                 <tr ng-hide="orderReturn.datru_diem==0">
-                                    <td colspan="4" class="text-right">Giảm</td>
-                                    <td colspan="2">{{orderReturn.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    <td colspan="4" class="text-right">Giảm 5%</td>
+                                    <td colspan="2" class="text-right">{{orderReturn.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                </tr>
+                                <tr ng-hide="orderReturn.Discount==0">
+                                    <td colspan="4" class="text-right">Giảm giá</td>
+                                    <td colspan="2" class="text-right">{{orderReturn.Discount | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                 </tr>
                                 <tr>
                                     <td class="text-right" style="font-weight:700" colspan="4">Thanh toán</td>
-                                    <td colspan="2">{{orderReturn.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    <td colspan="2" class="text-right">{{orderReturn.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                 </tr>
                                 <tr ng-hide="!orderReturn.ghichu && !orderReturn.chitietgiogiao">
                                     <td colspan="2">Lưu ý</td>
@@ -600,19 +610,23 @@
                                     </tr>
                                     <tr>
                                         <td colspan="4" class="text-right">Tổng thành tiền</td>
-                                        <td colspan="2">{{order.totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        <td colspan="2" class="text-right">{{order.totalMoneyPrint | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                     </tr>
                                     <tr ng-hide="(order.ship + order.phithuho) ==0">
                                         <td colspan="4" class="text-right">Phí</td>
-                                        <td colspan="2">{{order.ship + order.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        <td colspan="2" class="text-right">{{order.ship + order.phithuho | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                     </tr>
                                     <tr ng-hide="order.datru_diem==0">
-                                        <td colspan="4" class="text-right">Giảm</td>
-                                        <td colspan="2">{{order.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        <td colspan="4" class="text-right">Giảm 5%</td>
+                                        <td colspan="2" class="text-right">{{order.datru_diem | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                    </tr>
+                                    <tr ng-hide="order.Discount==0">
+                                        <td colspan="4" class="text-right">Giảm giá</td>
+                                        <td colspan="2" class="text-right">{{order.Discount | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                     </tr>
                                     <tr>
                                         <td class="text-right" style="font-weight:700" colspan="4">Thanh toán</td>
-                                        <td colspan="2">{{order.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
+                                        <td colspan="2" class="text-right">{{order.tongtien | currency:'':0}} <span style="font-size:11px">đ</span></td>
                                     </tr>
                                     <tr ng-hide="!order.ghichu && !order.chitietgiogiao">
                                         <td colspan="2">Lưu ý</td>
@@ -683,7 +697,7 @@
                                                 <td width="50%">
                                                     <b>Từ</b><br />
                                                     Babymart.vn<br />
-                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                    {{selectedOrder.AddressSeller}}
                                                 </td>
                                                 <td width="50%">
                                                     <b>
@@ -826,7 +840,7 @@
                                                 <td width="50%">
                                                     <b>Từ</b><br />
                                                     Babymart.vn<br />
-                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                    {{selectedOrder.AddressSeller}}
                                                 </td>
                                                 <td width="50%">
                                                     <b>
@@ -965,7 +979,7 @@
                                                 <td width="50%">
                                                     <b>Từ</b><br />
                                                     Babymart.vn<br />
-                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                    {{selectedOrder.AddressSeller}}
                                                 </td>
                                                 <td width="50%">
                                                     <b>
@@ -1096,7 +1110,7 @@
                                                 <td width="50%">
                                                     <b>Từ</b><br />
                                                     Babymart.vn<br />
-                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                    {{selectedOrder.AddressSeller}}
                                                 </td>
                                                 <td width="50%">
                                                     <b>
@@ -1221,7 +1235,7 @@
                                                 <td width="50%">
                                                     <b>Từ</b><br />
                                                     Babymart.vn<br />
-                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                    {{selectedOrder.AddressSeller}}
                                                 </td>
                                                 <td width="50%">
                                                     <b>
@@ -1348,7 +1362,7 @@
                                                 <td width="50%">
                                                     <b>Từ</b><br />
                                                     Babymart.vn<br />
-                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                    {{selectedOrder.AddressSeller}}
                                                 </td>
                                                 <td width="50%">
                                                     <b>
@@ -1481,7 +1495,7 @@
                                                 <td width="50%">
                                                     <b>Từ</b><br />
                                                     Babymart.vn<br />
-                                                    3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                    {{selectedOrder.AddressSeller}}
                                                 </td>
                                                 <td width="50%">
                                                     <b>
@@ -1611,7 +1625,7 @@
                                                         <td width="50%">
                                                             <b>Từ</b><br />
                                                             Babymart.vn<br />
-                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                            {{GHNOrder.AddressSeller}}
                                                         </td>
                                                         <td width="50%">
                                                             <b>
@@ -1731,7 +1745,7 @@
                                                         <td width="50%">
                                                             <b>Từ</b><br />
                                                             Babymart.vn<br />
-                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                            {{GHTKOrder.AddressSeller}}
                                                         </td>
                                                         <td width="50%">
                                                             <b>
@@ -1836,7 +1850,7 @@
                                                         <td width="50%">
                                                             <b>Từ</b><br />
                                                             Babymart.vn<br />
-                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                            {{VNPOrder.AddressSeller}}
                                                         </td>
                                                         <td width="50%">
                                                             <b>
@@ -1943,7 +1957,7 @@
                                                         <td width="50%">
                                                             <b>Từ</b><br />
                                                             Babymart.vn<br />
-                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                            {{SPEOrder.AddressSeller}}
                                                         </td>
                                                         <td width="50%">
                                                             <b>
@@ -2045,7 +2059,7 @@
                                                         <td width="50%">
                                                             <b>Từ</b><br />
                                                             Babymart.vn<br />
-                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                            {{NinjaVanOrder.AddressSeller}}
                                                         </td>
                                                         <td width="50%">
                                                             <b>
@@ -2150,7 +2164,7 @@
                                                         <td width="50%">
                                                             <b>Từ</b><br />
                                                             Babymart.vn<br />
-                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                            {{NowShipOrder.AddressSeller}}
                                                         </td>
                                                         <td width="50%">
                                                             <b>
@@ -2257,7 +2271,7 @@
                                                         <td width="50%">
                                                             <b>Từ</b><br />
                                                             Babymart.vn<br />
-                                                            3/19 Phan Văn Sửu, Phường 13, Phường 13, Quận Tân Bình, TP. Hồ Chí Minh
+                                                            {{BESTExpressOrder.AddressSeller}}
                                                         </td>
                                                         <td width="50%">
                                                             <b>

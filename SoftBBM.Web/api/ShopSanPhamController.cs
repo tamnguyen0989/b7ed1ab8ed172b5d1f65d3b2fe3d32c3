@@ -453,19 +453,34 @@ namespace SoftBBM.Web.api
                     _shopSanPhamRepository.Add(shopSanPham);
                     _unitOfWork.Commit();
 
-                    var priceCHA = new SoftChannelProductPrice();
-                    priceCHA.ProductId = shopSanPham.id;
-                    priceCHA.ChannelId = (int)ChannelEnum.CHA;
-                    priceCHA.Price = input.priceCHA;
-                    priceCHA.CreatedDate = DateTime.Now;
-                    _softChannelProductPriceRepository.Add(priceCHA);
+                    //var priceCHA = new SoftChannelProductPrice();
+                    //priceCHA.ProductId = shopSanPham.id;
+                    //priceCHA.ChannelId = (int)ChannelEnum.CHA;
+                    //priceCHA.Price = input.priceCHA;
+                    //priceCHA.CreatedDate = DateTime.Now;
+                    //_softChannelProductPriceRepository.Add(priceCHA);
 
-                    var priceONL = new SoftChannelProductPrice();
-                    priceONL.ProductId = shopSanPham.id;
-                    priceONL.ChannelId = (int)ChannelEnum.ONL;
-                    priceONL.Price = input.priceONL;
-                    priceONL.CreatedDate = DateTime.Now;
-                    _softChannelProductPriceRepository.Add(priceONL);
+                    //var priceONL = new SoftChannelProductPrice();
+                    //priceONL.ProductId = shopSanPham.id;
+                    //priceONL.ChannelId = (int)ChannelEnum.ONL;
+                    //priceONL.Price = input.priceONL;
+                    //priceONL.CreatedDate = DateTime.Now;
+                    //_softChannelProductPriceRepository.Add(priceONL);
+
+                    //update channel price
+                    if (input.SoftChannelProductPrices.Count > 0)
+                    {
+                        foreach (var channelPrice in input.SoftChannelProductPrices)
+                        {
+                            var softChannelPrice = new SoftChannelProductPrice();
+                            softChannelPrice.ProductId = shopSanPham.id;
+                            softChannelPrice.Price = channelPrice.Price;
+                            softChannelPrice.ChannelId = channelPrice.ChannelId;
+                            softChannelPrice.CreatedDate = DateTime.Now;
+                            softChannelPrice.CreatedBy = input.userId;
+                            _softChannelProductPriceRepository.Add(softChannelPrice);
+                        }
+                    }
 
                     var branches = _softBranchRepository.GetAllIds();
                     foreach (var branch in branches.ToList())

@@ -69,7 +69,8 @@
         }
         function copyPriceRefToRestPrice() {
             $.each($scope.product.SoftChannelProductPrices, function (i, v) {
-                v.Price = $scope.product.priceRef;
+                if (v.ChannelId != 7)
+                    v.Price = $scope.product.priceRef;
             });
         }
 

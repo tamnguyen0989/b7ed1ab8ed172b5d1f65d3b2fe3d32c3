@@ -46,9 +46,31 @@ namespace SoftBBM.Web.api
         IShopSanPhamLogRepository _shopSanPhamLogRepository;
         ISoftPointUpdateLogRepository _softPointUpdateLogRepository;
         IShopeeRepository _shopeeRepository;
+        ISoftOfflineOrderWindowRepository _softOfflineOrderWindowRepository;
+        ISystemLogRepository _systemLogRepository;
         IUnitOfWork _unitOfWork;
 
-        public donhangController(IUnitOfWork unitOfWork, IdonhangRepository donhangRepository, IdonhangctRepository donhangctRepository, IkhachhangRepository khachhangRepository, IshopbientheRepository shopbientheRepository, ISoftStockRepository softStockRepository, IdonhangchuyenphattinhRepository donhangchuyenphattinhRepository, IdonhangchuyenphattpRepository donhangchuyenphattpRepository, IApplicationUserRepository applicationUserRepository, IdonhangchuyenphatvungRepository donhangchuyenphatvungRepository, IdonhangchuyenphatdiachifutaRepository donhangchuyenphatdiachifutaRepository, IApplicationUserSoftBranchRepository applicationUserSoftBranchRepository, ISoftChannelRepository softChannelRepository, IShopSanPhamRepository shopSanPhamRepository, ISoftChannelProductPriceRepository softChannelProductPriceRepository, ISoftBranchRepository softBranchRepository, IShopSanPhamLogRepository shopSanPhamLogRepository, ISoftPointUpdateLogRepository softPointUpdateLogRepository, IShopeeRepository shopeeRepository)
+        public donhangController(IUnitOfWork unitOfWork,
+            IdonhangRepository donhangRepository,
+            IdonhangctRepository donhangctRepository,
+            IkhachhangRepository khachhangRepository,
+            IshopbientheRepository shopbientheRepository,
+            ISoftStockRepository softStockRepository,
+            IdonhangchuyenphattinhRepository donhangchuyenphattinhRepository,
+            IdonhangchuyenphattpRepository donhangchuyenphattpRepository,
+            IApplicationUserRepository applicationUserRepository,
+            IdonhangchuyenphatvungRepository donhangchuyenphatvungRepository,
+            IdonhangchuyenphatdiachifutaRepository donhangchuyenphatdiachifutaRepository,
+            IApplicationUserSoftBranchRepository applicationUserSoftBranchRepository,
+            ISoftChannelRepository softChannelRepository,
+            IShopSanPhamRepository shopSanPhamRepository,
+            ISoftChannelProductPriceRepository softChannelProductPriceRepository,
+            ISoftBranchRepository softBranchRepository,
+            IShopSanPhamLogRepository shopSanPhamLogRepository,
+            ISoftPointUpdateLogRepository softPointUpdateLogRepository,
+            IShopeeRepository shopeeRepository,
+            ISoftOfflineOrderWindowRepository softOfflineOrderWindowRepository,
+            ISystemLogRepository systemLogRepository)
         {
             _unitOfWork = unitOfWork;
             _donhangRepository = donhangRepository;
@@ -69,6 +91,8 @@ namespace SoftBBM.Web.api
             _shopSanPhamLogRepository = shopSanPhamLogRepository;
             _softPointUpdateLogRepository = softPointUpdateLogRepository;
             _shopeeRepository = shopeeRepository;
+            _softOfflineOrderWindowRepository = softOfflineOrderWindowRepository;
+            _systemLogRepository = systemLogRepository;
         }
 
         [Route("save")]
@@ -2131,18 +2155,9 @@ namespace SoftBBM.Web.api
                     if (!string.IsNullOrEmpty(pickup_time_id))
                     {
                         _shopeeRepository.confirmOrderNoDelay(item, pickup_time_id);
-                        //if (!string.IsNullOrEmpty(result))
-                        //{
-                        //    var donhang = _donhangRepository.GetSingleByCondition(x=>x.OrderIdShopeeApi == item);
-                        //    if (donhang != null)
-                        //    {
-                        //        donhang.TrackingNo = result;
-                        //        donhang.UpdatedDate = DateTime.Now;
-                        //        donhang.UpdatedBy = 0;
-                        //        _donhangRepository.Update(donhang);
-                        //    }
-                        //}
                     }
+                    //_shopeeRepository.confirmOrderNoDelayNoTimeAdd(item);
+
                 }
                 //Shopee delay
                 Thread.Sleep(2000);
@@ -2478,10 +2493,10 @@ namespace SoftBBM.Web.api
             var result = new List<Object>();
             try
             {
-                var orderDBs = _donhangRepository.GetMulti(x=>x.Status != (int)StatusOrder.Done 
-                                                                && x.Status != (int) StatusOrder.Cancel
+                var orderDBs = _donhangRepository.GetMulti(x => x.Status != (int)StatusOrder.Done
+                                                                && x.Status != (int)StatusOrder.Cancel
                                                                 && !string.IsNullOrEmpty(x.OrderIdShopeeApi))
-                                                                    .Select(x=> new { id=x.id, OrderIdShopeeApi = x.OrderIdShopeeApi }).ToList();
+                                                                    .Select(x => new { id = x.id, OrderIdShopeeApi = x.OrderIdShopeeApi }).ToList();
                 if (orderDBs.Count > 0)
                 {
                     foreach (var orderDB in orderDBs)
@@ -2533,5 +2548,186 @@ namespace SoftBBM.Web.api
                 _unitOfWork.Commit();
             }
         }
+
+        [HttpGet]
+        [Route("updateordernullproductid")]
+        [Authorize(Roles = "OrderUpdate")]
+        public HttpResponseMessage UpdateOrderNullProductId(HttpRequestMessage request)
+        {
+            try
+            {
+                var desList = _donhangctRepository.GetMulti(x => x.IdPro == null).Select(x => new
+                {
+                    Id = x.Id,
+                    Description = x.Description
+
+                }).ToList();
+                if (desList.Count > 0)
+                {
+                    foreach (var des in desList)
+                    {
+                        var item = JsonConvert.DeserializeObject<ShopeeOrderDetailItem>(des.Description);
+                        var donhangct = _donhangctRepository.GetSingleById((int)des.Id);
+                        var shopeeProduct = _shopeeRepository.GetItemDetail(item.item_id);
+                        if (shopeeProduct != null)
+                        {
+                            var sku = "";
+                            if (!string.IsNullOrEmpty(shopeeProduct.item_sku))
+                                sku = shopeeProduct.item_sku;
+                            if (!string.IsNullOrEmpty(sku))
+                            {
+                                var productDB = _shopSanPhamRepository.GetSingleByCondition(x => x.masp.Trim().ToLower() == sku.Trim().ToLower());
+                                if (productDB != null)
+                                {
+                                    donhangct.IdPro = productDB.id;
+                                    _donhangctRepository.Update(donhangct);
+
+                                    var stockCurrent = _softStockRepository.GetSingleByCondition(x => x.BranchId == (int)BranchEnum.KHO_CHINH && x.ProductId == productDB.id);
+                                    if (stockCurrent == null)
+                                    {
+                                        var newStockCurrent = new SoftBranchProductStock();
+                                        newStockCurrent.BranchId = (int)BranchEnum.KHO_CHINH;
+                                        newStockCurrent.ProductId = productDB.id;
+                                        newStockCurrent.StockTotal = 0;
+                                        newStockCurrent.CreatedDate = DateTime.Now;
+                                        newStockCurrent.CreatedBy = 0;
+                                        stockCurrent = _softStockRepository.Add(newStockCurrent);
+                                    }
+                                    stockCurrent.StockTotal -= donhangct.Soluong;
+                                    _softStockRepository.Update(stockCurrent);
+
+                                    var channelOrder = _softChannelRepository.GetSingleById((int)ChannelEnum.SPE);
+                                    shop_sanphamLogs productLog = new shop_sanphamLogs();
+                                    productLog.ProductId = productDB.id;
+                                    productLog.Description = "Đơn hàng " + channelOrder.Name + ", mã đơn: " + donhangct.Sodh;
+                                    productLog.Quantity = donhangct.Soluong;
+                                    productLog.CreatedBy = 0;
+                                    productLog.CreatedDate = DateTime.Now;
+                                    productLog.BranchId = (int)BranchEnum.KHO_CHINH;
+                                    productLog.StockTotal = stockCurrent.StockTotal.Value;
+                                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(productDB.id) - donhangct.Soluong;
+                                    _shopSanPhamLogRepository.Add(productLog);
+                                    _unitOfWork.Commit();
+                                }
+                            }
+                        }
+                    }
+                }
+                return request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                var log = new SystemLog();
+                log.InitSystemLog(0, "", "UpdateOrderNullProductId", JsonConvert.SerializeObject(ex), 99, "OrderUpdate");
+                _systemLogRepository.Add(log);
+                _unitOfWork.Commit();
+                return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("gettrackingnoshopeeorders")]
+        //[Authorize(Roles = "OrderUpdate")]
+        public HttpResponseMessage GetTrackingNoShopeeOrders(HttpRequestMessage request, List<string> items)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                foreach (var item in items)
+                {
+                    var order = _shopeeRepository.getOrder(item);
+                    if (!string.IsNullOrEmpty(order.tracking_no))
+                    {
+                        var donhang = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == item);
+                        if (donhang != null)
+                        {
+                            donhang.TrackingNo = order.tracking_no;
+                            _donhangRepository.Update(donhang);
+                        }
+                    }
+                    _unitOfWork.Commit();
+                }
+                //Shopee delay
+                Thread.Sleep(2000);
+
+                foreach (var item in items)
+                {
+                    var donhang = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == item);
+                    if (donhang != null)
+                    {
+                        var orderDetail = _shopeeRepository.getOrder(item);
+                        if (!string.IsNullOrEmpty(orderDetail.tracking_no))
+                        {
+                            donhang.TrackingNo = orderDetail.tracking_no;
+                            donhang.UpdatedDate = DateTime.Now;
+                            donhang.UpdatedBy = 0;
+                            _donhangRepository.Update(donhang);
+                        }
+                    }
+                }
+
+                _unitOfWork.Commit();
+
+                //Kiểm tra đơn sót
+                GetLackOrders();
+
+                return request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message + " | " + ex.StackTrace);
+                return response;
+            }
+        }
+
+        [HttpPost]
+        [Route("addofflineorderwindow")]
+        [Authorize(Roles = "OrderUpdate")]
+        public HttpResponseMessage AddOfflineOrderWindow(HttpRequestMessage request, AddOfflineOrderWindowInputVM item)
+        {
+            try
+            {
+                var offlineOrderWindow = _softOfflineOrderWindowRepository.GetSingleByCondition(x => x.UserId == item.UserId);
+                if (offlineOrderWindow != null)
+                {
+                    offlineOrderWindow.Value = item.value;
+                    _softOfflineOrderWindowRepository.Update(offlineOrderWindow);
+                }
+                else
+                {
+                    offlineOrderWindow = new SoftOfflineOrderWindow();
+                    offlineOrderWindow.UserId = item.UserId;
+                    offlineOrderWindow.Value = item.value;
+                    _softOfflineOrderWindowRepository.Add(offlineOrderWindow);
+                }
+                _unitOfWork.Commit();
+                return request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message + " | " + ex.StackTrace);
+            }
+        }
+
+        [HttpGet]
+        [Route("getofflineorderwindow")]
+        public HttpResponseMessage GetOfflineOrderWindow(HttpRequestMessage request, int userId)
+        {
+            try
+            {
+                if (userId > 0)
+                {
+                    var offlineOrderWindow = _softOfflineOrderWindowRepository.GetSingleByCondition(x => x.UserId == userId);
+                    if (offlineOrderWindow != null)
+                        return request.CreateResponse(HttpStatusCode.OK, offlineOrderWindow.Value);
+                }
+                return request.CreateResponse(HttpStatusCode.BadRequest, "Không tìm thấy dữ liệu");
+            }
+            catch (Exception ex)
+            {
+                return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message + " | " + ex.StackTrace);
+            }
+        }
+
     }
 }

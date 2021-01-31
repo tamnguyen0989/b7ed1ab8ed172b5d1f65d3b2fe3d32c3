@@ -1,9 +1,10 @@
 ﻿(function (app) {
-    app.controller('orderAddController', orderAddController);
+    app.controller('orderOfflineAddController', orderOfflineAddController);
 
-    orderAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$timeout', '$uibModal', '$sce', '$http', '$q'];
+    orderOfflineAddController.$inject = ['apiService', '$window', '$scope', 'notificationService', '$state', '$rootScope', '$timeout', '$uibModal', '$sce', '$http', '$q'];
 
-    function orderAddController(apiService, $window, $scope, notificationService, $state, $rootScope, $timeout, $uibModal, $sce, $http, $q) {
+    function orderOfflineAddController(apiService, $window, $scope, notificationService, $state, $rootScope, $timeout, $uibModal, $sce, $http, $q) {
+        $scope.userId = JSON.parse(localStorage.getItem("userId"));
         $scope.order = {
             Status: true
         }
@@ -111,6 +112,7 @@
         $scope.ONLChannelId = 2;
         $scope.ONLChannelName = "Online";
         $scope.CHAChannelId = 1;
+        $scope.CHAChannelName = "Cửa hàng";
 
         $scope.addOrder = addOrder;
         $scope.saveOrder = saveOrder;
@@ -153,14 +155,11 @@
         $scope.validSelectedTypeShipHCM = validSelectedTypeShipHCM;
         $scope.validSelectedTypeShipOutHCM = validSelectedTypeShipOutHCM;
         $scope.sumKg = sumKg;
+        $scope.updateDataOrderWindow = updateDataOrderWindow;
 
         function loadChannels() {
             $scope.loading = true;
             apiService.get('/api/channel/getall', null, function (result) {
-                //if ($scope.branchSelectedRoot.Id == 1)
-                //    result.data.splice(1, result.data.length - 1);
-                //else if ($scope.branchSelectedRoot.Id == 2)
-                //    result.data.splice(0, 1);
                 var channels = result.data;
                 var shopeeIndex = 0;
                 $.each(channels, function (index, value) {
@@ -169,7 +168,10 @@
                 });
                 channels.splice(shopeeIndex, 1)
                 $scope.channels = channels;
-                //$scope.selectedChannel = $scope.channels[0];
+                $scope.selectedChannel = $scope.channels[0];
+
+                $scope.order.ChannelId = $scope.CHAChannelId;
+                $scope.channelName = $scope.CHAChannelName.toUpperCase();
 
                 $scope.loading = false;
             }, function (error) {
@@ -290,7 +292,7 @@
             if (!isNullOrEmpty($scope.customer)) {
                 $scope.order.Customer = $scope.customer;
                 $scope.order.Customer.diem = sumPoint();
-            }            
+            }
             var currentDate = $scope.currentDate;
             $scope.order.Code = $scope.branchSelectedRoot.Code + ('0' + (currentDate.getDate())).slice(-2) + ('0' + (currentDate.getMonth() + 1)).slice(-2) + String(currentDate.getFullYear()).slice(-2) + $scope.selectedChannel.Code;
 
@@ -323,10 +325,65 @@
                         }, 500);
                     resetOrder();
                     init();
+                    updateDataOrderWindow();
                 }, function (error) {
                     notificationService.displayError(error.data);
                     $scope.addingOrder = false;
                 });
+        }
+        function updateDataOrderWindow() {
+            if (localStorage.getItem("userId")) {
+                $scope.order.CreatedBy = JSON.parse(localStorage.getItem("userId"));
+            }
+            $scope.order.ChannelId = $scope.selectedChannel.Id;
+            $scope.order.BranchId = $scope.branchSelectedRoot.Id;
+            if (!isNullOrEmpty($scope.customer)) {
+                $scope.customer.dienthoai = $scope.searchPhone;
+                $scope.customer.idtp = $scope.selectedCity.id;
+            }
+            if ($scope.selectedDistrict && !isNullOrEmpty($scope.customer))
+                $scope.customer.idquan = $scope.selectedDistrict.id;
+            if ($scope.selectedShipper && !isNullOrEmpty($scope.customer))
+                $scope.order.ShipperId = $scope.selectedShipper.Id;
+            $scope.order.Status = 3;
+            $scope.order.ghichu = $scope.ghichu;
+            //$scope.order.diemsp = Math.floor(($scope.diemsp - $scope.discount) / 1000);
+            $scope.order.datru_diem = Math.ceil($scope.datru_diem);
+            $scope.order.Discount = $scope.discount;
+            var anotherfee = 0;
+            if ($scope.anotherFee != null && $scope.anotherFee != "")
+                var anotherfee = parseInt($scope.anotherFee);
+            //$scope.order.ship = Math.floor(anotherfee + $scope.feeShip + $scope.feeDeliveryTime);
+            $scope.order.phithuho = $scope.cod;
+            $scope.order.thongtinxedo = $scope.coachInfo;
+            $scope.order.tongtienOff = totalMoney();
+            if ($scope.selectedPayment)
+                $scope.order.pttt = parseInt($scope.selectedPayment.value);
+            if ($scope.selectedDeliveryTime)
+                $scope.order.idgiogiao = $scope.selectedDeliveryTime.value;
+            $scope.order.OrderDetails = $scope.detailOrders;
+            if (!isNullOrEmpty($scope.customer)) {
+                $scope.order.Customer = $scope.customer;
+                $scope.order.Customer.diemOff = sumPoint();
+            }
+            var currentDate = $scope.currentDate;
+            $scope.order.Code = $scope.branchSelectedRoot.Code + ('0' + (currentDate.getDate())).slice(-2) + ('0' + (currentDate.getMonth() + 1)).slice(-2) + String(currentDate.getFullYear()).slice(-2) + $scope.selectedChannel.Code;
+            $scope.order.tonggiam = $scope.discount + $scope.datru_diem;
+            $scope.order.thanhtoan = total();
+            $scope.order.phikhac = $scope.anotherFee;
+            $scope.order.khachdua = $scope.paid;
+            $scope.order.tienthua = $scope.paid - totalMoney();
+            $scope.order.datru_diem = $scope.datru_diem;
+            $scope.order.giamgia = $scope.discount;
+            var data = {
+                userId: $scope.userId,
+                value: JSON.stringify($scope.order)
+            }
+            apiService.post('api/order/addofflineorderwindow', data, function (result) {
+                $scope.chatHub.server.update_order_window($scope.userId);
+            }, function (response) {
+                notificationService.displayError(response.data);
+            });
         }
         function saveOrder() {
             $scope.addingOrder = true;
@@ -374,7 +431,7 @@
             $scope.order.OrderDetails = $scope.detailOrders;
             if (!isNullOrEmpty($scope.customer)) {
                 $scope.order.Customer = $scope.customer;
-            }  
+            }
             var currentDate = $scope.currentDate;
             $scope.order.Code = $scope.branchSelectedRoot.Code + ('0' + (currentDate.getDate())).slice(-2) + ('0' + (currentDate.getMonth() + 1)).slice(-2) + String(currentDate.getFullYear()).slice(-2) + $scope.selectedChannel.Code;
             apiService.post('api/order/save/', $scope.order,
@@ -490,6 +547,7 @@
             setFreeShipCart();
             updateDistrict();
             //getFeeShip();
+            updateDataOrderWindow();
         }
         function sumMoneyCartNoDiscount() {
             var total = 0;
@@ -600,17 +658,7 @@
             //('00' + currentDate.getHours()).slice(-2) + ':' +
             //('00' + currentDate.getMinutes()).slice(-2) + ':' +
             //('00' + currentDate.getSeconds()).slice(-2);
-            if (localStorage.getItem("selectedChannel") && localStorage.getItem("selectedChannel") != 'undefined' && localStorage.getItem("selectedChannel") != 'null') {
-                $scope.selectedChannel = JSON.parse(localStorage.getItem("selectedChannel"));
-                if ($scope.selectedChannel.Id == $scope.SPEChannelId) {
-                    $scope.order.ChannelId = $scope.ONLChannelId;
-                    $scope.channelName = $scope.ONLChannelName.toUpperCase();
-                } else {
-                    $scope.order.ChannelId = $scope.selectedChannel.Id;
-                    var channelName = $scope.selectedChannel.Name;
-                    $scope.channelName = channelName.toUpperCase();
-                }             
-            }
+
             //if (localStorage.getItem("userName")) {
             //    $scope.order.CreatedBy = JSON.parse(localStorage.getItem("userName"));
             //}
@@ -1942,18 +1990,10 @@
             return +(Math.round(num + "e+2") + "e-2");
         }
 
-        //$scope.$watch('selectedChannel', function (n, o) {
-        //    if (n) {
-        //        var currentDate = $scope.currentDate;
-        //        $scope.order.ChannelId = n.Id;
-        //        resetOrderDetails();
-        //        $scope.order.Code = $scope.branchSelectedRoot.Code + ('0' + (currentDate.getDate())).slice(-2) + ('0' + (currentDate.getMonth() + 1)).slice(-2) + String(currentDate.getFullYear()).slice(-2) + n.Code;
-        //        $scope.selectedChannel = n;
-        //        localStorage.setItem("selectedChannel", JSON.stringify(n));
-        //    }
-        //    else
-        //        $scope.order.ChannelId = null;
-        //});
+        $scope.chatHub = null;
+        $scope.chatHub = $.connection.chatHub; // initializes hub
+        $.connection.hub.start(); // starts hub
+
         $scope.$watch('discountType', function (n, o) {
             if (n) {
                 switch (n) {
@@ -1996,7 +2036,7 @@
                 }
                 else
                     $scope.searchedProducts = result.data;
-
+                updateDataOrderWindow();
             }, function (error) {
                 //notificationService.displayError(error);
             });

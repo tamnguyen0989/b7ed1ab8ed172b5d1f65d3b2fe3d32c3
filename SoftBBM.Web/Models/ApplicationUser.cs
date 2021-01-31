@@ -44,6 +44,7 @@ namespace SoftBBM.Web.Models
             this.donhangs = new HashSet<donhang>();
             this.donhangs1 = new HashSet<donhang>();
             this.donhangs2 = new HashSet<donhang>();
+            this.SoftOfflineOrderWindows = new HashSet<SoftOfflineOrderWindow>();
         }
     
         public int Id { get; set; }
@@ -115,5 +116,7 @@ namespace SoftBBM.Web.Models
         public virtual ICollection<donhang> donhangs1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<donhang> donhangs2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SoftOfflineOrderWindow> SoftOfflineOrderWindows { get; set; }
     }
 }

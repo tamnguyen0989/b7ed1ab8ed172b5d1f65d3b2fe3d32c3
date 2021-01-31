@@ -590,6 +590,7 @@ namespace SoftBBM.Web.api
                                 TotalAmount = order.cod ? order.total_amount : 0.ToString(),
                                 CreateTime = UtilExtensions.UnixTimeStampToDateTime(order.create_time),
                                 MaxWeight = Math.Floor(totalWeight * 1000),
+                                AddressSeller = _shopeeRepository.GetAddress()
                             });
                         }
                         else
@@ -701,6 +702,7 @@ namespace SoftBBM.Web.api
             var result = new List<Object>();
             try
             {
+                var addressSeller = _shopeeRepository.GetAddress();
                 var statusOrdersViewModel = JsonConvert.DeserializeObject<StatusOrdersViewModelV2>(inputParams);
 
                 foreach (var orderVM in statusOrdersViewModel.Orders)
@@ -754,7 +756,8 @@ namespace SoftBBM.Web.api
                                 SenderSortCode = logistics.logistics.sender_sort_code.first_sender_sort_code,
                                 OrderDetails = order.items,
                                 TotalAmount = order.cod ? order.total_amount : 0.ToString(),
-                                CreateTime = UtilExtensions.UnixTimeStampToDateTime(order.create_time)
+                                CreateTime = UtilExtensions.UnixTimeStampToDateTime(order.create_time),
+                                AddressSeller = addressSeller,
                             });
                         }
                     }
@@ -812,12 +815,20 @@ namespace SoftBBM.Web.api
         [HttpGet]
         [Route("testapi")]
         [Authorize(Roles = "OrderUpdate")]
-        public HttpResponseMessage TestAPI(HttpRequestMessage request)
+        public HttpResponseMessage TestAPI(HttpRequestMessage request, string orderParam, string productParam)
         {
             var result = new List<Object>();
             try
             {
-                var orderShopee = _shopeeRepository.getOrder("201010V9XGD3UX");
+                //var orderShopee = new ShopeeOrder();
+                //if (!string.IsNullOrEmpty(orderParam))
+                //    orderShopee = _shopeeRepository.getOrder(orderParam);
+                //var productShopee = new ShopeeItem();
+                //if (!string.IsNullOrEmpty(productParam))
+                //    productShopee = _shopeeRepository.GetItemDetail(long.Parse(productParam));
+
+                var test = _shopeeRepository.GetAddress();
+
                 return request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)
@@ -831,27 +842,27 @@ namespace SoftBBM.Web.api
             }
         }
 
-        [HttpGet]
-        [Route("updatestockofproductsnoskuinorders")]
-        [Authorize(Roles = "OrderUpdate")]
-        public HttpResponseMessage UpdateStockOfProductsNoSkuInOrders(HttpRequestMessage request)
-        {
-            var result = new List<Object>();
-            try
-            {
-                var orderShopee = _shopeeRepository.GetItemDetail(314091888);
-                return request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (Exception ex)
-            {
-                //var contentLog = new SoftPointUpdateLog();
-                //contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
-                //contentLog.CreatedDate = DateTime.Now;
-                //_softPointUpdateLogRepository.Add(contentLog);
-                //_unitOfWork.Commit();
-                return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
-            }
-        }
+        //[HttpGet]
+        //[Route("updatestockofproductsnoskuinorders")]
+        //[Authorize(Roles = "OrderUpdate")]
+        //public HttpResponseMessage UpdateStockOfProductsNoSkuInOrders(HttpRequestMessage request)
+        //{
+        //    var result = new List<Object>();
+        //    try
+        //    {
+        //        var orderShopee = _shopeeRepository.GetItemDetail(314091888);
+        //        return request.CreateResponse(HttpStatusCode.OK);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //var contentLog = new SoftPointUpdateLog();
+        //        //contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
+        //        //contentLog.CreatedDate = DateTime.Now;
+        //        //_softPointUpdateLogRepository.Add(contentLog);
+        //        //_unitOfWork.Commit();
+        //        return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+        //    }
+        //}
 
         public float TotalWeightByLWH(float length = 0, float width = 0, float height = 0, bool fast = true)
         {

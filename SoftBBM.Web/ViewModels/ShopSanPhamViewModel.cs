@@ -149,9 +149,11 @@ namespace SoftBBM.Web.ViewModels
         public ShopSanPhamStatusViewModel selectedProductStatus { get; set; }
         public string barCode { get; set; }
         public int priceRef { get; set; }
-        public int priceCHA { get; set; }
-        public int priceONL { get; set; }
+        public int priceBase { get; set; }
+        //public int priceCHA { get; set; }
+        //public int priceONL { get; set; }
         public int userId { get; set; }
+        public List<SoftChannelProductPriceViewModel> SoftChannelProductPrices { get; set; }
     }
     public class ShopSanPhamMaxCodeProductVM
     {

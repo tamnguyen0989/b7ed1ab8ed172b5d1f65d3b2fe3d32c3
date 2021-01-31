@@ -11,10 +11,15 @@ namespace SoftBBM.Web.Hubs
 {
     public class ChatHub : Hub
     {
-        public void Send(int branchId)
+        public void send(int branchId)
         {
 
-                Clients.All.broadcastMessage(branchId);
+            Clients.All.broadcastMessage(branchId);
+        }
+        public void update_order_window(int userId)
+        {
+
+            Clients.All.broadcastMessage("update_offline_window",userId);
         }
     }
 }

@@ -99,4 +99,20 @@ namespace SoftBBM.Web.ViewModels
     {
         public List<OrderGetOrdersList> orders { get; set; }
     }
+    public class ShopeeGetAddress
+    {
+        public List<ShopeeAddress> address_list { get; set; }
+    }
+    public class ShopeeAddress
+    {
+        public int address_id { get; set; }
+        public string country { get; set; }
+        public string state { get; set; }       
+        public string city { get; set; }       
+        public string address { get; set; }       
+        public string zipcode { get; set; }       
+        public string district { get; set; }       
+        public string town { get; set; }   
+        public List<string> address_flag { get; set; }   
+    }
 }

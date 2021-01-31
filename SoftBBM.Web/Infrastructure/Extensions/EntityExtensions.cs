@@ -308,6 +308,7 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             systemLog.TypeName = typeName;
             systemLog.Before = before;
             systemLog.After = after;
+            systemLog.CreatedDate = DateTime.Now;
         }
     }
 }

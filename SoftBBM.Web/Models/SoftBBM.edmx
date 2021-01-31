@@ -786,6 +786,14 @@
           <Property Name="UpdatedDate" Type="datetime" />
           <Property Name="UpdatedBy" Type="int" />
         </EntityType>
+        <EntityType Name="SoftOfflineOrderWindow">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="Value" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="SoftOrderDetails">
           <Key>
             <PropertyRef Name="OrderId" />
@@ -828,7 +836,6 @@
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="CssClass" Type="varchar" MaxLength="256" />
-          <Property Name="Priority" Type="int" />
         </EntityType>
         <EntityType Name="SoftPointUpdateLogs">
           <Key>
@@ -1996,6 +2003,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_SoftOfflineOrderWindow_ApplicationUsers">
+          <End Role="ApplicationUsers" Type="Self.ApplicationUsers" Multiplicity="0..1" />
+          <End Role="SoftOfflineOrderWindow" Type="Self.SoftOfflineOrderWindow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftOfflineOrderWindow">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SoftOrderDetails_shop-sanpham">
           <End Role="shop-sanpham" Type="Self.shop-sanpham" Multiplicity="1" />
           <End Role="SoftOrderDetails" Type="Self.SoftOrderDetails" Multiplicity="*" />
@@ -2548,6 +2567,7 @@
           <EntitySet Name="SoftChannelProductPrices" EntityType="Self.SoftChannelProductPrices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SoftChannels" EntityType="Self.SoftChannels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SoftNotifications" EntityType="Self.SoftNotifications" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SoftOfflineOrderWindow" EntityType="Self.SoftOfflineOrderWindow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SoftOrderDetails" EntityType="Self.SoftOrderDetails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SoftOrders" EntityType="Self.SoftOrders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SoftOrderStatus" EntityType="Self.SoftOrderStatus" Schema="dbo" store:Type="Tables" />
@@ -2850,6 +2870,10 @@
           <AssociationSet Name="FK_SoftNotifications_SoftStockIns" Association="Self.FK_SoftNotifications_SoftStockIns">
             <End Role="SoftStockIns" EntitySet="SoftStockIns" />
             <End Role="SoftNotifications" EntitySet="SoftNotifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SoftOfflineOrderWindow_ApplicationUsers" Association="Self.FK_SoftOfflineOrderWindow_ApplicationUsers">
+            <End Role="ApplicationUsers" EntitySet="ApplicationUsers" />
+            <End Role="SoftOfflineOrderWindow" EntitySet="SoftOfflineOrderWindow" />
           </AssociationSet>
           <AssociationSet Name="FK_SoftOrderDetails_shop-sanpham" Association="Self.FK_SoftOrderDetails_shop-sanpham">
             <End Role="shop-sanpham" EntitySet="shop-sanpham" />
@@ -4063,7 +4087,6 @@
           <EntitySet Name="SoftNotifications" EntityType="SoftBBMModels.SoftNotification" />
           <EntitySet Name="SoftOrderDetails" EntityType="SoftBBMModels.SoftOrderDetail" />
           <EntitySet Name="SoftOrders" EntityType="SoftBBMModels.SoftOrder" />
-          <EntitySet Name="SoftOrderStatus" EntityType="SoftBBMModels.SoftOrderStatu" />
           <EntitySet Name="SoftReturnSupplierDetails" EntityType="SoftBBMModels.SoftReturnSupplierDetail" />
           <EntitySet Name="SoftReturnSuppliers" EntityType="SoftBBMModels.SoftReturnSupplier" />
           <EntitySet Name="SoftStockInCategories" EntityType="SoftBBMModels.SoftStockInCategory" />
@@ -4161,10 +4184,6 @@
           <AssociationSet Name="FK_SoftOrderDetails_SoftOrders" Association="SoftBBMModels.FK_SoftOrderDetails_SoftOrders">
             <End Role="SoftOrder" EntitySet="SoftOrders" />
             <End Role="SoftOrderDetail" EntitySet="SoftOrderDetails" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SoftOrders_SoftOrderStatus" Association="SoftBBMModels.FK_SoftOrders_SoftOrderStatus">
-            <End Role="SoftOrderStatu" EntitySet="SoftOrderStatus" />
-            <End Role="SoftOrder" EntitySet="SoftOrders" />
           </AssociationSet>
           <AssociationSet Name="FK_SoftReturnSupplierDetails_SoftReturnSuppliers" Association="SoftBBMModels.FK_SoftReturnSupplierDetails_SoftReturnSuppliers">
             <End Role="SoftReturnSupplier" EntitySet="SoftReturnSuppliers" />
@@ -4386,6 +4405,16 @@
             <End Role="donhangStatu" EntitySet="donhangStatus" />
             <End Role="donhang" EntitySet="donhangs" />
           </AssociationSet>
+          <EntitySet Name="SoftOrderStatus" EntityType="SoftBBMModels.SoftOrderStatu" />
+          <AssociationSet Name="FK_SoftOrders_SoftOrderStatus" Association="SoftBBMModels.FK_SoftOrders_SoftOrderStatus">
+            <End Role="SoftOrderStatu" EntitySet="SoftOrderStatus" />
+            <End Role="SoftOrder" EntitySet="SoftOrders" />
+          </AssociationSet>
+          <EntitySet Name="SoftOfflineOrderWindows" EntityType="SoftBBMModels.SoftOfflineOrderWindow" />
+          <AssociationSet Name="FK_SoftOfflineOrderWindow_ApplicationUsers" Association="SoftBBMModels.FK_SoftOfflineOrderWindow_ApplicationUsers">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="SoftOfflineOrderWindow" EntitySet="SoftOfflineOrderWindows" />
+          </AssociationSet>
           </EntityContainer>
         <ComplexType Name="spTB_DangNhap_TruyVanTheoTenDangNhap_Result">
           <Property Type="String" Name="TenDN" Nullable="false" MaxLength="100" />
@@ -4530,6 +4559,7 @@
           <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers" FromRole="ApplicationUser" ToRole="donhang" />
           <NavigationProperty Name="donhangs1" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers1" FromRole="ApplicationUser" ToRole="donhang" />
           <NavigationProperty Name="donhangs2" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers2" FromRole="ApplicationUser" ToRole="donhang" />
+          <NavigationProperty Name="SoftOfflineOrderWindows" Relationship="SoftBBMModels.FK_SoftOfflineOrderWindow_ApplicationUsers" FromRole="ApplicationUser" ToRole="SoftOfflineOrderWindow" />
           </EntityType>
         <Association Name="FK_ApplicationUserGroups_ApplicationUsers">
           <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -4889,17 +4919,6 @@
           <NavigationProperty Name="SoftChannel" Relationship="SoftBBMModels.FK_SoftOrders_SoftChannels" FromRole="SoftOrder" ToRole="SoftChannel" />
           <NavigationProperty Name="SoftOrderDetails" Relationship="SoftBBMModels.FK_SoftOrderDetails_SoftOrders" FromRole="SoftOrder" ToRole="SoftOrderDetail" />
           <NavigationProperty Name="SoftOrderStatu" Relationship="SoftBBMModels.FK_SoftOrders_SoftOrderStatus" FromRole="SoftOrder" ToRole="SoftOrderStatu" />
-        </EntityType>
-        <EntityType Name="SoftOrderStatu">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CssClass" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="SoftOrders" Relationship="SoftBBMModels.FK_SoftOrders_SoftOrderStatus" FromRole="SoftOrderStatu" ToRole="SoftOrder" />
-          <Property Name="Priority" Type="Int32" />
         </EntityType>
         <EntityType Name="SoftReturnSupplierDetail">
           <Key>
@@ -5265,18 +5284,6 @@
             </Principal>
             <Dependent Role="SoftOrderDetail">
               <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftOrders_SoftOrderStatus">
-          <End Type="SoftBBMModels.SoftOrderStatu" Role="SoftOrderStatu" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftOrder" Role="SoftOrder" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftOrderStatu">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftOrder">
-              <PropertyRef Name="StatusId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6224,6 +6231,49 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="SoftOrderStatu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CssClass" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="SoftOrders" Relationship="SoftBBMModels.FK_SoftOrders_SoftOrderStatus" FromRole="SoftOrderStatu" ToRole="SoftOrder" />
+        </EntityType>
+        <Association Name="FK_SoftOrders_SoftOrderStatus">
+          <End Type="SoftBBMModels.SoftOrderStatu" Role="SoftOrderStatu" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftOrder" Role="SoftOrder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftOrderStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftOrder">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SoftOfflineOrderWindow">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ApplicationUser" Relationship="SoftBBMModels.FK_SoftOfflineOrderWindow_ApplicationUsers" FromRole="SoftOfflineOrderWindow" ToRole="ApplicationUser" />
+        </EntityType>
+        <Association Name="FK_SoftOfflineOrderWindow_ApplicationUsers">
+          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftOfflineOrderWindow" Role="SoftOfflineOrderWindow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftOfflineOrderWindow">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -7135,17 +7185,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SoftOrderStatus">
-            <EntityTypeMapping TypeName="SoftBBMModels.SoftOrderStatu">
-              <MappingFragment StoreEntitySet="SoftOrderStatus">
-                <ScalarProperty Name="Priority" ColumnName="Priority" />
-                <ScalarProperty Name="CssClass" ColumnName="CssClass" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="SoftReturnSupplierDetails">
             <EntityTypeMapping TypeName="SoftBBMModels.SoftReturnSupplierDetail">
               <MappingFragment StoreEntitySet="SoftReturnSupplierDetails">
@@ -7490,6 +7529,25 @@
                 <ScalarProperty Name="CssClass" ColumnName="CssClass" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SoftOrderStatus">
+            <EntityTypeMapping TypeName="SoftBBMModels.SoftOrderStatu">
+              <MappingFragment StoreEntitySet="SoftOrderStatus">
+                <ScalarProperty Name="CssClass" ColumnName="CssClass" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SoftOfflineOrderWindows">
+            <EntityTypeMapping TypeName="SoftBBMModels.SoftOfflineOrderWindow">
+              <MappingFragment StoreEntitySet="SoftOfflineOrderWindow">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

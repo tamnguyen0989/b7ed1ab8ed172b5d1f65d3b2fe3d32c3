@@ -17,7 +17,7 @@ tr td button {
 tr td input {
     display: initial;
     /*text-align: center;*/
-    padding-left:5px
+    padding-left: 5px
 }
 
 table tr:first-child th {
@@ -447,25 +447,49 @@ li > a > p {
     padding: 1px !important;
 }
 
-.price_currency{
-    text-align:right
+.price_currency {
+    text-align: right
 }
 
-.padding_right_5px{
-    padding-right:5px
+.padding_right_5px {
+    padding-right: 5px
 }
+
 .padding_left_5px {
     padding-left: 5px
 }
+
 .padding_left_20px {
     padding-left: 20px
 }
-.tvk_branch{
-    color:darkblue
+
+.tvk_branch {
+    color: darkblue
 }
-.kho_chinh_branch{
-    color:darkred
+
+.kho_chinh_branch {
+    color: darkred
 }
+
 .modal-body {
     overflow-y: scroll !important;
+}
+
+.offline-order-menu {
+    background-color: #b6006e;
+}
+
+    .offline-order-menu:hover {
+        background-color: rebeccapurple !important;
+    }
+
+.online-order-menu {
+    background-color: yellowgreen;
+}
+
+    .online-order-menu:hover {
+        background-color: seagreen !important;
+    }
+.nomargin-bottom{
+    margin-bottom:0px !important
 }

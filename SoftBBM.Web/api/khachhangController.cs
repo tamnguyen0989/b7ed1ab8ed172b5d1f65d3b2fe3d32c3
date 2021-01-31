@@ -34,7 +34,7 @@ namespace SoftBBM.Web.api
         {
             HttpResponseMessage response = null;
 
-            var customer = _khachhangRepository.GetSingleByCondition(x => x.dienthoai == phone);
+            var customer = _khachhangRepository.GetMulti(x => x.dienthoai == phone).LastOrDefault();
             var responseData = Mapper.Map<khachhang, khachhangViewModel>(customer);
             response = request.CreateResponse(HttpStatusCode.OK, responseData);
 
@@ -105,8 +105,10 @@ namespace SoftBBM.Web.api
                 oldCustomer.duong = khachhangVM.duong;
                 oldCustomer.email = khachhangVM.email;
                 oldCustomer.hoten = khachhangVM.hoten;
-                oldCustomer.idquan = khachhangVM.District.id;
-                oldCustomer.idtp = khachhangVM.City.id;
+                if (khachhangVM.District != null)
+                    oldCustomer.idquan = khachhangVM.District.id;
+                if (khachhangVM.City != null)
+                    oldCustomer.idtp = khachhangVM.City.id;
                 oldCustomer.UpdatedBy = khachhangVM.userId;
                 oldCustomer.UpdatedDate = DateTime.Now;
                 _khachhangRepository.Update(oldCustomer);

@@ -150,4 +150,9 @@ namespace SoftBBM.Web.ViewModels
     {
         public string Name { get; set; }
     }
+    public class AddOfflineOrderWindowInputVM
+    {
+        public int UserId { get; set; }
+        public string value { get; set; }
+    }
 }

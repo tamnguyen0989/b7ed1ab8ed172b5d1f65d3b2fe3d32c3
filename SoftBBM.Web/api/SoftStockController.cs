@@ -1297,7 +1297,7 @@ namespace SoftBBM.Web.api
                 _shopSanPhamRepository.Update(product);
 
                 //update channel price
-                if(detailProductInputVm.SoftChannelProductPrices.Count > 0)
+                if (detailProductInputVm.SoftChannelProductPrices.Count > 0)
                 {
                     foreach (var channelPrice in detailProductInputVm.SoftChannelProductPrices)
                     {
@@ -1318,7 +1318,7 @@ namespace SoftBBM.Web.api
                             softChannelPrice.CreatedDate = DateTime.Now;
                             softChannelPrice.CreatedBy = detailProductInputVm.userId;
                             _softChannelProductPriceRepository.Add(softChannelPrice);
-                        }   
+                        }
                     }
                 }
 
@@ -1354,6 +1354,36 @@ namespace SoftBBM.Web.api
                 response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
                 return response;
             }
+        }
+
+        [Route("getenabledchannels")]
+        [HttpGet]
+        public HttpResponseMessage GetEnabledChannels(HttpRequestMessage request)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var res = new List<SoftChannelProductPriceViewModel>();
+                var channels = _softChannelRepository.GetMulti(x => x.Status == true);
+                foreach (var channel in channels)
+                {
+                    res.Add(new SoftChannelProductPriceViewModel()
+                    {
+                        ChannelId = channel.Id,
+                        ProductId = 0,
+                        Price = 0,
+                        PriceDiscount = 0,
+                        CreatedDate = DateTime.Now,
+                        channelName = channel.Name
+                    });
+                }
+                response = request.CreateResponse(HttpStatusCode.OK, res);
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+            return response;
         }
 
         public byte[] GetPriceWholesaleSheet(SoftStockSearchFilterViewModel softStockSearchFilterVM)

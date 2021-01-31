@@ -15,36 +15,36 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <!--<li class="dropdown messages-menu">
-                        <a ng-click="hideNotification()" class="dropdown-toggle" data-toggle="dropdown">
-                            <i style="font-size:1.4em" class="fa fa-commenting" aria-hidden="true">
-                            </i>
-                            <small ng-show="totalIsRead>0" style="font-size:12px !important" class="label label-danger">{{totalIsRead}}</small>
-                        </a>
-                        <ul id="notificationList" class="dropdown-menu dropdown-menu-left">
-                            <li ng-repeat="item in notifications" class="header">
-                                <a ng-click="updateIsRead(item)">
-                                    <h4>
-                                        Từ: {{item.SoftBranch.Name}}
-                                        <small><i class="fa fa-clock-o"></i>{{item.CreatedDateConvert}}</small>
-                                    </h4>
-                                    <p ng-class="{'has-error':item.IsRead==false}">{{item.Message}}</p>
-                                </a>
-                            </li>
-                            <li >
-                                <div>
-                                    <div class="col col-xs-6 text-left margintop5px">
-                                        <a href="" style="color:#3c8dbc !important" ng-click="updateReadAll()">Đã xem</a>
-                                        <span ng-if="updatingReadAll" style="margin-left:5px">
-                                            <i class="fa fa-refresh fa-fw fa-spin"></i><span>Đang cập nhật...</span>
-                                        </span>
-                                    </div>
-                                    <div class="col col-xs-6 text-right">
-                                        <custom-pager-small page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager-small>
-                                    </div>    
-                                </div>
-                            </li>
-                        </ul>
-                    </li>-->
+        <a ng-click="hideNotification()" class="dropdown-toggle" data-toggle="dropdown">
+            <i style="font-size:1.4em" class="fa fa-commenting" aria-hidden="true">
+            </i>
+            <small ng-show="totalIsRead>0" style="font-size:12px !important" class="label label-danger">{{totalIsRead}}</small>
+        </a>
+        <ul id="notificationList" class="dropdown-menu dropdown-menu-left">
+            <li ng-repeat="item in notifications" class="header">
+                <a ng-click="updateIsRead(item)">
+                    <h4>
+                        Từ: {{item.SoftBranch.Name}}
+                        <small><i class="fa fa-clock-o"></i>{{item.CreatedDateConvert}}</small>
+                    </h4>
+                    <p ng-class="{'has-error':item.IsRead==false}">{{item.Message}}</p>
+                </a>
+            </li>
+            <li >
+                <div>
+                    <div class="col col-xs-6 text-left margintop5px">
+                        <a href="" style="color:#3c8dbc !important" ng-click="updateReadAll()">Đã xem</a>
+                        <span ng-if="updatingReadAll" style="margin-left:5px">
+                            <i class="fa fa-refresh fa-fw fa-spin"></i><span>Đang cập nhật...</span>
+                        </span>
+                    </div>
+                    <div class="col col-xs-6 text-right">
+                        <custom-pager-small page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager-small>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </li>-->
                     <li class="dropdown messages-menu">
                         <a>
                             <select required
@@ -58,9 +58,20 @@
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
-                        <a ui-sref="add_order" target="_blank" style="background:#b6006e">
+                        <a ui-sref="add_offline_order" target="_blank" class="offline-order-menu">
                             <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                             <span>Bán hàng</span>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a ui-sref="view_offline_order" target="_blank" class="offline-order-menu">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="dropdown messages-menu">
+                        <a ui-sref="add_order" target="_blank" class="online-order-menu">
+                            <i class="fa fa-opencart" aria-hidden="true"></i>
+                            <span>Online</span>
                         </a>
                     </li>
                     <li class="dropdown messages-menu">
@@ -94,7 +105,7 @@
                                 <a ui-sref="product_logs" target="_blank"><i style="width:20px" class="fa fa-history" aria-hidden="true"></i>Lịch sử sản phẩm</a>
                             </li>
                         </ul>
-                    </li>  
+                    </li>
                     <li class="dropdown messages-menu">
                         <a ui-sref="stockins" target="_blank">
                             <i class="fa fa-plus-circle" aria-hidden="true"></i>
@@ -121,20 +132,20 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="dropdown messages-menu">
-                        <a href="" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-handshake-o" aria-hidden="true"></i>
-                            <span>Đối tác</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="header">
-                                <a ui-sref="customers" target="_blank"><i style="width:20px" class="fa fa-user-secret" aria-hidden="true"></i>Khách hàng</a>
-                            </li>
-                            <li class="header">
-                                <a ui-sref="suppliers" target="_blank"><i style="width:20px" class="fa fa-truck" aria-hidden="true"></i>Nhà cung cấp</a>
-                            </li>
-                        </ul>
-                    </li>      
+                    <!--<li class="dropdown messages-menu">
+        <a href="" class="dropdown-toggle" data-toggle="dropdown">
+            <i class="fa fa-handshake-o" aria-hidden="true"></i>
+            <span>Đối tác</span>
+        </a>
+        <ul class="dropdown-menu">
+            <li class="header">
+                <a ui-sref="customers" target="_blank"><i style="width:20px" class="fa fa-user-secret" aria-hidden="true"></i>Khách hàng</a>
+            </li>
+            <li class="header">
+                <a ui-sref="suppliers" target="_blank"><i style="width:20px" class="fa fa-truck" aria-hidden="true"></i>Nhà cung cấp</a>
+            </li>
+        </ul>
+    </li>-->
                     <li class="dropdown messages-menu">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-line-chart" aria-hidden="true"></i>
@@ -148,7 +159,7 @@
                                 <a ui-sref="sales_report" target="_blank"><i style="width:20px" class="fa fa-arrow-right" aria-hidden="true"></i>Doanh số bán một kênh</a>
                             </li>
                         </ul>
-                    </li>                               
+                    </li>
                     <li class="dropdown messages-menu">
                         <a href="" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-cogs" aria-hidden="true"></i>
@@ -160,6 +171,12 @@
                             </li>
                             <li class="header">
                                 <a ui-sref="export_price" target="_blank"><i style="width:20px" class="fa fa-fw fa-cloud-download" aria-hidden="true"></i>Export giá sỉ</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="customers" target="_blank"><i style="width:20px" class="fa fa-user-secret" aria-hidden="true"></i>Khách hàng</a>
+                            </li>
+                            <li class="header">
+                                <a ui-sref="suppliers" target="_blank"><i style="width:20px" class="fa fa-truck" aria-hidden="true"></i>Nhà cung cấp</a>
                             </li>
                             <li class="header">
                                 <a ui-sref="branches" target="_blank"><i style="width:20px" class="fa fa-hospital-o" aria-hidden="true"></i>Kho</a>
@@ -187,24 +204,24 @@
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <!--<li class="user-header">
-                                <img src="./Assets/admin/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                <p>
-                                    Alexander Pierce - Web Developer
-                                    <small>Member since Nov. 2012</small>
-                                </p>
-                            </li>-->
+                <img src="./Assets/admin/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <p>
+                    Alexander Pierce - Web Developer
+                    <small>Member since Nov. 2012</small>
+                </p>
+            </li>-->
                             <!-- Menu Body -->
                             <!--<li class="user-body">
-                                <div class="col-xs-4 text-center">
-                                    <a href="#">Followers</a>
-                                </div>
-                                <div class="col-xs-4 text-center">
-                                    <a href="#">Sales</a>
-                                </div>
-                                <div class="col-xs-4 text-center">
-                                    <a href="#">Friends</a>
-                                </div>
-                            </li>-->
+                <div class="col-xs-4 text-center">
+                    <a href="#">Followers</a>
+                </div>
+                <div class="col-xs-4 text-center">
+                    <a href="#">Sales</a>
+                </div>
+                <div class="col-xs-4 text-center">
+                    <a href="#">Friends</a>
+                </div>
+            </li>-->
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
@@ -218,8 +235,8 @@
                     </li>
                     <!-- Control Sidebar Toggle Button -->
                     <!--<li>
-                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                    </li>-->
+        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+    </li>-->
                 </ul>
             </div>
         </nav>

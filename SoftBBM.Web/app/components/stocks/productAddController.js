@@ -17,6 +17,8 @@
         $scope.genNewProductCodeByCategory = genNewProductCodeByCategory;
         $scope.loadSuppliers = loadSuppliers;
         $scope.loadProductStatus = loadProductStatus;
+        $scope.getEnabledChannels = getEnabledChannels;
+        $scope.copyPriceRefToRestPrice = copyPriceRefToRestPrice;
 
         function backButton() {
             $uibModalInstance.dismiss();
@@ -29,8 +31,9 @@
             $scope.product.selectedProductStatus = $scope.selectedProductStatus;
             $scope.product.barCode = $scope.barCode;
             $scope.product.priceRef = $scope.priceRef;
-            $scope.product.priceCHA = $scope.priceCHA;
-            $scope.product.priceONL = $scope.priceONL;
+            //$scope.product.priceBase = $scope.priceBase;
+            //$scope.product.priceCHA = $scope.priceCHA;
+            //$scope.product.priceONL = $scope.priceONL;
             $scope.product.userId = $scope.userId;
             apiService.post('/api/product/add/', $scope.product, function (result) {
                 if (result.data == true) {
@@ -90,8 +93,24 @@
                 notificationService.displayError(error);
             });
         }
+        function getEnabledChannels() {
+            $scope.loading = true;
+            apiService.get('/api/stock/getenabledchannels', null, function (result) {
+                $scope.product.SoftChannelProductPrices = result.data;
+                $scope.loading = false;
+            }, function (error) {
+                notificationService.displayError(error);
+            });
+        }
+        function copyPriceRefToRestPrice() {
+            $.each($scope.product.SoftChannelProductPrices, function (i, v) {
+                if (v.ChannelId != 7)
+                    v.Price = $scope.priceRef;
+            });
+        }
 
         loadProductCategories();
+        getEnabledChannels();
     }
 
 })(angular.module('softbbm.stocks'));

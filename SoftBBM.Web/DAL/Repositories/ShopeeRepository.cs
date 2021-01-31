@@ -27,6 +27,7 @@ namespace SoftBBM.Web.DAL.Repositories
         string getTimeSlot(string ordersn);
         string confirmOrder(string ordersn, string pickup_time_id);
         void confirmOrderNoDelay(string ordersn, string pickup_time_id);
+        void confirmOrderNoDelayNoTimeAdd(string ordersn);
         ShopeeOrderLogistics GetOrderLogistics(string ordersn);
         ShopeeGetOrdersList GetOrdersListLastDay();
         ShopeeGetOrdersList GetOrdersListLastWithDay(int quantity);
@@ -34,6 +35,7 @@ namespace SoftBBM.Web.DAL.Repositories
         List<donhangIdShopeeId> GetOrdersListLastWithDayDB(int quantity);
         void AddOrderLack(string ordersn, string statusOrder, DateTime? updatedDate);
         ShopeeItem GetItemDetail(long itemId);
+        string GetAddress();
 
     }
     public class ShopeeRepository : RepositoryBase<donhang>, IShopeeRepository
@@ -190,18 +192,20 @@ namespace SoftBBM.Web.DAL.Repositories
                 streamWriter.Close();
             }
 
-            //var log = new SystemLog();
-            //log.InitSystemLog(null, JsonConvert.SerializeObject(httpWebRequest, Formatting.Indented, new JsonSerializerSettings
-            //{
-            //    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            //}), "postRequest","",null,"Shopee");
-            //_systemLogRepository.Add(log);
+            var log = new SystemLog();
+            log.InitSystemLog(null, url + " - " + dataJson, "url", "", null, "Shopee");
+            _systemLogRepository.Add(log);
+            _unitOfWork.Commit();
 
             var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Encoding.Default, true))
             {
                 jsonStrResult = streamReader.ReadToEnd();
             }
+
+            log.InitSystemLog(null, jsonStrResult , "jsonStrResult - postRequest", "", null, "Shopee");
+            _systemLogRepository.Add(log);
+            _unitOfWork.Commit();
 
             return jsonStrResult;
         }
@@ -598,6 +602,46 @@ namespace SoftBBM.Web.DAL.Repositories
                 }
             }
             return null;
+        }
+
+        public string GetAddress()
+        {
+            var timestamp = getTimestamp();
+            var result = "";
+            var url = "https://partner.shopeemobile.com/api/v1/logistics/address/get";
+            string dataJson = "{'partner_id':" + _apiPartnerId + "," +
+                              "'shopid':" + _apiId + "," +
+                              "'timestamp':" + timestamp + "}";
+            dataJson = dataJson.Replace("'", "\"");
+            string data = postRequest(url, dataJson);
+
+            if (!string.IsNullOrEmpty(data))
+            {
+                var addresses = JsonConvert.DeserializeObject<ShopeeGetAddress>(data);
+                if (addresses.address_list.Count > 0)
+                {
+                    foreach (var item in addresses.address_list)
+                    {
+                        if(item.address_flag.Count > 0)
+                        {
+                            return item.address + ", " + item.district + ", " + item.city + ", " + item.state;
+                        }
+                    }
+                }
+            }
+            return "";
+        }
+
+        public void confirmOrderNoDelayNoTimeAdd(string ordersn)
+        {
+            var timestamp = getTimestamp();
+            var url = "https://partner.shopeemobile.com/api/v1/logistics/init";
+            string dataJson = "{'ordersn':'" + ordersn + "'," +
+                              "'partner_id':" + _apiPartnerId + "," +
+                              "'shopid':" + _apiId + "," +
+                              "'timestamp':" + timestamp + "}";
+            dataJson = dataJson.Replace("'", "\"");
+            string data = postRequest(url, dataJson);
         }
     }
 }

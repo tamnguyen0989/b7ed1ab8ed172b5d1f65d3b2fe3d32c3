@@ -12,6 +12,16 @@
             parent: 'base',
             templateUrl: '/app/components/orders/orderAddView.html' + BuildVersion,
             controller: 'orderAddController'
+        }).state('add_offline_order', {
+            url: '/add_offline_order',
+            parent: 'base',
+            templateUrl: '/app/components/orders/orderOfflineAddView.html' + BuildVersion,
+            controller: 'orderOfflineAddController'
+        }).state('view_offline_order', {
+            url: '/view_offline_order',
+            //parent: 'base',
+            templateUrl: '/app/components/orders/orderOfflineView.html' + BuildVersion,
+            controller: 'orderOfflineViewController'
         });
     }
 })();
