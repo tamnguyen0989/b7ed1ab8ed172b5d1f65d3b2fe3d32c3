@@ -386,7 +386,7 @@
                                     <td class="no-padding">
                                         <input type="checkbox" ng-model="item.checked" ng-click="selectOrder(item)" />
                                     </td>
-                                    <td><span ng-class="{'has-error':item.idgiogiao==5}">{{item.id}}</span>&emsp;<img ng-show="item.IsShopeeApi == true" src="Assets/Admin/img/ShopeeIcon.jpg" style="height:12%" /><br /><span style="font-size:11px">{{item.OrderIdShopeeApi}}</span></td>
+                                    <td><span ng-class="{'has-error':item.idgiogiao==5}">{{item.id}}</span>&emsp;<img ng-show="item.IsShopeeApi == true" src="Assets/Admin/img/ShopeeIcon.jpg" /><br /><span style="font-size:11px">{{item.OrderIdShopeeApi}}</span></td>
 
                                     <!--<td ng-show="selectedChannel.Id==2">
                                         <span ng-show="!item.Code">Website</span>
@@ -676,12 +676,12 @@
                                     <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                         <table width="100%">
                                             <tr>
-                                                <td width="40%">
-                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                    <img src="/Assets/Admin/img/GHN_Logo_Print.png" style="height:70%" /><br />
+                                                <td>
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                    <img src="/Assets/Admin/img/GHN_Logo_Print.png" /><br />
                                                     {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                 </td>
-                                                <td width="60%">
+                                                <td>
                                                     <svg id="TrackingNoBarcode"></svg><br />
                                                     Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
                                                     Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
@@ -813,12 +813,12 @@
                                     <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                         <table width="100%">
                                             <tr>
-                                                <td width="45%">
-                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                    <img src="/Assets/Admin/img/GHTK_Logo_Print.png" style="height:70%" />&nbsp;<br />
+                                                <td>
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                    <img src="/Assets/Admin/img/GHTK_Logo_Print.png" />&nbsp;<br />
                                                     {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                 </td>
-                                                <td width="55%">
+                                                <td>
                                                     <svg id="TrackingNoBarcode"></svg><br />
                                                     Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
                                                     Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
@@ -952,12 +952,12 @@
                                     <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                         <table width="100%">
                                             <tr>
-                                                <td width="40%">
-                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                    <img src="/Assets/Admin/img/VNP_Logo_Print.png" style="height:30%" /><br />
+                                                <td>
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                    <img src="/Assets/Admin/img/VNP_Logo_Print.png" /><br />
                                                     {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                 </td>
-                                                <td width="60%">
+                                                <td>
                                                     <svg id="TrackingNoBarcode"></svg><br />
                                                     Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
                                                     Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
@@ -1088,12 +1088,12 @@
                                     <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                         <table width="100%">
                                             <tr>
-                                                <td width="40%">
-                                                    <img src="/Assets/Admin/img/ShopeeExpress_Logo_Print.png" style="height:70%" /><br />
+                                                <td>
+                                                    <img src="/Assets/Admin/img/ShopeeExpress_Logo_Print.png" /><br />
                                                     <span style="font-size:18px">{{selectedOrder.RecipientSortCode}}</span><br />
                                                     {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                 </td>
-                                                <td width="60%">
+                                                <td>
                                                     <svg id="TrackingNoBarcode"></svg><br />
                                                     Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
                                                     Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
@@ -1213,12 +1213,12 @@
                                     <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                         <table width="100%">
                                             <tr>
-                                                <td width="45%">
-                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                    <img src="/Assets/Admin/img/NowShip_Logo_Print.jpg" style="height:70%" />&nbsp;<br />
+                                                <td>
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                    <img src="/Assets/Admin/img/NowShip_Logo_Print.jpg" />&nbsp;<br />
                                                     {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                 </td>
-                                                <td width="55%">
+                                                <td>
                                                     <svg id="TrackingNoBarcode"></svg><br />
                                                     Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
                                                     Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
@@ -1340,16 +1340,28 @@
                                     <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                         <table width="100%">
                                             <tr>
-                                                <td width="45%">
-                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                    <img src="/Assets/Admin/img/NinjaVan_Logo_Print.jpg" style="height:85%" />&nbsp;<br />
+                                                <!--<td width="45%">
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg"/><br />
+                                                    <img src="/Assets/Admin/img/NinjaVan_Logo_Print.jpg"/>&nbsp;<br />
                                                     {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
-                                                </td>
-                                                <td width="55%">
+                                                </td>-->
+                                                <td>
                                                     <svg id="TrackingNoBarcode"></svg><br />
-                                                    Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
-                                                    Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
-
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td width="33%">
+                                                                <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="width:70%" /><br />
+                                                                <img src="/Assets/Admin/img/NinjaVan_Logo_Print.jpg" style="width: 70%" />&nbsp;
+                                                            </td>
+                                                            <td width="20%">
+                                                                {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                            </td>
+                                                            <td width="47%">
+                                                                Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
+                                                                Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
                                                 </td>
                                             </tr>
                                         </table>
@@ -1470,12 +1482,12 @@
                                         <table width="100%">
                                             <tr>
                                                 <td width="45%">
-                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                    <img src="/Assets/Admin/img/BESTExpress_Logo_Print.png" style="height:50%" />&nbsp;<br />
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg"/><br />
+                                                    <img src="/Assets/Admin/img/BESTExpress_Logo_Print.png"/>&nbsp;<br />
                                                     {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                 </td>
                                                 <td width="55%">
-                                                    <svg id="TrackingNoBarcode"></svg>
+                                                    <svg id="TrackingNoBarcode"></svg><br />
                                                     Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
                                                     Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
                                                 </td>
@@ -1604,12 +1616,12 @@
                                             <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                                 <table width="100%">
                                                     <tr>
-                                                        <td width="40%">
-                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                            <img src="/Assets/Admin/img/GHN_Logo_Print.png" style="height:70%" /><br />
+                                                        <td>
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                            <img src="/Assets/Admin/img/GHN_Logo_Print.png" /><br />
                                                             {{GHNOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                         </td>
-                                                        <td width="60%">
+                                                        <td>
                                                             <svg id="TrackingNoBarcodeGHN{{$index}}"></svg><br />
                                                             Mã vận đơn: <b>{{GHNOrder.TrackingNo}}</b><br />
                                                             Mã đơn hàng: <b>{{GHNOrder.OrderIdShopeeApi}}</b><br />
@@ -1718,12 +1730,12 @@
                                             <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                                 <table width="100%">
                                                     <tr>
-                                                        <td width="45%">
-                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                            <img src="/Assets/Admin/img/GHTK_Logo_Print.png" style="height:70%" />&nbsp;<br />
+                                                        <td>
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                            <img src="/Assets/Admin/img/GHTK_Logo_Print.png" />&nbsp;<br />
                                                             {{GHTKOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                         </td>
-                                                        <td width="55%">
+                                                        <td>
                                                             <svg id="TrackingNoBarcodeGHTK{{$index}}"></svg><br />
                                                             Mã vận đơn: <b>{{GHTKOrder.TrackingNo}}</b><br />
                                                             Mã đơn hàng: <b>{{GHTKOrder.OrderIdShopeeApi}}</b><br />
@@ -1828,12 +1840,12 @@
                                             <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                                 <table width="100%">
                                                     <tr>
-                                                        <td width="40%">
-                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                            <img src="/Assets/Admin/img/VNP_Logo_Print.png" style="height:30%" /><br />
+                                                        <td>
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                            <img src="/Assets/Admin/img/VNP_Logo_Print.png" /><br />
                                                             {{VNPOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                         </td>
-                                                        <td width="60%">
+                                                        <td>
                                                             <svg id="TrackingNoBarcodeVNP{{$index}}"></svg><br />
                                                             Mã vận đơn: <b>{{VNPOrder.TrackingNo}}</b><br />
                                                             Mã đơn hàng: <b>{{VNPOrder.OrderIdShopeeApi}}</b><br />
@@ -1935,12 +1947,12 @@
                                             <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                                 <table width="100%">
                                                     <tr>
-                                                        <td width="40%">
-                                                            <img src="/Assets/Admin/img/ShopeeExpress_Logo_Print.png" style="height:70%" /><br />
+                                                        <td>
+                                                            <img src="/Assets/Admin/img/ShopeeExpress_Logo_Print.png" /><br />
                                                             <span style="font-size:18px">{{SPEOrder.RecipientSortCode}}</span><br />
                                                             {{SPEOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                         </td>
-                                                        <td width="60%">
+                                                        <td>
                                                             <svg id="TrackingNoBarcodeSPE{{$index}}"></svg><br />
                                                             Mã vận đơn: <b>{{SPEOrder.TrackingNo}}</b><br />
                                                             Mã đơn hàng: <b>{{SPEOrder.OrderIdShopeeApi}}</b><br />
@@ -2035,18 +2047,19 @@
                                     <table width="100%">
                                         <tr>
                                             <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <svg id="TrackingNoBarcodeNinjaVan{{$index}}"></svg><br />
                                                 <table width="100%">
                                                     <tr>
-                                                        <td width="45%">
-                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                            <img src="/Assets/Admin/img/NinjaVan_Logo_Print.jpg" style="height:85%" />&nbsp;<br />
+                                                        <td width="33%">
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="width:70%" /><br />
+                                                            <img src="/Assets/Admin/img/NinjaVan_Logo_Print.jpg" style="width: 70%" />&nbsp;
+                                                        </td>
+                                                        <td width="20%">
                                                             {{NinjaVanOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                         </td>
-                                                        <td width="55%">
-                                                            <svg id="TrackingNoBarcodeNinjaVan{{$index}}"></svg><br />
+                                                        <td width="47%">
                                                             Mã vận đơn: <b>{{NinjaVanOrder.TrackingNo}}</b><br />
                                                             Mã đơn hàng: <b>{{NinjaVanOrder.OrderIdShopeeApi}}</b><br />
-
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -2142,12 +2155,12 @@
                                             <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
                                                 <table width="100%">
                                                     <tr>
-                                                        <td width="45%">
-                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                            <img src="/Assets/Admin/img/NowShip_Logo_Print.jpg" style="height:70%" />&nbsp;<br />
+                                                        <td>
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                            <img src="/Assets/Admin/img/NowShip_Logo_Print.jpg" />&nbsp;<br />
                                                             {{NowShipOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                         </td>
-                                                        <td width="55%">
+                                                        <td>
                                                             <svg id="TrackingNoBarcodeNowShip{{$index}}"></svg><br />
                                                             Mã vận đơn: <b>{{NowShipOrder.TrackingNo}}</b><br />
                                                             Mã đơn hàng: <b>{{NowShipOrder.OrderIdShopeeApi}}</b><br />
@@ -2246,8 +2259,8 @@
                                                 <table width="100%">
                                                     <tr>
                                                         <td width="45%">
-                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" style="height:70%" /><br />
-                                                            <img src="/Assets/Admin/img/BESTExpress_Logo_Print.png" style="height:50%" />&nbsp;<br />
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                            <img src="/Assets/Admin/img/BESTExpress_Logo_Print.png" />&nbsp;<br />
                                                             {{BESTExpressOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                         </td>
                                                         <td width="55%">
