@@ -33,26 +33,65 @@
                 <form class="form-horizontal" name="frmInfo" role="form">
                     <div class="box-body">
                         <div class="row">
-                            <!--<h3 class="text-center" style="margin-bottom:20px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h3>-->
-                            <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:10px">
-                                <tr>
-                                    <th>STT</th>
-                                    <th>Mã</th>
-                                    <th>Tên</th>
-                                    <th>Giá</th>
-                                    <th>Số lượng</th>
-                                    <th>Thành tiền</th>
-                                </tr>
-                                <tr ng-repeat="item in order.OrderDetails">
-                                    <td>{{$index+1}}</td>
-                                    <td>{{item.masp}}</td>
-                                    <td>{{item.tensp}}</td>
-                                    <td class="text-right"> <span ng-show="item.PriceBeforeDiscount > 0" style="text-decoration: line-through">{{item.PriceBeforeDiscount | currency:'':0}}</span> {{item.Price | currency:'':0}}</td>
-                                    <td class="text-right">{{item.Quantity | currency:'':0}}</td>
-                                    <td class="text-right">{{item.Price * item.Quantity | currency:'':0}}</td>
-                                </tr>
-                            </table>
+                            <div class="col-md-12 col-xs-12 text-center">
+                                <img src="https://babymart.vn/Content/forntpage/images/ui/logo.png" style="width:20%"/>
+                            </div>
+                            <div class="col-md-12 col-xs-12 margintop10px">
+                                <!--<h3 class="text-center" style="margin-bottom:20px">Babymart.vn - Nơi bố mẹ gửi trọn niềm tin.</h3>-->
+                                <table class="table table-bordered table-striped table-hover text-left" style="margin-bottom:10px">
+                                    <tr>
+                                        <th>STT</th>
+                                        <th>Mã</th>
+                                        <th>Tên</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Thành tiền</th>
+                                    </tr>
+                                    <tr ng-repeat="item in order.OrderDetails">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.masp}}</td>
+                                        <td>{{item.tensp}}</td>
+                                        <td class="text-right"> <span ng-show="item.PriceBeforeDiscount > 0" style="text-decoration: line-through">{{item.PriceBeforeDiscount | currency:'':0}}</span> {{item.Price | currency:'':0}}</td>
+                                        <td class="text-right">{{item.Quantity | currency:'':0}}</td>
+                                        <td class="text-right">{{item.Price * item.Quantity | currency:'':0}}</td>
+                                    </tr>
+                                </table>
+                            </div>
                             <div class="col-md-6 col-xs-6">
+                                <div ng-show="!IsNullOrEmpty(order.Customer.dienthoai)" class="form-group nomargin-bottom">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label>Điện thoại</label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        {{order.Customer.dienthoai}}
+                                    </div>
+                                </div>
+                                <div ng-show="!IsNullOrEmpty(order.Customer.hoten)" class="form-group nomargin-bottom">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label>Tên</label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        {{order.Customer.hoten}}
+                                    </div>
+                                </div>
+                                <!--<div ng-show="!IsNullOrEmpty(order.Customer.duong)" class="form-group nomargin-bottom">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label>Địa chỉ</label>
+                                    </div>
+                                    <div class="col-md-9 col-xs-9">
+                                        {{order.Customer.duong}}
+                                    </div>
+                                </div>-->
+                                <div ng-show="!IsNullOrEmpty(order.Customer.diemOff) && !IsNullOrEmpty(order.Customer.dienthoai)" class="form-group nomargin-bottom">
+                                    <div class="col-md-6 col-xs-6">
+                                        <label>Điểm KH</label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6">
+                                        {{order.Customer.diemOff | currency:'':0}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xs-6" style="padding-right:25px">
                                 <div class="form-group nomargin-bottom">
                                     <div class="col-md-6 col-xs-6">
                                         <label>Thành tiền</label>
@@ -78,13 +117,13 @@
                                     </div>
                                 </div>
                                 <!--<div ng-show="!IsNullOrEmpty(order.tonggiam)" class="form-group nomargin-bottom">
-            <div class="col-md-6 col-xs-6">
-                <label>Tổng giảm</label>
-            </div>
-            <div class="col-md-6 col-xs-6 text-right">
-                {{order.tonggiam | currency:'':0}}
-            </div>
-        </div>-->
+                                    <div class="col-md-6 col-xs-6">
+                                        <label>Tổng giảm</label>
+                                    </div>
+                                    <div class="col-md-6 col-xs-6 text-right">
+                                        {{order.tonggiam | currency:'':0}}
+                                    </div>
+                                </div>-->
                                 <div ng-show="!IsNullOrEmpty(order.phikhac)" class="form-group nomargin-bottom">
                                     <div class="col-md-6 col-xs-6">
                                         <label>Phí khác</label>
@@ -95,9 +134,9 @@
                                 </div>
                                 <div class="form-group nomargin-bottom">
                                     <div class="col-md-6 col-xs-6">
-                                        <label class="text-red">Tổng</label>
+                                        <label class="text-red" style="font-size:18px">Tổng</label>
                                     </div>
-                                    <div class="col-md-6 col-xs-6 text-right text-red">
+                                    <div class="col-md-6 col-xs-6 text-right text-red text-bold" style="font-size:18px">
                                         {{order.tongtienOff | currency:'':0}}
                                     </div>
                                 </div>
@@ -118,41 +157,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-xs-6">
-                                <div ng-show="!IsNullOrEmpty(order.Customer.dienthoai)" class="form-group nomargin-bottom">
-                                    <div class="col-md-6 col-xs-6">
-                                        <label>Điện thoại</label>
-                                    </div>
-                                    <div class="col-md-6 col-xs-6">
-                                        {{order.Customer.dienthoai}}
-                                    </div>
-                                </div>
-                                <div ng-show="!IsNullOrEmpty(order.Customer.hoten)" class="form-group nomargin-bottom">
-                                    <div class="col-md-6 col-xs-6">
-                                        <label>Tên</label>
-                                    </div>
-                                    <div class="col-md-6 col-xs-6">
-                                        {{order.Customer.hoten}}
-                                    </div>
-                                </div>
-                                <!--<div ng-show="!IsNullOrEmpty(order.Customer.duong)" class="form-group nomargin-bottom">
-            <div class="col-md-6 col-xs-6">
-                <label>Địa chỉ</label>
-            </div>
-            <div class="col-md-9 col-xs-9">
-                {{order.Customer.duong}}
-            </div>
-        </div>-->
-                                <div ng-show="!IsNullOrEmpty(order.Customer.diemOff) && !IsNullOrEmpty(order.Customer.dienthoai)" class="form-group nomargin-bottom">
-                                    <div class="col-md-6 col-xs-6">
-                                        <label>Điểm KH</label>
-                                    </div>
-                                    <div class="col-md-6 col-xs-6">
-                                        {{order.Customer.diemOff | currency:'':0}}
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
                     </div><!-- /.box-body -->
                 </form>
