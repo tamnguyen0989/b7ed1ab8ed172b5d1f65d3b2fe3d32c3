@@ -68,7 +68,7 @@
                                 </div>
                                 <div ng-show="!IsNullOrEmpty(order.Customer.hoten)" class="form-group nomargin-bottom">
                                     <div class="col-md-6 col-xs-6">
-                                        <label>Tên</label>
+                                        <label>Anh/Chị</label>
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         {{order.Customer.hoten}}
@@ -84,7 +84,7 @@
                                 </div>-->
                                 <div ng-show="!IsNullOrEmpty(order.Customer.diemOff) && !IsNullOrEmpty(order.Customer.dienthoai)" class="form-group nomargin-bottom">
                                     <div class="col-md-6 col-xs-6">
-                                        <label>Điểm KH</label>
+                                        <label>Điểm tích lũy</label>
                                     </div>
                                     <div class="col-md-6 col-xs-6">
                                         {{order.Customer.diemOff | currency:'':0}}
@@ -134,7 +134,7 @@
                                 </div>
                                 <div class="form-group nomargin-bottom">
                                     <div class="col-md-6 col-xs-6">
-                                        <label class="text-red" style="font-size:18px">Tổng</label>
+                                        <label class="text-red" style="font-size:18px">Tổng thanh toán</label>
                                     </div>
                                     <div class="col-md-6 col-xs-6 text-right text-red text-bold" style="font-size:18px">
                                         {{order.tongtienOff | currency:'':0}}

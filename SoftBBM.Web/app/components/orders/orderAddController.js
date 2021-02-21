@@ -416,7 +416,7 @@
             $scope.selectedProduct = null;
             $scope.isAdding = true;
             $scope.selectedProduct = item;
-            if ((!item.kg && (!item.chieucao && !item.chieudai && !item.chieurong)) && $scope.selectedChannel.Id != 1) {
+            if (item.kg == 0 && item.chieucao == 0 && item.chieudai == 0 && item.chieurong == 0 && $scope.selectedChannel.Id != 1) {
                 var modalInstance = $uibModal.open({
                     templateUrl: '/app/components/orders/productKgUpdateModal.html' + BuildVersion,
                     controller: 'productKgUpdateController',
@@ -1014,7 +1014,7 @@
                     var maxChieuRong = $scope.detailOrders[0].chieurong;;
                     var maxChieuCao = $scope.detailOrders[0].chieucao;
                     $.each($scope.detailOrders, function (index, value) {
-                        if (value.chieudai == null && value.chieucao == null && value.chieurong == null) {
+                        if (value.chieudai == 0 && value.chieucao == 0 && value.chieurong == 0) {
                             $scope.passGHTKRules = false;
                             $scope.passVNEPRules = false;
                             return false;
