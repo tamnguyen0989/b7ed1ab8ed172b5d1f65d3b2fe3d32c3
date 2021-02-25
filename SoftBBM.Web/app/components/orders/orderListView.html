@@ -32,6 +32,13 @@
 <section class="content-header">
     <h1>
         Danh sách đơn hàng
+        <select ng-options="option.Name for option in channels track by option.Id"
+                ng-model="selectedChannel"
+                name="channel"
+                style="color:red"
+                class="marginleft5px">
+            <option disabled value="">-- Chọn loại đơn --</option>
+        </select>
     </h1>
     <ol class="breadcrumb">
         <li><a ng-click="setupToogleData()"><i class="fa fa-dashboard"></i> Ẩn/Hiện filter</a></li>
@@ -101,9 +108,38 @@
                     </form>
                 </div>
             </div>
+            <div class="row marginleft5px margintop5px" ng-show="selectedOrders.length>0">
+                <span class="label_bulk">Có {{selectedOrders.length}} đơn hàng được chọn</span>
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color:#3c8dbc;color:white">Cập nhật <span class="fa fa-caret-down"></span></button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1">Tình trạng ĐH</a>
+                                <ul class="dropdown-menu overflow_y">
+                                    <li ng-repeat="itemOrderStatus in orderStatusFilters">
+                                        <a ng-click="updateStatusOrders(itemOrderStatus)" tabindex="-1">{{itemOrderStatus.Name}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1">NV giao hàng</a>
+                                <ul class="dropdown-menu overflow_y">
+                                    <li ng-repeat="itemShipper in userFilters">
+                                        <a ng-click="updateShipper(itemShipper)" tabindex="-1">{{itemShipper.UserName}}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <button ng-show="selectedChannel.Id!=4" ng-click="getDetailOrdersToPrint()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
+                        <button ng-show="selectedChannel.Id==4" ng-click="printShopeeAll()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
+                        <button ng-click="resetSelectedOrders()" type="button" class="btn btn-default" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Bỏ chọn</button>
+                        <button ng-show="selectedChannel.Id==4" ng-click="confirmShopeeOrders()" type="button" class="btn btn-success" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Xác nhận {{selectedOrders.length}} đơn</button>
+                        <!--<button ng-show="selectedChannel.Id==4" ng-click="getTrackingNoShopeeOrders()" type="button" class="btn btn-info" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Cập nhật {{selectedOrders.length}} mã vận đơn</button>-->
+                    </div><!-- /btn-group -->
+            </div>
         </div>
         <div class="box-body">
-            <div class="row marginleft20px col-xs-12">
+            <!--<div class="row marginleft20px col-xs-12">
                 <div class="col col-xs-4">
                     <label>Loại đơn hàng: </label>
                     <select ng-options="option.Name for option in channels track by option.Id"
@@ -118,7 +154,7 @@
                     <label ng-show="!selectedChannel" style="font-weight:700;color:red;font-size:20px">Chọn loại đơn !</label>
                 </div>
                 <div class="col col-xs-4"></div>
-            </div>
+            </div>-->
             <div class="row col-xs-12 margintop5px">
                 <div ng-show="showFilter">
                     <div class="col col-xs-10" style="padding-left:0px;padding-right:0px">
@@ -324,43 +360,6 @@
                     <div class="col-xs-12">
                         <div class="responsivetable">
                             <table class="table table-bordered table-striped table-hover text-left table_data" style="margin-bottom:10px">
-                                <tr style="background-color:white">
-                                    <td colspan="7" style="text-align:left;">
-                                        <div class="input-group" ng-show="selectedOrders.length>0">
-                                            <span class="label_bulk">Có {{selectedOrders.length}} đơn hàng được chọn</span>
-                                            <div class="input-group-btn">
-                                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color:#3c8dbc;color:white">Cập nhật <span class="fa fa-caret-down"></span></button>
-                                                <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                                                    <li class="dropdown-submenu">
-                                                        <a tabindex="-1">Tình trạng ĐH</a>
-                                                        <ul class="dropdown-menu overflow_y">
-                                                            <li ng-repeat="itemOrderStatus in orderStatusFilters">
-                                                                <a ng-click="updateStatusOrders(itemOrderStatus)" tabindex="-1">{{itemOrderStatus.Name}}</a>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                    <li class="dropdown-submenu">
-                                                        <a tabindex="-1">NV giao hàng</a>
-                                                        <ul class="dropdown-menu overflow_y">
-                                                            <li ng-repeat="itemShipper in userFilters">
-                                                                <a ng-click="updateShipper(itemShipper)" tabindex="-1">{{itemShipper.UserName}}</a>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
-                                                </ul>
-                                                <button ng-show="selectedChannel.Id!=4" ng-click="getDetailOrdersToPrint()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
-                                                <button ng-show="selectedChannel.Id==4" ng-click="printShopeeAll()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
-                                                <button ng-click="resetSelectedOrders()" type="button" class="btn btn-default" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Bỏ chọn</button>
-                                                <button ng-show="selectedChannel.Id==4" ng-click="confirmShopeeOrders()" type="button" class="btn btn-success" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Xác nhận {{selectedOrders.length}} đơn</button>
-                                                <!--<button ng-show="selectedChannel.Id==4" ng-click="getTrackingNoShopeeOrders()" type="button" class="btn btn-info" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Cập nhật {{selectedOrders.length}} mã vận đơn</button>-->
-                                            </div><!-- /btn-group -->
-                                        </div>
-                                    </td>
-                                    <td ng-hide="selectedChannel.Id==1"></td>
-                                    <td ng-hide="selectedChannel.Id==1"></td>
-                                    <th colspan="5" style="text-align:right;">Tổng tiền ds:&emsp; <span style="color:red">{{totalMoney | currency:'':0}} đ</span></th>
-                                </tr>
-                                <tr></tr>
                                 <tr>
                                     <th class="no-padding">
                                         <input name="all" ng-model="allCheckVal" type="checkbox" ng-click="selectAll()" />
