@@ -1,7 +1,15 @@
 ﻿  <!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
-        Danh sách sản phẩm tại kho
+        Danh sách sản phẩm tại kho - Kênh
+        <select ng-options="option.Name for option in channels track by option.Id"
+                ng-model="selectedChannel"
+                ng-change="updateSelectedChannel()"
+                name="channel"
+                style="color:red"
+                class="marginleft5px">
+            <option disabled value="">-- Chọn kênh --</option>
+        </select>
     </h1>
     <ol class="breadcrumb">
         <li><a ng-click="setupToogleData()"><i class="fa fa-dashboard"></i> Ẩn/Hiện cột</a></li>
@@ -234,10 +242,9 @@
                     </form>
                 </div>
             </div>
-
         </div>
         <div class="box-body">
-            <div class="row marginleft20px col-xs-12" style="margin-bottom:10px">
+            <!--<div class="row marginleft20px col-xs-12" style="margin-bottom:10px">
                 <div class="col col-xs-4">
                     <label>Kênh: </label>
                     <select ng-options="option.Name for option in channels track by option.Id"
@@ -254,9 +261,8 @@
                     </div>
                 </div>
                 <div class="col col-xs-4 text-center">
-                    <!--<label style="font-weight:700;color:red;font-size:20px">{{channelName}}</label>-->
                 </div>
-            </div>
+            </div>-->
             <div class="row">
                 <div class="col-xs-12">
                     <div class="responsivetable">
