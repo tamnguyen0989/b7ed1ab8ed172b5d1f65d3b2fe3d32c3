@@ -92,7 +92,9 @@
                             <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật tình trạng đơn hàng chưa hoàn tất" style="width:60px" type="button" ng-click="updateStatusShopeeIncompleteOrders()"><i class="fa fa-fw fa-battery-3"></i></button>
                             <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật tình trạng đơn hàng chưa hoàn tất" style="width:60px" type="button" ng-click="updateOrderNullProductId()"><i class="fa fa-fw fa-plug"></i></button>
 
-                            <div class="pull-right totalcount">
+                            <span class="pull-right totalcount marginright10px">Tổng tiền ds:&emsp; <span style="color:red">{{totalMoney | currency:'':0}} đ</span></span>
+
+                            <!--<div class="pull-right totalcount">
                                 <span>
                                     Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
                                         <option value="10">10</option>
@@ -102,7 +104,7 @@
                                     </select> dòng
                                 </span>
                             </div>
-                            <span ng-hide="pagesCount==0" class="pull-right totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>
+                            <span ng-hide="pagesCount==0" class="pull-right totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>-->
 
                         </div>
                     </form>
@@ -110,32 +112,32 @@
             </div>
             <div class="row marginleft5px margintop5px" ng-show="selectedOrders.length>0">
                 <span class="label_bulk">Có {{selectedOrders.length}} đơn hàng được chọn</span>
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color:#3c8dbc;color:white">Cập nhật <span class="fa fa-caret-down"></span></button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                            <li class="dropdown-submenu">
-                                <a tabindex="-1">Tình trạng ĐH</a>
-                                <ul class="dropdown-menu overflow_y">
-                                    <li ng-repeat="itemOrderStatus in orderStatusFilters">
-                                        <a ng-click="updateStatusOrders(itemOrderStatus)" tabindex="-1">{{itemOrderStatus.Name}}</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="dropdown-submenu">
-                                <a tabindex="-1">NV giao hàng</a>
-                                <ul class="dropdown-menu overflow_y">
-                                    <li ng-repeat="itemShipper in userFilters">
-                                        <a ng-click="updateShipper(itemShipper)" tabindex="-1">{{itemShipper.UserName}}</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <button ng-show="selectedChannel.Id!=4" ng-click="getDetailOrdersToPrint()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
-                        <button ng-show="selectedChannel.Id==4" ng-click="printShopeeAll()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
-                        <button ng-click="resetSelectedOrders()" type="button" class="btn btn-default" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Bỏ chọn</button>
-                        <button ng-show="selectedChannel.Id==4" ng-click="confirmShopeeOrders()" type="button" class="btn btn-success" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Xác nhận {{selectedOrders.length}} đơn</button>
-                        <!--<button ng-show="selectedChannel.Id==4" ng-click="getTrackingNoShopeeOrders()" type="button" class="btn btn-info" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Cập nhật {{selectedOrders.length}} mã vận đơn</button>-->
-                    </div><!-- /btn-group -->
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" style="background-color:#3c8dbc;color:white">Cập nhật <span class="fa fa-caret-down"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">Tình trạng ĐH</a>
+                            <ul class="dropdown-menu overflow_y">
+                                <li ng-repeat="itemOrderStatus in orderStatusFilters">
+                                    <a ng-click="updateStatusOrders(itemOrderStatus)" tabindex="-1">{{itemOrderStatus.Name}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-submenu">
+                            <a tabindex="-1">NV giao hàng</a>
+                            <ul class="dropdown-menu overflow_y">
+                                <li ng-repeat="itemShipper in userFilters">
+                                    <a ng-click="updateShipper(itemShipper)" tabindex="-1">{{itemShipper.UserName}}</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <button ng-show="selectedChannel.Id!=4" ng-click="getDetailOrdersToPrint()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
+                    <button ng-show="selectedChannel.Id==4" ng-click="printShopeeAll()" type="button" class="btn btn-warning" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">In {{selectedOrders.length}} đơn</button>
+                    <button ng-click="resetSelectedOrders()" type="button" class="btn btn-default" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Bỏ chọn</button>
+                    <button ng-show="selectedChannel.Id==4" ng-click="confirmShopeeOrders()" type="button" class="btn btn-success" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Xác nhận {{selectedOrders.length}} đơn</button>
+                    <!--<button ng-show="selectedChannel.Id==4" ng-click="getTrackingNoShopeeOrders()" type="button" class="btn btn-info" style="margin-left:2px;border-top-left-radius: 3px ;border-bottom-left-radius: 3px">Cập nhật {{selectedOrders.length}} mã vận đơn</button>-->
+                </div><!-- /btn-group -->
             </div>
         </div>
         <div class="box-body">
@@ -1481,8 +1483,8 @@
                                         <table width="100%">
                                             <tr>
                                                 <td width="45%">
-                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg"/><br />
-                                                    <img src="/Assets/Admin/img/BESTExpress_Logo_Print.png"/>&nbsp;<br />
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                    <img src="/Assets/Admin/img/BESTExpress_Logo_Print.png" />&nbsp;<br />
                                                     {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
                                                 </td>
                                                 <td width="55%">
@@ -2363,8 +2365,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-12 text-center current_cursor">
+                    <div class="col-xs-6 text-right current_cursor">
                         <custom-pager page="{{page}}" pages-count="{{pagesCount}}" totalcount="{{totalCount}}" search-func="search(page)"></custom-pager>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <span ng-hide="pagesCount==0" class="totalcount"> Trang: {{page+1}} - Tổng số bản ghi: {{totalCount}} | </span>
+                        <span>
+                            Hiển thị <select ng-model="pageSizeNumber" ng-change="search()">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select> dòng
+                        </span>
                     </div>
                 </div>
             </div><!-- /.box-body -->
