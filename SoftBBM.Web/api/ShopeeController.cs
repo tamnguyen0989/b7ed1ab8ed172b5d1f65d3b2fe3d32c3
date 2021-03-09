@@ -134,12 +134,13 @@ namespace SoftBBM.Web.api
                             {
                                 var info = orderShopee.recipient_address;
                                 var phone = info.phone;
-                                if (phone.Substring(0, 2) == "84")
+                                var phone2 = info.phone;
+                                if (phone2.Substring(0, 2) == "84")
                                 {
-                                    phone = "0" + phone.Substring(2);
+                                    phone2 = "0" + phone.Substring(2);
                                 }
 
-                                var khachang = _khachhangRepository.GetSingleByCondition(x => x.dienthoai == phone);
+                                var khachang = _khachhangRepository.GetMulti(x => x.dienthoai == phone || x.dienthoai == phone2).LastOrDefault();
                                 if (khachang == null)
                                 {
                                     int? idtp = null;

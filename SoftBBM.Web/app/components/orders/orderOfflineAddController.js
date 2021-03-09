@@ -726,7 +726,8 @@
             $scope.order.DiscountCode = $scope.discountCode;
         }
         function updateCity() {
-            $scope.districts = $scope.selectedCity.donhang_chuyenphat_tinh;
+            let orderedTinh = _.orderBy($scope.selectedCity.donhang_chuyenphat_tinh, ['priority'], ['asc']);
+            $scope.districts = orderedTinh;
             //$scope.selectedDistrict = $scope.districts[0];
             $scope.selectedDistrict = null;
             resetAfterSelectDistrict();
@@ -791,7 +792,8 @@
         }
         function initCity() {
             $scope.selectedCity = $scope.cities[0];
-            $scope.districts = $scope.cities[0].donhang_chuyenphat_tinh;
+            let orderedTinh = _.orderBy($scope.cities[0].donhang_chuyenphat_tinh, ['priority'], ['asc']);
+            $scope.districts = orderedTinh;
             //$scope.selectedDistrict = $scope.districts[0];
         }
         function initCustomer() {

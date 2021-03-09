@@ -153,6 +153,8 @@
         $scope.validSelectedTypeShipHCM = validSelectedTypeShipHCM;
         $scope.validSelectedTypeShipOutHCM = validSelectedTypeShipOutHCM;
         $scope.sumKg = sumKg;
+        $scope.isHCMCity = isHCMCity;
+        $scope.shippable = shippable;
 
         function loadChannels() {
             $scope.loading = true;
@@ -276,7 +278,7 @@
             $scope.order.tongtien = totalMoney();
             if ($scope.selectedPayment)
                 $scope.order.pttt = parseInt($scope.selectedPayment.value);
-            if ($scope.selectedCity.id == 1 && $scope.HCMType == 3 && $scope.selectedTypeShipHCM) {
+            if ($scope.isHCMCity() && $scope.HCMType == 3 && $scope.selectedTypeShipHCM) {
                 $scope.order.ptgh = parseInt($scope.selectedTypeShipHCM);
                 $scope.order.tenptgh = $scope.nameTypeShip;
             }
@@ -290,7 +292,7 @@
             if (!isNullOrEmpty($scope.customer)) {
                 $scope.order.Customer = $scope.customer;
                 $scope.order.Customer.diem = sumPoint();
-            }            
+            }
             var currentDate = $scope.currentDate;
             $scope.order.Code = $scope.branchSelectedRoot.Code + ('0' + (currentDate.getDate())).slice(-2) + ('0' + (currentDate.getMonth() + 1)).slice(-2) + String(currentDate.getFullYear()).slice(-2) + $scope.selectedChannel.Code;
 
@@ -361,7 +363,7 @@
                     pm = 3;
                 $scope.order.pttt = pm;
             }
-            if ($scope.selectedCity.id == 1 && $scope.HCMType == 3 && $scope.selectedTypeShipHCM) {
+            if ($scope.isHCMCity() && $scope.HCMType == 3 && $scope.selectedTypeShipHCM) {
                 $scope.order.ptgh = parseInt($scope.selectedTypeShipHCM);
                 $scope.order.tenptgh = $scope.nameTypeShip;
             }
@@ -374,7 +376,7 @@
             $scope.order.OrderDetails = $scope.detailOrders;
             if (!isNullOrEmpty($scope.customer)) {
                 $scope.order.Customer = $scope.customer;
-            }  
+            }
             var currentDate = $scope.currentDate;
             $scope.order.Code = $scope.branchSelectedRoot.Code + ('0' + (currentDate.getDate())).slice(-2) + ('0' + (currentDate.getMonth() + 1)).slice(-2) + String(currentDate.getFullYear()).slice(-2) + $scope.selectedChannel.Code;
             apiService.post('api/order/save/', $scope.order,
@@ -609,7 +611,7 @@
                     $scope.order.ChannelId = $scope.selectedChannel.Id;
                     var channelName = $scope.selectedChannel.Name;
                     $scope.channelName = channelName.toUpperCase();
-                }             
+                }
             }
             //if (localStorage.getItem("userName")) {
             //    $scope.order.CreatedBy = JSON.parse(localStorage.getItem("userName"));
@@ -678,7 +680,8 @@
             $scope.order.DiscountCode = $scope.discountCode;
         }
         function updateCity() {
-            $scope.districts = $scope.selectedCity.donhang_chuyenphat_tinh;
+            let orderedTinh = _.orderBy($scope.selectedCity.donhang_chuyenphat_tinh, ['priority'], ['asc']);
+            $scope.districts = orderedTinh;
             //$scope.selectedDistrict = $scope.districts[0];
             $scope.selectedDistrict = null;
             resetAfterSelectDistrict();
@@ -686,7 +689,7 @@
         function updateDistrict() {
             resetAfterSelectDistrict();
             if ($scope.selectedCity) {
-                if ($scope.selectedCity.id == 1) {
+                if ($scope.isHCMCity()) {
                     setHCMType();
                     if ($scope.selectedChannel.Id == 2 && $scope.selectedDistrict && $scope.selectedDistrict.id > 0) {
                         $scope.selectedPayment = $scope.paymentHCMDefault;
@@ -743,7 +746,8 @@
         }
         function initCity() {
             $scope.selectedCity = $scope.cities[0];
-            $scope.districts = $scope.cities[0].donhang_chuyenphat_tinh;
+            let orderedTinh = _.orderBy($scope.cities[0].donhang_chuyenphat_tinh, ['priority'], ['asc']);
+            $scope.districts = orderedTinh;
             //$scope.selectedDistrict = $scope.districts[0];
         }
         function initCustomer() {
@@ -783,7 +787,7 @@
         }
         function getFeeShip() {
             if ($scope.selectedDistrict && $scope.selectedChannel.Id != 1) {
-                if ($scope.selectedCity.id == 1) {
+                if ($scope.isHCMCity()) {
                     if ($scope.HCMType != 3) {
                         if ($scope.freeShipCart == true)
                             $scope.feeShip = 0;
@@ -1681,7 +1685,17 @@
                 if ($scope.selectedDistrict.id == 115 || $scope.selectedDistrict.id == 117 || $scope.selectedDistrict.id == 118 || $scope.selectedDistrict.id == 119 || $scope.selectedDistrict.id == 120 || $scope.selectedDistrict.id == 122 || $scope.selectedDistrict.id == 124 || $scope.selectedDistrict.id == 125 || $scope.selectedDistrict.id == 127 || $scope.selectedDistrict.id == 128 || $scope.selectedDistrict.id == 129 || $scope.selectedDistrict.id == 130 || $scope.selectedDistrict.id == 131) {
                     $scope.HCMType = 1;
                 }
-                else if ($scope.selectedDistrict.id == 123 || $scope.selectedDistrict.id == 126 || $scope.selectedDistrict.id == 132 || $scope.selectedDistrict.id == 133 || $scope.selectedDistrict.id == 116 || $scope.selectedDistrict.id == 121) {
+                else if ($scope.selectedDistrict.id == 126
+                    || $scope.selectedDistrict.id == 132
+                    //|| $scope.selectedDistrict.id == 116
+                    //|| $scope.selectedDistrict.id == 123
+                    //|| $scope.selectedDistrict.id == 133
+
+                    // Q2,9,TĐ
+                    || $scope.selectedDistrict.id == 943
+
+                    || $scope.selectedDistrict.id == 121
+                    || $scope.selectedDistrict.id == 122) {
                     $scope.HCMType = 2;
                 }
                 else if ($scope.selectedDistrict.id == 134 || $scope.selectedDistrict.id == 135 || $scope.selectedDistrict.id == 136 || $scope.selectedDistrict.id == 137 || $scope.selectedDistrict.id == 889) {
@@ -1711,7 +1725,7 @@
         }
         function updateDeliveryTime() {
             if ($scope.selectedDeliveryTime) {
-                if ($scope.selectedCity.id == 1 && $scope.HCMType != 3) {
+                if ($scope.isHCMCity() && $scope.HCMType != 3) {
                     if ($scope.selectedDeliveryTime.value == 2 || $scope.selectedDeliveryTime.value == 3 || $scope.selectedDeliveryTime.value == 5) {
                         $scope.feeDeliveryTime = $scope.selectedDistrict.phighnhanh;
                     }
@@ -1888,7 +1902,7 @@
         }
         function validDeliveryTimeSubUrban() {
             if ($scope.selectedCity && $scope.selectedDistrict && $scope.selectedChannel)
-                if ($scope.selectedCity.id == 1 && $scope.selectedDistrict.id > 0 && checkSubUrban() == true && $scope.selectedChannel.Id > 1)
+                if ($scope.isHCMCity() && $scope.selectedDistrict.id > 0 && checkSubUrban() == true && $scope.selectedChannel.Id > 1)
                     return true
                 else
                     return false
@@ -1897,7 +1911,7 @@
         }
         function validDeliveryTime() {
             if ($scope.selectedCity && $scope.selectedDistrict && $scope.selectedChannel)
-                if ($scope.selectedCity.id == 1 && $scope.selectedDistrict.id > 0 && checkSubUrban() == false && checkFastDelivery() == false && $scope.selectedChannel.Id > 1)
+                if ($scope.isHCMCity() && $scope.selectedDistrict.id > 0 && checkSubUrban() == false && checkFastDelivery() == false && $scope.selectedChannel.Id > 1)
                     return true
                 else
                     return false
@@ -1907,7 +1921,7 @@
         function validDeliveryTimeFast() {
             if ($scope.selectedCity && $scope.selectedDistrict && $scope.selectedChannel) {
 
-                if ($scope.selectedCity.id == 1 && $scope.selectedDistrict.id > 0 && checkSubUrban() == false && checkFastDelivery() == true && $scope.HCMType != 3 && $scope.selectedChannel.Id > 1) {
+                if ($scope.isHCMCity() && $scope.selectedDistrict.id > 0 && checkSubUrban() == false && checkFastDelivery() == true && $scope.HCMType != 3 && $scope.selectedChannel.Id > 1) {
                     return true
                 }
 
@@ -1920,7 +1934,7 @@
         function validSelectedTypeShipHCM() {
             if ($scope.selectedCity && $scope.selectedDistrict && $scope.selectedChannel) {
 
-                if ($scope.selectedCity.id == 1 && $scope.selectedDistrict.id > 0 && $scope.HCMType == 3 && $scope.selectedChannel.Id > 1)
+                if ($scope.isHCMCity() && $scope.selectedDistrict.id > 0 && $scope.HCMType == 3 && $scope.selectedChannel.Id > 1)
                     return true
                 else
                     return false
@@ -1940,6 +1954,17 @@
         }
         function roundToTwo(num) {
             return +(Math.round(num + "e+2") + "e-2");
+        }
+        function isHCMCity() {
+            if ($scope.selectedCity)
+                if ($scope.selectedCity.id == 1)
+                    return true;
+            return false;
+        }
+        function shippable() {
+            if ((isHCMCity() && $scope.HCMType == 3) || !isHCMCity())
+                return true;
+            return false;
         }
 
         //$scope.$watch('selectedChannel', function (n, o) {

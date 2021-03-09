@@ -10,6 +10,7 @@
     </ol>
 </section>-->
 <!-- Main content -->
+<script src="../../../Assets/Admin/libs/lodash.js"></script>
 <section class="content">
     <!-- Default box -->
     <!-- Horizontal Form -->
@@ -193,7 +194,7 @@
                                                     <h3 class="box-title">Vận chuyển</h3>
                                                 </div>
                                                 <div class="box-body">
-                                                    <div ng-show="selectedCity.id==1 && HCMType==3 " class="form-group" style="margin-bottom:10px">
+                                                    <div ng-show="isHCMCity() && HCMType==3 " class="form-group" style="margin-bottom:10px">
                                                         <label class="col-xs-4 cus-control-label">
                                                             <span ng-show="frmOrderAdd.typeShipHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:<br />{{kg}} kg
                                                         </label>
@@ -268,7 +269,7 @@
 
                                                         </div>
                                                     </div>
-                                                    <div ng-show="selectedCity.id!=1 && selectedDistrict.id>0 " class="form-group" style="margin-bottom:10px">
+                                                    <div ng-show="shippable() && selectedDistrict.id>0 " class="form-group" style="margin-bottom:10px">
                                                         <label class="col-xs-4 cus-control-label"><span ng-show="frmOrderAdd.typeShipOutHCMTmp.$error.required" class="has-error">*</span> PT giao hàng:<br />{{kg}} kg</label>
                                                         <div class="col-xs-8">
                                                             <ul style="list-style-type: none;margin-left:-20px">
@@ -416,7 +417,7 @@
                                                             </select>-->
                                                         </div>
                                                     </div>
-                                                    <div ng-show="selectedCity.id==1 && (HCMType==1 ||  HCMType==2)" class="form-group">
+                                                    <div ng-show="isHCMCity() && (HCMType==1 ||  HCMType==2)" class="form-group">
                                                         <label class="col-xs-4 cus-control-label">
                                                             <span ng-show="frmOrderAdd.deliveryTimeSubUrban.$error.required" class="has-error">*</span><span ng-show="frmOrderAdd.deliveryTime.$error.required" class="has-error">*</span><span ng-show="frmOrderAdd.deliveryTimeFast.$error.required" class="has-error">*</span> TG giao hàng:
                                                         </label>
@@ -452,15 +453,15 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div ng-show="selectedCity.id==1 && HCMType!=3 && selectedDistrict && (feeShip>0 ||  feeDeliveryTime>0)" class="form-group">
+                                                    <div ng-show="isHCMCity() && HCMType!=3 && selectedDistrict && (feeShip>0 ||  feeDeliveryTime>0)" class="form-group">
                                                         <label class="col-xs-4 cus-control-label">Phí:</label>
                                                         <div class="col-xs-8">
                                                             <i style="font-size:13px;margin-left:5px" ng-show="feeShip>0">
                                                                 <!--<span>- Đơn tã, thực phẩm < 400,000</span>-->
                                                                 <span ng-show="HCMType==1 && foodCart==false">- Đơn vật dụng khác <= 200,000 (Q.1,3,4,5,6,8,10,11,TP,TB,GV,PN,BTH)</span>
                                                                 <span ng-show="HCMType==1 && foodCart==true">- Đơn tã,thực phẩm <= 400,000 (Q.1,3,4,5,6,8,10,11,TP,TB,GV,PN,BTH)</span>
-                                                                <span ng-show="HCMType==2 && foodCart==false">- Đơn vật dụng khác <= 300,000 (Q.2,7,9,12,BTA,TD)</span>
-                                                                <span ng-show="HCMType==2 && foodCart==true">- Đơn tã,thực phẩm <= 500,000 (Q.2,7,9,12,BTA,TD)</span>
+                                                                <span ng-show="HCMType==2 && foodCart==false">- Đơn vật dụng khác <= 300,000 (Q.7,12,BTA,TP.TĐ)</span>
+                                                                <span ng-show="HCMType==2 && foodCart==true">- Đơn tã,thực phẩm <= 500,000 (Q.7,12,BTA,TP.TĐ)</span>
                                                                 : <span style="color:blue">{{feeShip | currency:'':0}}</span><br />
                                                             </i>
                                                             <i style="font-size:13px;margin-left:5px" ng-show="feeDeliveryTime>0">
@@ -487,7 +488,7 @@
                                                             </i>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group" ng-show="((selectedChannel.Id==1 || selectedChannel.Id==2) && (HCMType==1 || HCMType==2)) && selectedCity.id==1">
+                                                    <div class="form-group" ng-show="((selectedChannel.Id==1 || selectedChannel.Id==2) && (HCMType==1 || HCMType==2)) && isHCMCity()">
                                                         <label class="col-xs-4 cus-control-label">NV giao hàng:</label>
                                                         <div class="col-xs-8">
                                                             <select ng-options="option.UserName for option in users track by option.Id"

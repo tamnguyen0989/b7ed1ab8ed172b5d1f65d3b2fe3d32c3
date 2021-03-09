@@ -1842,6 +1842,7 @@
     <Content Include="Assets\Admin\libs\kendo.all.min.js" />
     <Content Include="Assets\Admin\libs\kendo.core.min.js" />
     <Content Include="Assets\Admin\libs\kendo.multiselect.min.js" />
+    <Content Include="Assets\Admin\libs\lodash.js" />
     <Content Include="Assets\Admin\libs\moment.js" />
     <Content Include="Assets\Admin\libs\ngBootbox\dist\ngBootbox.js" />
     <Content Include="Assets\Admin\libs\ngBootbox\dist\ngBootbox.min.js" />

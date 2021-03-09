@@ -25,5 +25,6 @@ namespace SoftBBM.Web.ViewModels
         public string mavungvnpostnhanh { get; set; }
         public Nullable<int> phivnep { get; set; }
         public Nullable<int> tgvnep { get; set; }
+        public Nullable<int> priority { get; set; }
     }
 }
