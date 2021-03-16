@@ -221,8 +221,9 @@ namespace SoftBBM.Web.api
                                         productInBranch.UpdatedDate = DateTime.Now;
                                         _softStockRepository.Update(productInBranch);
 
+                                        _unitOfWork.Commit();
                                         shop_sanphamLogs productLog = new shop_sanphamLogs();
-                                        productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(product.id) - item.variation_quantity_purchased;
+                                        productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(product.id);
                                         productLog.UpdateShopSanPhamLog(product.id, "Đơn hàng Api Shopee,mã đơn Api Shopee: " + jsonContent.Data.Ordersn + ", mã đơn: " + newOrder.id.ToString(), item.variation_quantity_purchased, 0, (int)BranchEnum.KHO_CHINH, productInBranch.StockTotal.Value);
                                         _shopSanPhamLogRepository.Add(productLog);
                                         _unitOfWork.Commit();
@@ -313,9 +314,10 @@ namespace SoftBBM.Web.api
                                 stockCurrent.StockTotal += item.Soluong;
                                 _softStockRepository.Update(stockCurrent);
 
+                                _unitOfWork.Commit();
                                 shop_sanphamLogs productLog = new shop_sanphamLogs();
                                 productLog.UpdateShopSanPhamLog(bienthe.idsp, "Cập nhật huỷ đơn hàng Api Shopee, mã đơn Api Shopee: " + order.OrderIdShopeeApi + ", mã đơn: " + order.id, item.Soluong, 0, (int)BranchEnum.KHO_CHINH, stockCurrent.StockTotal.Value);
-                                productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                                productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value);
                                 _shopSanPhamLogRepository.Add(productLog);
 
                             }
@@ -454,8 +456,9 @@ namespace SoftBBM.Web.api
                                     productInBranch.UpdatedDate = DateTime.Now;
                                     _softStockRepository.Update(productInBranch);
 
+                                    _unitOfWork.Commit();
                                     shop_sanphamLogs productLog = new shop_sanphamLogs();
-                                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(product.id) - item.variation_quantity_purchased;
+                                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(product.id);
                                     productLog.UpdateShopSanPhamLog(product.id, "Đơn hàng Api Shopee,mã đơn Api Shopee: " + jsonContent.Data.Ordersn + ", mã đơn: " + newOrder.id.ToString(), item.variation_quantity_purchased, 0, (int)BranchEnum.KHO_CHINH, productInBranch.StockTotal.Value);
                                     _shopSanPhamLogRepository.Add(productLog);
                                     _unitOfWork.Commit();
@@ -519,9 +522,10 @@ namespace SoftBBM.Web.api
                                 stockCurrent.StockTotal += item.Soluong;
                                 _softStockRepository.Update(stockCurrent);
 
+                                _unitOfWork.Commit();
                                 shop_sanphamLogs productLog = new shop_sanphamLogs();
                                 productLog.UpdateShopSanPhamLog(bienthe.idsp, "Cập nhật huỷ đơn hàng Api Shopee, mã đơn Api Shopee: " + order.OrderIdShopeeApi + ", mã đơn: " + order.id, item.Soluong, 0, (int)BranchEnum.KHO_CHINH, stockCurrent.StockTotal.Value);
-                                productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                                productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value);
                                 _shopSanPhamLogRepository.Add(productLog);
 
                             }

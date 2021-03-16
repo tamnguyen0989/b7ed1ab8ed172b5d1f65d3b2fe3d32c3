@@ -156,6 +156,7 @@ namespace SoftBBM.Web.api
                     productInBranch.UpdatedDate = DateTime.Now;
                     _softStockRepository.Update(productInBranch);
 
+                    _unitOfWork.Commit();
                     //Add log
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                     productLog.ProductId = item.id;
@@ -165,7 +166,7 @@ namespace SoftBBM.Web.api
                     productLog.CreatedDate = DateTime.Now;
                     productLog.BranchId = softStockInVm.FromBranchId;
                     productLog.StockTotal = productInBranch.StockTotal.Value;
-                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id) - item.Quantity.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
                     _shopSanPhamLogRepository.Add(productLog);
                 }
 
@@ -316,7 +317,7 @@ namespace SoftBBM.Web.api
                     productInBranch.UpdatedDate = DateTime.Now;
                     _softStockRepository.Update(productInBranch);
 
-
+                    _unitOfWork.Commit();
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                     productLog.ProductId = item.id;
                     productLog.Description = "Nhập kho, mã đơn: " + softStockIn.Id;
@@ -325,7 +326,7 @@ namespace SoftBBM.Web.api
                     productLog.CreatedDate = DateTime.Now;
                     productLog.BranchId = softStockInVm.ToBranchId;
                     productLog.StockTotal = productInBranch.StockTotal.Value;
-                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id) + item.Quantity.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
                     _shopSanPhamLogRepository.Add(productLog);
 
                     foreach (var itemBranch in branches)
@@ -449,6 +450,7 @@ namespace SoftBBM.Web.api
                     productInBranch.UpdatedBy = userId;
                     _softStockRepository.Update(productInBranch);
 
+                    _unitOfWork.Commit();
                     //Add Log
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                     productLog.ProductId = item.ProductId;
@@ -478,7 +480,7 @@ namespace SoftBBM.Web.api
                     productLog.CreatedDate = DateTime.Now;
                     productLog.BranchId = softStockIn.ToBranchId;
                     productLog.StockTotal = productInBranch.StockTotal.Value;
-                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.ProductId) + item.Quantity.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.ProductId);
                     _shopSanPhamLogRepository.Add(productLog);
 
                     foreach (var itemBranch in branches)
@@ -579,6 +581,7 @@ namespace SoftBBM.Web.api
                     productInBranch.UpdatedDate = DateTime.Now;
                     _softStockRepository.Update(productInBranch);
 
+                    _unitOfWork.Commit();
                     //Add Log
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                     productLog.ProductId = item.ProductId;
@@ -601,7 +604,7 @@ namespace SoftBBM.Web.api
                     productLog.CreatedDate = DateTime.Now;
                     productLog.BranchId = softStockIn.FromBranchId;
                     productLog.StockTotal = productInBranch.StockTotal.Value;
-                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.ProductId) - item.Quantity.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.ProductId);
                     _shopSanPhamLogRepository.Add(productLog);
                 }
 

@@ -566,7 +566,7 @@ namespace SoftBBM.Web.DAL.Repositories
             {
                 foreach (var item in models)
                 {
-                    if (item.StockTotal > 0)
+                    if (item.StockTotal != null)
                         result += item.StockTotal.Value;
                 }
             }

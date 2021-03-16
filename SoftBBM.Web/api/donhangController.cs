@@ -211,6 +211,7 @@ namespace SoftBBM.Web.api
                     _softStockRepository.Update(stockCurrent);
 
                     var channelOrder = _softChannelRepository.GetSingleById(orderVM.ChannelId.Value);
+                    _unitOfWork.Commit();
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                     productLog.ProductId = item.id;
                     productLog.Description = "Đơn hàng " + channelOrder.Name + ", mã đơn: " + result.id;
@@ -219,7 +220,7 @@ namespace SoftBBM.Web.api
                     productLog.CreatedDate = DateTime.Now;
                     productLog.BranchId = orderVM.BranchId;
                     productLog.StockTotal = stockCurrent.StockTotal.Value;
-                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id) - item.Quantity.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
                     _shopSanPhamLogRepository.Add(productLog);
                 }
                 var donhangReturn = _donhangRepository.GetSingleById((int)donhang.id);
@@ -370,6 +371,7 @@ namespace SoftBBM.Web.api
                         donhang_ct.TotalDiscount = 0;
                     _donhangctRepository.Add(donhang_ct);
 
+                    _unitOfWork.Commit();
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                     productLog.ProductId = item.id;
                     productLog.Description = "Đơn hàng " + channelOrder.Name + ", mã đơn: " + result.id;
@@ -378,7 +380,7 @@ namespace SoftBBM.Web.api
                     productLog.CreatedDate = DateTime.Now;
                     productLog.BranchId = orderVM.BranchId;
                     productLog.StockTotal = stockCurrent.StockTotal.Value;
-                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id) - item.Quantity.Value;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
                     _shopSanPhamLogRepository.Add(productLog);
                 }
                 var donhangReturn = _donhangRepository.GetSingleById((int)donhang.id);
@@ -858,6 +860,7 @@ namespace SoftBBM.Web.api
                             stockCurrent.StockTotal += item.Soluong;
                             _softStockRepository.Update(stockCurrent);
 
+                            _unitOfWork.Commit();
                             shop_sanphamLogs productLog = new shop_sanphamLogs();
                             productLog.ProductId = bienthe.idsp;
                             productLog.Description = "Cập nhật huỷ đơn hàng " + channelOrder.Name + ", mã đơn: " + donhang.id;
@@ -866,7 +869,7 @@ namespace SoftBBM.Web.api
                             productLog.CreatedDate = DateTime.Now;
                             productLog.BranchId = donhang.BranchId;
                             productLog.StockTotal = stockCurrent.StockTotal.Value;
-                            productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                            productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) ;
                             _shopSanPhamLogRepository.Add(productLog);
                         }
                         _unitOfWork.Commit();
@@ -952,6 +955,7 @@ namespace SoftBBM.Web.api
                             stockCurrent.StockTotal += item.Soluong;
                             _softStockRepository.Update(stockCurrent);
 
+                            _unitOfWork.Commit();
                             shop_sanphamLogs productLog = new shop_sanphamLogs();
                             productLog.ProductId = bienthe.idsp;
                             productLog.Description = "Cập nhật gh thất bại đơn hàng " + channelOrder.Name + ", mã đơn: " + donhang.id;
@@ -960,7 +964,7 @@ namespace SoftBBM.Web.api
                             productLog.CreatedDate = DateTime.Now;
                             productLog.BranchId = donhang.BranchId;
                             productLog.StockTotal = stockCurrent.StockTotal.Value;
-                            productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                            productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value);
                             _shopSanPhamLogRepository.Add(productLog);
                         }
                         _unitOfWork.Commit();
@@ -1366,6 +1370,7 @@ namespace SoftBBM.Web.api
                                     stockCurrent.StockTotal += item.Soluong;
                                     _softStockRepository.Update(stockCurrent);
 
+                                    _unitOfWork.Commit();
                                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                                     productLog.ProductId = bienthe.idsp;
                                     productLog.Description = "Cập nhật huỷ đơn hàng " + channelOrder.Name + ", mã đơn: " + oldOrder.id;
@@ -1374,7 +1379,7 @@ namespace SoftBBM.Web.api
                                     productLog.CreatedDate = DateTime.Now;
                                     productLog.BranchId = oldOrder.BranchId;
                                     productLog.StockTotal = stockCurrent.StockTotal.Value;
-                                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value);
                                     _shopSanPhamLogRepository.Add(productLog);
                                 }
                             }
@@ -1463,6 +1468,7 @@ namespace SoftBBM.Web.api
                                 stockCurrent.StockTotal += item.Soluong;
                                 _softStockRepository.Update(stockCurrent);
 
+                                _unitOfWork.Commit();
                                 shop_sanphamLogs productLog = new shop_sanphamLogs();
                                 productLog.ProductId = bienthe.idsp;
                                 productLog.Description = "Cập nhật gh thất bại đơn hàng " + channelOrder.Name + ", mã đơn: " + oldOrder.id;
@@ -1471,7 +1477,7 @@ namespace SoftBBM.Web.api
                                 productLog.CreatedDate = DateTime.Now;
                                 productLog.BranchId = oldOrder.BranchId;
                                 productLog.StockTotal = stockCurrent.StockTotal.Value;
-                                productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                                productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value);
                                 _shopSanPhamLogRepository.Add(productLog);
                             }
                             _unitOfWork.Commit();
@@ -1679,6 +1685,7 @@ namespace SoftBBM.Web.api
                             _softStockRepository.Update(stockCurrent);
 
                             var channelOrder = _softChannelRepository.GetSingleById(donhang.ChannelId.Value);
+                            _unitOfWork.Commit();
                             shop_sanphamLogs productLog = new shop_sanphamLogs();
                             productLog.ProductId = bienthe.idsp;
                             productLog.Description = "Cập nhật chỉnh sửa đơn hàng " + channelOrder.Name + ", mã đơn: " + donhang.id;
@@ -1687,7 +1694,7 @@ namespace SoftBBM.Web.api
                             productLog.CreatedDate = DateTime.Now;
                             productLog.BranchId = donhang.BranchId;
                             productLog.StockTotal = stockCurrent.StockTotal.Value;
-                            productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                            productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value);
                             _shopSanPhamLogRepository.Add(productLog);
                         }
                         _unitOfWork.Commit();
@@ -2479,9 +2486,10 @@ namespace SoftBBM.Web.api
                     stockCurrent.StockTotal += item.Soluong;
                     _softStockRepository.Update(stockCurrent);
 
+                    _unitOfWork.Commit();
                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                     productLog.UpdateShopSanPhamLog(bienthe.idsp, "Cập nhật huỷ đơn hàng Api Shopee, mã đơn Api Shopee: " + order.OrderIdShopeeApi + ", mã đơn: " + order.id, item.Soluong, 0, (int)BranchEnum.KHO_CHINH, stockCurrent.StockTotal.Value);
-                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value) + item.Soluong;
+                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(bienthe.idsp.Value);
                     _shopSanPhamLogRepository.Add(productLog);
 
                 }
@@ -2597,6 +2605,7 @@ namespace SoftBBM.Web.api
                                     _softStockRepository.Update(stockCurrent);
 
                                     var channelOrder = _softChannelRepository.GetSingleById((int)ChannelEnum.SPE);
+                                    _unitOfWork.Commit();
                                     shop_sanphamLogs productLog = new shop_sanphamLogs();
                                     productLog.ProductId = productDB.id;
                                     productLog.Description = "Đơn hàng " + channelOrder.Name + ", mã đơn: " + donhangct.Sodh;
@@ -2605,7 +2614,7 @@ namespace SoftBBM.Web.api
                                     productLog.CreatedDate = DateTime.Now;
                                     productLog.BranchId = (int)BranchEnum.KHO_CHINH;
                                     productLog.StockTotal = stockCurrent.StockTotal.Value;
-                                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(productDB.id) - donhangct.Soluong;
+                                    productLog.StockTotalAll = _softStockRepository.GetStockTotalAll(productDB.id);
                                     _shopSanPhamLogRepository.Add(productLog);
                                     _unitOfWork.Commit();
                                 }
