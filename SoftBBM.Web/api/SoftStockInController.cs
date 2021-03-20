@@ -258,7 +258,7 @@ namespace SoftBBM.Web.api
                     var stockTotalAll = _softStockRepository.GetStockTotalAll(item.id);
                     if (shopSanPham != null)
                     {
-                        var beforeLog = Mapper.Map<shop_sanpham,ShopSanPhamNoRef>(shopSanPham);
+                        var beforeLog = Mapper.Map<shop_sanpham, ShopSanPhamNoRef>(shopSanPham);
 
                         shopSanPham.PriceBaseOld = shopSanPham.PriceBase;
                         shopSanPham.PriceBase = item.PriceNew;
@@ -2120,7 +2120,7 @@ namespace SoftBBM.Web.api
 
         [Route("loadsoldproductsbydate")]
         [HttpPost]
-        public HttpResponseMessage LoadSoldProductsByDate(HttpRequestMessage request, InputShopSanPhamSoldByDate InputVM)
+        public async Task<HttpResponseMessage> LoadSoldProductsByDate(HttpRequestMessage request, InputShopSanPhamSoldByDate InputVM)
         {
             HttpResponseMessage response = null;
             try
@@ -2137,6 +2137,7 @@ namespace SoftBBM.Web.api
                 var startDateSold = endDate.AddDays(-30);
                 startDateSold = UtilExtensions.ConvertStartDate(startDateSold);
                 endDateSold = UtilExtensions.ConvertEndDate(endDateSold);
+
                 foreach (var item in soldOrders)
                 {
                     foreach (var jtem in item.donhang_ct)
@@ -2169,6 +2170,48 @@ namespace SoftBBM.Web.api
                             }
                             if (exist == false)
                                 shopsanphams.Add(newItem);
+                        }
+                    }
+                }
+
+                var stockouts = _softStockInRepository.GetMulti(x => x.FromBranchId == InputVM.branchId
+                                                                    && x.CreatedDate >= startDateConvert
+                                                                    && x.CreatedDate <= endDateConvert).ToList();
+                foreach (var item in stockouts)
+                {
+                    foreach (var jtem in item.SoftStockInDetails)
+                    {
+                        var sp = _shopSanPhamRepository.GetSingleByCondition(x => x.id == jtem.ProductId);
+                        if (sp != null)
+                        {
+                            var newItem = Mapper.Map<shop_sanpham, ShopSanPhamSoldByDateViewModel>(sp);
+                            newItem.Quantity = jtem.Quantity != null ? jtem.Quantity.Value : 0;
+                            newItem.StockTotal = _softStockRepository.GetStockTotal(newItem.id, 2);
+                            newItem.AvgSoldQuantity = 0;
+                            var bienthe = _shopbientheRepository.GetSingleByCondition(x => x.idsp == jtem.ProductId);
+                            if(bienthe != null)
+                            {
+                                var quantityTmp = _donhangctRepository.GetMulti(x => x.donhang.ngaydat >= startDateSold && x.donhang.ngaydat <= endDateSold).Where(y => y.IdPro == bienthe.id);
+                                if (quantityTmp != null)
+                                    newItem.AvgSoldQuantity = quantityTmp.Sum(x => x.Soluong);
+                            }
+                            
+                            if (shopsanphams.Count == 0)
+                                shopsanphams.Add(newItem);
+                            else
+                            {
+                                var exist = false;
+                                foreach (var ztem in shopsanphams)
+                                {
+                                    if (newItem.id == ztem.id)
+                                    {
+                                        ztem.Quantity += jtem.Quantity != null ? jtem.Quantity.Value : 0;
+                                        exist = true;
+                                    }
+                                }
+                                if (exist == false)
+                                    shopsanphams.Add(newItem);
+                            }
                         }
                     }
                 }
