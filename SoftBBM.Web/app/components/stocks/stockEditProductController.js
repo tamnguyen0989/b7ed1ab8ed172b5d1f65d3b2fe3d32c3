@@ -62,7 +62,7 @@
                 $scope.selectedStock = null;
                 $scope.product = null;
                 $uibModalInstance.dismiss();
-                $scope.search();
+                $scope.search($scope.page);
             }, function (error) {
                 notificationService.displayError(error);
             });

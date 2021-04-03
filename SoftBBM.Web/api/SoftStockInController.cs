@@ -2175,6 +2175,7 @@ namespace SoftBBM.Web.api
                 }
 
                 var stockouts = _softStockInRepository.GetMulti(x => x.FromBranchId == InputVM.branchId
+                                                                    && x.FromBranchStatusId == "06"
                                                                     && x.CreatedDate >= startDateConvert
                                                                     && x.CreatedDate <= endDateConvert).ToList();
                 foreach (var item in stockouts)

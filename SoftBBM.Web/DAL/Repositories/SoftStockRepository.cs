@@ -89,9 +89,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<SoftBranchProductStock> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.shop_sanpham.CategoryId == item.Id);
+                                donhangstmp = query.Where(x => x.shop_sanpham.CategoryId == item);
                             else
-                                donhangstmp = stocks.Where(x => x.shop_sanpham.CategoryId == item.Id);
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.CategoryId == item);
                             if (stocksFilter == null)
                                 stocksFilter = donhangstmp;
                             else
@@ -107,9 +107,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<SoftBranchProductStock> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.shop_sanpham.SupplierId == item.Id);
+                                donhangstmp = query.Where(x => x.shop_sanpham.SupplierId == item);
                             else
-                                donhangstmp = stocks.Where(x => x.shop_sanpham.SupplierId == item.Id);
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.SupplierId == item);
                             if (stocksFilter == null)
                                 stocksFilter = donhangstmp;
                             else
@@ -125,9 +125,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<SoftBranchProductStock> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.shop_sanpham.StatusId == item.Id);
+                                donhangstmp = query.Where(x => x.shop_sanpham.StatusId == item);
                             else
-                                donhangstmp = stocks.Where(x => x.shop_sanpham.StatusId == item.Id);
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.StatusId == item);
                             if (stocksFilter == null)
                                 stocksFilter = donhangstmp;
                             else
@@ -143,9 +143,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<SoftBranchProductStock> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.shop_sanpham.SoftSupplier.VatId == item.Id);
+                                donhangstmp = query.Where(x => x.shop_sanpham.SoftSupplier.VatId == item);
                             else
-                                donhangstmp = stocks.Where(x => x.shop_sanpham.SoftSupplier.VatId == item.Id);
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.SoftSupplier.VatId == item);
                             if (stocksFilter == null)
                                 stocksFilter = donhangstmp;
                             else
@@ -295,9 +295,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<SoftBranchProductStock> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.shop_sanpham.CategoryId == item.Id);
+                                donhangstmp = query.Where(x => x.shop_sanpham.CategoryId == item);
                             else
-                                donhangstmp = stocks.Where(x => x.shop_sanpham.CategoryId == item.Id);
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.CategoryId == item);
                             if (stocksFilter == null)
                                 stocksFilter = donhangstmp;
                             else
@@ -313,9 +313,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<SoftBranchProductStock> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.shop_sanpham.SupplierId == item.Id);
+                                donhangstmp = query.Where(x => x.shop_sanpham.SupplierId == item);
                             else
-                                donhangstmp = stocks.Where(x => x.shop_sanpham.SupplierId == item.Id);
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.SupplierId == item);
                             if (stocksFilter == null)
                                 stocksFilter = donhangstmp;
                             else
@@ -331,9 +331,9 @@ namespace SoftBBM.Web.DAL.Repositories
                         {
                             IQueryable<SoftBranchProductStock> donhangstmp = null;
                             if (rootExist == false)
-                                donhangstmp = query.Where(x => x.shop_sanpham.StatusId == item.Id);
+                                donhangstmp = query.Where(x => x.shop_sanpham.StatusId == item);
                             else
-                                donhangstmp = stocks.Where(x => x.shop_sanpham.StatusId == item.Id);
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.StatusId == item);
                             if (stocksFilter == null)
                                 stocksFilter = donhangstmp;
                             else
@@ -347,15 +347,18 @@ namespace SoftBBM.Web.DAL.Repositories
                     {
                         foreach (var item in softStockSearchFilterVM.selectedVatStatusFilters)
                         {
-                            if (item.Id < 0)
+                            if (item < 0)
                             {
                                 IQueryable<SoftBranchProductStock> donhangstmp = null;
                                 if (rootExist == false)
                                 {
-                                    switch (item.Id)
+                                    switch (item)
                                     {
                                         case -1:
                                             donhangstmp = query.Where(x => x.shop_sanpham.hide == true || x.shop_sanpham.hide == null);
+                                            break;
+                                        case -3:
+                                            donhangstmp = query.Where(x => x.shop_sanpham.hide == false && x.shop_sanpham.shop_collection.Count > 0);
                                             break;
                                         default:
                                             donhangstmp = query.Where(x => x.shop_sanpham.hide == false);
@@ -364,10 +367,13 @@ namespace SoftBBM.Web.DAL.Repositories
                                 }
                                 else
                                 {
-                                    switch (item.Id)
+                                    switch (item)
                                     {
                                         case -1:
                                             donhangstmp = stocks.Where(x => x.shop_sanpham.hide == true || x.shop_sanpham.hide == null);
+                                            break;
+                                        case -3:
+                                            donhangstmp = stocks.Where(x => x.shop_sanpham.hide == false && x.shop_sanpham.shop_collection.Count > 0);
                                             break;
                                         default:
                                             donhangstmp = stocks.Where(x => x.shop_sanpham.hide == false);
@@ -383,9 +389,9 @@ namespace SoftBBM.Web.DAL.Repositories
                             {
                                 IQueryable<SoftBranchProductStock> donhangstmp = null;
                                 if (rootExist == false)
-                                    donhangstmp = query.Where(x => x.shop_sanpham.SoftSupplier.VatId == item.Id);
+                                    donhangstmp = query.Where(x => x.shop_sanpham.SoftSupplier.VatId == item);
                                 else
-                                    donhangstmp = stocks.Where(x => x.shop_sanpham.SoftSupplier.VatId == item.Id);
+                                    donhangstmp = stocks.Where(x => x.shop_sanpham.SoftSupplier.VatId == item);
                                 if (stocksFilter == null)
                                     stocksFilter = donhangstmp;
                                 else
@@ -471,7 +477,7 @@ namespace SoftBBM.Web.DAL.Repositories
                             IQueryable<SoftBranchProductStock> donhangstmp = null;
                             if (rootExist == false)
                             {
-                                switch (item.Id)
+                                switch (item)
                                 {
                                     case 1:
                                         donhangstmp = query.Where(x => x.shop_sanpham.hide == true || x.shop_sanpham.hide == null);
@@ -483,7 +489,7 @@ namespace SoftBBM.Web.DAL.Repositories
                             }
                             else
                             {
-                                switch (item.Id)
+                                switch (item)
                                 {
                                     case 1:
                                         donhangstmp = stocks.Where(x => x.shop_sanpham.hide == true || x.shop_sanpham.hide == null);

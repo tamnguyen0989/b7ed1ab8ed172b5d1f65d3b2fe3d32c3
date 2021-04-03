@@ -173,11 +173,16 @@ namespace SoftBBM.Web.ViewModels
         public int branchId { get; set; }
         public int page { get; set; }
         public int pageSize { get; set; }
-        public List<ShopSanPhamCategoryViewModel> selectedProductCategoryFilters { get; set; }
-        public List<SoftSupplierViewModel> selectedSupplierFilters { get; set; }
-        public List<ShopSanPhamStatusViewModel> selectedProductStatusFilters { get; set; }
-        public List<SoftSupplierVatStatuViewModel> selectedVatStatusFilters { get; set; }
-        public List<ShopSanPhamHideStatusViewModel> selectedHideStatusFilter { get; set; }
+        //public List<ShopSanPhamCategoryViewModel> selectedProductCategoryFilters { get; set; }
+        //public List<SoftSupplierViewModel> selectedSupplierFilters { get; set; }
+        //public List<ShopSanPhamStatusViewModel> selectedProductStatusFilters { get; set; }
+        //public List<SoftSupplierVatStatuViewModel> selectedVatStatusFilters { get; set; }
+        //public List<ShopSanPhamHideStatusViewModel> selectedHideStatusFilter { get; set; }
+        public List<int> selectedProductCategoryFilters { get; set; }
+        public List<int> selectedSupplierFilters { get; set; }
+        public List<string> selectedProductStatusFilters { get; set; }
+        public List<int> selectedVatStatusFilters { get; set; }
+        public List<int> selectedHideStatusFilter { get; set; }
 
         public Nullable<int> selectedStockFilter { get; set; }
         public Nullable<int> selectedStockFilterValue { get; set; }

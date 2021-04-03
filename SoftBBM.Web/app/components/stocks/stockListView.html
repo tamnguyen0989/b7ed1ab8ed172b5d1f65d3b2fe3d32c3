@@ -1,4 +1,33 @@
-﻿  <!-- Content Header (Page header) -->
+﻿<style>
+    @import url('../../../Assets/Admin/css/kendo.common.min.css');
+    @import url('../../../Assets/Admin/css/kendo.default.min.css');
+    @import url('../../../Assets/Admin/css/kendo.default.mobile.min.css');
+
+    .ng-leave {
+        display: none !important;
+    }
+
+    .ng-hide.ng-hide-animate {
+        display: none !important;
+    }
+
+    .box-title {
+        font-size: 17px !important;
+    }
+
+    .box-header {
+        padding: 5px !important;
+    }
+
+    .box.box-solid.box-primary {
+        border: none !important
+    }
+
+    .box {
+        box-shadow: none !important
+    }
+</style>
+<!-- Content Header (Page header) -->
 <section class="content-header">
     <h1>
         Danh sách sản phẩm tại kho - Kênh
@@ -114,131 +143,126 @@
                         </div>
 
                         <div ng-show="animate" class="row margintop10px" style="margin-right:-5px">
-                            <div class="col-xs-2" style="padding-right:5px;padding-left:0px">
-                                <div class="box box-solid box-primary" style="margin-bottom:0px">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Nhóm sản phẩm</h3>
-                                    </div><!-- /.box-header -->
-                                    <div class="box-body" style="padding-bottom:5px">
-                                        <select style="width:100%;border:0px;padding-left:0px"
-                                                ng-change="updateFilter()" ng-options="option.Name for option in productCategories track by option.Id"
-                                                ng-model="filters.selectedProductCategoryFilters"
-                                                name="productCategoryFilter"
-                                                class="form-control"
-                                                size="5"
-                                                multiple></select>
-                                    </div><!-- /.box-body -->
+                            <div class="col col-xs-8" style="padding-left:0px;padding-right:0px">
+                                <div class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                                    <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                        <div class="box-header">
+                                            <h4 class="box-title">Nhóm sản phẩm</h4><i style="float:right" class="fa fa-fw fa-cubes"></i>
+                                        </div>
+                                        <!--/.box-header-->
+                                        <div class="box-body" style="padding-bottom:5px">
+                                            <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                                    kendo-multi-select
+                                                    k-options="productCategories"
+                                                    k-ng-delay="productCategories"
+                                                    id="productCategoryFilter"
+                                                    name="productCategoryFilter"
+                                                    k-ng-model="filters.selectedProductCategoryFilters"></select>
+                                        </div>
+                                        <!--/.box-body-->
+                                    </div>
+                                </div>
+                                <div class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                                    <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                        <div class="box-header">
+                                            <h4 class="box-title">Nhà cung cấp</h4><i style="float:right" class="fa fa-fw fa-truck"></i>
+                                        </div>
+                                        <!--/.box-header-->
+                                        <div class="box-body" style="padding-bottom:5px">
+                                            <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                                    kendo-multi-select
+                                                    k-options="suppliersOp"
+                                                    k-ng-delay="suppliersOp"
+                                                    id="supplierFilter"
+                                                    name="supplierFilter"
+                                                    k-ng-model="filters.selectedSupplierFilters"></select>
+                                        </div>
+                                        <!--/.box-body-->
+                                    </div>
+                                </div>
+                                <div class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                                    <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                        <div class="box-header">
+                                            <h4 class="box-title">Tình trạng</h4><i style="float:right" class="fa fa-fw fa-shield"></i>
+                                        </div>
+                                        <!--/.box-header-->
+                                        <div class="box-body" style="padding-bottom:5px">
+                                            <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                                    kendo-multi-select
+                                                    k-options="productStatusesOp"
+                                                    k-ng-delay="productStatusesOp"
+                                                    id="productStatusFilter"
+                                                    name="productStatusFilter"
+                                                    k-ng-model="filters.selectedProductStatusFilters"></select>
+                                        </div>
+                                        <!--/.box-body-->
+                                    </div>
+                                </div>
+                                <div class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                                    <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                        <div class="box-header">
+                                            <h4 class="box-title">SP đã đăng,VAT</h4><i style="float:right" class="fa fa-fw fa-calculator"></i>
+                                        </div>
+                                        <!--/.box-header-->
+                                        <div class="box-body" style="padding-bottom:5px">
+                                            <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                                    kendo-multi-select
+                                                    k-options="vatStatusesOp"
+                                                    k-ng-delay="vatStatusesOp"
+                                                    id="vatStatusFilter"
+                                                    name="vatStatusFilter"
+                                                    k-ng-model="filters.selectedVatStatusFilters"></select>
+                                        </div>
+                                        <!--/.box-body-->
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                                <div class="box box-solid box-primary" style="margin-bottom:0px">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Nhà cung cấp</h3>
-                                    </div><!-- /.box-header -->
-                                    <div class="box-body" style="padding-bottom:5px">
-                                        <select style="width:100%;border:0px;padding-left:0px"
-                                                ng-change="updateFilter()" ng-options="option.Name for option in suppliers track by option.Id"
-                                                ng-model="filters.selectedSupplierFilters"
-                                                name="supplierFilter"
-                                                class="form-control"
-                                                size="5"
-                                                multiple></select>
-                                    </div><!-- /.box-body -->
+                            <div class="col col-xs-4" style="padding-left:0px;padding-right:0px">
+                                <div class="col-xs-6" style="padding-left:0px;padding-right:5px">
+                                    <div class="box box-solid box-primary" style="margin-bottom:0px">
+                                        <div class="box-header">
+                                            <h3 class="box-title">Tồn kho</h3>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body" style="padding-bottom:5px;height:122px">
+                                            <div class="row" style="margin-bottom:10px;margin-left:10px">
+                                                <input name="rbStockFilter" type="radio" value="1" ng-model="filters.selectedStockFilter" /> Lớn hơn
+                                                <input name="rbStockFilter" type="radio" value="2" ng-model="filters.selectedStockFilter" /> Nhỏ hơn
+                                                <input name="rbStockFilter" type="radio" value="3" ng-model="filters.selectedStockFilter" /> Bằng
+                                            </div>
+                                            <div class="row" style="margin-bottom:10px;margin-left:10px">
+                                                <input ng-disabled="!filters.selectedStockFilter" type="number" class="form-control" ng-model="filters.selectedStockFilterValue" />
+                                            </div>
+                                            <div style="margin-top:5px">
+                                                <button type="button" class="btn btn-success" style="padding:2px;float:left;margin-left:10px" ng-click="updateFilter()">Lọc</button>
+                                                <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetStockFilter()">Xoá</button>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div>
+                                </div>
+                                <div class="col-xs-6" style="padding-left:0px;padding-right:5px">
+                                    <div class="box box-solid box-primary" style="margin-bottom:0px">
+                                        <div class="box-header">
+                                            <h3 class="box-title">Tồn kho tổng</h3>
+                                        </div><!-- /.box-header -->
+                                        <div class="box-body" style="padding-bottom:5px;height:122px">
+                                            <div class="row" style="margin-bottom:10px;margin-left:10px">
+                                                <input name="rbStockTotalFilter" type="radio" value="1" ng-model="filters.selectedStockTotalFilter" /> Lớn hơn
+                                                <input name="rbStockTotalFilter" type="radio" value="2" ng-model="filters.selectedStockTotalFilter" /> Nhỏ hơn
+                                                <input name="rbStockTotalFilter" type="radio" value="3" ng-model="filters.selectedStockTotalFilter" /> Bằng
+                                            </div>
+                                            <div class="row" style="margin-bottom:10px;margin-left:10px">
+                                                <input ng-disabled="!filters.selectedStockTotalFilter" type="number" class="form-control" ng-model="filters.selectedStockTotalFilterValue" />
+                                            </div>
+                                            <div style="margin-top:5px">
+                                                <button type="button" class="btn btn-success" style="padding:2px;float:left;margin-left:10px" ng-click="updateFilter()">Lọc</button>
+                                                <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetStockTotalFilter()">Xoá</button>
+                                            </div>
+                                        </div><!-- /.box-body -->
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                                <div class="box box-solid box-primary" style="margin-bottom:0px">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Tình trạng</h3>
-                                    </div><!-- /.box-header -->
-                                    <div class="box-body" style="padding-bottom:5px">
-                                        <select style="width:100%;border:0px;padding-left:0px"
-                                                ng-change="updateFilter()" ng-options="option.Name for option in productStatuses track by option.Id"
-                                                ng-model="filters.selectedProductStatusFilters"
-                                                name="productStatusFilter"
-                                                class="form-control"
-                                                size="5"
-                                                multiple></select>
-                                    </div><!-- /.box-body -->
-                                </div>
-                            </div>
-                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                                <div class="box box-solid box-primary" style="margin-bottom:0px">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Ẩn/ Hiện SP - VAT</h3>
-                                    </div><!-- /.box-header -->
-                                    <div class="box-body" style="padding-bottom:5px">
-                                        <select style="width:100%;border:0px;padding-left:0px"
-                                                ng-change="updateFilter()" ng-options="option.Name for option in vatStatuses track by option.Id"
-                                                ng-model="filters.selectedVatStatusFilters"
-                                                name="vatStatusFilter"
-                                                class="form-control"
-                                                size="5"
-                                                multiple></select>
-                                    </div><!-- /.box-body -->
-                                </div>
-                            </div>
-                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                                <div class="box box-solid box-primary" style="margin-bottom:0px">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Tồn kho</h3>
-                                    </div><!-- /.box-header -->
-                                    <div class="box-body" style="padding-bottom:5px;height:122px">
-                                        <div class="row" style="margin-bottom:10px;margin-left:10px">
-                                            <input name="rbStockFilter" type="radio" value="1" ng-model="filters.selectedStockFilter" /> Lớn hơn
-                                            <input name="rbStockFilter" type="radio" value="2" ng-model="filters.selectedStockFilter" /> Nhỏ hơn
-                                            <input name="rbStockFilter" type="radio" value="3" ng-model="filters.selectedStockFilter" /> Bằng
-                                        </div>
-                                        <div class="row" style="margin-bottom:10px;margin-left:10px">
-                                            <input ng-disabled="!filters.selectedStockFilter" type="number" class="form-control" ng-model="filters.selectedStockFilterValue" />
-                                        </div>
-                                        <div style="margin-top:5px">
-                                            <button type="button" class="btn btn-success" style="padding:2px;float:left;margin-left:10px" ng-click="updateFilter()">Lọc</button>
-                                            <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetStockFilter()">Xoá</button>
-                                        </div>
-                                    </div><!-- /.box-body -->
-                                </div>
-                            </div>
-                            <div class="col-xs-2" style="padding-left:0px;padding-right:5px">
-                                <div class="box box-solid box-primary" style="margin-bottom:0px">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Tồn kho tổng</h3>
-                                    </div><!-- /.box-header -->
-                                    <div class="box-body" style="padding-bottom:5px;height:122px">
-                                        <div class="row" style="margin-bottom:10px;margin-left:10px">
-                                            <input name="rbStockTotalFilter" type="radio" value="1" ng-model="filters.selectedStockTotalFilter" /> Lớn hơn
-                                            <input name="rbStockTotalFilter" type="radio" value="2" ng-model="filters.selectedStockTotalFilter" /> Nhỏ hơn
-                                            <input name="rbStockTotalFilter" type="radio" value="3" ng-model="filters.selectedStockTotalFilter" /> Bằng
-                                        </div>
-                                        <div class="row" style="margin-bottom:10px;margin-left:10px">
-                                            <input ng-disabled="!filters.selectedStockTotalFilter" type="number" class="form-control" ng-model="filters.selectedStockTotalFilterValue" />
-                                        </div>
-                                        <div style="margin-top:5px">
-                                            <button type="button" class="btn btn-success" style="padding:2px;float:left;margin-left:10px" ng-click="updateFilter()">Lọc</button>
-                                            <button type="button" class="btn btn-danger" style="padding:2px;float:right" ng-click="resetStockTotalFilter()">Xoá</button>
-                                        </div>
-                                    </div><!-- /.box-body -->
-                                </div>
-                            </div>
+
                         </div>
-                        <!--<div ng-show="animate" class="row margintop10px" style="margin-right:-5px">
-                            <div class="col-xs-2" style="padding-right:5px;padding-left:0px">
-                                <div class="box box-solid box-primary" style="margin-bottom:0px">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Ẩn / Hiển</h3>
-                                    </div>
-                                    <div class="box-body" style="padding-bottom:5px">
-                                        <select style="width:100%;border:0px;padding-left:0px"
-                                                ng-change="updateFilter()" ng-options="option.Name for option in hideStatuses track by option.Id"
-                                                ng-model="filters.selectedHideStatusFilter"
-                                                name="hideStatusCategoryFilter"
-                                                class="form-control"
-                                                size="5"
-                                                multiple></select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
                     </form>
                 </div>
             </div>
@@ -395,8 +419,8 @@
                                     <!--<button title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="editStock(item,$index)"><i class="fa fa-pencil"></i></button>
                                     <button ng-show="!enabledEdit[{{$index}}]" title="Chỉnh sửa" class="btn btn-sm btn-info" ng-click="editStock(item,$index)"><i class="fa fa-pencil"></i></button>
                                     <button ng-disabled="data{{$index}}.$invalid" ng-hide="!enabledEdit[{{$index}}]" title="Cập nhật" class="btn btn-sm btn-success" ng-click="updateStock(item,$index)"><i class="fa fa-check"></i></button>
-                                    <button ng-hide="!enabledEdit[{{$index}}]" title="Hoàn tác" class="btn btn-sm btn-default" ng-click="cancelStock(item,$index)"><i class="fa fa-refresh"></i></button>-->
-                                    <button title="Đồng bộ tới Shopee" class="btn btn-sm btn-warning" ng-click="syncToShopee(item)">S</button>
+                                    <button ng-hide="!enabledEdit[{{$index}}]" title="Hoàn tác" class="btn btn-sm btn-default" ng-click="cancelStock(item,$index)"><i class="fa fa-refresh"></i></button>
+                                    <button title="Đồng bộ tới Shopee" class="btn btn-sm btn-warning" ng-click="syncToShopee(item)">S</button>-->
                                 </td>
                             </tr>
                         </table>

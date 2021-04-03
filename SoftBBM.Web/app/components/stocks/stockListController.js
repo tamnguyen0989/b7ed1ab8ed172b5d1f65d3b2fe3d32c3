@@ -191,16 +191,41 @@
                 }
             }
             apiService.get('/api/supplier/getall', config, function (result) {
-                $scope.suppliers = result.data;
+                var suppliers = result.data
+                $scope.suppliersOp = {
+                    dataSource: suppliers,
+                    placeholder: "Chọn",
+                    dataTextField: "Name",
+                    dataValueField: "Id",
+                    valuePrimitive: true,
+                    filter: "contains",
+                    change: function (e) {
+                        updateFilter();
+                    }
+                };
             }, function (error) {
                 notificationService.displayError(error);
             });
         }
         function loadProductStatus() {
+            $scope.loading = true;
             apiService.get('/api/stock/getallproductstatus', null, function (result) {
-                $scope.productStatuses = result.data;
+                var productStatuses = result.data
+                $scope.productStatusesOp = {
+                    dataSource: productStatuses,
+                    placeholder: "Chọn",
+                    dataTextField: "Name",
+                    dataValueField: "Id",
+                    valuePrimitive: true,
+                    filter: "contains",
+                    change: function (e) {
+                        updateFilter();
+                    }
+                };
+                $scope.loading = false;
             }, function (error) {
                 notificationService.displayError(error);
+                $scope.loading = false;
             });
         }
         function openChannelPrices(stock) {
@@ -225,7 +250,7 @@
                 scope: $scope,
                 windowClass: 'app-modal-window-small'
             }).result.finally(function ($scope) {
-                search($scope.page);
+
             });
         }
         function setupToogleData() {
@@ -342,22 +367,49 @@
         function loadProductCategories() {
             $scope.loading = true;
             apiService.get('/api/productcategory/getall', null, function (result) {
-                $scope.productCategories = result.data;
+                var productCategories = result.data
+                $scope.productCategories = {
+                    dataSource: productCategories,
+                    placeholder: "Chọn",
+                    dataTextField: "Name",
+                    dataValueField: "Id",
+                    valuePrimitive: true,
+                    filter: "contains",
+                    change: function (e) {
+                        updateFilter();
+                    }
+                };
+
                 $scope.loading = false;
             }, function (error) {
                 notificationService.displayError(error);
             });
         }
         function loadVatStatuses() {
+            $scope.loading = true;
             apiService.get('api/supplier/getallvatstatus', null,
                 function (result) {
-                    $scope.vatStatuses = [];
-                    var invisible = { Id: -1, Name: 'Ẩn SP', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
-                    var visible = { Id: -2, Name: 'Hiện SP', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
-                    $scope.vatStatuses.push(invisible, visible);
-                    $scope.vatStatuses = $scope.vatStatuses.concat(result.data);
+                    var vatStatuses = [];
+                    var invisible = { Id: -1, Name: 'SP đã ẩn', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
+                    var visible = { Id: -2, Name: 'SP đã hiện', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
+                    var posted = { Id: -3, Name: 'SP đã đăng', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
+                    vatStatuses.push(invisible, visible, posted);
+                    vatStatuses = vatStatuses.concat(result.data);
+                    $scope.vatStatusesOp = {
+                        dataSource: vatStatuses,
+                        placeholder: "Chọn",
+                        dataTextField: "Name",
+                        dataValueField: "Id",
+                        valuePrimitive: true,
+                        filter: "contains",
+                        change: function (e) {
+                            updateFilter();
+                        }
+                    };
+                    $scope.loading = false;
                 }, function (error) {
                     notificationService.displayError(error.data);
+                    $scope.loading = false;
                 });
         }
         function updateFilter() {
@@ -492,7 +544,7 @@
                 backdrop: 'static',
                 keyboard: false
             }).result.finally(function ($scope) {
-                search($scope.page);
+
             });
         }
         function openChannelPricesModal(stock) {
