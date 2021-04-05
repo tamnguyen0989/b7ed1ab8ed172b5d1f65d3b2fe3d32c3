@@ -191,6 +191,7 @@
                 }
             }
             apiService.get('/api/supplier/getall', config, function (result) {
+                $scope.suppliers = result.data
                 var suppliers = result.data
                 $scope.suppliersOp = {
                     dataSource: suppliers,
@@ -210,6 +211,7 @@
         function loadProductStatus() {
             $scope.loading = true;
             apiService.get('/api/stock/getallproductstatus', null, function (result) {
+                $scope.productStatuses = result.data
                 var productStatuses = result.data
                 $scope.productStatusesOp = {
                     dataSource: productStatuses,
