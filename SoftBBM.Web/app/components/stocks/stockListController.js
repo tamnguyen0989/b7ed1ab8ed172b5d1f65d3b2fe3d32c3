@@ -369,8 +369,9 @@
         function loadProductCategories() {
             $scope.loading = true;
             apiService.get('/api/productcategory/getall', null, function (result) {
+                $scope.productCategories = result.data
                 var productCategories = result.data
-                $scope.productCategories = {
+                $scope.productCategoriesOp = {
                     dataSource: productCategories,
                     placeholder: "Chọn",
                     dataTextField: "Name",
