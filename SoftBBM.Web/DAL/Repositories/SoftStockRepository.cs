@@ -278,8 +278,15 @@ namespace SoftBBM.Web.DAL.Repositories
             {
                 bool rootExist = false;
                 IQueryable<SoftBranchProductStock> stocksFilter = null;
-                if (!string.IsNullOrEmpty(softStockSearchFilterVM.stringFilter) || softStockSearchFilterVM.selectedProductCategoryFilters.Count > 0 || softStockSearchFilterVM.selectedSupplierFilters.Count > 0 ||
-                    softStockSearchFilterVM.selectedProductStatusFilters.Count > 0 || softStockSearchFilterVM.selectedVatStatusFilters.Count > 0 || (softStockSearchFilterVM.selectedStockFilter > 0 && softStockSearchFilterVM.selectedStockFilterValue != null) || (softStockSearchFilterVM.selectedStockTotalFilter > 0 && softStockSearchFilterVM.selectedStockTotalFilterValue != null) || softStockSearchFilterVM.selectedHideStatusFilter.Count > 0)
+                if (!string.IsNullOrEmpty(softStockSearchFilterVM.stringFilter)
+                    || softStockSearchFilterVM.selectedProductCategoryFilters.Count > 0
+                    || softStockSearchFilterVM.selectedSupplierFilters.Count > 0
+                    || softStockSearchFilterVM.selectedProductStatusFilters.Count > 0
+                    || softStockSearchFilterVM.selectedVatStatusFilters.Count > 0
+                    || (softStockSearchFilterVM.selectedStockFilter > 0 && softStockSearchFilterVM.selectedStockFilterValue != null)
+                    || (softStockSearchFilterVM.selectedStockTotalFilter > 0 && softStockSearchFilterVM.selectedStockTotalFilterValue != null)
+                    || softStockSearchFilterVM.selectedHideStatusFilter.Count > 0
+                    || softStockSearchFilterVM.selectedProductOptionFilters > 0)
                 {
                     if (!string.IsNullOrEmpty(softStockSearchFilterVM.stringFilter))
                     {
@@ -347,56 +354,15 @@ namespace SoftBBM.Web.DAL.Repositories
                     {
                         foreach (var item in softStockSearchFilterVM.selectedVatStatusFilters)
                         {
-                            if (item < 0)
-                            {
-                                IQueryable<SoftBranchProductStock> donhangstmp = null;
-                                if (rootExist == false)
-                                {
-                                    switch (item)
-                                    {
-                                        case -1:
-                                            donhangstmp = query.Where(x => x.shop_sanpham.hide == true || x.shop_sanpham.hide == null);
-                                            break;
-                                        case -3:
-                                            donhangstmp = query.Where(x => x.shop_sanpham.hide == false && x.shop_sanpham.shop_collection.Count > 0);
-                                            break;
-                                        default:
-                                            donhangstmp = query.Where(x => x.shop_sanpham.hide == false);
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    switch (item)
-                                    {
-                                        case -1:
-                                            donhangstmp = stocks.Where(x => x.shop_sanpham.hide == true || x.shop_sanpham.hide == null);
-                                            break;
-                                        case -3:
-                                            donhangstmp = stocks.Where(x => x.shop_sanpham.hide == false && x.shop_sanpham.shop_collection.Count > 0);
-                                            break;
-                                        default:
-                                            donhangstmp = stocks.Where(x => x.shop_sanpham.hide == false);
-                                            break;
-                                    }
-                                }
-                                if (stocksFilter == null)
-                                    stocksFilter = donhangstmp;
-                                else
-                                    stocksFilter = stocksFilter.Union(donhangstmp);
-                            }
+                            IQueryable<SoftBranchProductStock> donhangstmp = null;
+                            if (rootExist == false)
+                                donhangstmp = query.Where(x => x.shop_sanpham.SoftSupplier.VatId == item);
                             else
-                            {
-                                IQueryable<SoftBranchProductStock> donhangstmp = null;
-                                if (rootExist == false)
-                                    donhangstmp = query.Where(x => x.shop_sanpham.SoftSupplier.VatId == item);
-                                else
-                                    donhangstmp = stocks.Where(x => x.shop_sanpham.SoftSupplier.VatId == item);
-                                if (stocksFilter == null)
-                                    stocksFilter = donhangstmp;
-                                else
-                                    stocksFilter = stocksFilter.Union(donhangstmp);
-                            }
+                                donhangstmp = stocks.Where(x => x.shop_sanpham.SoftSupplier.VatId == item);
+                            if (stocksFilter == null)
+                                stocksFilter = donhangstmp;
+                            else
+                                stocksFilter = stocksFilter.Union(donhangstmp);
                         }
                         stocks = stocksFilter;
                         if (rootExist == false) rootExist = true;
@@ -507,6 +473,46 @@ namespace SoftBBM.Web.DAL.Repositories
                         stocks = stocksFilter;
                         if (rootExist == false) rootExist = true;
                         stocksFilter = null;
+                    }
+                    if (softStockSearchFilterVM.selectedProductOptionFilters > 0)
+                    {
+                        if (rootExist == false)
+                        {
+                            switch (softStockSearchFilterVM.selectedProductOptionFilters)
+                            {
+                                case 1:
+                                    stocks = query.Where(x => x.shop_sanpham.hide == true || x.shop_sanpham.hide == null);
+                                    break;
+                                case 3:
+                                    stocks = query.Where(x => x.shop_sanpham.hide == false && x.shop_sanpham.shop_collection.Count > 0);
+                                    break;
+                                case 4:
+                                    stocks = query.Where(x => x.shop_sanpham.hide == true && x.shop_sanpham.shop_collection.Count > 0);
+                                    break;
+                                default:
+                                    stocks = query.Where(x => x.shop_sanpham.hide == false);
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            switch (softStockSearchFilterVM.selectedProductOptionFilters)
+                            {
+                                case 1:
+                                    stocks = stocks.Where(x => x.shop_sanpham.hide == true || x.shop_sanpham.hide == null);
+                                    break;
+                                case 3:
+                                    stocks = stocks.Where(x => x.shop_sanpham.hide == false && x.shop_sanpham.shop_collection.Count > 0);
+                                    break;
+                                case 4:
+                                    stocks = stocks.Where(x => x.shop_sanpham.hide == true && x.shop_sanpham.shop_collection.Count > 0);
+                                    break;
+                                default:
+                                    stocks = stocks.Where(x => x.shop_sanpham.hide == false);
+                                    break;
+                            }
+                        }
+                        if (rootExist == false) rootExist = true;
                     }
                 }
                 else

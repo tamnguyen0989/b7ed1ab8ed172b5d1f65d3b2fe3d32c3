@@ -188,6 +188,7 @@ namespace SoftBBM.Web.ViewModels
         public Nullable<int> selectedStockFilterValue { get; set; }
         public Nullable<int> selectedStockTotalFilter { get; set; }
         public Nullable<int> selectedStockTotalFilterValue { get; set; }
+        public Nullable<int> selectedProductOptionFilters { get; set; }
         public string stringFilter { get; set; }
         public string sortBy { get; set; }
         public int channelId { get; set; }

@@ -42,6 +42,7 @@
             selectedStockTotalFilter: null,
             selectedStockTotalFilterValue: null,
             selectedHideStatusFilter: [],
+            selectedProductOptionFilters: null
         }
         $scope.filters.sortBy = '';
         $scope.productCodeSort = false;
@@ -62,6 +63,22 @@
             { Id: 0, Name: "Hiện SP", },
             { Id: 1, Name: "Ẩn SP", }
         ];
+        var productOp = [
+            { Id: 1, Name: 'SP đã ẩn', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null },
+            { Id: 2, Name: 'SP đã hiện', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null },
+            { Id: 3, Name: 'SP đã đăng', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null },
+            { Id: 4, Name: 'SP đã đăng + ẩn', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null }
+        ]
+        $scope.productOp = {
+            dataSource: productOp,
+            placeholder: "Chọn",
+            dataTextField: "Name",
+            dataValueField: "Id",
+            filter: "contains",
+            change: function (e) {
+                updateFilter();
+            }
+        };
 
         $scope.init = init;
         $scope.search = search;
@@ -122,6 +139,8 @@
                 $scope.filters.selectedStockTotalFilter = parseInt($scope.filters.selectedStockTotalFilter);
             if ($scope.filters.selectedStockTotalFilterValue)
                 $scope.filters.selectedStockTotalFilterValue = parseInt($scope.filters.selectedStockTotalFilterValue);
+            if ($scope.filters.selectedProductOptionFilters)
+                $scope.filters.selectedProductOptionFilters = parseInt($scope.filters.selectedProductOptionFilters);
             $scope.filters.channelId = $scope.selectedChannel.Id;
             apiService.post('/api/stock/search/', $scope.filters, function (result) {
                 $scope.stocks = result.data.Items;
@@ -147,8 +166,10 @@
                 selectedStockFilterValue: null,
                 selectedStockTotalFilter: null,
                 selectedStockTotalFilterValue: null,
+                selectedProductOptionFilters:null,
                 stringFilter: null,
                 selectedHideStatusFilter: [],
+                selectedProductOptionFilters: null
             }
             search();
         }
@@ -393,11 +414,7 @@
             apiService.get('api/supplier/getallvatstatus', null,
                 function (result) {
                     var vatStatuses = [];
-                    var invisible = { Id: -1, Name: 'SP đã ẩn', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
-                    var visible = { Id: -2, Name: 'SP đã hiện', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
-                    var posted = { Id: -3, Name: 'SP đã đăng', CreatedDate: null, CreatedBy: null, UpdatedDate: null, UpdatedBy: null, Status: null, Prioty: null };
-                    vatStatuses.push(invisible, visible, posted);
-                    vatStatuses = vatStatuses.concat(result.data);
+                    vatStatuses = result.data
                     $scope.vatStatusesOp = {
                         dataSource: vatStatuses,
                         placeholder: "Chọn",
@@ -433,6 +450,7 @@
         function resetStockTotalFilter() {
             $scope.filters.selectedStockTotalFilter = null;
             $scope.filters.selectedStockTotalFilterValue = null;
+            $scope.filters.selectedProductOptionFilters = null;
             $scope.filters.sortBy = '';
             $scope.productCodeSort = false;
             $scope.productNameSort = false;
@@ -615,6 +633,8 @@
                 $scope.filters.selectedStockTotalFilter = parseInt($scope.filters.selectedStockTotalFilter);
             if ($scope.filters.selectedStockTotalFilterValue)
                 $scope.filters.selectedStockTotalFilterValue = parseInt($scope.filters.selectedStockTotalFilterValue);
+            if ($scope.filters.selectedProductOptionFilters)
+                $scope.filters.selectedProductOptionFilters = parseInt($scope.filters.selectedProductOptionFilters);
             $scope.filters.channelId = $scope.selectedChannel.Id;
             apiService.post('/api/stock/search/', $scope.filters, function (result) {
                 $scope.stocks = result.data.Items;

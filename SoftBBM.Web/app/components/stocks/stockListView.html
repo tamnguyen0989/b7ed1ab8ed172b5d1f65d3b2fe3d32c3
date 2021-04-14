@@ -201,7 +201,26 @@
                                 <div class="col-xs-3" style="padding-right:5px;padding-left:0px">
                                     <div class="box box-solid box-primary" style="margin-bottom:10px">
                                         <div class="box-header">
-                                            <h4 class="box-title">SP đã đăng,VAT</h4><i style="float:right" class="fa fa-fw fa-calculator"></i>
+                                            <h4 class="box-title">Sản phẩm</h4><i style="float:right" class="fa fa-fw fa-cube"></i>
+                                        </div>
+                                        <!--/.box-header-->
+                                        <div class="box-body" style="padding-bottom:5px">
+                                            <select style="width: 100%; background:#fff;margin-bottom:5px"
+                                                    kendo-combobox
+                                                    k-options="productOp"
+                                                    k-ng-delay="productOp.dataSource"
+                                                    id="productOptionFilters"
+                                                    name="productOptionFilters"
+                                                    k-on-change="updateFilter()"
+                                                    ng-model="filters.selectedProductOptionFilters"></select>
+                                        </div>
+                                        <!--/.box-body-->
+                                    </div>
+                                </div>
+                                <div class="col-xs-3" style="padding-right:5px;padding-left:0px">
+                                    <div class="box box-solid box-primary" style="margin-bottom:10px">
+                                        <div class="box-header">
+                                            <h4 class="box-title">VAT</h4><i style="float:right" class="fa fa-fw fa-calculator"></i>
                                         </div>
                                         <!--/.box-header-->
                                         <div class="box-body" style="padding-bottom:5px">
