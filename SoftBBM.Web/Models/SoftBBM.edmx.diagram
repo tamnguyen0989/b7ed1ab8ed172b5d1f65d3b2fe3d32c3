@@ -157,25 +157,6 @@
         <AssociationConnector Association="SoftBBMModels.FK_SoftPointUpdateLogs_SoftPointUpdateLogs" />
         <EntityTypeShape EntityType="SoftBBMModels.donhang_ct" Width="1.5" PointX="20.875" PointY="9.125" />
         <AssociationConnector Association="SoftBBMModels.dh_sp" />
-        <EntityTypeShape EntityType="SoftBBMModels.SoftStockInDetail" Width="1.5" PointX="18.875" PointY="36.5" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockInDetails_shop_sanpham" />
-        <EntityTypeShape EntityType="SoftBBMModels.SoftStockIn" Width="1.5" PointX="21.625" PointY="35" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_ApplicationUsers" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_ApplicationUsers1" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftBranches" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftBranches1" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftBranches2" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftNotifications_SoftStockIns" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInCategories" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockInDetails_SoftStockIns" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentMethods" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentStatuses" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentTypes" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus1" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus2" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus3" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftSuppliers" />
         <EntityTypeShape EntityType="SoftBBMModels.donhang" Width="1.5" PointX="24.625" PointY="24.375" />
         <AssociationConnector Association="SoftBBMModels.FK_donhang_ApplicationUsers" />
         <AssociationConnector Association="SoftBBMModels.FK_donhang_ApplicationUsers1" />
@@ -193,6 +174,25 @@
         <AssociationConnector Association="SoftBBMModels.FK_SoftOrders_SoftOrderStatus" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftOfflineOrderWindow" Width="1.5" PointX="3" PointY="0.75" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftOfflineOrderWindow_ApplicationUsers" />
+        <EntityTypeShape EntityType="SoftBBMModels.SoftStockInDetail" Width="1.5" PointX="18.875" PointY="36.375" />
+        <EntityTypeShape EntityType="SoftBBMModels.SoftStockIn" Width="1.5" PointX="21.625" PointY="35" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_ApplicationUsers" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_ApplicationUsers1" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockInDetails_shop_sanpham" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftBranches" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftBranches1" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftBranches2" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftNotifications_SoftStockIns" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInCategories" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockInDetails_SoftStockIns" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentMethods" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentStatuses" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentTypes" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus1" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus2" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus3" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftSuppliers" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

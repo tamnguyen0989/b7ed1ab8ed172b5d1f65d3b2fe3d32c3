@@ -19,6 +19,7 @@ namespace SoftBBM.Web.Models
         public Nullable<int> PriceNew { get; set; }
         public Nullable<int> PriceRef { get; set; }
         public Nullable<double> Quantity { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
     
         public virtual shop_sanpham shop_sanpham { get; set; }
         public virtual SoftStockIn SoftStockIn { get; set; }

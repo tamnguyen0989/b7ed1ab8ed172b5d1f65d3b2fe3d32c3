@@ -64,6 +64,7 @@ namespace SoftBBM.Web.ViewModels
         public Nullable<float> Quantity { get; set; }
         public string SupplierName { get; set; }
         public double StockTotal { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
 
         public IEnumerable<ShopImageViewModel> shop_image { get; set; }
         public ShopSanPhamViewModel shop_sanpham { get; set; }

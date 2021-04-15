@@ -142,6 +142,7 @@ namespace SoftBBM.Web.api
                     SoftStockInDetail softStockInDetail = new SoftStockInDetail();
                     softStockInDetail.UpdateSoftStockInDetail(item);
                     softStockInDetail.StockInId = softStockIn.Id;
+                    softStockInDetail.CreatedDate = DateTime.Now;
                     _softStockInDetailRepository.Add(softStockInDetail);
                     //Update Product, Stock
 
@@ -243,6 +244,7 @@ namespace SoftBBM.Web.api
                     SoftStockInDetail softStockInDetail = new SoftStockInDetail();
                     softStockInDetail.UpdateSoftStockInDetail(item, "02");
                     softStockInDetail.StockInId = softStockIn.Id;
+                    softStockInDetail.CreatedDate = DateTime.Now;
                     _softStockInDetailRepository.Add(softStockInDetail);
 
                     var ctProduct = _shopSanPhamRepository.GetSingleById(item.id);
@@ -673,6 +675,7 @@ namespace SoftBBM.Web.api
                     SoftStockInDetail softStockInDetail = new SoftStockInDetail();
                     softStockInDetail.UpdateSoftStockInDetail(item);
                     softStockInDetail.StockInId = softStockIn.Id;
+                    softStockInDetail.CreatedDate = DateTime.Now;
                     _softStockInDetailRepository.Add(softStockInDetail);
 
                     var productInBranch = _softStockRepository.GetSingleByCondition(x => x.BranchId == softStockInVm.BranchId && x.ProductId == item.id);
@@ -722,6 +725,7 @@ namespace SoftBBM.Web.api
                     SoftStockInDetail softStockInDetail = new SoftStockInDetail();
                     softStockInDetail.UpdateSoftStockInDetail(item);
                     softStockInDetail.StockInId = softStockInVm.Id;
+                    softStockInDetail.CreatedDate = DateTime.Now;
                     _softStockInDetailRepository.Add(softStockInDetail);
                     //Update Product, Stock
                     var shopSanPham = _shopSanPhamRepository.GetSingleById(item.id);
@@ -844,6 +848,7 @@ namespace SoftBBM.Web.api
                     else
                         softStockInDetail.UpdateSoftStockInDetail(item, "02");
                     softStockInDetail.StockInId = softStockInVm.Id;
+                    softStockInDetail.CreatedDate = DateTime.Now;
                     _softStockInDetailRepository.Add(softStockInDetail);
                 }
                 _unitOfWork.Commit();
@@ -914,6 +919,7 @@ namespace SoftBBM.Web.api
                         fromSuppliers += ctProduct.SoftSupplier.Name + "|";
                     }
                     softStockInDetail.StockInId = softStockIn.Id;
+                    softStockInDetail.CreatedDate = DateTime.Now;
                     _softStockInDetailRepository.Add(softStockInDetail);
                 }
                 _unitOfWork.Commit();
@@ -993,6 +999,7 @@ namespace SoftBBM.Web.api
                     softStockInDetail.Quantity = item.Quantity;
                     softStockInDetail.PriceNew = item.PriceNew;
                     softStockInDetail.StockInId = softStockIn.Id;
+                    softStockInDetail.CreatedDate = DateTime.Now;
                     _softStockInDetailRepository.Add(softStockInDetail);
                 }
                 _unitOfWork.Commit();
@@ -1065,6 +1072,7 @@ namespace SoftBBM.Web.api
                     item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1117,6 +1125,7 @@ namespace SoftBBM.Web.api
                     item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1144,6 +1153,7 @@ namespace SoftBBM.Web.api
                     item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1169,6 +1179,7 @@ namespace SoftBBM.Web.api
                     var shopsanpham = _shopSanPhamRepository.GetSingleById(item.id);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1196,6 +1207,7 @@ namespace SoftBBM.Web.api
                     item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1223,6 +1235,7 @@ namespace SoftBBM.Web.api
                     item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1250,6 +1263,7 @@ namespace SoftBBM.Web.api
                     item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1277,6 +1291,7 @@ namespace SoftBBM.Web.api
                     item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1304,6 +1319,7 @@ namespace SoftBBM.Web.api
                     item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1331,6 +1347,7 @@ namespace SoftBBM.Web.api
                     item.StockTotal = _softStockRepository.GetStockTotal(item.id, branchId);
                     item.PriceAvg = shopsanpham.PriceAvg == null ? 0 : shopsanpham.PriceAvg.Value;
                 }
+                responsedata.SoftStockInDetails = responsedata.SoftStockInDetails.OrderBy(x => x.CreatedDate);
                 response = request.CreateResponse(HttpStatusCode.OK, responsedata);
                 return response;
             }
@@ -1382,6 +1399,7 @@ namespace SoftBBM.Web.api
                     SoftStockInDetail softStockInDetail = new SoftStockInDetail();
                     softStockInDetail.UpdateSoftStockInDetail(item);
                     softStockInDetail.StockInId = softStockInVm.Id;
+                    softStockInDetail.CreatedDate = DateTime.Now;
                     _softStockInDetailRepository.Add(softStockInDetail);
                 }
                 _unitOfWork.Commit();
@@ -2256,7 +2274,7 @@ namespace SoftBBM.Web.api
             List<ShopSanPhamSearchBookStampViewModel> shopSanPhamSearchBookStamps = new List<ShopSanPhamSearchBookStampViewModel>();
             try
             {
-                var softStockInDetails = _softStockInDetailRepository.GetMulti(x => x.StockInId == stockinId);
+                var softStockInDetails = _softStockInDetailRepository.GetMulti(x => x.StockInId == stockinId).OrderBy(x=>x.CreatedDate);
                 if (softStockInDetails.Count() > 0)
                 {
                     foreach (var item in softStockInDetails.ToList())
@@ -2291,7 +2309,7 @@ namespace SoftBBM.Web.api
                 var stockin = _softStockInRepository.GetSingleById(stockinId);
                 var supplier = _softSupplierRepository.GetSingleById(stockin.SupplierId.Value);
                 var supplierVM = Mapper.Map<SoftSupplier, SoftSupplierViewModel>(supplier);
-                var bookDetails = _softStockInDetailRepository.GetMulti(x => x.StockInId == stockinId);
+                var bookDetails = _softStockInDetailRepository.GetMulti(x => x.StockInId == stockinId).OrderBy(x=>x.CreatedDate);
                 var bookDetailsVM = Mapper.Map<IEnumerable<SoftStockInDetail>, IEnumerable<SoftStockInDetailViewModel>>(bookDetails);
                 bookPrintVm.BookDetails = bookDetailsVM;
                 bookPrintVm.Supplier = supplierVM;
@@ -2335,7 +2353,7 @@ namespace SoftBBM.Web.api
             var stockin = _softStockInRepository.GetSingleById(stockinId);
             var user = _applicationUserRepository.GetSingleById(stockin.CreatedBy.Value);
             var supplier = _softSupplierRepository.GetSingleById(stockin.SupplierId.Value);
-            var bookDetails = _softStockInDetailRepository.GetMulti(x => x.StockInId == stockinId);
+            var bookDetails = _softStockInDetailRepository.GetMulti(x => x.StockInId == stockinId).OrderBy(x=>x.CreatedDate);
             var bookDetailsVM = Mapper.Map<IEnumerable<SoftStockInDetail>, IEnumerable<BookExcelViewModel>>(bookDetails);
 
             using (var package = new ExcelPackage())

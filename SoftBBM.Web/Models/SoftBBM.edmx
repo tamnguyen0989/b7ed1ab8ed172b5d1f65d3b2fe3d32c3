@@ -895,6 +895,7 @@
           <Property Name="PriceNew" Type="int" />
           <Property Name="PriceRef" Type="int" />
           <Property Name="Quantity" Type="float" />
+          <Property Name="CreatedDate" Type="datetime" />
         </EntityType>
         <EntityType Name="SoftStockInPaymentMethods">
           <Key>
@@ -4292,11 +4293,60 @@
             <End Role="shop_bienthe" EntitySet="shop_bienthe" />
             <End Role="donhang_ct" EntitySet="donhang_ct" />
           </AssociationSet>
-          <EntitySet Name="SoftStockInDetails" EntityType="SoftBBMModels.SoftStockInDetail" />
-          <AssociationSet Name="FK_SoftStockInDetails_shop_sanpham" Association="SoftBBMModels.FK_SoftStockInDetails_shop_sanpham">
-            <End Role="shop_sanpham" EntitySet="shop_sanpham" />
-            <End Role="SoftStockInDetail" EntitySet="SoftStockInDetails" />
+          <EntitySet Name="donhangs" EntityType="SoftBBMModels.donhang" />
+          <AssociationSet Name="FK_donhang_ApplicationUsers" Association="SoftBBMModels.FK_donhang_ApplicationUsers">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="donhang" EntitySet="donhangs" />
           </AssociationSet>
+          <AssociationSet Name="FK_donhang_ApplicationUsers1" Association="SoftBBMModels.FK_donhang_ApplicationUsers1">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_donhang_ApplicationUsers2" Association="SoftBBMModels.FK_donhang_ApplicationUsers2">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="dh_ctDH" Association="SoftBBMModels.dh_ctDH">
+            <End Role="donhang" EntitySet="donhangs" />
+            <End Role="donhang_ct" EntitySet="donhang_ct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_donhang_SoftBranches" Association="SoftBBMModels.FK_donhang_SoftBranches">
+            <End Role="SoftBranch" EntitySet="SoftBranches" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_donhang_SoftChannels" Association="SoftBBMModels.FK_donhang_SoftChannels">
+            <End Role="SoftChannel" EntitySet="SoftChannels" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KHHH_DH" Association="SoftBBMModels.FK_KHHH_DH">
+            <End Role="khachhang" EntitySet="khachhangs" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SoftPointUpdateLogs_donhang" Association="SoftBBMModels.FK_SoftPointUpdateLogs_donhang">
+            <End Role="donhang" EntitySet="donhangs" />
+            <End Role="SoftPointUpdateLog" EntitySet="SoftPointUpdateLogs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vanglai_dh" Association="SoftBBMModels.fk_vanglai_dh">
+            <End Role="khachhang_vanglai" EntitySet="khachhang_vanglai" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <EntitySet Name="SystemLogs" EntityType="SoftBBMModels.SystemLog" />
+          <EntitySet Name="donhangStatus" EntityType="SoftBBMModels.donhangStatu" />
+          <AssociationSet Name="FK_donhang_donhangStatus" Association="SoftBBMModels.FK_donhang_donhangStatus">
+            <End Role="donhangStatu" EntitySet="donhangStatus" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <EntitySet Name="SoftOrderStatus" EntityType="SoftBBMModels.SoftOrderStatu" />
+          <AssociationSet Name="FK_SoftOrders_SoftOrderStatus" Association="SoftBBMModels.FK_SoftOrders_SoftOrderStatus">
+            <End Role="SoftOrderStatu" EntitySet="SoftOrderStatus" />
+            <End Role="SoftOrder" EntitySet="SoftOrders" />
+          </AssociationSet>
+          <EntitySet Name="SoftOfflineOrderWindows" EntityType="SoftBBMModels.SoftOfflineOrderWindow" />
+          <AssociationSet Name="FK_SoftOfflineOrderWindow_ApplicationUsers" Association="SoftBBMModels.FK_SoftOfflineOrderWindow_ApplicationUsers">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="SoftOfflineOrderWindow" EntitySet="SoftOfflineOrderWindows" />
+          </AssociationSet>
+          <EntitySet Name="SoftStockInDetails" EntityType="SoftBBMModels.SoftStockInDetail" />
           <EntitySet Name="SoftStockIns" EntityType="SoftBBMModels.SoftStockIn" />
           <AssociationSet Name="FK_SoftStockIns_ApplicationUsers" Association="SoftBBMModels.FK_SoftStockIns_ApplicationUsers">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
@@ -4305,6 +4355,10 @@
           <AssociationSet Name="FK_SoftStockIns_ApplicationUsers1" Association="SoftBBMModels.FK_SoftStockIns_ApplicationUsers1">
             <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
             <End Role="SoftStockIn" EntitySet="SoftStockIns" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SoftStockInDetails_shop_sanpham" Association="SoftBBMModels.FK_SoftStockInDetails_shop_sanpham">
+            <End Role="shop_sanpham" EntitySet="shop_sanpham" />
+            <End Role="SoftStockInDetail" EntitySet="SoftStockInDetails" />
           </AssociationSet>
           <AssociationSet Name="FK_SoftStockIns_SoftBranches" Association="SoftBBMModels.FK_SoftStockIns_SoftBranches">
             <End Role="SoftBranch" EntitySet="SoftBranches" />
@@ -4361,59 +4415,6 @@
           <AssociationSet Name="FK_SoftStockIns_SoftSuppliers" Association="SoftBBMModels.FK_SoftStockIns_SoftSuppliers">
             <End Role="SoftSupplier" EntitySet="SoftSuppliers" />
             <End Role="SoftStockIn" EntitySet="SoftStockIns" />
-          </AssociationSet>
-          <EntitySet Name="donhangs" EntityType="SoftBBMModels.donhang" />
-          <AssociationSet Name="FK_donhang_ApplicationUsers" Association="SoftBBMModels.FK_donhang_ApplicationUsers">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_donhang_ApplicationUsers1" Association="SoftBBMModels.FK_donhang_ApplicationUsers1">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_donhang_ApplicationUsers2" Association="SoftBBMModels.FK_donhang_ApplicationUsers2">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="dh_ctDH" Association="SoftBBMModels.dh_ctDH">
-            <End Role="donhang" EntitySet="donhangs" />
-            <End Role="donhang_ct" EntitySet="donhang_ct" />
-          </AssociationSet>
-          <AssociationSet Name="FK_donhang_SoftBranches" Association="SoftBBMModels.FK_donhang_SoftBranches">
-            <End Role="SoftBranch" EntitySet="SoftBranches" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_donhang_SoftChannels" Association="SoftBBMModels.FK_donhang_SoftChannels">
-            <End Role="SoftChannel" EntitySet="SoftChannels" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KHHH_DH" Association="SoftBBMModels.FK_KHHH_DH">
-            <End Role="khachhang" EntitySet="khachhangs" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SoftPointUpdateLogs_donhang" Association="SoftBBMModels.FK_SoftPointUpdateLogs_donhang">
-            <End Role="donhang" EntitySet="donhangs" />
-            <End Role="SoftPointUpdateLog" EntitySet="SoftPointUpdateLogs" />
-          </AssociationSet>
-          <AssociationSet Name="fk_vanglai_dh" Association="SoftBBMModels.fk_vanglai_dh">
-            <End Role="khachhang_vanglai" EntitySet="khachhang_vanglai" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <EntitySet Name="SystemLogs" EntityType="SoftBBMModels.SystemLog" />
-          <EntitySet Name="donhangStatus" EntityType="SoftBBMModels.donhangStatu" />
-          <AssociationSet Name="FK_donhang_donhangStatus" Association="SoftBBMModels.FK_donhang_donhangStatus">
-            <End Role="donhangStatu" EntitySet="donhangStatus" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <EntitySet Name="SoftOrderStatus" EntityType="SoftBBMModels.SoftOrderStatu" />
-          <AssociationSet Name="FK_SoftOrders_SoftOrderStatus" Association="SoftBBMModels.FK_SoftOrders_SoftOrderStatus">
-            <End Role="SoftOrderStatu" EntitySet="SoftOrderStatus" />
-            <End Role="SoftOrder" EntitySet="SoftOrders" />
-          </AssociationSet>
-          <EntitySet Name="SoftOfflineOrderWindows" EntityType="SoftBBMModels.SoftOfflineOrderWindow" />
-          <AssociationSet Name="FK_SoftOfflineOrderWindow_ApplicationUsers" Association="SoftBBMModels.FK_SoftOfflineOrderWindow_ApplicationUsers">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="SoftOfflineOrderWindow" EntitySet="SoftOfflineOrderWindows" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="spTB_DangNhap_TruyVanTheoTenDangNhap_Result">
@@ -4554,12 +4555,12 @@
           <NavigationProperty Name="shop_sanphamLogs" Relationship="SoftBBMModels.FK_shop_sanphamLogs_ApplicationUsers" FromRole="ApplicationUser" ToRole="shop_sanphamLogs" />
           <NavigationProperty Name="shop_sanpham" Relationship="SoftBBMModels.FK_shop_sanpham_ApplicationUsers" FromRole="ApplicationUser" ToRole="shop_sanpham" />
           <NavigationProperty Name="shop_sanpham1" Relationship="SoftBBMModels.FK_shop_sanpham_ApplicationUsers1" FromRole="ApplicationUser" ToRole="shop_sanpham" />
-          <NavigationProperty Name="SoftStockIns" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers" FromRole="ApplicationUser" ToRole="SoftStockIn" />
-          <NavigationProperty Name="SoftStockIns1" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers1" FromRole="ApplicationUser" ToRole="SoftStockIn" />
           <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers" FromRole="ApplicationUser" ToRole="donhang" />
           <NavigationProperty Name="donhangs1" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers1" FromRole="ApplicationUser" ToRole="donhang" />
           <NavigationProperty Name="donhangs2" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers2" FromRole="ApplicationUser" ToRole="donhang" />
           <NavigationProperty Name="SoftOfflineOrderWindows" Relationship="SoftBBMModels.FK_SoftOfflineOrderWindow_ApplicationUsers" FromRole="ApplicationUser" ToRole="SoftOfflineOrderWindow" />
+          <NavigationProperty Name="SoftStockIns" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers" FromRole="ApplicationUser" ToRole="SoftStockIn" />
+          <NavigationProperty Name="SoftStockIns1" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers1" FromRole="ApplicationUser" ToRole="SoftStockIn" />
           </EntityType>
         <Association Name="FK_ApplicationUserGroups_ApplicationUsers">
           <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -4794,10 +4795,10 @@
           <NavigationProperty Name="SoftReturnSuppliers" Relationship="SoftBBMModels.FK_SoftReturnSuppliers_SoftBranches" FromRole="SoftBranch" ToRole="SoftReturnSupplier" />
           <Property Name="Priority" Type="Int32" />
           <NavigationProperty Name="shop_sanphamLogs" Relationship="SoftBBMModels.FK_shop_sanphamLogs_SoftBranches" FromRole="SoftBranch" ToRole="shop_sanphamLogs" />
+          <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_SoftBranches" FromRole="SoftBranch" ToRole="donhang" />
           <NavigationProperty Name="SoftStockIns" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches" FromRole="SoftBranch" ToRole="SoftStockIn" />
           <NavigationProperty Name="SoftStockIns1" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches1" FromRole="SoftBranch" ToRole="SoftStockIn" />
           <NavigationProperty Name="SoftStockIns2" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches2" FromRole="SoftBranch" ToRole="SoftStockIn" />
-          <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_SoftBranches" FromRole="SoftBranch" ToRole="donhang" />
         </EntityType>
         <EntityType Name="SoftBranchProductStock">
           <Key>
@@ -5758,268 +5759,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="SoftStockInDetail">
-          <Key>
-            <PropertyRef Name="StockInId" />
-            <PropertyRef Name="ProductId" />
-          </Key>
-          <Property Name="StockInId" Type="Int32" Nullable="false" />
-          <Property Name="ProductId" Type="Int32" Nullable="false" />
-          <Property Name="PriceNew" Type="Int32" />
-          <Property Name="PriceRef" Type="Int32" />
-          <Property Name="Quantity" Type="Double" />
-          <NavigationProperty Name="shop_sanpham" Relationship="SoftBBMModels.FK_SoftStockInDetails_shop_sanpham" FromRole="SoftStockInDetail" ToRole="shop_sanpham" />
-          <NavigationProperty Name="SoftStockIn" Relationship="SoftBBMModels.FK_SoftStockInDetails_SoftStockIns" FromRole="SoftStockInDetail" ToRole="SoftStockIn" />
-        </EntityType>
-        <Association Name="FK_SoftStockInDetails_shop_sanpham">
-          <End Type="SoftBBMModels.shop_sanpham" Role="shop_sanpham" Multiplicity="1" />
-          <End Type="SoftBBMModels.SoftStockInDetail" Role="SoftStockInDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="shop_sanpham">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="SoftStockInDetail">
-              <PropertyRef Name="ProductId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="SoftStockIn">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="BranchId" Type="Int32" />
-          <Property Name="SupplierId" Type="Int32" />
-          <Property Name="Total" Type="Int64" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdatedBy" Type="Int32" />
-          <Property Name="StatusId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="FromBranchId" Type="Int32" />
-          <Property Name="ToBranchId" Type="Int32" />
-          <Property Name="FromBranchStatusId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="ToBranchStatusId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="SupplierStatusId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
-          <Property Name="StockInDate" Type="DateTime" Precision="3" />
-          <Property Name="StockOutDate" Type="DateTime" Precision="3" />
-          <Property Name="PaymentTypeId" Type="Int32" />
-          <Property Name="PaymentMethodId" Type="Int32" />
-          <Property Name="PaidDate" Type="DateTime" Precision="3" />
-          <Property Name="PaymentStatusId" Type="Int32" />
-          <Property Name="FromSuppliers" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="TotalQuantity" Type="Double" />
-          <NavigationProperty Name="ApplicationUser" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers" FromRole="SoftStockIn" ToRole="ApplicationUser" />
-          <NavigationProperty Name="ApplicationUser1" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers1" FromRole="SoftStockIn" ToRole="ApplicationUser" />
-          <NavigationProperty Name="SoftBranch" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches" FromRole="SoftStockIn" ToRole="SoftBranch" />
-          <NavigationProperty Name="SoftBranch1" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches1" FromRole="SoftStockIn" ToRole="SoftBranch" />
-          <NavigationProperty Name="SoftBranch2" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches2" FromRole="SoftStockIn" ToRole="SoftBranch" />
-          <NavigationProperty Name="SoftNotifications" Relationship="SoftBBMModels.FK_SoftNotifications_SoftStockIns" FromRole="SoftStockIn" ToRole="SoftNotification" />
-          <NavigationProperty Name="SoftStockInCategory" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInCategories" FromRole="SoftStockIn" ToRole="SoftStockInCategory" />
-          <NavigationProperty Name="SoftStockInDetails" Relationship="SoftBBMModels.FK_SoftStockInDetails_SoftStockIns" FromRole="SoftStockIn" ToRole="SoftStockInDetail" />
-          <NavigationProperty Name="SoftStockInPaymentMethod" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentMethods" FromRole="SoftStockIn" ToRole="SoftStockInPaymentMethod" />
-          <NavigationProperty Name="SoftStockInPaymentStatus" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentStatuses" FromRole="SoftStockIn" ToRole="SoftStockInPaymentStatus" />
-          <NavigationProperty Name="SoftStockInPaymentType" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentTypes" FromRole="SoftStockIn" ToRole="SoftStockInPaymentType" />
-          <NavigationProperty Name="SoftStockInStatu" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus" FromRole="SoftStockIn" ToRole="SoftStockInStatu" />
-          <NavigationProperty Name="SoftStockInStatu1" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus1" FromRole="SoftStockIn" ToRole="SoftStockInStatu" />
-          <NavigationProperty Name="SoftStockInStatu2" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus2" FromRole="SoftStockIn" ToRole="SoftStockInStatu" />
-          <NavigationProperty Name="SoftStockInStatu3" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus3" FromRole="SoftStockIn" ToRole="SoftStockInStatu" />
-          <NavigationProperty Name="SoftSupplier" Relationship="SoftBBMModels.FK_SoftStockIns_SoftSuppliers" FromRole="SoftStockIn" ToRole="SoftSupplier" />
-        </EntityType>
-        <Association Name="FK_SoftStockIns_ApplicationUsers">
-          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="CreatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_ApplicationUsers1">
-          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="UpdatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftBranches">
-          <End Type="SoftBBMModels.SoftBranch" Role="SoftBranch" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftBranch">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="BranchId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftBranches1">
-          <End Type="SoftBBMModels.SoftBranch" Role="SoftBranch" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftBranch">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="FromBranchId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftBranches2">
-          <End Type="SoftBBMModels.SoftBranch" Role="SoftBranch" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftBranch">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="ToBranchId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftNotifications_SoftStockIns">
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftNotification" Role="SoftNotification" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockIn">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftNotification">
-              <PropertyRef Name="StockinId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftStockInCategories">
-          <End Type="SoftBBMModels.SoftStockInCategory" Role="SoftStockInCategory" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockInCategory">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="CategoryId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockInDetails_SoftStockIns">
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="1" />
-          <End Type="SoftBBMModels.SoftStockInDetail" Role="SoftStockInDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockIn">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockInDetail">
-              <PropertyRef Name="StockInId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftStockInPaymentMethods">
-          <End Type="SoftBBMModels.SoftStockInPaymentMethod" Role="SoftStockInPaymentMethod" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockInPaymentMethod">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="PaymentMethodId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftStockInPaymentStatuses">
-          <End Type="SoftBBMModels.SoftStockInPaymentStatus" Role="SoftStockInPaymentStatus" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockInPaymentStatus">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="PaymentStatusId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftStockInPaymentTypes">
-          <End Type="SoftBBMModels.SoftStockInPaymentType" Role="SoftStockInPaymentType" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockInPaymentType">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="PaymentTypeId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftStockInStatus">
-          <End Type="SoftBBMModels.SoftStockInStatu" Role="SoftStockInStatu" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockInStatu">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="StatusId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftStockInStatus1">
-          <End Type="SoftBBMModels.SoftStockInStatu" Role="SoftStockInStatu" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockInStatu">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="FromBranchStatusId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftStockInStatus2">
-          <End Type="SoftBBMModels.SoftStockInStatu" Role="SoftStockInStatu" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockInStatu">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="ToBranchStatusId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftStockInStatus3">
-          <End Type="SoftBBMModels.SoftStockInStatu" Role="SoftStockInStatu" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftStockInStatu">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="SupplierStatusId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftStockIns_SoftSuppliers">
-          <End Type="SoftBBMModels.SoftSupplier" Role="SoftSupplier" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftSupplier">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="SoftStockIn">
-              <PropertyRef Name="SupplierId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="donhang">
           <Key>
             <PropertyRef Name="id" />
@@ -6271,6 +6010,269 @@
             </Principal>
             <Dependent Role="SoftOfflineOrderWindow">
               <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="SoftStockInDetail">
+          <Key>
+            <PropertyRef Name="StockInId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="StockInId" Type="Int32" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="PriceNew" Type="Int32" />
+          <Property Name="PriceRef" Type="Int32" />
+          <Property Name="Quantity" Type="Double" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="shop_sanpham" Relationship="SoftBBMModels.FK_SoftStockInDetails_shop_sanpham" FromRole="SoftStockInDetail" ToRole="shop_sanpham" />
+          <NavigationProperty Name="SoftStockIn" Relationship="SoftBBMModels.FK_SoftStockInDetails_SoftStockIns" FromRole="SoftStockInDetail" ToRole="SoftStockIn" />
+        </EntityType>
+        <EntityType Name="SoftStockIn">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BranchId" Type="Int32" />
+          <Property Name="SupplierId" Type="Int32" />
+          <Property Name="Total" Type="Int64" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="StatusId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="FromBranchId" Type="Int32" />
+          <Property Name="ToBranchId" Type="Int32" />
+          <Property Name="FromBranchStatusId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="ToBranchStatusId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="SupplierStatusId" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="StockInDate" Type="DateTime" Precision="3" />
+          <Property Name="StockOutDate" Type="DateTime" Precision="3" />
+          <Property Name="PaymentTypeId" Type="Int32" />
+          <Property Name="PaymentMethodId" Type="Int32" />
+          <Property Name="PaidDate" Type="DateTime" Precision="3" />
+          <Property Name="PaymentStatusId" Type="Int32" />
+          <Property Name="FromSuppliers" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TotalQuantity" Type="Double" />
+          <NavigationProperty Name="ApplicationUser" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers" FromRole="SoftStockIn" ToRole="ApplicationUser" />
+          <NavigationProperty Name="ApplicationUser1" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers1" FromRole="SoftStockIn" ToRole="ApplicationUser" />
+          <NavigationProperty Name="SoftBranch" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches" FromRole="SoftStockIn" ToRole="SoftBranch" />
+          <NavigationProperty Name="SoftBranch1" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches1" FromRole="SoftStockIn" ToRole="SoftBranch" />
+          <NavigationProperty Name="SoftBranch2" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches2" FromRole="SoftStockIn" ToRole="SoftBranch" />
+          <NavigationProperty Name="SoftNotifications" Relationship="SoftBBMModels.FK_SoftNotifications_SoftStockIns" FromRole="SoftStockIn" ToRole="SoftNotification" />
+          <NavigationProperty Name="SoftStockInCategory" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInCategories" FromRole="SoftStockIn" ToRole="SoftStockInCategory" />
+          <NavigationProperty Name="SoftStockInDetails" Relationship="SoftBBMModels.FK_SoftStockInDetails_SoftStockIns" FromRole="SoftStockIn" ToRole="SoftStockInDetail" />
+          <NavigationProperty Name="SoftStockInPaymentMethod" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentMethods" FromRole="SoftStockIn" ToRole="SoftStockInPaymentMethod" />
+          <NavigationProperty Name="SoftStockInPaymentStatus" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentStatuses" FromRole="SoftStockIn" ToRole="SoftStockInPaymentStatus" />
+          <NavigationProperty Name="SoftStockInPaymentType" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInPaymentTypes" FromRole="SoftStockIn" ToRole="SoftStockInPaymentType" />
+          <NavigationProperty Name="SoftStockInStatu" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus" FromRole="SoftStockIn" ToRole="SoftStockInStatu" />
+          <NavigationProperty Name="SoftStockInStatu1" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus1" FromRole="SoftStockIn" ToRole="SoftStockInStatu" />
+          <NavigationProperty Name="SoftStockInStatu2" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus2" FromRole="SoftStockIn" ToRole="SoftStockInStatu" />
+          <NavigationProperty Name="SoftStockInStatu3" Relationship="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus3" FromRole="SoftStockIn" ToRole="SoftStockInStatu" />
+          <NavigationProperty Name="SoftSupplier" Relationship="SoftBBMModels.FK_SoftStockIns_SoftSuppliers" FromRole="SoftStockIn" ToRole="SoftSupplier" />
+        </EntityType>
+        <Association Name="FK_SoftStockIns_ApplicationUsers">
+          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_ApplicationUsers1">
+          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockInDetails_shop_sanpham">
+          <End Type="SoftBBMModels.shop_sanpham" Role="shop_sanpham" Multiplicity="1" />
+          <End Type="SoftBBMModels.SoftStockInDetail" Role="SoftStockInDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shop_sanpham">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SoftStockInDetail">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftBranches">
+          <End Type="SoftBBMModels.SoftBranch" Role="SoftBranch" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftBranch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="BranchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftBranches1">
+          <End Type="SoftBBMModels.SoftBranch" Role="SoftBranch" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftBranch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="FromBranchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftBranches2">
+          <End Type="SoftBBMModels.SoftBranch" Role="SoftBranch" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftBranch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="ToBranchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftNotifications_SoftStockIns">
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftNotification" Role="SoftNotification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockIn">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftNotification">
+              <PropertyRef Name="StockinId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftStockInCategories">
+          <End Type="SoftBBMModels.SoftStockInCategory" Role="SoftStockInCategory" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockInCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockInDetails_SoftStockIns">
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="1" />
+          <End Type="SoftBBMModels.SoftStockInDetail" Role="SoftStockInDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockIn">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockInDetail">
+              <PropertyRef Name="StockInId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftStockInPaymentMethods">
+          <End Type="SoftBBMModels.SoftStockInPaymentMethod" Role="SoftStockInPaymentMethod" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockInPaymentMethod">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftStockInPaymentStatuses">
+          <End Type="SoftBBMModels.SoftStockInPaymentStatus" Role="SoftStockInPaymentStatus" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockInPaymentStatus">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="PaymentStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftStockInPaymentTypes">
+          <End Type="SoftBBMModels.SoftStockInPaymentType" Role="SoftStockInPaymentType" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockInPaymentType">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="PaymentTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftStockInStatus">
+          <End Type="SoftBBMModels.SoftStockInStatu" Role="SoftStockInStatu" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockInStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftStockInStatus1">
+          <End Type="SoftBBMModels.SoftStockInStatu" Role="SoftStockInStatu" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockInStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="FromBranchStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftStockInStatus2">
+          <End Type="SoftBBMModels.SoftStockInStatu" Role="SoftStockInStatu" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockInStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="ToBranchStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftStockInStatus3">
+          <End Type="SoftBBMModels.SoftStockInStatu" Role="SoftStockInStatu" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftStockInStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="SupplierStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftStockIns_SoftSuppliers">
+          <End Type="SoftBBMModels.SoftSupplier" Role="SoftSupplier" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftStockIn" Role="SoftStockIn" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftSupplier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SoftStockIn">
+              <PropertyRef Name="SupplierId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7409,47 +7411,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="SoftStockInDetails">
-            <EntityTypeMapping TypeName="SoftBBMModels.SoftStockInDetail">
-              <MappingFragment StoreEntitySet="SoftStockInDetails">
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="PriceRef" ColumnName="PriceRef" />
-                <ScalarProperty Name="PriceNew" ColumnName="PriceNew" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="StockInId" ColumnName="StockInId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="SoftStockIns">
-            <EntityTypeMapping TypeName="SoftBBMModels.SoftStockIn">
-              <MappingFragment StoreEntitySet="SoftStockIns">
-                <ScalarProperty Name="TotalQuantity" ColumnName="TotalQuantity" />
-                <ScalarProperty Name="FromSuppliers" ColumnName="FromSuppliers" />
-                <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />
-                <ScalarProperty Name="PaidDate" ColumnName="PaidDate" />
-                <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
-                <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
-                <ScalarProperty Name="StockOutDate" ColumnName="StockOutDate" />
-                <ScalarProperty Name="StockInDate" ColumnName="StockInDate" />
-                <ScalarProperty Name="SupplierStatusId" ColumnName="SupplierStatusId" />
-                <ScalarProperty Name="ToBranchStatusId" ColumnName="ToBranchStatusId" />
-                <ScalarProperty Name="FromBranchStatusId" ColumnName="FromBranchStatusId" />
-                <ScalarProperty Name="ToBranchId" ColumnName="ToBranchId" />
-                <ScalarProperty Name="FromBranchId" ColumnName="FromBranchId" />
-                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
-                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="donhangs">
             <EntityTypeMapping TypeName="SoftBBMModels.donhang">
               <MappingFragment StoreEntitySet="donhang">
@@ -7548,6 +7509,48 @@
               <MappingFragment StoreEntitySet="SoftOfflineOrderWindow">
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SoftStockInDetails">
+            <EntityTypeMapping TypeName="SoftBBMModels.SoftStockInDetail">
+              <MappingFragment StoreEntitySet="SoftStockInDetails">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PriceRef" ColumnName="PriceRef" />
+                <ScalarProperty Name="PriceNew" ColumnName="PriceNew" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="StockInId" ColumnName="StockInId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SoftStockIns">
+            <EntityTypeMapping TypeName="SoftBBMModels.SoftStockIn">
+              <MappingFragment StoreEntitySet="SoftStockIns">
+                <ScalarProperty Name="TotalQuantity" ColumnName="TotalQuantity" />
+                <ScalarProperty Name="FromSuppliers" ColumnName="FromSuppliers" />
+                <ScalarProperty Name="PaymentStatusId" ColumnName="PaymentStatusId" />
+                <ScalarProperty Name="PaidDate" ColumnName="PaidDate" />
+                <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
+                <ScalarProperty Name="PaymentTypeId" ColumnName="PaymentTypeId" />
+                <ScalarProperty Name="StockOutDate" ColumnName="StockOutDate" />
+                <ScalarProperty Name="StockInDate" ColumnName="StockInDate" />
+                <ScalarProperty Name="SupplierStatusId" ColumnName="SupplierStatusId" />
+                <ScalarProperty Name="ToBranchStatusId" ColumnName="ToBranchStatusId" />
+                <ScalarProperty Name="FromBranchStatusId" ColumnName="FromBranchStatusId" />
+                <ScalarProperty Name="ToBranchId" ColumnName="ToBranchId" />
+                <ScalarProperty Name="FromBranchId" ColumnName="FromBranchId" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
