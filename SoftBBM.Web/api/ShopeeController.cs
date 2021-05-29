@@ -74,13 +74,11 @@ namespace SoftBBM.Web.api
             var jsonContent = JsonConvert.DeserializeObject<ShopeeHookInpVM>(content);
             try
             {
-
-
-                var contentLog = new SoftPointUpdateLog();
-                contentLog.Description = "content: " + content;
-                contentLog.CreatedDate = DateTime.Now;
-                _softPointUpdateLogRepository.Add(contentLog);
-                _unitOfWork.Commit();
+                //var contentLog = new SoftPointUpdateLog();
+                //contentLog.Description = "content: " + content;
+                //contentLog.CreatedDate = DateTime.Now;
+                //_softPointUpdateLogRepository.Add(contentLog);
+                //_unitOfWork.Commit();
 
 
                 if (jsonContent != null)
@@ -118,20 +116,26 @@ namespace SoftBBM.Web.api
                         return response = request.CreateResponse(HttpStatusCode.BadRequest, "404 not found!");
                     if (jsonContent.Code == 3 && jsonContent.Data.Status == CommonClass.UNPAID)
                     {
-                        //var newLog = new shop_sanphamLogs();
-                        //newLog.StockTotal = 0;
-                        //newLog.StockTotalAll = 0;
-                        //newLog.Description ="Order status update push: "+ JsonConvert.SerializeObject(jsonContent);
-                        //_shopSanPhamLogRepository.Add(newLog);
-                        //_unitOfWork.Commit();
+                        var newLog = new shop_sanphamLogs();
+                        newLog.StockTotal = 0;
+                        newLog.StockTotalAll = 0;
+                        newLog.Description = "Order status update push: " + JsonConvert.SerializeObject(jsonContent);
+                        _shopSanPhamLogRepository.Add(newLog);
+                        _unitOfWork.Commit();
 
                         var orderDB = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == jsonContent.Data.Ordersn);
                         if (orderDB == null)
-                        {
+                        {                        
                             //thêm mới đơn hàng
                             var orderShopee = _shopeeRepository.getOrder(jsonContent.Data.Ordersn);
                             if (orderShopee != null)
                             {
+                                var contentLog = new SoftPointUpdateLog();
+                                contentLog.Description = "order from shopee: " + JsonConvert.SerializeObject(orderShopee);
+                                contentLog.CreatedDate = DateTime.Now;
+                                _softPointUpdateLogRepository.Add(contentLog);
+                                _unitOfWork.Commit();
+
                                 var info = orderShopee.recipient_address;
                                 var phone = info.phone;
                                 var phone2 = info.phone;
