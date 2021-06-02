@@ -191,7 +191,7 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             donhang.idgiogiao = orderVM.idgiogiao;
             donhang.tenptgh = orderVM.tenptgh;
         }
-        public static void UpdatedonhangFromShopee(this donhang donhang, int? makh, long? total_amount, string ghichu,string shipperName,int? status,string orderIdShopeeApi)
+        public static void UpdatedonhangFromShopee(this donhang donhang, int? makh, long? total_amount, string ghichu, string shipperName, string shipperType, int? status, string orderIdShopeeApi)
         {
             donhang.makh = makh;
             donhang.CreatedDate = DateTime.Now;
@@ -202,8 +202,9 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             donhang.Status = status;
             donhang.IsShopeeApi = true;
             donhang.OrderIdShopeeApi = orderIdShopeeApi;
-            donhang.ChannelId = (int) ChannelEnum.SPE;
+            donhang.ChannelId = (int)ChannelEnum.SPE;
             donhang.BranchId = (int)BranchEnum.KHO_CHINH;
+            donhang.ShipperTypeShopeeApi = shipperType;
         }
         public static void UpdatedonhangLackFromShopee(this donhang donhang, int? makh, long? total_amount, string ghichu, string shipperName, int? status, string orderIdShopeeApi, DateTime createdDate, DateTime? updatedDate)
         {
@@ -226,7 +227,7 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             donhang_ct.Soluong = orderDetailVM.Quantity.Value;
             donhang_ct.Dongia = orderDetailVM.Price;
         }
-        public static void UpdatedonhangctFromShopee(this donhang_ct donhang_ct, long soDh,long? idPro,long soLuong,int? donGia, int? donGiaKM,string description)
+        public static void UpdatedonhangctFromShopee(this donhang_ct donhang_ct, long soDh, long? idPro, long soLuong, int? donGia, int? donGiaKM, string description)
         {
             donhang_ct.Sodh = soDh;
             donhang_ct.IdPro = idPro;
@@ -288,7 +289,7 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             khachhang.CreatedBy = 0;
             khachhang.diem = "0";
         }
-        public static void UpdateShopSanPhamLog(this shop_sanphamLogs shopSanPhamLog,int? productId,string description,double? quantity,int? createdBy,int? branchId,double stockTotal)
+        public static void UpdateShopSanPhamLog(this shop_sanphamLogs shopSanPhamLog, int? productId, string description, double? quantity, int? createdBy, int? branchId, double stockTotal)
         {
             shopSanPhamLog.ProductId = productId;
             shopSanPhamLog.Description = description;
@@ -298,7 +299,7 @@ namespace SoftBBM.Web.Infrastructure.Extensions
             shopSanPhamLog.BranchId = branchId;
             shopSanPhamLog.StockTotal = stockTotal;
         }
-        public static void InitSystemLog(this SystemLog systemLog, int? keyId = null,string value="", string appName = "", string description = "",int? type=null, string typeName = "", string before = "", string after = "")
+        public static void InitSystemLog(this SystemLog systemLog, int? keyId = null, string value = "", string appName = "", string description = "", int? type = null, string typeName = "", string before = "", string after = "")
         {
             systemLog.KeyId = keyId;
             systemLog.Value = value;

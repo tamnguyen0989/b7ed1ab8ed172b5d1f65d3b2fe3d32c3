@@ -103,13 +103,13 @@ namespace SoftBBM.Web.Models
         public virtual DbSet<shop_sanpham> shop_sanpham { get; set; }
         public virtual DbSet<SoftPointUpdateLog> SoftPointUpdateLogs { get; set; }
         public virtual DbSet<donhang_ct> donhang_ct { get; set; }
-        public virtual DbSet<donhang> donhangs { get; set; }
         public virtual DbSet<SystemLog> SystemLogs { get; set; }
         public virtual DbSet<donhangStatu> donhangStatus { get; set; }
         public virtual DbSet<SoftOrderStatu> SoftOrderStatus { get; set; }
         public virtual DbSet<SoftOfflineOrderWindow> SoftOfflineOrderWindows { get; set; }
         public virtual DbSet<SoftStockInDetail> SoftStockInDetails { get; set; }
         public virtual DbSet<SoftStockIn> SoftStockIns { get; set; }
+        public virtual DbSet<donhang> donhangs { get; set; }
     
         public virtual int TinTuc_Phantrang(Nullable<int> currPage, Nullable<int> recodperpage, Nullable<int> pagesize, Nullable<int> cateID, string page)
         {

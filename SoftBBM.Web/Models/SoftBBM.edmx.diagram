@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5b0d6ac2d6d64cd2a1b81398c9e7592f" Name="Diagram1" ZoomLevel="59">
+      <Diagram DiagramId="5b0d6ac2d6d64cd2a1b81398c9e7592f" Name="Diagram1" ZoomLevel="48">
         <EntityTypeShape EntityType="SoftBBMModels.admin" Width="1.5" PointX="0.75" PointY="2.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SoftBBMModels.admin_role" Width="1.5" PointX="2.75" PointY="2.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SoftBBMModels.cart" Width="1.5" PointX="12.75" PointY="21.875" IsExpanded="true" />
@@ -157,19 +157,8 @@
         <AssociationConnector Association="SoftBBMModels.FK_SoftPointUpdateLogs_SoftPointUpdateLogs" />
         <EntityTypeShape EntityType="SoftBBMModels.donhang_ct" Width="1.5" PointX="20.875" PointY="9.125" />
         <AssociationConnector Association="SoftBBMModels.dh_sp" />
-        <EntityTypeShape EntityType="SoftBBMModels.donhang" Width="1.5" PointX="24.625" PointY="24.375" />
-        <AssociationConnector Association="SoftBBMModels.FK_donhang_ApplicationUsers" />
-        <AssociationConnector Association="SoftBBMModels.FK_donhang_ApplicationUsers1" />
-        <AssociationConnector Association="SoftBBMModels.FK_donhang_ApplicationUsers2" />
-        <AssociationConnector Association="SoftBBMModels.dh_ctDH" />
-        <AssociationConnector Association="SoftBBMModels.FK_donhang_SoftBranches" />
-        <AssociationConnector Association="SoftBBMModels.FK_donhang_SoftChannels" />
-        <AssociationConnector Association="SoftBBMModels.FK_KHHH_DH" />
-        <AssociationConnector Association="SoftBBMModels.FK_SoftPointUpdateLogs_donhang" />
-        <AssociationConnector Association="SoftBBMModels.fk_vanglai_dh" />
         <EntityTypeShape EntityType="SoftBBMModels.SystemLog" Width="1.5" PointX="17.375" PointY="0.75" />
         <EntityTypeShape EntityType="SoftBBMModels.donhangStatu" Width="1.5" PointX="15.375" PointY="6.875" />
-        <AssociationConnector Association="SoftBBMModels.FK_donhang_donhangStatus" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftOrderStatu" Width="1.5" PointX="17.375" PointY="5.875" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftOrders_SoftOrderStatus" />
         <EntityTypeShape EntityType="SoftBBMModels.SoftOfflineOrderWindow" Width="1.5" PointX="3" PointY="0.75" />
@@ -193,6 +182,17 @@
         <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus2" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftStockInStatus3" />
         <AssociationConnector Association="SoftBBMModels.FK_SoftStockIns_SoftSuppliers" />
+        <EntityTypeShape EntityType="SoftBBMModels.donhang" Width="1.5" PointX="24.625" PointY="24.25" />
+        <AssociationConnector Association="SoftBBMModels.FK_donhang_ApplicationUsers" />
+        <AssociationConnector Association="SoftBBMModels.FK_donhang_ApplicationUsers1" />
+        <AssociationConnector Association="SoftBBMModels.FK_donhang_ApplicationUsers2" />
+        <AssociationConnector Association="SoftBBMModels.dh_ctDH" />
+        <AssociationConnector Association="SoftBBMModels.FK_donhang_donhangStatus" />
+        <AssociationConnector Association="SoftBBMModels.FK_donhang_SoftBranches" />
+        <AssociationConnector Association="SoftBBMModels.FK_donhang_SoftChannels" />
+        <AssociationConnector Association="SoftBBMModels.FK_KHHH_DH" />
+        <AssociationConnector Association="SoftBBMModels.FK_SoftPointUpdateLogs_donhang" />
+        <AssociationConnector Association="SoftBBMModels.fk_vanglai_dh" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

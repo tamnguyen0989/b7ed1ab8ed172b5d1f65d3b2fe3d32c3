@@ -116,13 +116,6 @@ namespace SoftBBM.Web.api
                         return response = request.CreateResponse(HttpStatusCode.BadRequest, "404 not found!");
                     if (jsonContent.Code == 3 && jsonContent.Data.Status == CommonClass.UNPAID)
                     {
-                        var newLog = new shop_sanphamLogs();
-                        newLog.StockTotal = 0;
-                        newLog.StockTotalAll = 0;
-                        newLog.Description = "Order status update push: " + JsonConvert.SerializeObject(jsonContent);
-                        _shopSanPhamLogRepository.Add(newLog);
-                        _unitOfWork.Commit();
-
                         var orderDB = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == jsonContent.Data.Ordersn);
                         if (orderDB == null)
                         {                        
@@ -130,11 +123,11 @@ namespace SoftBBM.Web.api
                             var orderShopee = _shopeeRepository.getOrder(jsonContent.Data.Ordersn);
                             if (orderShopee != null)
                             {
-                                var contentLog = new SoftPointUpdateLog();
-                                contentLog.Description = "order from shopee: " + JsonConvert.SerializeObject(orderShopee);
-                                contentLog.CreatedDate = DateTime.Now;
-                                _softPointUpdateLogRepository.Add(contentLog);
-                                _unitOfWork.Commit();
+                                //var contentLog = new SoftPointUpdateLog();
+                                //contentLog.Description = "order from shopee: " + JsonConvert.SerializeObject(orderShopee);
+                                //contentLog.CreatedDate = DateTime.Now;
+                                //_softPointUpdateLogRepository.Add(contentLog);
+                                //_unitOfWork.Commit();
 
                                 var info = orderShopee.recipient_address;
                                 var phone = info.phone;
@@ -167,7 +160,7 @@ namespace SoftBBM.Web.api
                                 long totalAmont = 0;
                                 long.TryParse(orderShopee.total_amount, out totalAmont);
                                 var newOrder = new donhang();
-                                newOrder.UpdatedonhangFromShopee(khachang.MaKH, totalAmont, orderShopee.message_to_seller, orderShopee.shipping_carrier, (int)StatusOrder.Process, jsonContent.Data.Ordersn);
+                                newOrder.UpdatedonhangFromShopee(khachang.MaKH, totalAmont, orderShopee.message_to_seller, orderShopee.shipping_carrier, orderShopee.checkout_shipping_carrier,(int)StatusOrder.Process, jsonContent.Data.Ordersn);
                                 _donhangRepository.Add(newOrder);
                                 _unitOfWork.Commit();
 
@@ -279,11 +272,18 @@ namespace SoftBBM.Web.api
                     else if (jsonContent.Code == 3 && jsonContent.Data.Status == CommonClass.READY_TO_SHIP)
                     {
                         var order = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == jsonContent.Data.Ordersn);
+                        var shopeeOrder = _shopeeRepository.getOrder(jsonContent.Data.Ordersn);
                         if (order != null)
                         {
                             order.UpdatedBy = 0;
                             order.UpdatedDate = DateTime.Now;
                             order.Status = (int)StatusOrder.ReadyToShip;
+
+                            //if (shopeeOrder != null)
+                            //{
+                            //    order.ShipperNameShopeeApi = shopeeOrder.shipping_carrier;
+                            //    order.ShipperTypeShopeeApi = shopeeOrder.checkout_shipping_carrier;
+                            //}
                             _donhangRepository.Update(order);
                             _unitOfWork.Commit();
                         }
@@ -407,7 +407,7 @@ namespace SoftBBM.Web.api
                             long totalAmont = 0;
                             long.TryParse(orderShopee.total_amount, out totalAmont);
                             var newOrder = new donhang();
-                            newOrder.UpdatedonhangFromShopee(khachang.MaKH, totalAmont, orderShopee.note, orderShopee.shipping_carrier, (int)StatusOrder.Process, jsonContent.Data.Ordersn);
+                            newOrder.UpdatedonhangFromShopee(khachang.MaKH, totalAmont, orderShopee.note, orderShopee.shipping_carrier, orderShopee.checkout_shipping_carrier, (int)StatusOrder.Process, jsonContent.Data.Ordersn);
                             _donhangRepository.Add(newOrder);
                             _unitOfWork.Commit();
 
@@ -568,6 +568,12 @@ namespace SoftBBM.Web.api
                         if (logistics != null)
                         {
                             var orderDB = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == orderId);
+                            orderDB.ShipperNameShopeeApi = order.shipping_carrier;
+                            orderDB.ShipperTypeShopeeApi = order.checkout_shipping_carrier;
+                            _donhangRepository.Update(orderDB);
+                            _unitOfWork.Commit();
+
+
                             var datePrint = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
                             orderDB.StatusPrint = "<li>" + username + " đã in (" + datePrint + ")</li>";
                             _donhangRepository.Update(orderDB);
@@ -725,6 +731,11 @@ namespace SoftBBM.Web.api
                     var order = _shopeeRepository.getOrder(orderVM);
                     if (order != null)
                     {
+                        orderDb.ShipperNameShopeeApi = order.shipping_carrier;
+                        orderDb.ShipperTypeShopeeApi = order.checkout_shipping_carrier;
+                        _donhangRepository.Update(orderDb);
+                        _unitOfWork.Commit();
+
                         var logistics = _shopeeRepository.GetOrderLogistics(orderVM);
                         if (logistics != null)
                         {
@@ -882,5 +893,40 @@ namespace SoftBBM.Web.api
                 res = (length * width * height) / 4000;
             return res;
         }
+
+        //Update shipper name from created date
+        [HttpGet]
+        [Route("updateshippername")]
+        public HttpResponseMessage UpdateShipperName(HttpRequestMessage request)
+        {
+            var result = new List<Object>();
+            try
+            {
+                var dtCondition = new DateTime(2021, 05, 29, 0, 0, 1);
+                var orders = _donhangRepository.GetMulti(x => x.CreatedDate > dtCondition && x.IsShopeeApi == true).ToList();
+                if (orders.Count > 0)
+                {
+                    foreach (var order in orders)
+                    {
+                        var orderShopee = _shopeeRepository.getOrder(order.OrderIdShopeeApi);
+                        order.ShipperNameShopeeApi = orderShopee.shipping_carrier;
+                        order.ShipperTypeShopeeApi = orderShopee.checkout_shipping_carrier;
+                        _donhangRepository.Update(order);
+                        _unitOfWork.Commit();
+                    }
+                }   
+                return request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                var contentLog = new SoftPointUpdateLog();
+                contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
+                contentLog.CreatedDate = DateTime.Now;
+                _softPointUpdateLogRepository.Add(contentLog);
+                _unitOfWork.Commit();
+                return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+            }
+        }
+
     }
 }

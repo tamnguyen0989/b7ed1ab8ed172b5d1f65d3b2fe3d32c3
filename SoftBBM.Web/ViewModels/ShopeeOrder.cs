@@ -11,6 +11,7 @@ namespace SoftBBM.Web.ViewModels
         public List<ShopeeOrderDetailItem> items { get; set; }
         public ShopeeRecipientAddress recipient_address { get; set; }
         public string shipping_carrier { get; set; }
+        public string checkout_shipping_carrier { get; set; }
         public string note { get; set; }
         public string total_amount { get; set; }
         public string message_to_seller { get; set; }

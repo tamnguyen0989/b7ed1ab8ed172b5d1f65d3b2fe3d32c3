@@ -2127,9 +2127,12 @@ namespace SoftBBM.Web.api
                         if (!string.IsNullOrEmpty(result))
                         {
                             var donhang = _donhangRepository.GetSingleById((int)item.id);
+                            var orderDetail = _shopeeRepository.getOrder(item.OrderIdShopeeApi);
                             if (donhang != null)
                             {
                                 donhang.TrackingNo = result;
+                                donhang.ShipperNameShopeeApi = orderDetail.shipping_carrier;
+                                donhang.ShipperTypeShopeeApi = orderDetail.checkout_shipping_carrier;
                                 donhang.UpdatedDate = DateTime.Now;
                                 donhang.UpdatedBy = 0;
                                 _donhangRepository.Update(donhang);
@@ -2178,6 +2181,8 @@ namespace SoftBBM.Web.api
                         if (!string.IsNullOrEmpty(orderDetail.tracking_no))
                         {
                             donhang.TrackingNo = orderDetail.tracking_no;
+                            donhang.ShipperNameShopeeApi = orderDetail.shipping_carrier;
+                            donhang.ShipperTypeShopeeApi = orderDetail.checkout_shipping_carrier;
                             donhang.UpdatedDate = DateTime.Now;
                             donhang.UpdatedBy = 0;
                             _donhangRepository.Update(donhang);
@@ -2737,6 +2742,5 @@ namespace SoftBBM.Web.api
                 return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message + " | " + ex.StackTrace);
             }
         }
-
     }
 }

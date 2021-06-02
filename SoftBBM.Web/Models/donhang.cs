@@ -68,18 +68,19 @@ namespace SoftBBM.Web.Models
         public string ShipperNameShopeeApi { get; set; }
         public string TrackingNo { get; set; }
         public string StatusPrint { get; set; }
+        public string ShipperTypeShopeeApi { get; set; }
     
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ApplicationUser ApplicationUser1 { get; set; }
         public virtual ApplicationUser ApplicationUser2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<donhang_ct> donhang_ct { get; set; }
+        public virtual donhangStatu donhangStatu { get; set; }
         public virtual SoftBranch SoftBranch { get; set; }
         public virtual SoftChannel SoftChannel { get; set; }
         public virtual khachhang khachhang { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<SoftPointUpdateLog> SoftPointUpdateLogs { get; set; }
         public virtual khachhang_vanglai khachhang_vanglai { get; set; }
-        public virtual donhangStatu donhangStatu { get; set; }
     }
 }

@@ -1055,14 +1055,14 @@
         }
         function testAPI() {
             $scope.waiting = true;
-            var config = {
-                params: {
-                    orderParam: '',
-                    productParam: '822611347',
-                }
-            }
-            apiService.get('/api/shopee/testapi', config, function (result) {
-                //notificationService.displaySuccess('Cập nhật tình  trạng đơn hàng từ ' + config.params.quantity + ' ngày trước thành công!');
+            //var config = {
+            //    params: {
+            //        orderParam: '',
+            //        productParam: '822611347',
+            //    }
+            //}
+            apiService.get('/api/shopee/updateshippername', null, function (result) {
+                notificationService.displaySuccess('Cập nhật thành công!');
                 //search($scope.page);
                 $scope.waiting = false;
             }, function (error) {

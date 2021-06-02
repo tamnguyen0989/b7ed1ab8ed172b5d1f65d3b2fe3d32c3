@@ -198,7 +198,7 @@ namespace SoftBBM.Web.DAL.Repositories
             _unitOfWork.Commit();
 
             var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Encoding.Default, true))
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Encoding.UTF8, true))
             {
                 jsonStrResult = streamReader.ReadToEnd();
             }
@@ -253,6 +253,12 @@ namespace SoftBBM.Web.DAL.Repositories
                               "'timestamp':" + timestamp + "}";
             dataJson = dataJson.Replace("'", "\"");
             string data = postRequest(url, dataJson);
+
+            //var contentLog = new SoftPointUpdateLog();
+            //contentLog.Description = "getOrder: " + data;
+            //contentLog.CreatedDate = DateTime.Now;
+            //_softPointUpdateLogRepository.Add(contentLog);
+            //_unitOfWork.Commit();
 
             if (!string.IsNullOrEmpty(data))
             {

@@ -181,6 +181,7 @@
           <Property Name="ShipperNameShopeeApi" Type="nvarchar(max)" />
           <Property Name="TrackingNo" Type="varchar(max)" />
           <Property Name="StatusPrint" Type="nvarchar(max)" />
+          <Property Name="ShipperTypeShopeeApi" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <EntityType Name="donhang_chuyenphat_danhsachdiachifuta">
           <Key>
@@ -4293,49 +4294,8 @@
             <End Role="shop_bienthe" EntitySet="shop_bienthe" />
             <End Role="donhang_ct" EntitySet="donhang_ct" />
           </AssociationSet>
-          <EntitySet Name="donhangs" EntityType="SoftBBMModels.donhang" />
-          <AssociationSet Name="FK_donhang_ApplicationUsers" Association="SoftBBMModels.FK_donhang_ApplicationUsers">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_donhang_ApplicationUsers1" Association="SoftBBMModels.FK_donhang_ApplicationUsers1">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_donhang_ApplicationUsers2" Association="SoftBBMModels.FK_donhang_ApplicationUsers2">
-            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="dh_ctDH" Association="SoftBBMModels.dh_ctDH">
-            <End Role="donhang" EntitySet="donhangs" />
-            <End Role="donhang_ct" EntitySet="donhang_ct" />
-          </AssociationSet>
-          <AssociationSet Name="FK_donhang_SoftBranches" Association="SoftBBMModels.FK_donhang_SoftBranches">
-            <End Role="SoftBranch" EntitySet="SoftBranches" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_donhang_SoftChannels" Association="SoftBBMModels.FK_donhang_SoftChannels">
-            <End Role="SoftChannel" EntitySet="SoftChannels" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_KHHH_DH" Association="SoftBBMModels.FK_KHHH_DH">
-            <End Role="khachhang" EntitySet="khachhangs" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
-          <AssociationSet Name="FK_SoftPointUpdateLogs_donhang" Association="SoftBBMModels.FK_SoftPointUpdateLogs_donhang">
-            <End Role="donhang" EntitySet="donhangs" />
-            <End Role="SoftPointUpdateLog" EntitySet="SoftPointUpdateLogs" />
-          </AssociationSet>
-          <AssociationSet Name="fk_vanglai_dh" Association="SoftBBMModels.fk_vanglai_dh">
-            <End Role="khachhang_vanglai" EntitySet="khachhang_vanglai" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
           <EntitySet Name="SystemLogs" EntityType="SoftBBMModels.SystemLog" />
           <EntitySet Name="donhangStatus" EntityType="SoftBBMModels.donhangStatu" />
-          <AssociationSet Name="FK_donhang_donhangStatus" Association="SoftBBMModels.FK_donhang_donhangStatus">
-            <End Role="donhangStatu" EntitySet="donhangStatus" />
-            <End Role="donhang" EntitySet="donhangs" />
-          </AssociationSet>
           <EntitySet Name="SoftOrderStatus" EntityType="SoftBBMModels.SoftOrderStatu" />
           <AssociationSet Name="FK_SoftOrders_SoftOrderStatus" Association="SoftBBMModels.FK_SoftOrders_SoftOrderStatus">
             <End Role="SoftOrderStatu" EntitySet="SoftOrderStatus" />
@@ -4415,6 +4375,47 @@
           <AssociationSet Name="FK_SoftStockIns_SoftSuppliers" Association="SoftBBMModels.FK_SoftStockIns_SoftSuppliers">
             <End Role="SoftSupplier" EntitySet="SoftSuppliers" />
             <End Role="SoftStockIn" EntitySet="SoftStockIns" />
+          </AssociationSet>
+          <EntitySet Name="donhangs" EntityType="SoftBBMModels.donhang" />
+          <AssociationSet Name="FK_donhang_ApplicationUsers" Association="SoftBBMModels.FK_donhang_ApplicationUsers">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_donhang_ApplicationUsers1" Association="SoftBBMModels.FK_donhang_ApplicationUsers1">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_donhang_ApplicationUsers2" Association="SoftBBMModels.FK_donhang_ApplicationUsers2">
+            <End Role="ApplicationUser" EntitySet="ApplicationUsers" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="dh_ctDH" Association="SoftBBMModels.dh_ctDH">
+            <End Role="donhang" EntitySet="donhangs" />
+            <End Role="donhang_ct" EntitySet="donhang_ct" />
+          </AssociationSet>
+          <AssociationSet Name="FK_donhang_donhangStatus" Association="SoftBBMModels.FK_donhang_donhangStatus">
+            <End Role="donhangStatu" EntitySet="donhangStatus" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_donhang_SoftBranches" Association="SoftBBMModels.FK_donhang_SoftBranches">
+            <End Role="SoftBranch" EntitySet="SoftBranches" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_donhang_SoftChannels" Association="SoftBBMModels.FK_donhang_SoftChannels">
+            <End Role="SoftChannel" EntitySet="SoftChannels" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KHHH_DH" Association="SoftBBMModels.FK_KHHH_DH">
+            <End Role="khachhang" EntitySet="khachhangs" />
+            <End Role="donhang" EntitySet="donhangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SoftPointUpdateLogs_donhang" Association="SoftBBMModels.FK_SoftPointUpdateLogs_donhang">
+            <End Role="donhang" EntitySet="donhangs" />
+            <End Role="SoftPointUpdateLog" EntitySet="SoftPointUpdateLogs" />
+          </AssociationSet>
+          <AssociationSet Name="fk_vanglai_dh" Association="SoftBBMModels.fk_vanglai_dh">
+            <End Role="khachhang_vanglai" EntitySet="khachhang_vanglai" />
+            <End Role="donhang" EntitySet="donhangs" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="spTB_DangNhap_TruyVanTheoTenDangNhap_Result">
@@ -4555,12 +4556,12 @@
           <NavigationProperty Name="shop_sanphamLogs" Relationship="SoftBBMModels.FK_shop_sanphamLogs_ApplicationUsers" FromRole="ApplicationUser" ToRole="shop_sanphamLogs" />
           <NavigationProperty Name="shop_sanpham" Relationship="SoftBBMModels.FK_shop_sanpham_ApplicationUsers" FromRole="ApplicationUser" ToRole="shop_sanpham" />
           <NavigationProperty Name="shop_sanpham1" Relationship="SoftBBMModels.FK_shop_sanpham_ApplicationUsers1" FromRole="ApplicationUser" ToRole="shop_sanpham" />
-          <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers" FromRole="ApplicationUser" ToRole="donhang" />
-          <NavigationProperty Name="donhangs1" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers1" FromRole="ApplicationUser" ToRole="donhang" />
-          <NavigationProperty Name="donhangs2" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers2" FromRole="ApplicationUser" ToRole="donhang" />
           <NavigationProperty Name="SoftOfflineOrderWindows" Relationship="SoftBBMModels.FK_SoftOfflineOrderWindow_ApplicationUsers" FromRole="ApplicationUser" ToRole="SoftOfflineOrderWindow" />
           <NavigationProperty Name="SoftStockIns" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers" FromRole="ApplicationUser" ToRole="SoftStockIn" />
           <NavigationProperty Name="SoftStockIns1" Relationship="SoftBBMModels.FK_SoftStockIns_ApplicationUsers1" FromRole="ApplicationUser" ToRole="SoftStockIn" />
+          <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers" FromRole="ApplicationUser" ToRole="donhang" />
+          <NavigationProperty Name="donhangs1" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers1" FromRole="ApplicationUser" ToRole="donhang" />
+          <NavigationProperty Name="donhangs2" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers2" FromRole="ApplicationUser" ToRole="donhang" />
           </EntityType>
         <Association Name="FK_ApplicationUserGroups_ApplicationUsers">
           <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="1" />
@@ -4795,10 +4796,10 @@
           <NavigationProperty Name="SoftReturnSuppliers" Relationship="SoftBBMModels.FK_SoftReturnSuppliers_SoftBranches" FromRole="SoftBranch" ToRole="SoftReturnSupplier" />
           <Property Name="Priority" Type="Int32" />
           <NavigationProperty Name="shop_sanphamLogs" Relationship="SoftBBMModels.FK_shop_sanphamLogs_SoftBranches" FromRole="SoftBranch" ToRole="shop_sanphamLogs" />
-          <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_SoftBranches" FromRole="SoftBranch" ToRole="donhang" />
           <NavigationProperty Name="SoftStockIns" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches" FromRole="SoftBranch" ToRole="SoftStockIn" />
           <NavigationProperty Name="SoftStockIns1" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches1" FromRole="SoftBranch" ToRole="SoftStockIn" />
           <NavigationProperty Name="SoftStockIns2" Relationship="SoftBBMModels.FK_SoftStockIns_SoftBranches2" FromRole="SoftBranch" ToRole="SoftStockIn" />
+          <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_SoftBranches" FromRole="SoftBranch" ToRole="donhang" />
         </EntityType>
         <EntityType Name="SoftBranchProductStock">
           <Key>
@@ -5759,176 +5760,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="donhang">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StoreId" Type="Int32" />
-          <Property Name="makh" Type="Int32" />
-          <Property Name="diemsp" Type="Int32" />
-          <Property Name="vanglai" Type="Int32" />
-          <Property Name="ghichu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="noidung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ship" Type="Int32" />
-          <Property Name="tongtien" Type="Int64" />
-          <Property Name="idgiogiao" Type="Int32" />
-          <Property Name="ngaydat" Type="DateTime" Precision="3" />
-          <Property Name="pttt" Type="Int32" />
-          <Property Name="ptgh" Type="Int32" />
-          <Property Name="typeconfim" Type="Int32" />
-          <Property Name="dagiao" Type="Boolean" />
-          <Property Name="ngaygiao" Type="DateTime" Precision="3" />
-          <Property Name="datru_diem" Type="Int32" />
-          <Property Name="dahuy" Type="Boolean" />
-          <Property Name="ngayhuy" Type="DateTime" Precision="3" />
-          <Property Name="thongtinxedo" Type="String" MaxLength="650" FixedLength="false" Unicode="true" />
-          <Property Name="tinhtrang" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
-          <Property Name="donhangtu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="typeconfimcall" Type="Int32" />
-          <Property Name="tenptgh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="phithuho" Type="Int32" />
-          <Property Name="dain" Type="Boolean" />
-          <Property Name="chitietgiogiao" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ChannelId" Type="Int32" />
-          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdatedBy" Type="Int32" />
-          <Property Name="CreatedUserId" Type="Int32" />
-          <Property Name="ShipperId" Type="Int32" />
-          <Property Name="BranchId" Type="Int32" />
-          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="PointCusBeforeOrder" Type="Int32" />
-          <Property Name="Discount" Type="Int32" />
-          <Property Name="DiscountMoney" Type="Int32" />
-          <Property Name="DiscountPercent" Type="Int32" />
-          <Property Name="DiscountCode" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="IsShopeeApi" Type="Boolean" />
-          <Property Name="OrderIdShopeeApi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ShipperNameShopeeApi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="TrackingNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="StatusPrint" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ApplicationUser" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers" FromRole="donhang" ToRole="ApplicationUser" />
-          <NavigationProperty Name="ApplicationUser1" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers1" FromRole="donhang" ToRole="ApplicationUser" />
-          <NavigationProperty Name="ApplicationUser2" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers2" FromRole="donhang" ToRole="ApplicationUser" />
-          <NavigationProperty Name="donhang_ct" Relationship="SoftBBMModels.dh_ctDH" FromRole="donhang" ToRole="donhang_ct" />
-          <NavigationProperty Name="SoftBranch" Relationship="SoftBBMModels.FK_donhang_SoftBranches" FromRole="donhang" ToRole="SoftBranch" />
-          <NavigationProperty Name="SoftChannel" Relationship="SoftBBMModels.FK_donhang_SoftChannels" FromRole="donhang" ToRole="SoftChannel" />
-          <NavigationProperty Name="khachhang" Relationship="SoftBBMModels.FK_KHHH_DH" FromRole="donhang" ToRole="khachhang" />
-          <NavigationProperty Name="SoftPointUpdateLogs" Relationship="SoftBBMModels.FK_SoftPointUpdateLogs_donhang" FromRole="donhang" ToRole="SoftPointUpdateLog" />
-          <NavigationProperty Name="khachhang_vanglai" Relationship="SoftBBMModels.fk_vanglai_dh" FromRole="donhang" ToRole="khachhang_vanglai" />
-          <NavigationProperty Name="donhangStatu" Relationship="SoftBBMModels.FK_donhang_donhangStatus" FromRole="donhang" ToRole="donhangStatu" />
-        </EntityType>
-        <Association Name="FK_donhang_ApplicationUsers">
-          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="donhang">
-              <PropertyRef Name="ShipperId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_donhang_ApplicationUsers1">
-          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="donhang">
-              <PropertyRef Name="CreatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_donhang_ApplicationUsers2">
-          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApplicationUser">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="donhang">
-              <PropertyRef Name="UpdatedBy" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="dh_ctDH">
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="1" />
-          <End Type="SoftBBMModels.donhang_ct" Role="donhang_ct" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="donhang">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="donhang_ct">
-              <PropertyRef Name="Sodh" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_donhang_SoftBranches">
-          <End Type="SoftBBMModels.SoftBranch" Role="SoftBranch" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftBranch">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="donhang">
-              <PropertyRef Name="BranchId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_donhang_SoftChannels">
-          <End Type="SoftBBMModels.SoftChannel" Role="SoftChannel" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="SoftChannel">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="donhang">
-              <PropertyRef Name="ChannelId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_KHHH_DH">
-          <End Type="SoftBBMModels.khachhang" Role="khachhang" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="khachhang">
-              <PropertyRef Name="MaKH" />
-            </Principal>
-            <Dependent Role="donhang">
-              <PropertyRef Name="makh" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_SoftPointUpdateLogs_donhang">
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.SoftPointUpdateLog" Role="SoftPointUpdateLog" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="donhang">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="SoftPointUpdateLog">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="fk_vanglai_dh">
-          <End Type="SoftBBMModels.khachhang_vanglai" Role="khachhang_vanglai" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="khachhang_vanglai">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="donhang">
-              <PropertyRef Name="vanglai" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="SystemLog">
           <Key>
             <PropertyRef Name="Id" />
@@ -5958,18 +5789,6 @@
           <Property Name="Priority" Type="Int32" />
           <NavigationProperty Name="donhangs" Relationship="SoftBBMModels.FK_donhang_donhangStatus" FromRole="donhangStatu" ToRole="donhang" />
         </EntityType>
-        <Association Name="FK_donhang_donhangStatus">
-          <End Type="SoftBBMModels.donhangStatu" Role="donhangStatu" Multiplicity="0..1" />
-          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="donhangStatu">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="donhang">
-              <PropertyRef Name="Status" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="SoftOrderStatu">
           <Key>
             <PropertyRef Name="Id" />
@@ -6273,6 +6092,189 @@
             </Principal>
             <Dependent Role="SoftStockIn">
               <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="donhang">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StoreId" Type="Int32" />
+          <Property Name="makh" Type="Int32" />
+          <Property Name="diemsp" Type="Int32" />
+          <Property Name="vanglai" Type="Int32" />
+          <Property Name="ghichu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="noidung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ship" Type="Int32" />
+          <Property Name="tongtien" Type="Int64" />
+          <Property Name="idgiogiao" Type="Int32" />
+          <Property Name="ngaydat" Type="DateTime" Precision="3" />
+          <Property Name="pttt" Type="Int32" />
+          <Property Name="ptgh" Type="Int32" />
+          <Property Name="typeconfim" Type="Int32" />
+          <Property Name="dagiao" Type="Boolean" />
+          <Property Name="ngaygiao" Type="DateTime" Precision="3" />
+          <Property Name="datru_diem" Type="Int32" />
+          <Property Name="dahuy" Type="Boolean" />
+          <Property Name="ngayhuy" Type="DateTime" Precision="3" />
+          <Property Name="thongtinxedo" Type="String" MaxLength="650" FixedLength="false" Unicode="true" />
+          <Property Name="tinhtrang" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Name="donhangtu" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="typeconfimcall" Type="Int32" />
+          <Property Name="tenptgh" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="phithuho" Type="Int32" />
+          <Property Name="dain" Type="Boolean" />
+          <Property Name="chitietgiogiao" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ChannelId" Type="Int32" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="CreatedUserId" Type="Int32" />
+          <Property Name="ShipperId" Type="Int32" />
+          <Property Name="BranchId" Type="Int32" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="PointCusBeforeOrder" Type="Int32" />
+          <Property Name="Discount" Type="Int32" />
+          <Property Name="DiscountMoney" Type="Int32" />
+          <Property Name="DiscountPercent" Type="Int32" />
+          <Property Name="DiscountCode" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="IsShopeeApi" Type="Boolean" />
+          <Property Name="OrderIdShopeeApi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShipperNameShopeeApi" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TrackingNo" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="StatusPrint" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShipperTypeShopeeApi" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ApplicationUser" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers" FromRole="donhang" ToRole="ApplicationUser" />
+          <NavigationProperty Name="ApplicationUser1" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers1" FromRole="donhang" ToRole="ApplicationUser" />
+          <NavigationProperty Name="ApplicationUser2" Relationship="SoftBBMModels.FK_donhang_ApplicationUsers2" FromRole="donhang" ToRole="ApplicationUser" />
+          <NavigationProperty Name="donhang_ct" Relationship="SoftBBMModels.dh_ctDH" FromRole="donhang" ToRole="donhang_ct" />
+          <NavigationProperty Name="donhangStatu" Relationship="SoftBBMModels.FK_donhang_donhangStatus" FromRole="donhang" ToRole="donhangStatu" />
+          <NavigationProperty Name="SoftBranch" Relationship="SoftBBMModels.FK_donhang_SoftBranches" FromRole="donhang" ToRole="SoftBranch" />
+          <NavigationProperty Name="SoftChannel" Relationship="SoftBBMModels.FK_donhang_SoftChannels" FromRole="donhang" ToRole="SoftChannel" />
+          <NavigationProperty Name="khachhang" Relationship="SoftBBMModels.FK_KHHH_DH" FromRole="donhang" ToRole="khachhang" />
+          <NavigationProperty Name="SoftPointUpdateLogs" Relationship="SoftBBMModels.FK_SoftPointUpdateLogs_donhang" FromRole="donhang" ToRole="SoftPointUpdateLog" />
+          <NavigationProperty Name="khachhang_vanglai" Relationship="SoftBBMModels.fk_vanglai_dh" FromRole="donhang" ToRole="khachhang_vanglai" />
+        </EntityType>
+        <Association Name="FK_donhang_ApplicationUsers">
+          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="donhang">
+              <PropertyRef Name="ShipperId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_donhang_ApplicationUsers1">
+          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="donhang">
+              <PropertyRef Name="CreatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_donhang_ApplicationUsers2">
+          <End Type="SoftBBMModels.ApplicationUser" Role="ApplicationUser" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApplicationUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="donhang">
+              <PropertyRef Name="UpdatedBy" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="dh_ctDH">
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="1" />
+          <End Type="SoftBBMModels.donhang_ct" Role="donhang_ct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donhang">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="donhang_ct">
+              <PropertyRef Name="Sodh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_donhang_donhangStatus">
+          <End Type="SoftBBMModels.donhangStatu" Role="donhangStatu" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donhangStatu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="donhang">
+              <PropertyRef Name="Status" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_donhang_SoftBranches">
+          <End Type="SoftBBMModels.SoftBranch" Role="SoftBranch" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftBranch">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="donhang">
+              <PropertyRef Name="BranchId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_donhang_SoftChannels">
+          <End Type="SoftBBMModels.SoftChannel" Role="SoftChannel" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SoftChannel">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="donhang">
+              <PropertyRef Name="ChannelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KHHH_DH">
+          <End Type="SoftBBMModels.khachhang" Role="khachhang" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="khachhang">
+              <PropertyRef Name="MaKH" />
+            </Principal>
+            <Dependent Role="donhang">
+              <PropertyRef Name="makh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SoftPointUpdateLogs_donhang">
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.SoftPointUpdateLog" Role="SoftPointUpdateLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="donhang">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="SoftPointUpdateLog">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_vanglai_dh">
+          <End Type="SoftBBMModels.khachhang_vanglai" Role="khachhang_vanglai" Multiplicity="0..1" />
+          <End Type="SoftBBMModels.donhang" Role="donhang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="khachhang_vanglai">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="donhang">
+              <PropertyRef Name="vanglai" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -7411,59 +7413,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="donhangs">
-            <EntityTypeMapping TypeName="SoftBBMModels.donhang">
-              <MappingFragment StoreEntitySet="donhang">
-                <ScalarProperty Name="StatusPrint" ColumnName="StatusPrint" />
-                <ScalarProperty Name="TrackingNo" ColumnName="TrackingNo" />
-                <ScalarProperty Name="ShipperNameShopeeApi" ColumnName="ShipperNameShopeeApi" />
-                <ScalarProperty Name="OrderIdShopeeApi" ColumnName="OrderIdShopeeApi" />
-                <ScalarProperty Name="IsShopeeApi" ColumnName="IsShopeeApi" />
-                <ScalarProperty Name="DiscountCode" ColumnName="DiscountCode" />
-                <ScalarProperty Name="DiscountPercent" ColumnName="DiscountPercent" />
-                <ScalarProperty Name="DiscountMoney" ColumnName="DiscountMoney" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="PointCusBeforeOrder" ColumnName="PointCusBeforeOrder" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
-                <ScalarProperty Name="ShipperId" ColumnName="ShipperId" />
-                <ScalarProperty Name="CreatedUserId" ColumnName="CreatedUserId" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="ChannelId" ColumnName="ChannelId" />
-                <ScalarProperty Name="chitietgiogiao" ColumnName="chitietgiogiao" />
-                <ScalarProperty Name="dain" ColumnName="dain" />
-                <ScalarProperty Name="phithuho" ColumnName="phithuho" />
-                <ScalarProperty Name="tenptgh" ColumnName="tenptgh" />
-                <ScalarProperty Name="typeconfimcall" ColumnName="typeconfimcall" />
-                <ScalarProperty Name="donhangtu" ColumnName="donhangtu" />
-                <ScalarProperty Name="tinhtrang" ColumnName="tinhtrang" />
-                <ScalarProperty Name="thongtinxedo" ColumnName="thongtinxedo" />
-                <ScalarProperty Name="ngayhuy" ColumnName="ngayhuy" />
-                <ScalarProperty Name="dahuy" ColumnName="dahuy" />
-                <ScalarProperty Name="datru_diem" ColumnName="datru_diem" />
-                <ScalarProperty Name="ngaygiao" ColumnName="ngaygiao" />
-                <ScalarProperty Name="dagiao" ColumnName="dagiao" />
-                <ScalarProperty Name="typeconfim" ColumnName="typeconfim" />
-                <ScalarProperty Name="ptgh" ColumnName="ptgh" />
-                <ScalarProperty Name="pttt" ColumnName="pttt" />
-                <ScalarProperty Name="ngaydat" ColumnName="ngaydat" />
-                <ScalarProperty Name="idgiogiao" ColumnName="idgiogiao" />
-                <ScalarProperty Name="tongtien" ColumnName="tongtien" />
-                <ScalarProperty Name="ship" ColumnName="ship" />
-                <ScalarProperty Name="noidung" ColumnName="noidung" />
-                <ScalarProperty Name="ghichu" ColumnName="ghichu" />
-                <ScalarProperty Name="vanglai" ColumnName="vanglai" />
-                <ScalarProperty Name="diemsp" ColumnName="diemsp" />
-                <ScalarProperty Name="makh" ColumnName="makh" />
-                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="SystemLogs">
             <EntityTypeMapping TypeName="SoftBBMModels.SystemLog">
               <MappingFragment StoreEntitySet="SystemLog">
@@ -7552,6 +7501,60 @@
                 <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="donhangs">
+            <EntityTypeMapping TypeName="SoftBBMModels.donhang">
+              <MappingFragment StoreEntitySet="donhang">
+                <ScalarProperty Name="ShipperTypeShopeeApi" ColumnName="ShipperTypeShopeeApi" />
+                <ScalarProperty Name="StatusPrint" ColumnName="StatusPrint" />
+                <ScalarProperty Name="TrackingNo" ColumnName="TrackingNo" />
+                <ScalarProperty Name="ShipperNameShopeeApi" ColumnName="ShipperNameShopeeApi" />
+                <ScalarProperty Name="OrderIdShopeeApi" ColumnName="OrderIdShopeeApi" />
+                <ScalarProperty Name="IsShopeeApi" ColumnName="IsShopeeApi" />
+                <ScalarProperty Name="DiscountCode" ColumnName="DiscountCode" />
+                <ScalarProperty Name="DiscountPercent" ColumnName="DiscountPercent" />
+                <ScalarProperty Name="DiscountMoney" ColumnName="DiscountMoney" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="PointCusBeforeOrder" ColumnName="PointCusBeforeOrder" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="BranchId" ColumnName="BranchId" />
+                <ScalarProperty Name="ShipperId" ColumnName="ShipperId" />
+                <ScalarProperty Name="CreatedUserId" ColumnName="CreatedUserId" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ChannelId" ColumnName="ChannelId" />
+                <ScalarProperty Name="chitietgiogiao" ColumnName="chitietgiogiao" />
+                <ScalarProperty Name="dain" ColumnName="dain" />
+                <ScalarProperty Name="phithuho" ColumnName="phithuho" />
+                <ScalarProperty Name="tenptgh" ColumnName="tenptgh" />
+                <ScalarProperty Name="typeconfimcall" ColumnName="typeconfimcall" />
+                <ScalarProperty Name="donhangtu" ColumnName="donhangtu" />
+                <ScalarProperty Name="tinhtrang" ColumnName="tinhtrang" />
+                <ScalarProperty Name="thongtinxedo" ColumnName="thongtinxedo" />
+                <ScalarProperty Name="ngayhuy" ColumnName="ngayhuy" />
+                <ScalarProperty Name="dahuy" ColumnName="dahuy" />
+                <ScalarProperty Name="datru_diem" ColumnName="datru_diem" />
+                <ScalarProperty Name="ngaygiao" ColumnName="ngaygiao" />
+                <ScalarProperty Name="dagiao" ColumnName="dagiao" />
+                <ScalarProperty Name="typeconfim" ColumnName="typeconfim" />
+                <ScalarProperty Name="ptgh" ColumnName="ptgh" />
+                <ScalarProperty Name="pttt" ColumnName="pttt" />
+                <ScalarProperty Name="ngaydat" ColumnName="ngaydat" />
+                <ScalarProperty Name="idgiogiao" ColumnName="idgiogiao" />
+                <ScalarProperty Name="tongtien" ColumnName="tongtien" />
+                <ScalarProperty Name="ship" ColumnName="ship" />
+                <ScalarProperty Name="noidung" ColumnName="noidung" />
+                <ScalarProperty Name="ghichu" ColumnName="ghichu" />
+                <ScalarProperty Name="vanglai" ColumnName="vanglai" />
+                <ScalarProperty Name="diemsp" ColumnName="diemsp" />
+                <ScalarProperty Name="makh" ColumnName="makh" />
+                <ScalarProperty Name="StoreId" ColumnName="StoreId" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
