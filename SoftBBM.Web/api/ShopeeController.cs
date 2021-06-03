@@ -118,7 +118,7 @@ namespace SoftBBM.Web.api
                     {
                         var orderDB = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == jsonContent.Data.Ordersn);
                         if (orderDB == null)
-                        {                        
+                        {
                             //thêm mới đơn hàng
                             var orderShopee = _shopeeRepository.getOrder(jsonContent.Data.Ordersn);
                             if (orderShopee != null)
@@ -160,7 +160,7 @@ namespace SoftBBM.Web.api
                                 long totalAmont = 0;
                                 long.TryParse(orderShopee.total_amount, out totalAmont);
                                 var newOrder = new donhang();
-                                newOrder.UpdatedonhangFromShopee(khachang.MaKH, totalAmont, orderShopee.message_to_seller, orderShopee.shipping_carrier, orderShopee.checkout_shipping_carrier,(int)StatusOrder.Process, jsonContent.Data.Ordersn);
+                                newOrder.UpdatedonhangFromShopee(khachang.MaKH, totalAmont, orderShopee.message_to_seller, orderShopee.shipping_carrier, orderShopee.checkout_shipping_carrier, (int)StatusOrder.Process, jsonContent.Data.Ordersn);
                                 _donhangRepository.Add(newOrder);
                                 _unitOfWork.Commit();
 
@@ -279,11 +279,29 @@ namespace SoftBBM.Web.api
                             order.UpdatedDate = DateTime.Now;
                             order.Status = (int)StatusOrder.ReadyToShip;
 
-                            //if (shopeeOrder != null)
-                            //{
-                            //    order.ShipperNameShopeeApi = shopeeOrder.shipping_carrier;
-                            //    order.ShipperTypeShopeeApi = shopeeOrder.checkout_shipping_carrier;
-                            //}
+                            if (shopeeOrder != null)
+                            {
+                                order.ShipperNameShopeeApi = shopeeOrder.shipping_carrier;
+                                order.ShipperTypeShopeeApi = shopeeOrder.checkout_shipping_carrier;
+                            }
+                            _donhangRepository.Update(order);
+                            _unitOfWork.Commit();
+                        }
+
+                    }
+                    else if (jsonContent.Code == 3 && jsonContent.Data.Status == CommonClass.PAID)
+                    {
+                        var order = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == jsonContent.Data.Ordersn);
+                        var shopeeOrder = _shopeeRepository.getOrder(jsonContent.Data.Ordersn);
+                        if (order != null)
+                        {
+                            order.UpdatedBy = 0;
+                            order.UpdatedDate = DateTime.Now;
+                            if (shopeeOrder != null)
+                            {
+                                order.ShipperNameShopeeApi = shopeeOrder.shipping_carrier;
+                                order.ShipperTypeShopeeApi = shopeeOrder.checkout_shipping_carrier;
+                            }
                             _donhangRepository.Update(order);
                             _unitOfWork.Commit();
                         }
@@ -902,7 +920,7 @@ namespace SoftBBM.Web.api
             var result = new List<Object>();
             try
             {
-                var dtCondition = new DateTime(2021, 05, 29, 0, 0, 1);
+                var dtCondition = new DateTime(2021, 05, 30, 0, 0, 1);
                 var orders = _donhangRepository.GetMulti(x => x.CreatedDate > dtCondition && x.IsShopeeApi == true).ToList();
                 if (orders.Count > 0)
                 {
@@ -914,7 +932,7 @@ namespace SoftBBM.Web.api
                         _donhangRepository.Update(order);
                         _unitOfWork.Commit();
                     }
-                }   
+                }
                 return request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception ex)

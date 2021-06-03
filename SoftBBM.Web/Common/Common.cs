@@ -8,6 +8,7 @@ namespace SoftBBM.Web.Common
     public static class CommonClass
     {
         public const string UNPAID = "UNPAID";
+        public const string PAID = "PAID";
         public const string READY_TO_SHIP = "READY_TO_SHIP";
         public const string RETRY_SHIP = "RETRY_SHIP";
         public const string SHIPPED = "SHIPPED";
