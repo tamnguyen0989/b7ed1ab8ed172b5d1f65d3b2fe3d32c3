@@ -764,5 +764,31 @@ namespace SoftBBM.Web.api
             }
 
         }
+
+
+        [Route("updateurlproducts")]
+        [Authorize(Roles = "ProductAdd")]
+        [HttpGet]
+        public HttpResponseMessage UpdateUrlProducts(HttpRequestMessage request)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                var products = _shopSanPhamRepository.GetMulti(x=>x.spurl == null || x.spurl =="").ToList();
+                foreach (var product in products)
+                {
+                    product.spurl = product.tensp.ConvertToUnSign();
+                    _shopSanPhamRepository.Update(product);
+                    _unitOfWork.Commit();
+                }
+                return request.CreateResponse(HttpStatusCode.OK, true);
+            }
+            catch (Exception ex)
+            {
+                response = request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
+                return response;
+            }
+
+        }
     }
 }

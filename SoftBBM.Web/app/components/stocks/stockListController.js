@@ -79,6 +79,13 @@
                 updateFilter();
             }
         };
+        $scope.picker = {};
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1,
+            showWeeks: false
+        };
+        $scope.waiting = false;
 
         $scope.init = init;
         $scope.search = search;
@@ -109,12 +116,6 @@
         $scope.updateSelectedChannel = updateSelectedChannel;
         $scope.openChannelPricePopover = openChannelPricePopover;
         $scope.closeChannelPricePopover = closeChannelPricePopover;
-        $scope.picker = {};
-        $scope.dateOptions = {
-            formatYear: 'yy',
-            startingDay: 1,
-            showWeeks: false
-        };
         $scope.openStartDateDiscount = openStartDateDiscount;
         $scope.openEndDateDiscount = openEndDateDiscount;
         $scope.updateChannelPricePopover = updateChannelPricePopover;
@@ -123,6 +124,7 @@
         $scope.exportPriceWholesale = exportPriceWholesale;
         $scope.syncToShopee = syncToShopee;
         $scope.hideProduct = hideProduct;
+        $scope.updateUrlProducts = updateUrlProducts;
 
         function search(page) {
             page = page || 0;
@@ -166,7 +168,7 @@
                 selectedStockFilterValue: null,
                 selectedStockTotalFilter: null,
                 selectedStockTotalFilterValue: null,
-                selectedProductOptionFilters:null,
+                selectedProductOptionFilters: null,
                 stringFilter: null,
                 selectedHideStatusFilter: [],
                 selectedProductOptionFilters: null
@@ -604,6 +606,17 @@
                 else
                     notificationService.displaySuccess('Hiện sản phẩm thành công!');
             }, function (response) {
+                console.log(response.data);
+                notificationService.displayError('Cập nhật thất bại!');
+            });
+        }
+        function updateUrlProducts() {
+            $scope.waiting = true;
+            apiService.get('/api/product/updateurlproducts', null, function (result) {
+                $scope.waiting = false;
+                notificationService.displaySuccess('Cập nhật Url sản phẩm thành công!');
+            }, function (response) {
+                $scope.waiting = false;
                 console.log(response.data);
                 notificationService.displayError('Cập nhật thất bại!');
             });
