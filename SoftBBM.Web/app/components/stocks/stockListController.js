@@ -128,7 +128,7 @@
 
         function search(page) {
             page = page || 0;
-            $scope.loading = true;
+            $scope.waiting = true;
             $scope.filters.branchId = $scope.branchSelectedRoot.Id;
             $scope.filters.page = page;
             $scope.filters.pageSize = parseInt($scope.pageSizeNumber);
@@ -149,11 +149,12 @@
                 $scope.page = result.data.Page;
                 $scope.pagesCount = result.data.TotalPages;
                 $scope.totalCount = result.data.TotalCount;
-                $scope.loading = false;
+                $scope.waiting = false;
                 if ($scope.filterStocks && $scope.filterStocks.length && $scope.page == 0) {
                     //notificationService.displaySuccess($scope.totalCount + ' sản phẩm tìm được');
                 }
             }, function (response) {
+                $scope.waiting = false;
                 notificationService.displayError(response.data);
             });
         }

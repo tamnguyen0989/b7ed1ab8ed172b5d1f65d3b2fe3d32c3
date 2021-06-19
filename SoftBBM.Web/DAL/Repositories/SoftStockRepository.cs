@@ -1,4 +1,5 @@
 ﻿using SoftBBM.Web.DAL.Infrastructure;
+using SoftBBM.Web.Infrastructure.Extensions;
 using SoftBBM.Web.Models;
 using SoftBBM.Web.ViewModels;
 using System;
@@ -290,10 +291,19 @@ namespace SoftBBM.Web.DAL.Repositories
                 {
                     if (!string.IsNullOrEmpty(softStockSearchFilterVM.stringFilter))
                     {
+                        var unsignNameProduct = softStockSearchFilterVM.stringFilter.ConvertToUnSign();
                         if (rootExist == false)
-                            stocks = query.Where(c => c.shop_sanpham.tensp.ToLower().Contains(softStockSearchFilterVM.stringFilter) || c.shop_sanpham.id.ToString() == softStockSearchFilterVM.stringFilter || c.shop_sanpham.masp.Contains(softStockSearchFilterVM.stringFilter) || c.shop_sanpham.SoftSupplier.Name.Contains(softStockSearchFilterVM.stringFilter));
+                            stocks = query.Where(c => c.shop_sanpham.tensp.ToLower().Contains(softStockSearchFilterVM.stringFilter) 
+                            || c.shop_sanpham.id.ToString() == softStockSearchFilterVM.stringFilter 
+                            || c.shop_sanpham.masp.Contains(softStockSearchFilterVM.stringFilter) 
+                            || c.shop_sanpham.spurl.ToLower().Contains(unsignNameProduct)
+                            || c.shop_sanpham.SoftSupplier.Name.Contains(softStockSearchFilterVM.stringFilter));
                         else
-                            stocks = stocks.Where(c => c.shop_sanpham.tensp.ToLower().Contains(softStockSearchFilterVM.stringFilter) || c.shop_sanpham.id.ToString() == softStockSearchFilterVM.stringFilter || c.shop_sanpham.masp.Contains(softStockSearchFilterVM.stringFilter) || c.shop_sanpham.SoftSupplier.Name.Contains(softStockSearchFilterVM.stringFilter));
+                            stocks = stocks.Where(c => c.shop_sanpham.tensp.ToLower().Contains(softStockSearchFilterVM.stringFilter) 
+                            || c.shop_sanpham.id.ToString() == softStockSearchFilterVM.stringFilter 
+                            || c.shop_sanpham.masp.Contains(softStockSearchFilterVM.stringFilter)
+                            || c.shop_sanpham.spurl.ToLower().Contains(unsignNameProduct)
+                            || c.shop_sanpham.SoftSupplier.Name.Contains(softStockSearchFilterVM.stringFilter));
                         if (rootExist == false) rootExist = true;
                     }
                     if (softStockSearchFilterVM.selectedProductCategoryFilters.Count > 0)
