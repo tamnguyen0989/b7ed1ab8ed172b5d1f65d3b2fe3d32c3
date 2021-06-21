@@ -7,7 +7,7 @@
         $scope.loading = true;
         $scope.page = 0;
         $scope.pagesCount = 0;
-        $scope.pageSizeNumber = '10';
+        $scope.pageSizeNumber = '20';
         $scope.setupToogleDataVal = false;
         $scope.showId = false;
         $scope.showImage = true;

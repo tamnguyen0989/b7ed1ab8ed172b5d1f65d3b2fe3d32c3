@@ -6,7 +6,7 @@
         $scope.loading = true;
         $scope.page = 0;
         $scope.pagesCount = 0;
-        $scope.pageSizeNumber = '10';
+        $scope.pageSizeNumber = '20';
         $scope.totalMoney = 0;
         $scope.channels = [];
         $scope.showFilter = false;
