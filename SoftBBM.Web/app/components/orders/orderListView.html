@@ -390,12 +390,12 @@
                                     <td><span ng-class="{'has-error':item.idgiogiao==5}">{{item.id}}</span>&emsp;<img ng-show="item.IsShopeeApi == true" src="Assets/Admin/img/ShopeeIcon.jpg" /><br /><span style="font-size:11px">{{item.OrderIdShopeeApi}}</span></td>
 
                                     <!--<td ng-show="selectedChannel.Id==2">
-                                        <span ng-show="!item.Code">Website</span>
-                                        {{item.Code}}
-                                    </td>-->
+                            <span ng-show="!item.Code">Website</span>
+                            {{item.Code}}
+                        </td>-->
                                     <!--<td ng-hide="selectedChannel">
-                                        {{item.Channel}} <span ng-show="item.ChannelId==2 && item.Code">- CHA</span><span ng-show="item.ChannelId==2 && !item.Code">- WS</span>
-                                    </td>-->
+                            {{item.Channel}} <span ng-show="item.ChannelId==2 && item.Code">- CHA</span><span ng-show="item.ChannelId==2 && !item.Code">- WS</span>
+                        </td>-->
                                     <td>{{item.CustomerName}}</td>
                                     <td>{{item.CreatedDateConvert}}</td>
                                     <td style="text-align:right">{{item.tongtien | currency:'':0}}</td>
@@ -466,9 +466,9 @@
                             </p>
                             <h4 class="text-center" style="margin-top:0px;margin-bottom:3px">HÓA ĐƠN BÁN HÀNG</h4>
                             <!--<div class="row"  style="margin-top:0px">
-                                <div class="col col-xs-2 text-right" style="padding-right:5px">Ngày :</div>
-                                <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
-                            </div>-->
+                    <div class="col col-xs-2 text-right" style="padding-right:5px">Ngày :</div>
+                    <div class="col col-xs-10 text-left" style="padding-left:5px">{{orderReturn.CreatedDate | date:'dd-MM-yyyy HH:mm:ss'}}</div>
+                </div>-->
                             <div class="row">
                                 <div class="col col-xs-2 text-right" style="padding-right:5px">
                                     Số :
@@ -646,6 +646,7 @@
 
                     </div>
                 </div>
+                <!--GHN Print-->
                 <div class="row" style="display:none">
                     <div id="printDivGHN">
                         <style>
@@ -783,6 +784,7 @@
                         </div>
                     </div>
                 </div>
+                <!--GHTK Print-->
                 <div class="row" style="display:none">
                     <div id="printDivGHTK">
                         <style>
@@ -917,6 +919,7 @@
                         </div>
                     </div>
                 </div>
+                <!--VNP Print-->
                 <div class="row" style="display:none">
                     <div id="printDivVNP">
                         <style>
@@ -966,10 +969,10 @@
                                                 </td>
                                             </tr>
                                             <!--<tr>
-                                                <td colspan="2" style="text-align:center">
-                                                    <span style="font-size:15px"><b>{{selectedOrder.RecipientSortCode}}</b></span>
-                                                </td>
-                                            </tr>-->
+                                    <td colspan="2" style="text-align:center">
+                                        <span style="font-size:15px"><b>{{selectedOrder.RecipientSortCode}}</b></span>
+                                    </td>
+                                </tr>-->
                                         </table>
                                     </td>
                                 </tr>
@@ -1058,6 +1061,7 @@
                         </div>
                     </div>
                 </div>
+                <!--Shopee Print-->
                 <div class="row" style="display:none">
                     <div id="printDivSPE">
                         <style>
@@ -1183,6 +1187,7 @@
                         </div>
                     </div>
                 </div>
+                <!--NowShip Print-->
                 <div class="row" style="display:none">
                     <div id="printDivNowShip">
                         <style>
@@ -1310,6 +1315,7 @@
                         </div>
                     </div>
                 </div>
+                <!--NinjaVan Print-->
                 <div class="row" style="display:none">
                     <div id="printDivNinja">
                         <style>
@@ -1342,10 +1348,10 @@
                                         <table width="100%">
                                             <tr>
                                                 <!--<td width="45%">
-                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg"/><br />
-                                                    <img src="/Assets/Admin/img/NinjaVan_Logo_Print.jpg"/>&nbsp;<br />
-                                                    {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
-                                                </td>-->
+                                        <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg"/><br />
+                                        <img src="/Assets/Admin/img/NinjaVan_Logo_Print.jpg"/>&nbsp;<br />
+                                        {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                    </td>-->
                                                 <td>
                                                     <svg id="TrackingNoBarcode"></svg><br />
                                                     <table width="100%">
@@ -1451,6 +1457,7 @@
                         </div>
                     </div>
                 </div>
+                <!--BESTExpress Print-->
                 <div class="row" style="display:none">
                     <div id="printDivBESTExpress">
                         <style>
@@ -1584,6 +1591,155 @@
                         </div>
                     </div>
                 </div>
+                <!--ViettelPost Print-->
+                <div class="row" style="display:none">
+                    <div id="printDivViettelPost">
+                        <style>
+                            @media print {
+                                .ng-hide {
+                                    display: none !important;
+                                }
+                            }
+
+                            .pagebreak {
+                                page-break-before: always;
+                            }
+
+                            ul li {
+                                list-style: none;
+                            }
+
+                            #contentViettelPost {
+                                font-size: 9px;
+                            }
+
+                                #contentViettelPost td, th {
+                                    padding: 0px !important;
+                                }
+                        </style>
+                        <div id="contentViettelPost">
+                            <table width="100%">
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="45%">
+                                                    <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                    <img src="/Assets/Admin/img/ViettelPost_Logo_Print.png" />&nbsp;<br />
+                                                    {{selectedOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                </td>
+                                                <td width="55%">
+                                                    <svg id="TrackingNoBarcode"></svg><br />
+                                                    Mã vận đơn: <b>{{selectedOrder.TrackingNo}}</b><br />
+                                                    Mã đơn hàng: <b>{{selectedOrder.OrderIdShopeeApi}}</b><br />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="50%">
+                                                    <b>Từ</b><br />
+                                                    Babymart.vn<br />
+                                                    {{selectedOrder.AddressSeller}}
+                                                </td>
+                                                <td width="50%">
+                                                    <b>
+                                                        Đến<br />
+                                                        {{selectedOrder.BuyerName}}<br />
+                                                        {{selectedOrder.AddressBuyer}}
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                <td width="50%"><b>SĐT:</b> {{selectedOrder.PhoneBuyer}}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px; text-align:center !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td><span style="font-size:15px">KHL</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="70%" rowspan="2" style="vertical-align:text-top;text-align:left;">
+                                                    <b>Nội dung hàng (Tổng SL sản phẩm: {{selectedOrder.TotalQuantity}})</b><br />
+                                                    <p style="height:200px;overflow:hidden">
+                                                        <span ng-repeat="detail in selectedOrder.OrderDetails" style="font-size:8px">
+                                                            {{$index + 1}}. {{detail.item_name}} ({{detail.item_sku}})<span ng-hide="!(detail.variation_name.length > 0)">, {{detail.variation_name}}</span>, SL: {{detail.variation_quantity_purchased}}
+                                                            <br />
+                                                        </span>
+                                                    </p>
+                                                    <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                    <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                    <span ng-hide="IsNullOrEmpty(selectedOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{selectedOrder.ghichu}}</span>
+                                                </td>
+                                                <td width="30%" style="border-left:1px dashed black;border-bottom:1px dashed black;vertical-align:middle;text-align:center;font-size:10px">
+                                                    <p style="height:100px;">
+                                                        <span id="qrCodeViettelPost"></span><br />
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            <tr style="vertical-align:text-top;text-align:center">
+                                                <td width="30%" style="padding:5px !important;font-size:16px">
+                                                    <span style="font-size:13px">Ngày đặt hàng:<br /><span style="font-weight:bold">{{selectedOrder.CreateTime | date:'dd-MM-yyyy'}}<br />{{selectedOrder.CreateTime | date:'HH:mm'}}</span></span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:3px !important" width="100%">
+                                        <table width="100%" style="border-top:1px dashed black">
+                                            <tr>
+                                                <td width="45%" style="vertical-align:text-top;">
+                                                    Tiền thu Người nhận:
+                                                    <p style="margin-left:15px;font-weight:800;font-size:15px">{{selectedOrder.TotalAmount | currency:'':0}}&emsp;VND</p>
+                                                    Chỉ dẫn giao hàng<br />
+                                                    - Không đồng kiểm;<br />
+                                                    - Chuyển hoàn sau 3 lần phát;<br />
+                                                    - Lưu kho tối đa 5 ngày<br />
+                                                </td>
+                                                <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                    <div style="height:130px">
+                                                        <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                            Khối lượng tối đa:{{selectedOrder.MaxWeight}} &emsp;g
+                                                        </div>
+                                                        <div style="height:80%;padding:5px;">
+                                                            <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row" style="display:none">
                     <div id="printDivShopeeAll">
                         <style>
@@ -1610,6 +1766,7 @@
                                 }
                         </style>
                         <div id="contentShopeeAll">
+                            <!--GHN Print-->
                             <div ng-hide="!(GHNOrders.length > 0)">
                                 <div ng-repeat="GHNOrder in GHNOrders">
                                     <table width="100%">
@@ -1724,6 +1881,7 @@
                                     <div class="pagebreak"> </div>
                                 </div>
                             </div>
+                            <!--GHTK Print-->
                             <div ng-hide="!(GHTKOrders.length > 0)">
                                 <div ng-repeat="GHTKOrder in GHTKOrders">
                                     <table width="100%">
@@ -1834,6 +1992,7 @@
                                     <div class="pagebreak"> </div>
                                 </div>
                             </div>
+                            <!--VNPost Print-->
                             <div ng-hide="!(VNPOrders.length > 0)">
                                 <div ng-repeat="VNPOrder in VNPOrders">
                                     <table width="100%">
@@ -1941,6 +2100,7 @@
                                     <div class="pagebreak"> </div>
                                 </div>
                             </div>
+                            <!--Shopee Print-->
                             <div ng-hide="!(SPEOrders.length > 0)">
                                 <div ng-repeat="SPEOrder in SPEOrders">
                                     <table width="100%">
@@ -2043,6 +2203,7 @@
                                 </div>
 
                             </div>
+                            <!--NinjaVan Print-->
                             <div ng-hide="!(NinjaVanOrders.length > 0)">
                                 <div ng-repeat="NinjaVanOrder in NinjaVanOrders">
                                     <table width="100%">
@@ -2149,6 +2310,7 @@
                                     <div class="pagebreak"> </div>
                                 </div>
                             </div>
+                            <!--NowShip Print-->
                             <div ng-hide="!(NowShipOrders.length > 0)">
                                 <div ng-repeat="NowShipOrder in NowShipOrders">
                                     <table width="100%">
@@ -2252,6 +2414,7 @@
                                     <div class="pagebreak"> </div>
                                 </div>
                             </div>
+                            <!--BESTExpress Print-->
                             <div ng-hide="!(BESTExpressOrders.length > 0)">
                                 <div ng-repeat="BESTExpressOrder in BESTExpressOrders">
                                     <table width="100%">
@@ -2360,6 +2523,132 @@
                                     </table>
                                     <div class="pagebreak"> </div>
                                 </div>
+                            </div>
+                            <!--ViettelPost Print-->
+                            <div ng-hide="!(ViettelPostOrders.length > 0)">
+                                <div ng-repeat="ViettelPostOrder in ViettelPostOrders">
+                                    <table width="100%">
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td>
+                                                            <img src="/Assets/Admin/img/Shopee_Logo_Print.jpg" /><br />
+                                                            <img src="/Assets/Admin/img/ViettelPost_Logo_Print.png" /><br />
+                                                            {{ViettelPostOrder.CreateTime | date:'dd-MM-yyyy HH:mm'}}
+                                                        </td>
+                                                        <td>
+                                                            <svg id="TrackingNoBarcodeViettelPost{{$index}}"></svg><br />
+                                                            Mã vận đơn: <b>{{ViettelPostOrder.TrackingNo}}</b><br />
+                                                            Mã đơn hàng: <b>{{ViettelPostOrder.OrderIdShopeeApi}}</b><br />
+
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="50%">
+                                                            <b>Từ</b><br />
+                                                            Babymart.vn<br />
+                                                            {{ViettelPostOrder.AddressSeller}}
+                                                        </td>
+                                                        <td width="50%">
+                                                            <b>
+                                                                Đến<br />
+                                                                {{ViettelPostOrder.BuyerName}}<br />
+                                                                {{ViettelPostOrder.AddressBuyer}}
+                                                            </b>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="50%"><b>SĐT:</b> 84918644643</td>
+                                                        <td width="50%"><b>SĐT:</b> {{ViettelPostOrder.PhoneBuyer}}</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px; text-align:center !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td><span style="font-size:15px">KHL</span></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding-left:5px !important;padding-right:5px !important;padding-bottom:2px !important;padding-top:2px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="70%" rowspan="2" style="vertical-align:text-top;text-align:left;">
+                                                            <b>Nội dung hàng (Tổng SL sản phẩm: {{ViettelPostOrder.TotalQuantity}})</b><br />
+                                                            <p style="height:200px;overflow:hidden">
+                                                                <span ng-repeat="detailViettelPostOrder in ViettelPostOrder.OrderDetails" style="font-size:8px">
+                                                                    {{$index + 1}}. {{detailViettelPostOrder.item_name}} ({{detailViettelPostOrder.item_sku}})<span ng-hide="!(detailViettelPostOrder.variation_name.length > 0)">, {{detailViettelPostOrder.variation_name}}</span>, SL: {{detailViettelPostOrder.variation_quantity_purchased}}
+                                                                    <br />
+                                                                </span>
+                                                            </p>
+                                                            <p style="font-size:13px;font-weight:bold;margin-top:1px;margin-bottom:1px;padding:0px;text-align:right">Babymart.vn cho xem hàng</p>
+                                                            <i>Một số sản phẩm có thể bị ẩn do danh sách quá dài.</i><br />
+                                                            <span ng-hide="IsNullOrEmpty(ViettelPostOrder.ghichu)" style="font-size:12px; font-weight:bold">* Ghi chú: {{ViettelPostOrder.ghichu}}</span>
+                                                        </td>
+                                                        <td width="30%" style="border-left:1px dashed black;border-bottom:1px dashed black;vertical-align:middle;text-align:center;font-size:10px">
+                                                            <p style="height:100px;">
+                                                                <span id="qrCodeVietelPost{{$index}}"></span><br />
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                    <tr style="vertical-align:text-top;text-align:center">
+                                                        <td width="30%" style="padding:5px !important;font-size:16px">
+                                                            <span style="font-size:13px">Ngày đặt hàng:<br /><span style="font-weight:bold">{{ViettelPostOrder.CreateTime | date:'dd-MM-yyyy'}}<br />{{ViettelPostOrder.CreateTime | date:'HH:mm'}}</span></span>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:3px !important" width="100%">
+                                                <table width="100%" style="border-top:1px dashed black">
+                                                    <tr>
+                                                        <td width="45%" style="vertical-align:text-top;">
+                                                            Tiền thu Người nhận:
+                                                            <span style="margin-left:15px;font-weight:800;font-size:15px">{{ViettelPostOrder.TotalAmount | currency:'':0}}&emsp;VND</span><br />
+                                                            Chỉ dẫn giao hàng<br />
+                                                            - Không đồng kiểm;<br />
+                                                            - Chuyển hoàn sau 3 lần phát;<br />
+                                                            - Lưu kho tối đa 5 ngày<br />
+                                                        </td>
+                                                        <td width="55%" rowspan="2" style="vertical-align:text-top;text-align:center">
+                                                            <div style="height:130px">
+                                                                <div style="height:10%;margin-bottom:0px;margin-top:0px">
+                                                                    Khối lượng tối đa:{{ViettelPostOrder.MaxWeight}} &emsp;g
+                                                                </div>
+                                                                <div style="height:80%;padding:5px;">
+                                                                    <div style="height:100%;padding: 0px 5px 0px 5px;border:solid 1px black;vertical-align:text-top;text-align:center">
+                                                                        <span style="margin-top:0px;margin-bottom:5px"></span><b>Chữ ký người nhận</b><br />
+                                                                        <span style="font-size:8px">Xác nhận hàng nguyên vẹn, không móp/méo, bể/vỡ</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="pagebreak"> </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

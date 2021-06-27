@@ -543,7 +543,7 @@
                         + '</head><body onload="window.print(); window.close();"><div>'
                         + innerContents + '</div></html>');
                     popupWinindow.document.close();
-                }, 500);
+                }, 1000);
                 search($scope.page);
             }, function (error) {
                 notificationService.displayError(error);
@@ -580,7 +580,7 @@
                         + '</head><body onload="window.print(); window.close();"><div>'
                         + innerContents + '</div></html>');
                     popupWinindow.document.close();
-                }, 500);
+                }, 1000);
                 search($scope.page);
             }, function (error) {
                 notificationService.displayError(error);
@@ -812,6 +812,14 @@
                             break;
                         case 'best express':
                             idElement = 'printDivBESTExpress';
+                        case 'viettel post':
+                            var typeNumber = 4;
+                            var errorCorrectionLevel = 'L';
+                            var qr = qrcode(typeNumber, errorCorrectionLevel);
+                            qr.addData($scope.selectedOrder.TrackingNo);
+                            qr.make();
+                            document.getElementById('qrCodeViettelPost').innerHTML = qr.createImgTag();
+                            idElement = 'printDivViettelPost';
                             break;
                     }
                     var innerContents = document.getElementById(idElement).innerHTML;
@@ -893,6 +901,7 @@
             $scope.NinjaVanOrders = [];
             $scope.NowShipOrders = [];
             $scope.BESTExpressOrders = [];
+            $scope.ViettelPostOrders = [];
 
             $.ajax({
                 url: "api/shopee/getordersdetailstoprint/",
@@ -949,6 +958,11 @@
                                     $scope.BESTExpressOrders.push(value);
                                     break;
                                 }
+                            case "viettel post":
+                                {
+                                    $scope.ViettelPostOrders.push(value);
+                                    break;
+                                }
                         }
                     });
                     $scope.waiting = false;
@@ -1002,7 +1016,17 @@
                             $.each($scope.BESTExpressOrders, function (index, value) {
                                 printBarcode("#TrackingNoBarcodeBESTExpressOrders" + index, value.TrackingNo)
                             });
-
+                        if ($scope.ViettelPostOrders.length > 0) {
+                            $.each($scope.ViettelPostOrders, function (index, value) {
+                                printBarcode("#TrackingNoBarcodeViettelPost" + index, value.TrackingNo)
+                                var typeNumber = 4;
+                                var errorCorrectionLevel = 'L';
+                                var qr = qrcode(typeNumber, errorCorrectionLevel);
+                                qr.addData(value.TrackingNo);
+                                qr.make();
+                                document.getElementById('qrCodeVietelPost' + index).innerHTML = qr.createImgTag();
+                            });
+                        }
                         var innerContents = document.getElementById(idElement).innerHTML;
                         var popupWinindow = window.open();
                         popupWinindow.window.focus();

@@ -71,8 +71,9 @@ namespace SoftBBM.Web.Controllers
             //        }
             //    }
             //}
+            long unixTimestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-            return View();
+            return View(unixTimestamp);
         }
     }
 }
