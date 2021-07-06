@@ -81,10 +81,10 @@
                             <button class="btn btn-default" type="submit" style="width:60px" title="Tìm kiếm"><i class="fa fa-search"></i></button>
                             <a class="btn btn-success" ui-sref="add_order" style="width:60px" title="Thêm mới" ng-show="selectedChannel.Id!=4" target="_blank"><i class="fa fa-plus"></i></a>
                             <button type="button" class="btn btn-warning" ng-click="refeshPage()" title="Làm mới DS" style="width:60px"><i class="fa fa-fw fa-refresh"></i></button>
-                            <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc" style="width:60px"><i class="fa fa-fw fa-filter"></i></button>
-                            <button class="btn" title="Xuất DS đơn hàng" style="background-color:yellowgreen;color:white;width:60px" type="button" ng-click="authenExport()"><i class="fa fa-fw fa-cloud-download"></i></button>
-                            <button class="btn btn-info" ng-show="selectedChannel.Id==4" title="Đồng bộ mã vận đơn từ Shopee" style="width:60px" type="button" ng-click="syncTrackingNoShopee()"><i class="fa fa-fw fa-indent"></i></button>
-                            <button type="button" class="btn btn-info" ng-click="loadExtension()" title="hỗ trợ" style="width:60px"><i class="fa fa-fw fa-bell-o"></i></button>
+                            <button type="button" class="btn btn-flickr" ng-click="loadFilter()" title="Bộ lọc"><i class="fa fa-fw fa-filter"></i>Bộ lọc</button>
+                            <button class="btn" title="Xuất DS đơn hàng" style="background-color:yellowgreen;color:white" type="button" ng-click="authenExport()"><i class="fa fa-fw fa-cloud-download"></i>Xuất đơn</button>
+                            <button class="btn btn-info" ng-show="selectedChannel.Id==4" title="Đồng bộ mã vận đơn từ Shopee" type="button" ng-click="syncTrackingNoShopee()"><i class="fa fa-fw fa-indent"></i>Sync MVĐơn</button>
+                            <button type="button" class="btn btn-info" ng-click="loadExtension()" title="hỗ trợ"><i class="fa fa-fw fa-bell-o"></i>Hỗ trợ Tiki</button>
                             <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật đơn hàng sót 5 ngày trước" style="width:60px" type="button" ng-click="getLackShopeeOrdersWithDay()"><i class="fa fa-fw fa-balance-scale"></i></button>
                             <button class="btn btn-default" ng-show="userName=='admin'" title="Cập nhật tình trạng đơn hàng từ 5 ngày trước" style="width:60px" type="button" ng-click="updateStatusShopeeOrdersWithDay()"><i class="fa fa-fw fa-database"></i></button>
                             <button class="btn btn-default" ng-show="userName=='admin'" title="TestAPI" style="width:60px" type="button" ng-click="testAPI()"><i class="fa fa-fw fa-shield"></i></button>

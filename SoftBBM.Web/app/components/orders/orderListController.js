@@ -46,6 +46,7 @@
             { Name: 'VNPost Tiết Kiệm' },
             { Name: 'VNPost Nhanh' },
             { Name: 'Shopee Express' },
+            { Name: 'Viettel Post' },
             { Name: 'Ninja Van' },
             { Name: 'NowShip' },
             { Name: 'BEST Express' },
