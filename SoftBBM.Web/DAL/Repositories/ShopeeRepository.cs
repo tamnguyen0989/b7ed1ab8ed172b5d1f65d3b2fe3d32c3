@@ -30,7 +30,8 @@ namespace SoftBBM.Web.DAL.Repositories
         void confirmOrderNoDelayNoTimeAdd(string ordersn);
         ShopeeOrderLogistics GetOrderLogistics(string ordersn);
         ShopeeGetOrdersList GetOrdersListLastDay();
-        ShopeeGetOrdersList GetOrdersListLastWithDay(int quantity);
+        ShopeeGetOrdersList GetOrdersListLastWithDay(int quantity, string status);
+        ShopeeGetOrdersList GetOrdersListLastWithHour(int quantity, string status);
         List<donhangIdShopeeId> GetOrdersListLastDayDB();
         List<donhangIdShopeeId> GetOrdersListLastWithDayDB(int quantity);
         void AddOrderLack(string ordersn, string statusOrder, DateTime? updatedDate);
@@ -153,6 +154,11 @@ namespace SoftBBM.Web.DAL.Repositories
             var unixTimestamp = (Int32)(DateTime.UtcNow.AddDays(-quantity).Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
             return unixTimestamp;
         }
+        public int getTimestampLastWithHour(int quantity)
+        {
+            var unixTimestamp = (Int32)(DateTime.UtcNow.AddHours(-quantity).Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            return unixTimestamp;
+        }
 
         //key=password, data = dataJson
         public string createSignature(string key, string data)
@@ -192,10 +198,10 @@ namespace SoftBBM.Web.DAL.Repositories
                 streamWriter.Close();
             }
 
-            var log = new SystemLog();
-            log.InitSystemLog(null, url + " - " + dataJson, "url", "", null, "Shopee");
-            _systemLogRepository.Add(log);
-            _unitOfWork.Commit();
+            //var log = new SystemLog();
+            //log.InitSystemLog(null, url + " - " + dataJson, "url", "", (int)SystemError.SHOPEE, "Shopee");
+            //_systemLogRepository.Add(log);
+            //_unitOfWork.Commit();
 
             var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
             using (var streamReader = new StreamReader(httpResponse.GetResponseStream(), Encoding.UTF8, true))
@@ -203,9 +209,9 @@ namespace SoftBBM.Web.DAL.Repositories
                 jsonStrResult = streamReader.ReadToEnd();
             }
 
-            log.InitSystemLog(null, jsonStrResult , "jsonStrResult - postRequest", "", null, "Shopee");
-            _systemLogRepository.Add(log);
-            _unitOfWork.Commit();
+            //log.InitSystemLog(null, jsonStrResult , "jsonStrResult - postRequest", "", null, "Shopee");
+            //_systemLogRepository.Add(log);
+            //_unitOfWork.Commit();
 
             return jsonStrResult;
         }
@@ -410,30 +416,87 @@ namespace SoftBBM.Web.DAL.Repositories
             return result;
         }
 
-        public ShopeeGetOrdersList GetOrdersListLastWithDay(int quantity)
+        public ShopeeGetOrdersList GetOrdersListLastWithDay(int quantity, string status)
         {
+            bool more = true;
             var timestamp = getTimestamp();
             var fromDate = getTimestampLastWithDay(quantity);
             var result = new ShopeeGetOrdersList();
-            var url = "https://partner.shopeemobile.com/api/v1/orders/basics";
-            string dataJson = "{'create_time_from':" + fromDate + "," +
-                              "'create_time_to':" + timestamp + "," +
-                              "'partner_id':" + _apiPartnerId + "," +
-                              "'shopid':" + _apiId + "," +
-                              "'timestamp':" + timestamp + "}";
-            dataJson = dataJson.Replace("'", "\"");
-            string data = postRequest(url, dataJson);
-
-            if (!string.IsNullOrEmpty(data))
+            var pagination_entries_per_page = 100;
+            var pagination_offset = -1;
+            while (more)
             {
-                var ordersList = JsonConvert.DeserializeObject<ShopeeGetOrdersList>(data);
-                if (ordersList == null)
-                    return result;
-                if (ordersList.orders.Count > 0)
+                pagination_offset++;
+                //var url = "https://partner.shopeemobile.com/api/v1/orders/basics";
+                var url = "https://partner.shopeemobile.com/api/v1/orders/get";
+                string dataJson = "{'create_time_from':" + fromDate + "," +
+                                  "'create_time_to':" + timestamp + "," +
+                                  "'partner_id':" + _apiPartnerId + "," +
+                                  "'shopid':" + _apiId + "," +
+                                  "'order_status':'" + status + "'," +
+                                  "'pagination_offset':" + pagination_offset + "," +
+                                  "'pagination_entries_per_page':" + pagination_entries_per_page + "," +
+                                  "'timestamp':" + timestamp + "}";
+                dataJson = dataJson.Replace("'", "\"");
+                string data = postRequest(url, dataJson);
+
+                if (!string.IsNullOrEmpty(data))
                 {
-                    result = ordersList;
+                    var ordersList = JsonConvert.DeserializeObject<ShopeeGetOrdersList>(data);
+                    if (ordersList.orders.Count > 0)
+                    {
+                        if (result.orders == null)
+                            result.orders = ordersList.orders;
+                        else
+                            result.orders.AddRange(ordersList.orders);
+                    }   
+                    if (!ordersList.more)
+                        more = false;
                 }
             }
+            
+            return result;
+        }
+
+        public ShopeeGetOrdersList GetOrdersListLastWithHour(int quantity, string status)
+        {
+            bool more = true;
+            var timestamp = getTimestamp();
+            var fromDate = getTimestampLastWithHour(quantity);
+            var result = new ShopeeGetOrdersList();
+            var pagination_entries_per_page = 100;
+            var pagination_offset = -1;
+            while (more)
+            {
+                pagination_offset++;
+                //var url = "https://partner.shopeemobile.com/api/v1/orders/basics";
+                var url = "https://partner.shopeemobile.com/api/v1/orders/get";
+                string dataJson = "{'create_time_from':" + fromDate + "," +
+                                  "'create_time_to':" + timestamp + "," +
+                                  "'partner_id':" + _apiPartnerId + "," +
+                                  "'shopid':" + _apiId + "," +
+                                  "'order_status':'" + status + "'," +
+                                  "'pagination_offset':" + pagination_offset + "," +
+                                  "'pagination_entries_per_page':" + pagination_entries_per_page + "," +
+                                  "'timestamp':" + timestamp + "}";
+                dataJson = dataJson.Replace("'", "\"");
+                string data = postRequest(url, dataJson);
+
+                if (!string.IsNullOrEmpty(data))
+                {
+                    var ordersList = JsonConvert.DeserializeObject<ShopeeGetOrdersList>(data);
+                    if (ordersList.orders.Count > 0)
+                    {
+                        if (result.orders == null)
+                            result.orders = ordersList.orders;
+                        else
+                            result.orders.AddRange(ordersList.orders);
+                    }
+                    if (!ordersList.more)
+                        more = false;
+                }
+            }
+
             return result;
         }
 

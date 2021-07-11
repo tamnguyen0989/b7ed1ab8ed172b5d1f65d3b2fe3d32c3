@@ -99,6 +99,7 @@ namespace SoftBBM.Web.ViewModels
     public class ShopeeGetOrdersList
     {
         public List<OrderGetOrdersList> orders { get; set; }
+        public bool more { get; set; }
     }
     public class ShopeeGetAddress
     {

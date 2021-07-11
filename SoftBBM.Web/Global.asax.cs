@@ -1,4 +1,5 @@
-﻿using SoftBBM.Web.Mapping;
+﻿using SoftBBM.Web.DAL;
+using SoftBBM.Web.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace SoftBBM.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            JobScheduler.Start();
         }
     }
 }

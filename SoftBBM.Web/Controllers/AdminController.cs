@@ -3,6 +3,7 @@ using SoftBBM.Web.DAL.Repositories;
 using SoftBBM.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -71,9 +72,10 @@ namespace SoftBBM.Web.Controllers
             //        }
             //    }
             //}
-            long unixTimestamp = (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+            long version = 0;
+            long.TryParse(ConfigurationSettings.AppSettings.Get("version").ToString(), out version);
 
-            return View(unixTimestamp);
+            return View(version);
         }
     }
 }

@@ -35,9 +35,25 @@ namespace SoftBBM.Web.api
         IkhachhangRepository _khachhangRepository;
         IdonhangchuyenphattpRepository _donhangchuyenphattpRepository;
         IdonhangchuyenphattinhRepository _donhangchuyenphattinhRepository;
+        ISystemLogRepository _systemLogRepository;
         IUnitOfWork _unitOfWork;
 
-        public ShopeeController(ISoftStockRepository softStockRepository, IShopSanPhamRepository shopSanPhamRepository, IUnitOfWork unitOfWork, ISoftChannelProductPriceRepository softChannelProductPriceRepository, IShopSanPhamStatusRepository shopSanPhamStatusRepository, ISoftChannelRepository softChannelRepository, ISoftBranchRepository softBranchRepository, IdonhangRepository donhangRepository, IdonhangctRepository donhangctRepository, IshopbientheRepository shopbientheRepository, IShopeeRepository shopeeRepository, IShopSanPhamLogRepository shopSanPhamLogRepository, ISoftPointUpdateLogRepository softPointUpdateLogRepository, IkhachhangRepository khachhangRepository, IdonhangchuyenphattinhRepository donhangchuyenphattinhRepository, IdonhangchuyenphattpRepository donhangchuyenphattpRepository)
+        public ShopeeController(ISoftStockRepository softStockRepository, 
+            IShopSanPhamRepository shopSanPhamRepository, IUnitOfWork unitOfWork, 
+            ISoftChannelProductPriceRepository softChannelProductPriceRepository, 
+            IShopSanPhamStatusRepository shopSanPhamStatusRepository, 
+            ISoftChannelRepository softChannelRepository, 
+            ISoftBranchRepository softBranchRepository, 
+            IdonhangRepository donhangRepository, 
+            IdonhangctRepository donhangctRepository, 
+            IshopbientheRepository shopbientheRepository, 
+            IShopeeRepository shopeeRepository, 
+            IShopSanPhamLogRepository shopSanPhamLogRepository, 
+            ISoftPointUpdateLogRepository softPointUpdateLogRepository, 
+            IkhachhangRepository khachhangRepository, 
+            IdonhangchuyenphattinhRepository donhangchuyenphattinhRepository, 
+            IdonhangchuyenphattpRepository donhangchuyenphattpRepository, 
+            ISystemLogRepository systemLogRepository)
         {
             _shopSanPhamRepository = shopSanPhamRepository;
             _softChannelProductPriceRepository = softChannelProductPriceRepository;
@@ -54,6 +70,7 @@ namespace SoftBBM.Web.api
             _khachhangRepository = khachhangRepository;
             _donhangchuyenphattinhRepository = donhangchuyenphattinhRepository;
             _donhangchuyenphattpRepository = donhangchuyenphattpRepository;
+            _systemLogRepository = systemLogRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -637,10 +654,9 @@ namespace SoftBBM.Web.api
             }
             catch (Exception ex)
             {
-                var contentLog = new SoftPointUpdateLog();
-                contentLog.Description = "Error (GetOrderDetails to print ): " + JsonConvert.SerializeObject(ex);
-                contentLog.CreatedDate = DateTime.Now;
-                _softPointUpdateLogRepository.Add(contentLog);
+                var log = new SystemLog();
+                log.InitSystemLog(0, "Error_Api", "GetOrderDetails to print", JsonConvert.SerializeObject(ex), (int)SystemError.SHOPEE, "Shopee");
+                _systemLogRepository.Add(log);
                 _unitOfWork.Commit();
 
                 return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
@@ -805,10 +821,9 @@ namespace SoftBBM.Web.api
             }
             catch (Exception ex)
             {
-                var contentLog = new SoftPointUpdateLog();
-                contentLog.Description = "Error (GetOrdersDetailsToPrint to print all ): " + JsonConvert.SerializeObject(ex);
-                contentLog.CreatedDate = DateTime.Now;
-                _softPointUpdateLogRepository.Add(contentLog);
+                var log = new SystemLog();
+                log.InitSystemLog(0, "Error_Api", "GetOrdersDetailsToPrint to print all", JsonConvert.SerializeObject(ex), (int)SystemError.SHOPEE, "Shopee");
+                _systemLogRepository.Add(log);
                 _unitOfWork.Commit();
                 return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
@@ -841,10 +856,9 @@ namespace SoftBBM.Web.api
             }
             catch (Exception ex)
             {
-                var contentLog = new SoftPointUpdateLog();
-                contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
-                contentLog.CreatedDate = DateTime.Now;
-                _softPointUpdateLogRepository.Add(contentLog);
+                var log = new SystemLog();
+                log.InitSystemLog(0, "Error_Api", "GetLackOrders", JsonConvert.SerializeObject(ex), (int)SystemError.SHOPEE, "Shopee");
+                _systemLogRepository.Add(log);
                 _unitOfWork.Commit();
                 return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }
@@ -937,10 +951,9 @@ namespace SoftBBM.Web.api
             }
             catch (Exception ex)
             {
-                var contentLog = new SoftPointUpdateLog();
-                contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
-                contentLog.CreatedDate = DateTime.Now;
-                _softPointUpdateLogRepository.Add(contentLog);
+                var log = new SystemLog();
+                log.InitSystemLog(0, "Error_Api", "UpdateShipperName", JsonConvert.SerializeObject(ex), (int)SystemError.SHOPEE, "Shopee");
+                _systemLogRepository.Add(log);
                 _unitOfWork.Commit();
                 return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
             }

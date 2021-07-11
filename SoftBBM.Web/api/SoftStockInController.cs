@@ -5,6 +5,7 @@ using OfficeOpenXml.Table;
 using SoftBBM.Web.Common;
 using SoftBBM.Web.DAL.Infrastructure;
 using SoftBBM.Web.DAL.Repositories;
+using SoftBBM.Web.Enum;
 using SoftBBM.Web.Infrastructure.Core;
 using SoftBBM.Web.Infrastructure.Extensions;
 using SoftBBM.Web.Models;
@@ -290,7 +291,7 @@ namespace SoftBBM.Web.api
                         var afterLog = Mapper.Map<shop_sanpham, ShopSanPhamNoRef>(shopSanPham);
 
                         var log = new SystemLog();
-                        log.InitSystemLog(shopSanPham.id, "", "AddStockIn", "", 1, "StockIn",
+                        log.InitSystemLog(shopSanPham.id, "", "AddStockIn", "", (int)SystemError.STOCK_IN, "StockIn",
                             JsonConvert.SerializeObject(beforeLog, Formatting.Indented, new JsonSerializerSettings
                             {
                                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore

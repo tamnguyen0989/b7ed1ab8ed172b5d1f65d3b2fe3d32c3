@@ -2296,7 +2296,6 @@ namespace SoftBBM.Web.api
             {
                 //Kiểm tra đơn sót
                 GetLackOrdersWithDay(5);
-
                 return request.CreateResponse(HttpStatusCode.OK, true);
             }
             catch (Exception ex)
@@ -2370,26 +2369,33 @@ namespace SoftBBM.Web.api
             }
             catch (Exception ex)
             {
-                var contentLog = new SoftPointUpdateLog();
-                contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
-                contentLog.CreatedDate = DateTime.Now;
-                _softPointUpdateLogRepository.Add(contentLog);
+                var log = new SystemLog();
+                log.InitSystemLog(0,"Error_Func", "GetLackOrders", JsonConvert.SerializeObject(ex), (int)SystemError.SHOPEE, "Shopee");
+                _systemLogRepository.Add(log);
                 _unitOfWork.Commit();
             }
         }
 
         public void GetLackOrdersWithDay(int quantity)
         {
-            var result = new List<Object>();
+            quantity = 2;
+            var shopeeOrderLastDay = new List<OrderGetOrdersList>();
             try
             {
-                var shopeeOrderLastDay = _shopeeRepository.GetOrdersListLastWithDay(quantity);
-                if (shopeeOrderLastDay.orders.Count > 0)
+                var shopeeOrderLastDay_ReadyToShip = _shopeeRepository.GetOrdersListLastWithDay(quantity, "READY_TO_SHIP").orders;
+                if (shopeeOrderLastDay_ReadyToShip != null)
+                    shopeeOrderLastDay.AddRange(shopeeOrderLastDay_ReadyToShip);
+
+                var shopeeOrderLastDay_Unpaid = _shopeeRepository.GetOrdersListLastWithDay(quantity,"UNPAID").orders;
+                if(shopeeOrderLastDay_Unpaid != null)
+                    shopeeOrderLastDay.AddRange(shopeeOrderLastDay_Unpaid);
+
+                if (shopeeOrderLastDay.Count > 0)
                 {
-                    var orderDB = _shopeeRepository.GetOrdersListLastWithDayDB(quantity);
-                    foreach (var orderSPE in shopeeOrderLastDay.orders)
+                    foreach (var orderSPE in shopeeOrderLastDay)
                     {
-                        if (!orderDB.Any(x => x.OrderIdShopeeApi == orderSPE.ordersn))
+                        var orderDB = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == orderSPE.ordersn);
+                        if (orderDB == null)
                         {
                             DateTime? updateDate = null;
                             if (orderSPE.update_time > 0)
@@ -2401,10 +2407,47 @@ namespace SoftBBM.Web.api
             }
             catch (Exception ex)
             {
-                var contentLog = new SoftPointUpdateLog();
-                contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
-                contentLog.CreatedDate = DateTime.Now;
-                _softPointUpdateLogRepository.Add(contentLog);
+                var log = new SystemLog();
+                log.InitSystemLog(0, "Error_Func", "GetLackOrdersWithDay", JsonConvert.SerializeObject(ex), (int)SystemError.SHOPEE, "Shopee");
+                _systemLogRepository.Add(log);
+                _unitOfWork.Commit();
+            }
+        }
+
+        public void GetLackOrdersWithHour(int quantity)
+        {
+            quantity = 2;
+            var shopeeOrderLastDay = new List<OrderGetOrdersList>();
+            try
+            {
+                var shopeeOrderLastDay_ReadyToShip = _shopeeRepository.GetOrdersListLastWithHour(quantity, "READY_TO_SHIP").orders;
+                if (shopeeOrderLastDay_ReadyToShip != null)
+                    shopeeOrderLastDay.AddRange(shopeeOrderLastDay_ReadyToShip);
+
+                var shopeeOrderLastDay_Unpaid = _shopeeRepository.GetOrdersListLastWithHour(quantity, "UNPAID").orders;
+                if (shopeeOrderLastDay_Unpaid != null)
+                    shopeeOrderLastDay.AddRange(shopeeOrderLastDay_Unpaid);
+
+                if (shopeeOrderLastDay.Count > 0)
+                {
+                    foreach (var orderSPE in shopeeOrderLastDay)
+                    {
+                        var orderDB = _donhangRepository.GetSingleByCondition(x => x.OrderIdShopeeApi == orderSPE.ordersn);
+                        if (orderDB == null)
+                        {
+                            DateTime? updateDate = null;
+                            if (orderSPE.update_time > 0)
+                                updateDate = UtilExtensions.UnixTimeStampToDateTime(orderSPE.update_time);
+                            _shopeeRepository.AddOrderLack(orderSPE.ordersn, orderSPE.order_status, updateDate);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var log = new SystemLog();
+                log.InitSystemLog(0, "Error_Func", "GetLackOrdersWithHour", JsonConvert.SerializeObject(ex), (int)SystemError.SHOPEE, "Shopee");
+                _systemLogRepository.Add(log);
                 _unitOfWork.Commit();
             }
         }
@@ -2459,10 +2502,9 @@ namespace SoftBBM.Web.api
             }
             catch (Exception ex)
             {
-                var contentLog = new SoftPointUpdateLog();
-                contentLog.Description = "Error (GetLackOrders): " + JsonConvert.SerializeObject(ex);
-                contentLog.CreatedDate = DateTime.Now;
-                _softPointUpdateLogRepository.Add(contentLog);
+                var log = new SystemLog();
+                log.InitSystemLog(0, "Error_Func", "UpdateStatusShopeeOrders", JsonConvert.SerializeObject(ex), (int)SystemError.SHOPEE, "Shopee");
+                _systemLogRepository.Add(log);
                 _unitOfWork.Commit();
             }
         }
@@ -2554,10 +2596,9 @@ namespace SoftBBM.Web.api
             }
             catch (Exception ex)
             {
-                var contentLog = new SoftPointUpdateLog();
-                contentLog.Description = "Error (UpdateStatusShopeeIncompleteOrders): " + JsonConvert.SerializeObject(ex);
-                contentLog.CreatedDate = DateTime.Now;
-                _softPointUpdateLogRepository.Add(contentLog);
+                var log = new SystemLog();
+                log.InitSystemLog(0, "Error_Func", "UpdateStatusShopeeIncompleteOrders", JsonConvert.SerializeObject(ex), (int)SystemError.SHOPEE, "Shopee");
+                _systemLogRepository.Add(log);
                 _unitOfWork.Commit();
             }
         }
@@ -2632,7 +2673,7 @@ namespace SoftBBM.Web.api
             catch (Exception ex)
             {
                 var log = new SystemLog();
-                log.InitSystemLog(0, "", "UpdateOrderNullProductId", JsonConvert.SerializeObject(ex), 99, "OrderUpdate");
+                log.InitSystemLog(0, "", "UpdateOrderNullProductId", JsonConvert.SerializeObject(ex), (int)SystemError.ORDER, "Order");
                 _systemLogRepository.Add(log);
                 _unitOfWork.Commit();
                 return request.CreateResponse(HttpStatusCode.BadRequest, ex.Message);
